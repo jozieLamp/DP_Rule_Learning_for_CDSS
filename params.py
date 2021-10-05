@@ -9,6 +9,9 @@ popSize = 10  # 8106 #Size of population
 verbose = True
 template = None
 
+# MCTS PARAMS
+defaultPolicy = 'random' #options: random,
+
 # DATA PARAMETERS
 dataFilename = "Data/ICU/Best/"
 # variables with guess ranges

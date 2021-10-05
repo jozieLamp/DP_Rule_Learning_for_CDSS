@@ -4,7 +4,7 @@ import copy
 
 #Grammar Dictionary for easier access of child nodes in template tree
 stlGrammarDict = {
-    "evl": [["statemenList"]],
+    "eval": [["statemenList"]],
     "statementList": [["statement"]],
     "statement": [["(","boolExpr",")"]],
     "boolExpr": [["stlTerm"], ["stlTerm", "AND", "stlTerm"], ["stlTerm", "OR", "stlTerm"], ["stlTerm", "IMPLIES", "stlTerm"] ],
@@ -19,6 +19,7 @@ stlGrammarDict = {
     "NEQ": [["Variable", "Parameter"]]
 }
 
+terminalNodes = ["Variable", "Parameter"]
 
 
 class Node:
@@ -40,10 +41,11 @@ class RuleTemplate(treelib.Tree):
 
     def makeDefaultTree(self):
         # Make start  of rule template
-        self.create_node(identifier=self.generateID("evl"), parent=None, data=Node(name="evl1"))
-        self.create_node(identifier=self.generateID("statementList"), parent="evl1", data=Node(name="statementList1"))
+        self.create_node(identifier=self.generateID("eval"), parent=None, data=Node(name="evl1"))
+        self.create_node(identifier=self.generateID("statementList"), parent="eval1", data=Node(name="statementList1"))
         self.create_node(identifier=self.generateID("statement"), parent="statementList1", data=Node(name="statemen1"))
-        self.create_node(identifier=self.generateID("boolExpr"), parent="statement1", data=Node(name="boolExpr1", ruleTree = copy.deepcopy(self)))
+        self.create_node(identifier=self.generateID("boolExpr"), parent="statement1", data=Node(name="boolExpr1"))
+        self['boolExpr1'].data.ruleTree = copy.deepcopy(self)
 
     # generate unique ids for tree
     def generateID(self, type):

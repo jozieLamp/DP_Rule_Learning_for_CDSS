@@ -19,7 +19,7 @@ def runProtocol(params):
     num = 1
     while len(clientList) < params.popSize:
         fileName = params.dataFilename + repr(num) + "Rules.txt"
-        c = Client(clientNum=num, ruleSet=[])
+        c = Client(clientNum=num, epsilon=params.epsilon, ruleSet=[])
         fileFound = c.loadRuleSet(fileName)
         # c.logRuleSet()
         if fileFound:
