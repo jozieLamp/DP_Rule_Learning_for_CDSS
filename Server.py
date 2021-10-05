@@ -55,6 +55,8 @@ class Server :
             branch = self.selectBranch(states[-1])
             print("Branch selected:", branch)
 
+            #TODO - working here - line 89 in robo grammar
+
             usedBudget = 1
 
 
@@ -71,7 +73,7 @@ class Server :
         if self.verbose:
             print("Next Set of Branch Choices", branchChoices)
 
-        if branchChoices == terminalNodes: #Reached terminal nodes
+        if all([x == terminalNodes for x in branchChoices]): #Reached only terminal nodes
             if self.verbose:
                 print("Reached terminal nodes")
             return None
