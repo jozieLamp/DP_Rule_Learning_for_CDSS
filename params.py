@@ -4,14 +4,15 @@
 popSize = 10  # 8106 #Size of population
 #popSize = 40337 #Sepsis size
 
-protocolTrace = False  # print full protocol trace
-loadProbMapping = False  # load prob mapping from file
-protocol = "LDP"  # run LDP model
 
+# PROTOCOL PARAMS
+verbose = True
+template = None
+
+# DATA PARAMETERS
 dataFilename = "Data/ICU/Best/"
-
 # variables with guess ranges
-#ICU Dataset
+# ICU Dataset
 variables = {'LOS': [0.0, 122.0], 'ICU_Pt_Days': [0.0, 120.0], 'Mort': [0.0, 1.0], 'n_evts': [0.0, 5.0],
              'y': [0.0, 1.0], 'tte': [-60, 100], 'death': [0.0, 1.0],
              'direct': [0.0, 1.0], 'MET': [0.0, 1.0], 'Sgy': [0.0, 1.0], 'Glasgow_Coma_Scale_Total': [0, 15.0],

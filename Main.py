@@ -43,10 +43,9 @@ def runProtocol(params):
     for v in params.variables.keys():  # Make var dict of variables and their ranges
         varDict[v] = params.variables.get(v)
 
-    s = Server(clientList, varDict, params.epsilon)
+    s = Server(clientList, varDict, params)
 
-
-
+    s.runMCTS()
 
 
 
