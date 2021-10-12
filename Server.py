@@ -56,6 +56,8 @@ class Server :
             print("Branch selected:", branch)
 
             #TODO - working here - line 89 in robo grammar
+            while branch != None:
+                pass
 
             usedBudget = 1
 
