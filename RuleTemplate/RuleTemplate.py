@@ -26,7 +26,7 @@ class Node:
     def __init__(self, name, ruleTree=None):
         self.name = name
         self.type = re.sub('[0-9]', '', self.name) #type of node (name stripped of number ID)
-        self.visitNum = 0
+        self.visits = 0
 
         self.ruleTree = ruleTree #current rule structure of this node
 
@@ -60,5 +60,24 @@ class RuleTemplate(treelib.Tree):
 
     # show tree structure and groups
     def showTree(self):
-        self.show(idhidden=False, data_property="name")
+        self.show(idhidden=False, data_property="visits")
+
+    def addChildBranches(self, parent, childNodes): #parent is full node, not just parent id
+        for branch in childNodes:
+
+            #part if we add by braches ...
+            branchString = ' '.join(map(str, branch))
+
+            id = self.generateID(branchString)
+            self.create_node(identifier=id, parent=parent.identifier, data=Node(name=id))
+
+            #Part if we add by nodes
+            # id = self.generateID(branch)
+            # self.create_node(identifier=id, parent=parent.identifier, data=Node(name=id))
+            # for node in branch:
+            #     id = self.generateID(node)
+            #     self.create_node(identifier=id, parent=parent.identifier, data=Node(name=id))
+
+                #TODO - figure out how to add rule tree for this ...
+                #self['boolExpr1'].data.ruleTree = copy.deepcopy(self)
 

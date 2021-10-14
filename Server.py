@@ -18,13 +18,14 @@ class Server :
         if params.template == None:
             # make default rule template tree to start
             self.templateTree = RuleTemplate(default=True)
-            self.rootNode = 'boolExpr1'
+            # self.rootNode = 'boolExpr1'
+            self.rootNode = 'statement1'
 
         else: #TODO - add option to start from preset template
             pass
 
         #mcts params
-        self.defaultPolicy = params.defaultPolicy
+        self.cp = params.cp
 
         #Privacy budget params
         self.epsilon = params.epsilon
@@ -34,6 +35,7 @@ class Server :
         self.verbose = params.verbose
         self.logger = logging.getLogger('SERVER')
         self.mcLogger = logging.getLogger('MCTS')
+
 
     def checkClientBudgetsUsed(self):
         # print("clients used budgets", self.clientsWithUsedBudgets)
@@ -47,90 +49,103 @@ class Server :
     # RUN Monte Carlo Tree Search
     def runMCTS(self):
         usedBudget = 0
-        states = [self.rootNode]
 
         while usedBudget < self.epsilon:
             # SELECTION
-            branches = []
-            branch = self.selectBranch(states[-1])
-            print("Branch selected:", branch)
+            if (self.verbose):
+                self.mcLogger.info("Begin Search\n")
 
-            #TODO - working here - line 89 in robo grammar
-            while branch != None:
-                pass
+            currNode = self.templateTree[self.rootNode] #get actual branch node
+
+            X = self.selection(currNode)
+
+            #to del
+            self.templateTree['boolExpr1'].data.visits = 1
+
+            Y = self.expansion(X)
+            # if (Y):
+            #     Result = self.Simulation(Y)
+            #     if (self.verbose):
+            #         print
+            #         "Result: ", Result
+            #     self.Backpropagation(Y, Result)
+            # else:
+            #     Result = game.GetResult(X.state)
+            #     if (self.verbose):
+            #         print
+            #         "Result: ", Result
+            #     self.Backpropagation(X, Result)
+            # self.PrintResult(Result)
 
             usedBudget = 1
 
-
-    # state is string name of node
-    #Returns the selected branch choice
-    def selectBranch(self, state):
-        # get actual current node from state name
-        currNode = self.templateTree[state]
         if self.verbose:
-            print("CurrNode:", currNode.identifier)
+            self.mcLogger.info("Search Completed")
 
-        # get available branch choices
-        branchChoices = stlGrammarDict[currNode.data.type]
+    #### SELECTION
+    def selection(self, currBranch):
+        '''
+        Perform selection phase of MCTS search
+        :param currBranch: branch to start at
+        :return: selected branch
+        '''
         if self.verbose:
-            print("Next Set of Branch Choices", branchChoices)
+            self.mcLogger.info("--SELECTION PHASE--")
+            self.mcLogger.info("Current Branch: " + currBranch.identifier)
 
-        if all([x == terminalNodes for x in branchChoices]): #Reached only terminal nodes
+        while len(self.templateTree.children(currBranch.identifier)) != 0:
+            currBranch = self.selectChildBranch(currBranch)
+
+        if self.verbose:
+            self.mcLogger.info("Returned Branch: " + currBranch.identifier + "\n")
+
+        return currBranch
+
+    def selectChildBranch(self, branch):
+        '''
+        Select 1st unvisited child node, or if all children visited, select node with highest UTC value
+        :param branch: branch node to start select from
+        :return: selected child branch
+        '''
+
+        if self.verbose:
+            self.mcLogger.info("Selecting Child Branch from " + branch.identifier)
+
+
+        if branch.data.type in terminalNodes: #if branch is a leaf node
             if self.verbose:
-                print("Reached terminal nodes")
-            return None
+                self.mcLogger.info("Branch terminal, returning")
+            return branch
 
-        else:
-            # If state unvisited
-            if currNode.data.visitNum == 0:  # state unvisited --> follow default policy
-                # TODO - make alternative default policies
-                if self.defaultPolicy == "random": #Randomly select a branch
-                    return random.choice(branchChoices)
-
-            else:  # follow tree policy
-                # TODO - adapt tree policy potentially
-
-                # get branch choice that has max of uct score
+        for child in self.templateTree.children(branch.identifier):
+            if child.data.visits == 0.0: #univisted child node
                 if self.verbose:
-                    print("Tree Policy selected")
-
-                maxScore = 0
-                maxBranch = None
-                for bc in branchChoices:
-                    uct = self.uctScore(currNode, bc)
-                    if uct > maxScore:
-                        maxScore = uct
-                        maxBranch = bc
-
-                return maxBranch
-
-    #branch is string type
-    def uctScore(self, currNode, branch): #TODO - Update UCT scoring method
-        #Get actual branch in tree to get visit count
-        nodeChilds = self.templateTree.children(currNode.identifier)
-        idx = [i for i, s in enumerate(nodeChilds) if branch in s][0]
-        branchVisitCount = self.templateTree[nodeChilds[idx]].data.visitNum
-
-        if branchVisitCount > 0:
-            #get reward for current node --> count of client yes responses
-            #Make test template
-            testTemp = copy.deepcopy(currNode.data.ruleTree)
-            for n in branch:
-                id = testTemp.generateID(n)
-                testTemp.create_node(identifier=id, parent=currNode.identifier, data=Node(name="boolExpr1"))
-
-            percentCount = self.queryClientRuleMatch(testTemp)
-
-            uct = 2*(1/math.sqrt(2)) * math.sqrt(2.0 * math.log(currNode.data.visitNum)/branchVisitCount)
-            score = percentCount + uct
-
-        else:
-            return float('inf')
+                    self.mcLogger.info("Found univisited child node " + child.identifier)
+                return child
 
         if self.verbose:
-            print("UCT Score for possible branch", branch, ": ", score)
+            self.mcLogger.info("All children visited, selecting node with highest UTC value")
 
-        return score
+        maxUTC = -1
+        bestChild = None
+        for child in self.templateTree.children(branch.identifier):
+            utc = self.utcScore(child)
+
+            if utc > maxUTC:
+                maxUTC = utc
+                bestChild = child
+
+        return bestChild
+
+
+    def utcScore(self, branch):
+
+        # get reward for current node --> count of client yes responses
+        percentCount = self.queryClientRuleMatch(branch.data.ruleTree)
+
+        uct = percentCount + self.cp * math.sqrt(math.log(branch.parent().data.visits) / branch.data.visits)
+
+        return uct
 
 
     # Get a % of how many clients have a match to the template
@@ -189,3 +204,51 @@ class Server :
                 nodes.append(id)  # remove numbers, append name
 
         return nodes
+
+    #### EXPANSION
+    def expansion(self, selectedBranch):
+        '''
+        Expand the previously selected node
+        :param selectedBranch:
+        :return: ending node of expansion trace
+        '''
+
+        if self.verbose:
+            self.mcLogger.info("--EXPANSION PHASE--")
+
+        if selectedBranch.data.type in terminalNodes: #fully expanded --> at leaf node
+            if self.verbose:
+                self.mcLogger.info("Terminal node reached, expansion completed\n")
+
+            return None
+
+        elif selectedBranch.data.visits == 0: #branch unvisited
+            if self.verbose:
+                self.mcLogger.info("Branch unvisited, returning selected branch\n")
+            return selectedBranch
+
+        else:
+            if len(self.templateTree.children(selectedBranch.identifier)) == 0: #no children added to node yet
+                branchChildren = self.evaluateChildren(selectedBranch) #get possible child branches
+                self.templateTree.addChildBranches(parent=selectedBranch, childNodes=branchChildren) #add all children to branch
+
+                if self.verbose:
+                    self.mcLogger.info("Updated Template Tree:")
+                    self.templateTree.showTree()
+
+            #select child acc to policy
+
+    def evaluateChildren(self, branch):
+        '''
+        Evaluate all possible children states (branches) and add all those that are feasible / possible to visit
+        :param branch: current branch to explore children states of
+        :return: child branch options
+        '''
+        if self.verbose:
+            self.mcLogger.info("Evaluating child branches")
+
+        branchChoices = stlGrammarDict[branch.data.type]
+        if self.verbose:
+            self.mcLogger.info("Found Possible Child Branches: {}".format(' '.join(map(str, branchChoices))))
+
+        return branchChoices
