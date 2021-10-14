@@ -4,19 +4,24 @@ import io
 from PIL import Image
 
 import re
+import logging
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
 import graphviz
 
+logger = logging.getLogger('Rule Template')
+
+
 class Branch: #Set of nodes in tree
     def __init__(self, name, parentNode):
-        self.name = name #name should be in [stl AND stl]1 format
+        self.name = name
+        self.parent = parentNode #parent node branch belongs to
+
         self.visits = 0
 
         self.nodes = []
 
-        self.parent = parentNode #parent node branch belongs to
 
 class Node: #single STL type
     def __init__(self, name):
@@ -24,6 +29,7 @@ class Node: #single STL type
         self.type = re.sub('[0-9]', '', self.name)  # type of node (name stripped of number ID)
         self.visits = 0
 
+        self.branch = None
         self.children = [] #list of branch children
 
 
@@ -75,6 +81,7 @@ class RuleTemplate():
 
         for n in nodeNames:
             nod = Node(n) #make node object
+            nod.branch = br #link node to its branch
             br.nodes.append(nod) #add node to branch
 
             #add nodes to rule temp
@@ -86,10 +93,30 @@ class RuleTemplate():
                 self.dotGraph.add_edge(pydot.Edge(parentName, n))  # connect edge btw parent and node
 
 
+
     def removeNode(self, nodeName):
-        pass
+        node = self._nodes[nodeName]
+
+        if node.children != []:
+            logger.error("ERROR: cannot remove node, node has children")
+            return
+
+        node.branch.nodes.remove(node) #remove node from branch
+        del self._nodes[nodeName] #remove node from node list
+
+        #remove node from graph
+        self.dotGraph.del_edge(node.branch.parent.name, nodeName) #delete edge
+        cluster = self.dotGraph.get_subgraph('"cluster_' + node.branch.name + '"')[0] #delete node from cluster
+        cluster.del_node(nodeName)
+
+        #check if all child nodes have been removed from the branch - if so, remove branch
+        if node.branch.nodes == []:
+            print("All nodes removed from branch, removing branch from template")
+            self.removeBranch(node.branch.name)
+
 
     def removeBranch(self, branchName):
+
         pass
 
     # generate unique node ids for tree
@@ -118,14 +145,20 @@ if __name__ == "__main__":
 
     rt = RuleTemplate()
     rt.addBranch(branch=["eval"], parentName=None)
-    rt.addBranch(branch=["stl", "&", "stl"], parentName="eval1")
-    rt.addBranch(branch=["stl", "|", "stl"], parentName="eval1")
+    rt.addBranch(branch=['stl', 'AND', 'stl'], parentName="eval1")
+    rt.addBranch(branch=["stl", "OR", "stl"], parentName="eval1")
     rt.addBranch(branch=["F", "BO"], parentName="stl1")
+    rt.showGraph()
+
+    rt.removeNode("stl2")
 
     print(rt._nodes)
-    print(rt.root.nodes)
+    print(rt._branches)
+
+    # rt.removeBranch('[stl3 OR1 stl4]')
 
     rt.showGraph()
+
     # #test graph
     #
     # #Make graph
