@@ -1,83 +1,153 @@
-import treelib
+import pydot
+from IPython.display import Image, display
+import io
+from PIL import Image
 import re
-import copy
-
-#Grammar Dictionary for easier access of child nodes in template tree
-stlGrammarDict = {
-    "eval": [["statemenList"]],
-    "statementList": [["statement"]],
-    "statement": [["(","boolExpr",")"]],
-    "boolExpr": [["stlTerm"], ["stlTerm", "AND", "stlTerm"], ["stlTerm", "OR", "stlTerm"], ["stlTerm", "IMPLIES", "stlTerm"] ],
-    "stlTerm": [["BooleanAtomic", "U", "timeBound",  "BooleanAtomic"], ["F", "timeBound", "BooleanAtomic"], ["G", "timeBound", "BooleanAtomic"], ["BooleanAtomic"]],
-    "timeBound": [["[","atomic",",","atomic","]"]],
-    "BooleanAtomic": [["GT"], ["GE"], ["LT"], ["LE"], ["EQ"], ["NEQ"], ["(","boolExpr",")"], ["NOT", "BooleanAtomic"]],
-    "GT": [["Variable", "Parameter"]],
-    "GE": [["Variable", "Parameter"]],
-    "LT": [["Variable", "Parameter"]],
-    "LE": [["Variable", "Parameter"]],
-    "EQ": [["Variable", "Parameter"]],
-    "NEQ": [["Variable", "Parameter"]]
-}
-
-terminalNodes = ["Variable", "Parameter"]
+import logging
+import matplotlib.pyplot as plt
 
 
-class Node:
-    def __init__(self, name, ruleTree=None):
+class Branch: #Set of nodes in tree
+    def __init__(self, name, parentNode):
         self.name = name
-        self.type = re.sub('[0-9]', '', self.name) #type of node (name stripped of number ID)
+        self.parent = parentNode #parent node branch belongs to
+        self.visits = 0
+        self.nodes = []
+
+
+class Node: #single STL type
+    def __init__(self, name):
+        self.name = name
+        self.type = re.sub('[0-9]', '', self.name)  # type of node (name stripped of number ID)
         self.visits = 0
 
-        self.ruleTree = ruleTree #current rule structure of this node
+        self.branch = None
+        self.children = [] #list of branch children
 
-class RuleTemplate(treelib.Tree):
+
+
+class RuleTemplate():
     def __init__(self, default=True):
-        super(RuleTemplate, self).__init__()
-
-        self.idDict = {}  # tracking current ids
+        self.root = None
+        self.nodeIDDict = {}  # tracking current IDs of node
+        self._nodes = {} #dict of nodes in template- nodeName: node object
+        self._branches = {}
+        self.dotGraph = pydot.Dot(graph_type='digraph') # Make pydot graph to visualize rule template
+        self.logger = logging.getLogger('Rule Template')
 
         if default: self.makeDefaultTree()
 
-
     def makeDefaultTree(self):
-        # Make start  of rule template
-        self.create_node(identifier=self.generateID("eval"), parent=None, data=Node(name="evl1"))
-        self.create_node(identifier=self.generateID("statementList"), parent="eval1", data=Node(name="statementList1"))
-        self.create_node(identifier=self.generateID("statement"), parent="statementList1", data=Node(name="statemen1"))
-        self.create_node(identifier=self.generateID("boolExpr"), parent="statement1", data=Node(name="boolExpr1"))
-        self['boolExpr1'].data.ruleTree = copy.deepcopy(self)
+        self.addBranch(branch=['eval'], parentName=None)
+        self.addBranch(branch=['statementList'], parentName="eval1")
+        self.addBranch(branch=['statement'], parentName="statementList1")
+        self.addBranch(branch=['boolExpr'], parentName="statement1")
 
-    # generate unique ids for tree
+    def addBranch(self, branch, parentName):
+        #get actual parent node from rule template
+        if parentName != None:
+            parentNode = self._nodes[parentName]
+        else:
+            parentNode = None
+
+        #get subnode name IDs
+        nodeNames = []
+        for n in branch:
+            nodID = self.generateID(n)
+            nodeNames.append(nodID)
+
+        # make branch object and add it to parentNode
+        brID = "[" + ' '.join(map(str, nodeNames)) + "]"
+        br = Branch(name=brID, parentNode=parentNode)
+        self._branches[brID] = br
+
+        if parentNode == None:
+            self.root = br
+        else: #add branch to children of parent node
+            parentNode.children.append(br)
+
+        #add branch to dot graph
+        clusterBranch = pydot.Cluster(brID, label=brID)
+        self.dotGraph.add_subgraph(clusterBranch)
+
+        for n in nodeNames:
+            nod = Node(n) #make node object
+            nod.branch = br #link node to its branch
+            br.nodes.append(nod) #add node to branch
+
+            #add nodes to rule temp
+            self._nodes[n] = nod
+
+            #add node to dot graph
+            clusterBranch.add_node(pydot.Node(n))
+            if parentNode != None:
+                self.dotGraph.add_edge(pydot.Edge(parentName, n))  # connect edge btw parent and node
+
+    def removeNode(self, nodeName):
+        try:
+            node = self._nodes[nodeName]
+        except:
+            self.logger.error("ERROR: cannot find node " +  nodeName)
+            return
+
+        if node.children != []:
+            self.logger.error("ERROR: cannot remove node, node has children")
+            return
+
+        node.branch.nodes.remove(node) #remove node from branch
+        del self._nodes[nodeName] #remove node from node list
+
+        #remove node from graph
+        self.dotGraph.del_edge(node.branch.parent.name, nodeName) #delete edge
+        cluster = self.dotGraph.get_subgraph('"cluster_' + node.branch.name + '"')[0] #delete node from cluster
+        cluster.del_node(nodeName)
+
+        #check if all child nodes have been removed from the branch - if so, remove branch
+        if node.branch.nodes == []:
+            self.logger.info("All nodes removed from branch, removing branch from template")
+            self.removeBranch(node.branch.name)
+
+
+    def removeBranch(self, branchName):
+        try:
+            branch = self._branches[branchName]
+        except:
+            self.logger.error("ERROR: cannot find branch " + branchName)
+            return
+
+        #make sure no nodes have children
+        for n in branch.nodes:
+            if n.children != []:
+                self.logger.error("ERROR: cannot remove branch, one or more nodes have children")
+                return
+
+        #remove nodes
+        while len(branch.nodes) != 0:
+            n = branch.nodes[0]
+            self.removeNode(n.name)
+
+        #remove branch from list
+        if branchName in self._branches.keys():
+            del self._branches[branchName] #remove node from node list
+
+
+    # generate unique node ids for tree
     def generateID(self, type):
-        if type in self.idDict:
-            val = self.idDict.get(type) + 1
-            self.idDict[type] = val
+        if type in self.nodeIDDict:
+            val = self.nodeIDDict.get(type) + 1
+            self.nodeIDDict[type] = val
         else:
             val = 1
-            self.idDict[type] = val
+            self.nodeIDDict[type] = val
 
         return type + str(val)
 
-    # show tree structure and groups
-    def showTree(self):
-        self.show(idhidden=False, data_property="visits")
+    #Pydot Graph Functions
+    def showGraph(self):
+        img = Image.open(io.BytesIO(self.dotGraph.create_png()))  # .show()
+        plt.imshow(img)  # to show in pycharm sciview
+        plt.show()
 
-    def addChildBranches(self, parent, childNodes): #parent is full node, not just parent id
-        for branch in childNodes:
-
-            #part if we add by braches ...
-            branchString = ' '.join(map(str, branch))
-
-            id = self.generateID(branchString)
-            self.create_node(identifier=id, parent=parent.identifier, data=Node(name=id))
-
-            #Part if we add by nodes
-            # id = self.generateID(branch)
-            # self.create_node(identifier=id, parent=parent.identifier, data=Node(name=id))
-            # for node in branch:
-            #     id = self.generateID(node)
-            #     self.create_node(identifier=id, parent=parent.identifier, data=Node(name=id))
-
-                #TODO - figure out how to add rule tree for this ...
-                #self['boolExpr1'].data.ruleTree = copy.deepcopy(self)
-
+    def saveGraph(self, graphName):
+        self.dotGraph.write(graphName, format='png') #to save to file
+        # "Graphs/img.png"
