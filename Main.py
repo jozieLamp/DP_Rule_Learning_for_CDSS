@@ -45,7 +45,8 @@ def runProtocol(params):
 
     s = Server(clientList, varDict, params)
 
-    s.runMCTS()
+    # s.runMCTS(branchName='[boolExpr1]')
+    s.runMCTS(branchName='[statementList1]')
 
 
 

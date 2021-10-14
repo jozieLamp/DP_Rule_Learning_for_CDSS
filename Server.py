@@ -18,8 +18,6 @@ class Server :
         if params.template == None:
             # make default rule template tree to start
             self.templateTree = RuleTemplate(default=True)
-            # self.rootNode = 'boolExpr1'
-            self.rootNode = 'statement1'
 
         else: #TODO - add option to start from preset template
             pass
@@ -47,35 +45,36 @@ class Server :
             return False
 
     # RUN Monte Carlo Tree Search
-    def runMCTS(self):
+    def runMCTS(self, branchName):
         usedBudget = 0
+
 
         while usedBudget < self.epsilon:
             # SELECTION
             if (self.verbose):
                 self.mcLogger.info("Begin Search\n")
 
-            currNode = self.templateTree[self.rootNode] #get actual branch node
+            currBranch = self.templateTree._branches[branchName]
 
-            X = self.selection(currNode)
+            X = self.selection(currBranch)
 
-            #to del
-            self.templateTree['boolExpr1'].data.visits = 1
-
-            Y = self.expansion(X)
-            # if (Y):
-            #     Result = self.Simulation(Y)
-            #     if (self.verbose):
-            #         print
-            #         "Result: ", Result
-            #     self.Backpropagation(Y, Result)
-            # else:
-            #     Result = game.GetResult(X.state)
-            #     if (self.verbose):
-            #         print
-            #         "Result: ", Result
-            #     self.Backpropagation(X, Result)
-            # self.PrintResult(Result)
+            # #to del
+            # self.templateTree['boolExpr1'].data.visits = 1
+            #
+            # Y = self.expansion(X)
+            # # if (Y):
+            # #     Result = self.Simulation(Y)
+            # #     if (self.verbose):
+            # #         print
+            # #         "Result: ", Result
+            # #     self.Backpropagation(Y, Result)
+            # # else:
+            # #     Result = game.GetResult(X.state)
+            # #     if (self.verbose):
+            # #         print
+            # #         "Result: ", Result
+            # #     self.Backpropagation(X, Result)
+            # # self.PrintResult(Result)
 
             usedBudget = 1
 
@@ -91,41 +90,41 @@ class Server :
         '''
         if self.verbose:
             self.mcLogger.info("--SELECTION PHASE--")
-            self.mcLogger.info("Current Branch: " + currBranch.identifier)
+            self.mcLogger.info("Current Branch: " + currBranch.name)
 
-        while len(self.templateTree.children(currBranch.identifier)) != 0:
+        while currBranch.hasChildren():
             currBranch = self.selectChildBranch(currBranch)
 
         if self.verbose:
-            self.mcLogger.info("Returned Branch: " + currBranch.identifier + "\n")
+            self.mcLogger.info("Returned Branch: " + currBranch.name + "\n")
 
         return currBranch
 
     def selectChildBranch(self, branch):
         '''
-        Select 1st unvisited child node, or if all children visited, select node with highest UTC value
+        Select 1st unvisited child branch, or if all children visited, select branch with highest UTC value
         :param branch: branch node to start select from
         :return: selected child branch
         '''
 
         if self.verbose:
-            self.mcLogger.info("Selecting Child Branch from " + branch.identifier)
+            self.mcLogger.info("Selecting Child Branch from " + branch.name)
 
-
-        if branch.data.type in terminalNodes: #if branch is a leaf node
+        if branch.terminalBranch(): #if branch is a leaf
             if self.verbose:
                 self.mcLogger.info("Branch terminal, returning")
             return branch
 
-        for child in self.templateTree.children(branch.identifier):
-            if child.data.visits == 0.0: #univisted child node
-                if self.verbose:
-                    self.mcLogger.info("Found univisited child node " + child.identifier)
+        for node in branch.nodes:
+            for child in node.children:
+                if child.visits == 0.0: #univisited child branch
+                    self.mcLogger.info("Found univisited child branch " + child.name)
                 return child
 
         if self.verbose:
             self.mcLogger.info("All children visited, selecting node with highest UTC value")
 
+        #TODO HERE --> fix this part
         maxUTC = -1
         bestChild = None
         for child in self.templateTree.children(branch.identifier):

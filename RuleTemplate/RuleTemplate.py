@@ -6,6 +6,26 @@ import re
 import logging
 import matplotlib.pyplot as plt
 
+#Grammar Dictionary for easier access of child nodes in template tree
+stlGrammarDict = {
+    "eval": [["statemenList"]],
+    "statementList": [["statement"]],
+    "statement": [["(","boolExpr",")"]],
+    "boolExpr": [["stlTerm"], ["stlTerm", "AND", "stlTerm"], ["stlTerm", "OR", "stlTerm"], ["stlTerm", "IMPLIES", "stlTerm"] ],
+    "stlTerm": [["BooleanAtomic", "U", "timeBound",  "BooleanAtomic"], ["F", "timeBound", "BooleanAtomic"], ["G", "timeBound", "BooleanAtomic"], ["BooleanAtomic"]],
+    "timeBound": [["[","atomic",",","atomic","]"]],
+    "BooleanAtomic": [["GT"], ["GE"], ["LT"], ["LE"], ["EQ"], ["NEQ"], ["(","boolExpr",")"], ["NOT", "BooleanAtomic"]],
+    "GT": [["Variable", "Parameter"]],
+    "GE": [["Variable", "Parameter"]],
+    "LT": [["Variable", "Parameter"]],
+    "LE": [["Variable", "Parameter"]],
+    "EQ": [["Variable", "Parameter"]],
+    "NEQ": [["Variable", "Parameter"]]
+}
+
+terminalNodes = ["Variable", "Parameter"]
+
+
 
 class Branch: #Set of nodes in tree
     def __init__(self, name, parentNode):
@@ -14,12 +34,25 @@ class Branch: #Set of nodes in tree
         self.visits = 0
         self.nodes = []
 
+    def hasChildren(self):
+        for n in self.nodes:
+            if n.children != []:
+                return True
+
+        return False
+
+    def terminalBranch(self):
+        for n in self.nodes:
+            if n.type not in terminalNodes:
+                return False
+
+        return True
+
 
 class Node: #single STL type
     def __init__(self, name):
         self.name = name
         self.type = re.sub('[0-9]', '', self.name)  # type of node (name stripped of number ID)
-        self.visits = 0
 
         self.branch = None
         self.children = [] #list of branch children
@@ -28,7 +61,7 @@ class Node: #single STL type
 
 class RuleTemplate():
     def __init__(self, default=True):
-        self.root = None
+        self.root = None #name of root node
         self.nodeIDDict = {}  # tracking current IDs of node
         self._nodes = {} #dict of nodes in template- nodeName: node object
         self._branches = {}
@@ -42,6 +75,7 @@ class RuleTemplate():
         self.addBranch(branch=['statementList'], parentName="eval1")
         self.addBranch(branch=['statement'], parentName="statementList1")
         self.addBranch(branch=['boolExpr'], parentName="statement1")
+
 
     def addBranch(self, branch, parentName):
         #get actual parent node from rule template
@@ -62,7 +96,7 @@ class RuleTemplate():
         self._branches[brID] = br
 
         if parentNode == None:
-            self.root = br
+            self.root = brID
         else: #add branch to children of parent node
             parentNode.children.append(br)
 
@@ -116,10 +150,9 @@ class RuleTemplate():
             return
 
         #make sure no nodes have children
-        for n in branch.nodes:
-            if n.children != []:
-                self.logger.error("ERROR: cannot remove branch, one or more nodes have children")
-                return
+        if branch.hasChildren():
+            self.logger.error("ERROR: cannot remove branch, one or more nodes have children")
+            return
 
         #remove nodes
         while len(branch.nodes) != 0:
@@ -143,9 +176,11 @@ class RuleTemplate():
         return type + str(val)
 
     #Pydot Graph Functions
-    def showGraph(self):
+    def showGraph(self, title=None):
         img = Image.open(io.BytesIO(self.dotGraph.create_png()))  # .show()
         plt.imshow(img)  # to show in pycharm sciview
+        if title != None:
+            plt.title(title)
         plt.show()
 
     def saveGraph(self, graphName):
