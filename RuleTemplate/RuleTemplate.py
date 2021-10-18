@@ -5,6 +5,10 @@ from PIL import Image
 import re
 import logging
 import matplotlib.pyplot as plt
+import treelib
+import copy
+
+from RuleTemplate.RuleTree import RuleTree
 
 #Grammar Dictionary for easier access of child nodes in template tree
 stlGrammarDict = {
@@ -34,6 +38,8 @@ class Branch: #Set of nodes in tree
         self.visits = 0
         self.nodes = []
 
+        self.ruleTree = RuleTree()
+
     def hasChildren(self):
         for n in self.nodes:
             if n.children != []:
@@ -58,7 +64,7 @@ class Node: #single STL type
         self.children = [] #list of branch children
 
 
-
+#Full Rule Template
 class RuleTemplate():
     def __init__(self, default=True):
         self.root = None #name of root node
@@ -76,6 +82,11 @@ class RuleTemplate():
         self.addBranch(branch=['statement'], parentName="statementList1")
         self.addBranch(branch=['boolExpr'], parentName="statement1")
 
+    def getBranch(self, name):
+        try:
+            return self._branches[name]
+        except:
+            self.logger.error("Branch name not found")
 
     def addBranch(self, branch, parentName):
         #get actual parent node from rule template
@@ -97,8 +108,10 @@ class RuleTemplate():
 
         if parentNode == None:
             self.root = brID
+
         else: #add branch to children of parent node
             parentNode.children.append(br)
+            br.ruleTree = copy.deepcopy(parentNode.branch.ruleTree)
 
         #add branch to dot graph
         clusterBranch = pydot.Cluster(brID, label=brID)
@@ -116,6 +129,11 @@ class RuleTemplate():
             clusterBranch.add_node(pydot.Node(n))
             if parentNode != None:
                 self.dotGraph.add_edge(pydot.Edge(parentName, n))  # connect edge btw parent and node
+
+        #make rule template
+        for n in nodeNames:
+            br.ruleTree.create_node(identifier=n, parent=parentName)
+
 
     def removeNode(self, nodeName):
         try:
@@ -177,6 +195,7 @@ class RuleTemplate():
 
     #Pydot Graph Functions
     def showGraph(self, title=None):
+        plt.figure(figsize=[20,10])
         img = Image.open(io.BytesIO(self.dotGraph.create_png()))  # .show()
         plt.imshow(img)  # to show in pycharm sciview
         if title != None:
@@ -186,3 +205,35 @@ class RuleTemplate():
     def saveGraph(self, graphName):
         self.dotGraph.write(graphName, format='png') #to save to file
         # "Graphs/img.png"
+
+    printList = ["G", "F", "U", "[", "]", "(", ")", "atomic"]
+    rop = ["GT", "GE", "LT", "LE", "EQ", "NEQ"]
+    ropSymbol = [">", ">=", "<", "<=", "=", "!="]
+
+    def getRule(self, branchName, string=None):
+        test = treelib.Tree()
+
+        br = self.getBranch(branchName)
+        paren = br.parent
+
+        for nod in br.nodes:
+            test.create_node(identifier=nod.name, parent=None)
+
+        while paren != None:
+            #make parent nodes
+            for nod in paren.branch.nodes:
+                test.create_node(identifier=nod.name, parent=None)
+
+                #update child nodes
+                for n in nod.children:
+                    for nn in n.nodes:
+                        test.update_node(nn.name, parent=nod.name)
+
+            paren = paren.parent
+
+        test.show()
+
+
+
+
+

@@ -56,12 +56,9 @@ class Server :
 
             currBranch = self.templateTree._branches[branchName]
 
-            X = self.selection(currBranch)
+            X = self.selection(currBranch) #TODO - may need to fix selection to do multiple paths from branches with multi nodes
 
-            # #to del
-            # self.templateTree['boolExpr1'].data.visits = 1
-            #
-            # Y = self.expansion(X)
+            Y = self.expansion(X) #TODO WORKING HERE
             # # if (Y):
             # #     Result = self.Simulation(Y)
             # #     if (self.verbose):
@@ -85,11 +82,11 @@ class Server :
     def selection(self, currBranch):
         '''
         Perform selection phase of MCTS search
-        :param currBranch: branch to start at
-        :return: selected branch
+        :param currBranch: branch(es) to start at
+        :return: selected branch(es)
         '''
         if self.verbose:
-            self.mcLogger.info("--SELECTION PHASE--")
+            self.mcLogger.info("----SELECTION PHASE----")
             self.mcLogger.info("Current Branch: " + currBranch.name)
 
         while currBranch.hasChildren():
@@ -104,7 +101,7 @@ class Server :
         '''
         Select 1st unvisited child branch, or if all children visited, select branch with highest UTC value
         :param branch: branch node to start select from
-        :return: selected child branch
+        :return: selected child branch(es)
         '''
 
         if self.verbose:
@@ -119,30 +116,41 @@ class Server :
             for child in node.children:
                 if child.visits == 0.0: #univisited child branch
                     self.mcLogger.info("Found univisited child branch " + child.name)
-                return child
+                    return child #child = child branch from node
 
         if self.verbose:
             self.mcLogger.info("All children visited, selecting node with highest UTC value")
 
-        #TODO HERE --> fix this part
+
+        #Select branch with highest UTC value
+
+        #Note - currently treats each child as separate (even if parent has combined children options ...)
+        # TODO HERE -->
+        #get all combinations of child nodes
+        #for each child combo, get max UTC, update the UTC of each node in the branch
+
         maxUTC = -1
         bestChild = None
-        for child in self.templateTree.children(branch.identifier):
-            utc = self.utcScore(child)
 
-            if utc > maxUTC:
-                maxUTC = utc
-                bestChild = child
+        for node in branch.nodes:
+            for child in node.children:
+                utc = self.utcScore(child)
 
-        return bestChild
+                if self.verbose:
+                    self.logger.info("UTC for " + child.name + " : " + str(utc))
+
+                if utc > maxUTC:
+                    maxUTC = utc
+                    bestChild = child
+
+            return bestChild
 
 
     def utcScore(self, branch):
-
         # get reward for current node --> count of client yes responses
-        percentCount = self.queryClientRuleMatch(branch.data.ruleTree)
-
-        uct = percentCount + self.cp * math.sqrt(math.log(branch.parent().data.visits) / branch.data.visits)
+        percentCount = self.queryClientRuleMatch(branch.ruleTree)
+        parenVisits = branch.parent.branch.visits
+        uct = percentCount + self.cp * math.sqrt(math.log(parenVisits) / branch.visits)
 
         return uct
 

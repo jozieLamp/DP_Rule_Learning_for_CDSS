@@ -45,6 +45,29 @@ def runProtocol(params):
 
     s = Server(clientList, varDict, params)
 
+    # s.templateTree.addBranch(branch=['stlTerm', 'AND', 'stlTerm'], parentName='boolExpr1')
+    # s.templateTree.addBranch(branch=['stlTerm'], parentName='boolExpr1')
+    # s.templateTree.addBranch(branch=['F', 'timeBound', 'BooleanAtomic'], parentName='stlTerm1')
+    # s.templateTree.addBranch(branch=['G', 'timeBound', 'BooleanAtomic'], parentName='stlTerm1')
+    # s.templateTree.addBranch(branch=['G', 'timeBound', 'BooleanAtomic'], parentName='stlTerm2')
+    # s.templateTree.addBranch(branch=['F', 'timeBound', 'BooleanAtomic'], parentName='stlTerm2')
+    #
+    # s.templateTree.addBranch(branch=['GT'], parentName='BooleanAtomic1')
+    # s.templateTree.addBranch(branch=['GE'], parentName='BooleanAtomic1')
+    # s.templateTree.addBranch(branch=['LT'], parentName='BooleanAtomic2')
+    # s.templateTree.addBranch(branch=['LE'], parentName='BooleanAtomic2')
+    #
+    # # s.templateTree.showGraph()
+    # # s.templateTree.getBranch('[stlTerm1 AND1 stlTerm2]').visits = 1
+    #
+    # s.templateTree.getBranch('[G2 timeBound3 BooleanAtomic3]').visits = 1
+    # s.templateTree.getBranch('[F2 timeBound4 BooleanAtomic4]').visits = 1
+    # s.templateTree.getBranch('[F1 timeBound1 BooleanAtomic1]').visits = 1
+    # s.templateTree.getBranch('[G1 timeBound2 BooleanAtomic2]').visits = 1
+    #
+
+
+
     # s.runMCTS(branchName='[boolExpr1]')
     s.runMCTS(branchName='[statementList1]')
 
