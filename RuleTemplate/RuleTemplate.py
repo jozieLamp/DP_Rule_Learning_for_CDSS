@@ -199,7 +199,7 @@ class RuleTemplate():
 
     #Pydot Graph Functions
     def showGraph(self, title=None):
-        plt.figure(figsize=[40,20])
+        plt.figure(figsize=[40,25])
         img = Image.open(io.BytesIO(self.dotGraph.create_png()))  # .show()
         plt.imshow(img)  # to show in pycharm sciview
         if title != None:

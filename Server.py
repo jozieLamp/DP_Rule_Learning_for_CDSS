@@ -48,6 +48,14 @@ class Server :
     def runMCTS(self, branchName):
         usedBudget = 0
 
+        '''
+        TODO NEXT -- 1. make it so this stops when budget is used
+        #2. Figure out scoring for simulation and backprop
+        #3. Figure out how to allocate budget amongst queries
+        #4. Figure out beam search part where prunes branches ...
+        #5. (?) Look at searching down multiple path ways for branch children (eg stl & stl) 
+        '''
+
 
         # while usedBudget < self.epsilon:
         while not self.checkClientBudgetsUsed():
