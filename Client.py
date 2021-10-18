@@ -81,7 +81,7 @@ class Client:
             return response, trueResp, p
 
         else:
-            return "BUDGET USED"
+            return "BUDGET USED", None, None
 
     # check for structural match
     def queryStructuralRuleMatch(self, tempNodes, varList):

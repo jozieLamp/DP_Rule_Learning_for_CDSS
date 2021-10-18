@@ -49,7 +49,8 @@ class Server :
         usedBudget = 0
 
 
-        while usedBudget < self.epsilon:
+        # while usedBudget < self.epsilon:
+        while not self.checkClientBudgetsUsed():
             # SELECTION
             if (self.verbose):
                 self.mcLogger.info("Begin Search\n")
@@ -57,23 +58,22 @@ class Server :
             currBranch = self.templateTree._branches[branchName]
 
             X = self.selection(currBranch) #TODO - may need to fix selection to do multiple paths from branches with multi nodes
+            if self.verbose:
+                self.templateTree.showGraph(title='Selection Step')
 
-            Y = self.expansion(X) #TODO WORKING HERE
-            # # if (Y):
-            # #     Result = self.Simulation(Y)
-            # #     if (self.verbose):
-            # #         print
-            # #         "Result: ", Result
-            # #     self.Backpropagation(Y, Result)
-            # # else:
-            # #     Result = game.GetResult(X.state)
-            # #     if (self.verbose):
-            # #         print
-            # #         "Result: ", Result
-            # #     self.Backpropagation(X, Result)
-            # # self.PrintResult(Result)
+            Y = self.expansion(X)
 
-            usedBudget = 1
+            if Y != None:
+                result = self.simulation(Y)
+                self.backpropagation(Y, result)
+
+            else:
+                result = self.queryClientRuleMatch(X.ruleTree) #TODO - this was originally game.getResult(X.state) may need to adapt this
+                if (self.verbose):
+                    self.mcLogger.info("Got result " + str(result))
+
+                self.backpropagation(X, result)
+
 
         if self.verbose:
             self.mcLogger.info("Search Completed")
@@ -152,6 +152,10 @@ class Server :
         parenVisits = branch.parent.branch.visits
         uct = percentCount + self.cp * math.sqrt(math.log(parenVisits) / branch.visits)
 
+        #update scores in branch
+        branch.uctScores.append(uct)
+        branch.matchScores.append(percentCount)
+
         return uct
 
 
@@ -168,11 +172,12 @@ class Server :
 
         for c in self.clientList:
             resp, truResp, p = self.clientList[c].randResponseQueryStruct(tempNodes)
-            trueYesses += truResp
+
             if resp == "BUDGET USED":
                 self.clientsWithUsedBudgets.append(c)
             else:
                 yesCount += resp
+                trueYesses += truResp
 
         if not self.checkClientBudgetsUsed():
             q = 1-p
@@ -185,9 +190,13 @@ class Server :
             if percentCount < 0:
                 percentCount = 0.0
 
+            #Fix over estimates
+            if percentCount > 1.0:
+                percentCount = 1.0
+
             if self.verbose:
                 # print("yes cnt", yesCount, "p", p, "q", q, "est true count", estTrueCount)
-                print("True Percent", truePerCount, "Est Percent", percentCount)
+                self.logger.info("True Percent " + str(truePerCount) +  ", Est Percent " + str(percentCount))
 
             return percentCount
 
@@ -221,41 +230,108 @@ class Server :
         '''
 
         if self.verbose:
-            self.mcLogger.info("--EXPANSION PHASE--")
+            self.mcLogger.info("----EXPANSION PHASE----")
 
-        if selectedBranch.data.type in terminalNodes: #fully expanded --> at leaf node
+        if selectedBranch.terminalBranch(): #fully expanded --> at leaf node
             if self.verbose:
-                self.mcLogger.info("Terminal node reached, expansion completed\n")
+                self.mcLogger.info("Terminal node reached, expansion completed " + selectedBranch.name +  "\n")
 
             return None
 
-        elif selectedBranch.data.visits == 0: #branch unvisited
+        elif selectedBranch.visits == 0: #branch unvisited
             if self.verbose:
-                self.mcLogger.info("Branch unvisited, returning selected branch\n")
+                self.mcLogger.info("Branch unvisited, returning selected branch "  + selectedBranch.name +  "\n")
             return selectedBranch
 
         else:
-            if len(self.templateTree.children(selectedBranch.identifier)) == 0: #no children added to node yet
-                branchChildren = self.evaluateChildren(selectedBranch) #get possible child branches
-                self.templateTree.addChildBranches(parent=selectedBranch, childNodes=branchChildren) #add all children to branch
+            if not selectedBranch.hasChildren(): #no children added to node yet
+                branchChildren = self.evaluateChildren(selectedBranch) #get possible child branches and add to branch
 
                 if self.verbose:
-                    self.mcLogger.info("Updated Template Tree:")
-                    self.templateTree.showTree()
+                    self.mcLogger.info("Updated Template Tree")
+                    self.templateTree.showGraph(title='Expansion Step')
 
-            #select child acc to policy
+            #select from the added child branches according to a policy
+            return self.selectionPolicy(branchChildren)
 
     def evaluateChildren(self, branch):
         '''
         Evaluate all possible children states (branches) and add all those that are feasible / possible to visit
         :param branch: current branch to explore children states of
-        :return: child branch options
+        :return branch children added
         '''
         if self.verbose:
-            self.mcLogger.info("Evaluating child branches")
+            self.mcLogger.info("Evaluating possible child branches")
 
-        branchChoices = stlGrammarDict[branch.data.type]
+        branchChildren = []
+
+        for node in branch.nodes:
+            childChoices = stlGrammarDict[node.type] #get possible child branches
+            if self.verbose:
+                self.mcLogger.info("For node " + node.name + " found Possible Child Branches: {}".format(' '.join(map(str, childChoices))))
+
+            #TODO - potentially evaluate some type of condition here to add the branches to the node ...
+            for choice in childChoices:
+                br = self.templateTree.addBranch(choice, node.name) #add all children to branch
+                branchChildren.append(br)
+
+        return branchChildren
+
+
+    #TODO - this is currently random, make an actual policy here eventually
+    def selectionPolicy(self, branchOptions):
+        '''
+        Select branch according to policy
+        :param branchOptions: List of branches to choose from
+        :return:
+        '''
+        sel = random.choice(branchOptions)
+
         if self.verbose:
-            self.mcLogger.info("Found Possible Child Branches: {}".format(' '.join(map(str, branchChoices))))
+            self.mcLogger.info("Selected branch to explore " +  sel.name + " according to default policy: random\n")
 
-        return branchChoices
+        return sel
+
+    #### SIMULATION
+    def simulation(self, selectedBranch):
+        '''
+        Get some type of simulation result for entire rule at this node
+
+        :param selectedBranch: branch to simulate results for
+        :return: simulation result (right now match count to rule)
+        '''
+        if self.verbose:
+            self.mcLogger.info("----SIMULATION PHASE----")
+            self.mcLogger.info("Simulating Branch: " + selectedBranch.name)
+            selectedBranch.ruleTree.show()
+
+        #Traditional result here is the number of wins or losses --> for us could be # clients with match ???
+        #Note - this part could be where the p budgets are tested / evaluated ...
+        percentCount = self.queryClientRuleMatch(selectedBranch.ruleTree)
+
+        if self.verbose:
+            self.mcLogger.info("Rule Match Percentage: " + str(percentCount) + "\n")
+
+        return percentCount
+
+    def backpropagation(self, startingBranch, score):
+        '''
+        Backpropagate score up tree
+        :param startingBranch: branch to start backpropagation from
+        :param score: score to propagate up
+        :return:
+        '''
+        if self.verbose:
+            self.mcLogger.info("----BACKPROPAGATION PHASE----")
+
+        #Update current branch
+        startingBranch.matchScores.append(score)
+        startingBranch.visits += 1 #add visit to this node
+        #normally is a self.utcScore() here ... but need to determine how to do this without doubly querying the clients ...
+
+        #prop scores
+        br = startingBranch
+        while br.parent != None:
+            br = br.parent.branch
+            br.matchScores.append(score)
+            br.visits += 1  # add visit to this node

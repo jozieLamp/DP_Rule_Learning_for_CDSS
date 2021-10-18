@@ -30,13 +30,16 @@ stlGrammarDict = {
 terminalNodes = ["Variable", "Parameter"]
 
 
-
 class Branch: #Set of nodes in tree
     def __init__(self, name, parentNode):
         self.name = name
         self.parent = parentNode #parent node branch belongs to
         self.visits = 0
         self.nodes = []
+
+        self.uctScores = [] #list of scores for this branch
+        self.matchScores = [] #list of match count scores for this branch in format [percentage, num clients]
+        #TODO - make adaptive active client thing here ...
 
         self.ruleTree = RuleTree()
 
@@ -71,7 +74,7 @@ class RuleTemplate():
         self.nodeIDDict = {}  # tracking current IDs of node
         self._nodes = {} #dict of nodes in template- nodeName: node object
         self._branches = {}
-        self.dotGraph = pydot.Dot(graph_type='digraph') # Make pydot graph to visualize rule template
+        self.dotGraph = pydot.Dot(graph_type='digraph', forcelabels=True) # Make pydot graph to visualize rule template
         self.logger = logging.getLogger('Rule Template')
 
         if default: self.makeDefaultTree()
@@ -134,6 +137,7 @@ class RuleTemplate():
         for n in nodeNames:
             br.ruleTree.create_node(identifier=n, parent=parentName)
 
+        return br #return added branch
 
     def removeNode(self, nodeName):
         try:
@@ -195,7 +199,7 @@ class RuleTemplate():
 
     #Pydot Graph Functions
     def showGraph(self, title=None):
-        plt.figure(figsize=[20,10])
+        plt.figure(figsize=[40,20])
         img = Image.open(io.BytesIO(self.dotGraph.create_png()))  # .show()
         plt.imshow(img)  # to show in pycharm sciview
         if title != None:
