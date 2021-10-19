@@ -35,21 +35,21 @@ class Server :
         self.mcLogger = logging.getLogger('MCTS')
 
 
-    def checkClientBudgetsUsed(self):
-        # print("clients used budgets", self.clientsWithUsedBudgets)
+    def globalBudgetUsed(self):
         if list(self.clientList.keys()) == set(self.clientsWithUsedBudgets):
             return True
-        # elif len(set(self.clientsWithUsedBudgets)) > len(self.clientList) - 3:  # only a few clients without used budgets so end
-        #     return True
+        elif len(set(self.clientsWithUsedBudgets)) > len(self.clientList)-3: #only a few clients without used budgets so end
+            return True
         else:
             return False
+
 
     # RUN Monte Carlo Tree Search
     def runMCTS(self, branchName):
         usedBudget = 0
 
         '''
-        TODO NEXT -- 1. make it so this stops when budget is used
+        TODO NEXT 
         #2. Figure out scoring for simulation and backprop
         #3. Figure out how to allocate budget amongst queries
         #4. Figure out beam search part where prunes branches ...
@@ -58,33 +58,49 @@ class Server :
 
 
         # while usedBudget < self.epsilon:
-        while not self.checkClientBudgetsUsed():
+        while not self.globalBudgetUsed():
             # SELECTION
             if (self.verbose):
                 self.mcLogger.info("Begin Search\n")
 
             currBranch = self.templateTree._branches[branchName]
 
+            #query here in utc score part ...
             X = self.selection(currBranch) #TODO - may need to fix selection to do multiple paths from branches with multi nodes
+            if X == "BUDGET USED":
+                self.logger.info("BUDGET USED\n")
+                break
             if self.verbose:
-                self.templateTree.showGraph(title='Selection Step')
+                clus = self.templateTree.dotGraph.get_subgraph('"cluster_' + X.name + '"')[0]
+                clus.set('color', 'red')
+                self.templateTree.saveGraph(graphName='Selection Step')
+                clus.set('color', 'black')
 
             Y = self.expansion(X)
 
             if Y != None:
                 result = self.simulation(Y)
-                self.backpropagation(Y, result)
+
+                if result == "BUDGET USED":
+                    self.logger.info("BUDGET USED\n")
+                    break
+                else:
+                    self.backpropagation(Y, result)
 
             else:
                 result = self.queryClientRuleMatch(X.ruleTree) #TODO - this was originally game.getResult(X.state) may need to adapt this
                 if (self.verbose):
-                    self.mcLogger.info("Got result " + str(result))
+                    self.mcLogger.info("Got result " + str(result) + "\n")
 
-                self.backpropagation(X, result)
+                if result == "BUDGET USED":
+                    self.logger.info("BUDGET USED\n")
+                    break
+                else:
+                    self.backpropagation(X, result)
 
 
         if self.verbose:
-            self.mcLogger.info("Search Completed")
+            self.mcLogger.info("----SEARCH COMPLETED----")
 
     #### SELECTION
     def selection(self, currBranch):
@@ -99,6 +115,8 @@ class Server :
 
         while currBranch.hasChildren():
             currBranch = self.selectChildBranch(currBranch)
+            if currBranch == None:
+                return "BUDGET USED"
 
         if self.verbose:
             self.mcLogger.info("Returned Branch: " + currBranch.name + "\n")
@@ -147,7 +165,8 @@ class Server :
                 if self.verbose:
                     self.logger.info("UTC for " + child.name + " : " + str(utc))
 
-                if utc > maxUTC:
+
+                if utc != "BUDGET USED" and utc > maxUTC:
                     maxUTC = utc
                     bestChild = child
 
@@ -157,6 +176,9 @@ class Server :
     def utcScore(self, branch):
         # get reward for current node --> count of client yes responses
         percentCount = self.queryClientRuleMatch(branch.ruleTree)
+        if percentCount == 'BUDGET USED':
+            return "BUDGET USED"
+
         parenVisits = branch.parent.branch.visits
         uct = percentCount + self.cp * math.sqrt(math.log(parenVisits) / branch.visits)
 
@@ -187,7 +209,7 @@ class Server :
                 yesCount += resp
                 trueYesses += truResp
 
-        if not self.checkClientBudgetsUsed():
+        if not self.globalBudgetUsed():
             q = 1-p
             estTrueCount = (yesCount - (len(self.clientList) * q)) / (p-q)
             percentCount = float(estTrueCount / len(self.clientList))
@@ -257,7 +279,11 @@ class Server :
 
                 if self.verbose:
                     self.mcLogger.info("Updated Template Tree")
-                    self.templateTree.showGraph(title='Expansion Step')
+                    clus = self.templateTree.dotGraph.get_subgraph('"cluster_' + selectedBranch.name + '"')[0]
+                    clus.set('color', 'red')
+                    self.templateTree.saveGraph(graphName='Expansion Step')
+                    clus.set('color', 'black')
+
 
             #select from the added child branches according to a policy
             return self.selectionPolicy(branchChildren)
@@ -274,14 +300,15 @@ class Server :
         branchChildren = []
 
         for node in branch.nodes:
-            childChoices = stlGrammarDict[node.type] #get possible child branches
-            if self.verbose:
-                self.mcLogger.info("For node " + node.name + " found Possible Child Branches: {}".format(' '.join(map(str, childChoices))))
+            if node.type in stlGrammarDict.keys(): #node is expandable
+                childChoices = stlGrammarDict[node.type] #get possible child branches
+                if self.verbose:
+                    self.mcLogger.info("For node " + node.name + " found Possible Child Branches: {}".format(' '.join(map(str, childChoices))))
 
-            #TODO - potentially evaluate some type of condition here to add the branches to the node ...
-            for choice in childChoices:
-                br = self.templateTree.addBranch(choice, node.name) #add all children to branch
-                branchChildren.append(br)
+                #TODO - potentially evaluate some type of condition here to add the branches to the node ...
+                for choice in childChoices:
+                    br = self.templateTree.addBranch(choice, node.name) #add all children to branch
+                    branchChildren.append(br)
 
         return branchChildren
 
@@ -331,6 +358,7 @@ class Server :
         '''
         if self.verbose:
             self.mcLogger.info("----BACKPROPAGATION PHASE----")
+            self.mcLogger.info("Backpropogating Score: " + str(score) + "\n")
 
         #Update current branch
         startingBranch.matchScores.append(score)

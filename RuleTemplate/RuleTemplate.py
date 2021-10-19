@@ -17,7 +17,7 @@ stlGrammarDict = {
     "statement": [["(","boolExpr",")"]],
     "boolExpr": [["stlTerm"], ["stlTerm", "AND", "stlTerm"], ["stlTerm", "OR", "stlTerm"], ["stlTerm", "IMPLIES", "stlTerm"] ],
     "stlTerm": [["BooleanAtomic", "U", "timeBound",  "BooleanAtomic"], ["F", "timeBound", "BooleanAtomic"], ["G", "timeBound", "BooleanAtomic"], ["BooleanAtomic"]],
-    "timeBound": [["[","atomic",",","atomic","]"]],
+    # "timeBound": [["[","atomic",",","atomic","]"]],
     "BooleanAtomic": [["GT"], ["GE"], ["LT"], ["LE"], ["EQ"], ["NEQ"], ["(","boolExpr",")"], ["NOT", "BooleanAtomic"]],
     "GT": [["Variable", "Parameter"]],
     "GE": [["Variable", "Parameter"]],
@@ -76,6 +76,8 @@ class RuleTemplate():
         self._branches = {}
         self.dotGraph = pydot.Dot(graph_type='digraph', forcelabels=True) # Make pydot graph to visualize rule template
         self.logger = logging.getLogger('Rule Template')
+
+        self.graphNum = 1
 
         if default: self.makeDefaultTree()
 
@@ -206,8 +208,11 @@ class RuleTemplate():
             plt.title(title)
         plt.show()
 
+
     def saveGraph(self, graphName):
-        self.dotGraph.write(graphName, format='png') #to save to file
+        nme = "RuleTemplate/Graphs/" + str(self.graphNum) + "_" + graphName + ".png"
+        self.dotGraph.write(nme, format='png') #to save to file
+        self.graphNum += 1
         # "Graphs/img.png"
 
     printList = ["G", "F", "U", "[", "]", "(", ")", "atomic"]

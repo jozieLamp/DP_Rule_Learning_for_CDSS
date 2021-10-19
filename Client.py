@@ -49,7 +49,7 @@ class Client:
         else:
             return False
 
-    def randResponseQueryStruct(self, tempNodes, varList=None, pLossBudg=0.1):
+    def randResponseQueryStruct(self, tempNodes, varList=None, pLossBudg=0.01):
 
         if not self.privacyBudgetUsed():  # first check privacy budget not used
 
