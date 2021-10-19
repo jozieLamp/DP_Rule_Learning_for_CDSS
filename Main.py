@@ -68,7 +68,7 @@ def runProtocol(params):
 
 
 
-    s.runMCTS(branchName='[boolExpr1]')
+    s.runMCTS(branchName='[eval1]')
     # s.runMCTS(branchName='[statementList1]')
 
 

@@ -12,7 +12,7 @@ from RuleTemplate.RuleTree import RuleTree
 
 #Grammar Dictionary for easier access of child nodes in template tree
 stlGrammarDict = {
-    "eval": [["statemenList"]],
+    "eval": [["statementList"]],
     "statementList": [["statement"]],
     "statement": [["(","boolExpr",")"]],
     "boolExpr": [["stlTerm"], ["stlTerm", "AND", "stlTerm"], ["stlTerm", "OR", "stlTerm"], ["stlTerm", "IMPLIES", "stlTerm"] ],
@@ -34,14 +34,18 @@ class Branch: #Set of nodes in tree
     def __init__(self, name, parentNode):
         self.name = name
         self.parent = parentNode #parent node branch belongs to
-        self.visits = 0
+        self.visits = 0.0
         self.nodes = []
 
-        self.uctScores = [] #list of scores for this branch
-        self.matchScores = [] #list of match count scores for this branch in format [percentage, num clients]
+        self.matchScores = [] #list of match count scores + number of clients queried in format [percentage, num clients]
+        self.uct = 0.0 #UCT score of branch
         #TODO - make adaptive active client thing here ...
 
         self.ruleTree = RuleTree()
+
+    def getCurrentScore(self): #return average percent match score
+        pers = [item[0] for item in self.matchScores]
+        return sum(pers) / len(self.matchScores)
 
     def hasChildren(self):
         for n in self.nodes:
@@ -83,9 +87,10 @@ class RuleTemplate():
 
     def makeDefaultTree(self):
         self.addBranch(branch=['eval'], parentName=None)
-        self.addBranch(branch=['statementList'], parentName="eval1")
-        self.addBranch(branch=['statement'], parentName="statementList1")
-        self.addBranch(branch=['boolExpr'], parentName="statement1")
+        # self.getBranch('[eval1]').visits = 1
+        # self.addBranch(branch=['statementList'], parentName="eval1")
+        # self.addBranch(branch=['statement'], parentName="statementList1")
+        # self.addBranch(branch=['boolExpr'], parentName="statement1")
 
     def getBranch(self, name):
         try:
@@ -241,6 +246,25 @@ class RuleTemplate():
             paren = paren.parent
 
         test.show()
+
+
+    def getLeafBranches(self):
+        brList = []
+        for key, br in self._branches.items():
+            if not br.hasChildren():
+                brList.append(br)
+
+        return brList
+
+    def generateRuleSet(self):
+        leafs = self.getLeafBranches()
+        ruleSet = []
+
+        for l in leafs:
+            ruleSet.append(l.ruleTree)
+
+        return ruleSet
+
 
 
 

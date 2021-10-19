@@ -28,12 +28,22 @@ class Server :
         #Privacy budget params
         self.epsilon = params.epsilon
         self.clientsWithUsedBudgets = []  # list of clients who have used budget
+        self.numQueries = 0
+
+        #Ruleset
+        self.ruleSet = [] #set of rule trees
 
         #Output params
         self.verbose = params.verbose
         self.logger = logging.getLogger('SERVER')
         self.mcLogger = logging.getLogger('MCTS')
 
+    def logRuleSet(self):
+        self.logger.info("Retrieved Rules:")
+        self.logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        for r in self.ruleSet:
+            self.logger.info(r.toString())
+        self.logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
 
     def globalBudgetUsed(self):
         if list(self.clientList.keys()) == set(self.clientsWithUsedBudgets):
@@ -50,49 +60,49 @@ class Server :
 
         '''
         TODO NEXT 
-        #2. Figure out scoring for simulation and backprop
+        
+        #2.5 Figure out getting multiple pathways down from branch for searching and for printing out the final rules ...
+        
         #3. Figure out how to allocate budget amongst queries
         #4. Figure out beam search part where prunes branches ...
         #5. (?) Look at searching down multiple path ways for branch children (eg stl & stl) 
         '''
 
 
-        # while usedBudget < self.epsilon:
+
         while not self.globalBudgetUsed():
             # SELECTION
             if (self.verbose):
-                self.mcLogger.info("Begin Search\n")
+                self.mcLogger.info("Begin Search Round\n")
 
             currBranch = self.templateTree._branches[branchName]
 
             #query here in utc score part ...
             X = self.selection(currBranch) #TODO - may need to fix selection to do multiple paths from branches with multi nodes
-            if X == "BUDGET USED":
-                self.logger.info("BUDGET USED\n")
-                break
             if self.verbose:
                 clus = self.templateTree.dotGraph.get_subgraph('"cluster_' + X.name + '"')[0]
                 clus.set('color', 'red')
                 self.templateTree.saveGraph(graphName='Selection Step')
+                self.mcLogger.info("**Saved Graph " + str(self.templateTree.graphNum) + "_" + 'Selection Step\n')
                 clus.set('color', 'black')
 
             Y = self.expansion(X)
 
             if Y != None:
-                result = self.simulation(Y)
+                result = self.simulation(Y) #result is in form [percentCount, activeClients]
 
-                if result == "BUDGET USED":
+                if result[0] == "BUDGET USED":
                     self.logger.info("BUDGET USED\n")
                     break
                 else:
                     self.backpropagation(Y, result)
 
             else:
-                result = self.queryClientRuleMatch(X.ruleTree) #TODO - this was originally game.getResult(X.state) may need to adapt this
+                result = self.queryClientRuleMatch(X.ruleTree) #result is in form [percentCount, activeClients]
                 if (self.verbose):
-                    self.mcLogger.info("Got result " + str(result) + "\n")
+                    self.mcLogger.info("Got result " + str(result[0]) + " " + str(result[1]) + "\n")
 
-                if result == "BUDGET USED":
+                if result[0] == "BUDGET USED":
                     self.logger.info("BUDGET USED\n")
                     break
                 else:
@@ -100,7 +110,11 @@ class Server :
 
 
         if self.verbose:
-            self.mcLogger.info("----SEARCH COMPLETED----")
+            self.mcLogger.info("----SEARCH COMPLETED----\n")
+
+        self.ruleSet = self.templateTree.generateRuleSet()
+        self.logRuleSet()
+
 
     #### SELECTION
     def selection(self, currBranch):
@@ -115,11 +129,9 @@ class Server :
 
         while currBranch.hasChildren():
             currBranch = self.selectChildBranch(currBranch)
-            if currBranch == None:
-                return "BUDGET USED"
 
         if self.verbose:
-            self.mcLogger.info("Returned Branch: " + currBranch.name + "\n")
+            self.mcLogger.info("Returned Branch: " + currBranch.name)
 
         return currBranch
 
@@ -145,111 +157,33 @@ class Server :
                     return child #child = child branch from node
 
         if self.verbose:
-            self.mcLogger.info("All children visited, selecting node with highest UTC value")
+            self.mcLogger.info("All children visited, selecting node with highest score value")
 
 
-        #Select branch with highest UTC value
+        #Select branch with highest score (UTC??) value
 
         #Note - currently treats each child as separate (even if parent has combined children options ...)
         # TODO HERE -->
         #get all combinations of child nodes
         #for each child combo, get max UTC, update the UTC of each node in the branch
 
-        maxUTC = -1
+        maxScore = -1
         bestChild = None
 
         for node in branch.nodes:
             for child in node.children:
-                utc = self.utcScore(child)
+                # utc = self.utcScore(child)
+                score = child.getCurrentScore()
 
                 if self.verbose:
-                    self.logger.info("UTC for " + child.name + " : " + str(utc))
+                    self.logger.info("Score for " + child.name + " : " + str(score))
 
-
-                if utc != "BUDGET USED" and utc > maxUTC:
-                    maxUTC = utc
+                if score > maxScore:
+                    maxScore = score
                     bestChild = child
 
-            return bestChild
+        return bestChild
 
-
-    def utcScore(self, branch):
-        # get reward for current node --> count of client yes responses
-        percentCount = self.queryClientRuleMatch(branch.ruleTree)
-        if percentCount == 'BUDGET USED':
-            return "BUDGET USED"
-
-        parenVisits = branch.parent.branch.visits
-        uct = percentCount + self.cp * math.sqrt(math.log(parenVisits) / branch.visits)
-
-        #update scores in branch
-        branch.uctScores.append(uct)
-        branch.matchScores.append(percentCount)
-
-        return uct
-
-
-    # Get a % of how many clients have a match to the template
-    def queryClientRuleMatch(self, template):
-        # get template node list
-        tempNodes = self.getTemplateNodes(template)
-        # print("temp nodes", tempNodes)
-
-        # get count from clients of who have template
-        yesCount = 0
-        trueYesses = 0
-        p = None
-
-        for c in self.clientList:
-            resp, truResp, p = self.clientList[c].randResponseQueryStruct(tempNodes)
-
-            if resp == "BUDGET USED":
-                self.clientsWithUsedBudgets.append(c)
-            else:
-                yesCount += resp
-                trueYesses += truResp
-
-        if not self.globalBudgetUsed():
-            q = 1-p
-            estTrueCount = (yesCount - (len(self.clientList) * q)) / (p-q)
-            percentCount = float(estTrueCount / len(self.clientList))
-
-            truePerCount = float(trueYesses / len(self.clientList)) #Real percent
-
-            #Fix negative estimates
-            if percentCount < 0:
-                percentCount = 0.0
-
-            #Fix over estimates
-            if percentCount > 1.0:
-                percentCount = 1.0
-
-            if self.verbose:
-                # print("yes cnt", yesCount, "p", p, "q", q, "est true count", estTrueCount)
-                self.logger.info("True Percent " + str(truePerCount) +  ", Est Percent " + str(percentCount))
-
-            return percentCount
-
-        # else:
-        return "BUDGET USED"
-
-    # Get list of nodes from template
-    def getTemplateNodes(self, temp):
-        nodes = []
-        parent = None
-        ignoreList = ["(", ")"]
-        for n in temp.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
-            if temp.parent(n) != parent:
-                parent = temp.parent(n)
-                nodes.append("newLevel")
-
-            nd = temp.get_node(n)
-            id = re.sub('[0-9]', '', nd.identifier)
-
-            if id not in ignoreList:
-                nodes.append(id)  # remove numbers, append name
-
-        return nodes
 
     #### EXPANSION
     def expansion(self, selectedBranch):
@@ -282,10 +216,14 @@ class Server :
                     clus = self.templateTree.dotGraph.get_subgraph('"cluster_' + selectedBranch.name + '"')[0]
                     clus.set('color', 'red')
                     self.templateTree.saveGraph(graphName='Expansion Step')
+                    self.mcLogger.info("**Saved Graph " + str(self.templateTree.graphNum) + "_" + 'Selection Step')
                     clus.set('color', 'black')
+            else: #branch has children already
+                branchChildren = []
+                for nod in selectedBranch.nodes:
+                    branchChildren.extend(nod.children)
 
-
-            #select from the added child branches according to a policy
+            #select from the (potentially added) child branches according to a policy
             return self.selectionPolicy(branchChildren)
 
     def evaluateChildren(self, branch):
@@ -330,7 +268,8 @@ class Server :
     #### SIMULATION
     def simulation(self, selectedBranch):
         '''
-        Get some type of simulation result for entire rule at this node
+        Get some type of simulation result for entire rule at this node --> query of number of client matches
+        Note: this is the only place in the search where an actual query is conducted
 
         :param selectedBranch: branch to simulate results for
         :return: simulation result (right now match count to rule)
@@ -342,32 +281,118 @@ class Server :
 
         #Traditional result here is the number of wins or losses --> for us could be # clients with match ???
         #Note - this part could be where the p budgets are tested / evaluated ...
-        percentCount = self.queryClientRuleMatch(selectedBranch.ruleTree)
+        percentCount, activeClients = self.queryClientRuleMatch(selectedBranch.ruleTree)
 
         if self.verbose:
             self.mcLogger.info("Rule Match Percentage: " + str(percentCount) + "\n")
 
-        return percentCount
+        return percentCount, activeClients
 
     def backpropagation(self, startingBranch, score):
         '''
-        Backpropagate score up tree
+        Backpropagate UCT score up tree
         :param startingBranch: branch to start backpropagation from
         :param score: score to propagate up
         :return:
         '''
         if self.verbose:
             self.mcLogger.info("----BACKPROPAGATION PHASE----")
-            self.mcLogger.info("Backpropogating Score: " + str(score) + "\n")
 
         #Update current branch
-        startingBranch.matchScores.append(score)
+        startingBranch.matchScores.append(score) #update score list
         startingBranch.visits += 1 #add visit to this node
-        #normally is a self.utcScore() here ... but need to determine how to do this without doubly querying the clients ...
+        startingBranch.utc = self.utcScore(startingBranch, startingBranch.getCurrentScore()) #calc utc for this branch
+
+
+        if self.verbose:
+            self.mcLogger.info("Backpropogating Score: " + str(score[0]))
+            self.mcLogger.info("Calculated UTC for node " + startingBranch.name + ": "+ str(startingBranch.utc))
 
         #prop scores
         br = startingBranch
         while br.parent != None:
             br = br.parent.branch
-            br.matchScores.append(score)
+            br.matchScores.append(score) #add score to parent node
             br.visits += 1  # add visit to this node
+            br.utc = self.utcScore(br, br.getCurrentScore())  # calc utc for this branch
+
+
+            if self.verbose:
+                self.mcLogger.info("Calculated UTC for node " + br.name + ": " + str(br.utc))
+
+    def utcScore(self, branch, score):
+        if branch.parent == None:
+            parenVisits = branch.visits
+        else:
+            parenVisits = branch.parent.branch.visits
+
+        uct = score + self.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        return uct
+
+
+    # Get a % of how many clients have a match to the template
+    def queryClientRuleMatch(self, template):
+        #add to num queries sent out by server
+        self.numQueries += 1
+
+        # get template node list
+        tempNodes = self.getTemplateNodes(template)
+        # print("temp nodes", tempNodes)
+
+        activeClients = len(self.clientList)#TODO fix this part ...
+
+        # get count from clients of who have template
+        yesCount = 0
+        trueYesses = 0
+        p = None
+
+        for c in self.clientList:
+            resp, truResp, p = self.clientList[c].randResponseQueryStruct(tempNodes)
+
+            if resp == "BUDGET USED":
+                self.clientsWithUsedBudgets.append(c)
+            else:
+                yesCount += resp
+                trueYesses += truResp
+
+        if not self.globalBudgetUsed():
+            q = 1-p
+            estTrueCount = (yesCount - (len(self.clientList) * q)) / (p-q)
+            percentCount = float(estTrueCount / len(self.clientList))
+
+            truePerCount = float(trueYesses / len(self.clientList)) #Real percent
+
+            #Fix negative estimates
+            if percentCount < 0:
+                percentCount = 0.0
+
+            #Fix over estimates
+            if percentCount > 1.0:
+                percentCount = 1.0
+
+            if self.verbose:
+                # print("yes cnt", yesCount, "p", p, "q", q, "est true count", estTrueCount)
+                self.logger.info("True Percent " + str(truePerCount) +  ", Est Percent " + str(percentCount))
+
+            return percentCount, activeClients
+
+        # else:
+        return "BUDGET USED", activeClients
+
+    # Get list of nodes from template
+    def getTemplateNodes(self, temp):
+        nodes = []
+        parent = None
+        ignoreList = ["(", ")"]
+        for n in temp.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
+            if temp.parent(n) != parent:
+                parent = temp.parent(n)
+                nodes.append("newLevel")
+
+            nd = temp.get_node(n)
+            id = re.sub('[0-9]', '', nd.identifier)
+
+            if id not in ignoreList:
+                nodes.append(id)  # remove numbers, append name
+
+        return nodes
