@@ -115,6 +115,11 @@ class Server :
         self.ruleSet = self.templateTree.generateRuleSet()
         self.logRuleSet()
 
+        self.logger.info("Completed " + str(self.numQueries) + " queries")
+
+
+
+###################################################################################################################################################################
 
     #### SELECTION
     def selection(self, currBranch):

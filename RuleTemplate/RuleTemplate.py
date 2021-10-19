@@ -9,6 +9,7 @@ import treelib
 import copy
 
 from RuleTemplate.RuleTree import RuleTree
+from SignalTemporalLogic.STLFactory import STLFactory
 
 #Grammar Dictionary for easier access of child nodes in template tree
 stlGrammarDict = {
@@ -53,6 +54,17 @@ class Branch: #Set of nodes in tree
                 return True
 
         return False
+
+    def multiChildBranch(self):
+        ccount = 0
+        for nod in self.nodes:
+            if nod.children != []:
+                ccount += 1
+
+        if ccount > 1:
+            return True
+        else:
+            return False
 
     def terminalBranch(self):
         for n in self.nodes:
@@ -256,12 +268,29 @@ class RuleTemplate():
 
         return brList
 
+    #TODO working here - get rules with all combinations of branch splits ...
+    def generateRuleSet(self):
+        ruleSet = []
+
+        branch = self.root
+
+        #if more than one node has children --> Split case
+        if branch.multiChildBranch():
+            pass
+
+        #easy case where just keep traversing down child branches single paths for each branch option
+
+
+
     def generateRuleSet(self):
         leafs = self.getLeafBranches()
         ruleSet = []
 
         for l in leafs:
             ruleSet.append(l.ruleTree)
+
+        # stlFac = STLFactory()  # Check if structure correct
+        # ft = stlFac.constructFormulaTree(rle.toStringWithParams() + "\n")
 
         return ruleSet
 
