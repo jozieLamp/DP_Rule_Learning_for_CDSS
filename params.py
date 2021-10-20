@@ -12,6 +12,7 @@ template = None
 
 # MCTS PARAMS
 cp = 1/math.sqrt(2) #UCT param to increase or decrease the amount of exploration performed
+maxTreeDepth = 17
 
 # DATA PARAMETERS
 dataFilename = "Data/ICU/Best/"

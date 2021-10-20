@@ -38,6 +38,7 @@ class Branch: #Set of nodes in tree
         self.name = name
         self.parent = parentNode #parent node branch belongs to
         self.visits = 0.0
+        self.depth = 0
         self.nodes = []
 
         self.matchScores = [] #list of match count scores + number of clients queried in format [percentage, num clients]
@@ -144,6 +145,7 @@ class RuleTemplate():
         else: #add branch to children of parent node
             parentNode.children.append(br)
             br.ruleTree = copy.deepcopy(parentNode.branch.ruleTree)
+            br.depth = parentNode.branch.depth + 1 #increment depth for branch
 
         #add branch to dot graph
         clusterBranch = pydot.Cluster(brID, label=brID)

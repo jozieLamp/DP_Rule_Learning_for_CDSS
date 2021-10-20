@@ -24,6 +24,7 @@ class Server :
 
         #mcts params
         self.cp = params.cp
+        self.maxTreeDepth = params.maxTreeDepth
 
         #Privacy budget params
         self.epsilon = params.epsilon
@@ -62,6 +63,8 @@ class Server :
         TODO NEXT         
         #3. Figure out how to allocate budget amongst queries
         #4. Figure out beam search part where prunes branches ...
+        
+        
         #5. (?) Look at searching down multiple path ways for branch children (eg stl & stl) 
         # Fix until rule problems with these --> figure out why valid rules not being formatted properly
         '''
@@ -76,27 +79,28 @@ class Server :
             currBranch = self.templateTree._branches[branchName]
 
             #query here in utc score part ...
-            X = self.selection(currBranch) #TODO - may need to fix selection to do multiple paths from branches with multi nodes
+            selectedBranch = self.selection(currBranch) #TODO - may need to fix selection to do multiple paths from branches with multi nodes
             if self.verbose:
-                clus = self.templateTree.dotGraph.get_subgraph('"cluster_' + X.name + '"')[0]
+                clus = self.templateTree.dotGraph.get_subgraph('"cluster_' + selectedBranch.name + '"')[0]
                 clus.set('color', 'red')
                 self.templateTree.saveGraph(graphName='Selection Step')
                 self.mcLogger.info("**Saved Graph " + str(self.templateTree.graphNum) + "_" + 'Selection Step\n')
                 clus.set('color', 'black')
 
-            Y = self.expansion(X)
+            #EXPANSION
+            expandedBranch = self.expansion(selectedBranch)
 
-            if Y != None:
-                result = self.simulation(Y) #result is in form [percentCount, activeClients]
+            if expandedBranch != None:
+                result = self.simulation(expandedBranch) #result is in form [percentCount, activeClients]
 
                 if result[0] == "BUDGET USED":
                     self.logger.info("BUDGET USED\n")
                     break
                 else:
-                    self.backpropagation(Y, result)
+                    self.backpropagation(expandedBranch, result)
 
             else:
-                result = self.queryClientRuleMatch(X.ruleTree) #result is in form [percentCount, activeClients]
+                result = self.queryClientRuleMatch(selectedBranch.ruleTree) #result is in form [percentCount, activeClients]
                 if (self.verbose):
                     self.mcLogger.info("Got result " + str(result[0]) + " " + str(result[1]) + "\n")
 
@@ -104,7 +108,7 @@ class Server :
                     self.logger.info("BUDGET USED\n")
                     break
                 else:
-                    self.backpropagation(X, result)
+                    self.backpropagation(selectedBranch, result)
 
         if self.verbose:
             self.mcLogger.info("----SEARCH COMPLETED----\n")
@@ -248,10 +252,16 @@ class Server :
                 if self.verbose:
                     self.mcLogger.info("For node " + node.name + " found Possible Child Branches: {}".format(' '.join(map(str, childChoices))))
 
-                #TODO - potentially evaluate some type of condition here to add the branches to the node ...
+                #TODO - evaluate more types of conditions here to add the branches to the node ...
                 for choice in childChoices:
-                    br = self.templateTree.addBranch(choice, node.name) #add all children to branch
-                    branchChildren.append(br)
+                    #Check depth condition
+                    if choice not in terminalNodes and branch.depth + 1 > self.maxTreeDepth:
+                        if self.verbose:
+                            self.mcLogger.info("Reached max depth of " + str(branch.depth) + " - no children to expand")
+                        pass
+                    else:
+                        br = self.templateTree.addBranch(choice, node.name) #add all children to branch
+                        branchChildren.append(br)
 
         return branchChildren
 
@@ -263,12 +273,16 @@ class Server :
         :param branchOptions: List of branches to choose from
         :return:
         '''
-        sel = random.choice(branchOptions)
 
-        if self.verbose:
-            self.mcLogger.info("Selected branch to explore " +  sel.name + " according to default policy: random\n")
+        if branchOptions == [] or branchOptions == None:
+            return None
+        else:
+            sel = random.choice(branchOptions)
 
-        return sel
+            if self.verbose:
+                self.mcLogger.info("Selected branch to explore " +  sel.name + " according to default policy: random\n")
+
+            return sel
 
     #### SIMULATION
     def simulation(self, selectedBranch):

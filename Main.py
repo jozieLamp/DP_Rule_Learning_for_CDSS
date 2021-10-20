@@ -45,54 +45,9 @@ def runProtocol(params):
 
     s = Server(clientList, varDict, params)
 
-    # s.templateTree.addBranch(branch=['stlTerm', 'AND', 'stlTerm'], parentName='boolExpr1')
-    # s.templateTree.addBranch(branch=['stlTerm'], parentName='boolExpr1')
-    # s.templateTree.addBranch(branch=['F', 'timeBound', 'BooleanAtomic'], parentName='stlTerm1')
-    # s.templateTree.addBranch(branch=['G', 'timeBound', 'BooleanAtomic'], parentName='stlTerm1')
-    # s.templateTree.addBranch(branch=['G', 'timeBound', 'BooleanAtomic'], parentName='stlTerm2')
-    # s.templateTree.addBranch(branch=['F', 'timeBound', 'BooleanAtomic'], parentName='stlTerm2')
-    #
-    # s.templateTree.addBranch(branch=['GT'], parentName='BooleanAtomic1')
-    # s.templateTree.addBranch(branch=['GE'], parentName='BooleanAtomic1')
-    # s.templateTree.addBranch(branch=['LT'], parentName='BooleanAtomic2')
-    # s.templateTree.addBranch(branch=['LE'], parentName='BooleanAtomic2')
-    #
-    # # s.templateTree.showGraph()
-    # # s.templateTree.getBranch('[stlTerm1 AND1 stlTerm2]').visits = 1
-    #
-    # s.templateTree.getBranch('[G2 timeBound3 BooleanAtomic3]').visits = 1
-    # s.templateTree.getBranch('[F2 timeBound4 BooleanAtomic4]').visits = 1
-    # s.templateTree.getBranch('[F1 timeBound1 BooleanAtomic1]').visits = 1
-    # s.templateTree.getBranch('[G1 timeBound2 BooleanAtomic2]').visits = 1
-    #
-
-
-
+    #Run MCTS
     s.runMCTS(branchName='[eval1]')
-    #
-    # # import treelib
-    # from RuleTemplate.RuleTree import RuleTree
-    # t = RuleTree()
-    # t.create_node(identifier='a', parent= None)
-    # t.create_node(identifier='b', parent = 'a')
-    # t.create_node(identifier='c', parent='a')
-    # t.create_node(identifier='d', parent='b')
-    # t.show()
-    #
-    # r = RuleTree()
-    # r.create_node(identifier='1', parent=None)
-    # r.create_node(identifier='2', parent='1')
-    # r.create_node(identifier='3', parent='2')
-    # r.create_node(identifier='4', parent='2')
-    # r.create_node(identifier='5', parent='1')
-    # r.show()
-    #
-    #
-    #
-    # subtree = r.subtree('2')
-    # t.paste('c', subtree) #paste subtree onto parent
-    #
-    # t.show()
+
 
 
 
