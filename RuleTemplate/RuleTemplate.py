@@ -7,6 +7,7 @@ import logging
 import matplotlib.pyplot as plt
 import treelib
 import copy
+import itertools
 
 from RuleTemplate.RuleTree import RuleTree
 from SignalTemporalLogic.STLFactory import STLFactory
@@ -65,6 +66,14 @@ class Branch: #Set of nodes in tree
             return True
         else:
             return False
+
+    def getChildBranches(self):
+        childs = []
+        for nod in self.nodes:
+            if nod.children != []:
+                childs.extend(nod.children)
+
+        return childs
 
     def terminalBranch(self):
         for n in self.nodes:
@@ -268,31 +277,122 @@ class RuleTemplate():
 
         return brList
 
-    #TODO working here - get rules with all combinations of branch splits ...
     def generateRuleSet(self):
         ruleSet = []
+        branch = self._branches[self.root]
+        trees = self.getLeaf(branch)
 
-        branch = self.root
+        for t in trees:
+            stlFac = STLFactory()  # Check if structure correct
+            ft = stlFac.constructFormulaTree(t.toStringWithParams() + "\n")
 
-        #if more than one node has children --> Split case
-        if branch.multiChildBranch():
-            pass
-
-        #easy case where just keep traversing down child branches single paths for each branch option
-
-
-
-    def generateRuleSet(self):
-        leafs = self.getLeafBranches()
-        ruleSet = []
-
-        for l in leafs:
-            ruleSet.append(l.ruleTree)
-
-        # stlFac = STLFactory()  # Check if structure correct
-        # ft = stlFac.constructFormulaTree(rle.toStringWithParams() + "\n")
+            if ft != None:  # Formula is not improper
+                ruleSet.append(t)
 
         return ruleSet
+
+    def getLeaf(self, branch, trees=[]):
+        if branch.multiChildBranch():
+            # print("Reached multi branch", branch.name)
+
+            realTrees = copy.deepcopy(trees)
+
+            nodeList = [] #list of nodes with children getting combos for
+            options = []
+            for n in branch.nodes: #Get all leaf options for this split
+                sub = []
+                for c in n.children:
+                    sub.extend(self.getLeaf(c, trees=[]))
+
+                if sub != []:
+                    nodeList.append(n)
+                    options.append(sub)
+
+            #Get all combinations of the leaf items for each node in split
+            combos = list(itertools.product(*options))
+            for com in combos:
+                rt = copy.deepcopy(branch.ruleTree) #make copy of current branch tree
+
+                for i in range(len(com)): #for each subtree to be added from combos
+                    rt = self.addSubtreeToRuleTree(parentTree=rt, childTree=com[i], nodeName=nodeList[i].name)
+
+                    #add combined trees
+                    realTrees.append(rt)
+
+            return realTrees
+
+        if not branch.hasChildren(): #reached leaf nodes
+            trees.append(branch.ruleTree)
+            return trees
+        else:
+            for opt in branch.getChildBranches():
+                trees = self.getLeaf(opt, trees)
+
+        return trees
+
+    def addSubtreeToRuleTree(self, parentTree, childTree, nodeName):
+        #Node name is where subtree node will be added at in parent tree / cut off from subtree
+
+        # print("Current parent tree")
+        # parentTree.show()
+        #
+        # print("child tree to be added")
+        # childTree.show()
+        #
+        # print("Nodename getting subtree at:", nodeName)
+        subtree = childTree.subtree(nodeName)  # make copy of subtree
+        # print("subtree")
+        # subtree.show()
+
+        # Get parent node name in rule tree
+        parentNode = parentTree.parent(nodeName).identifier
+        # print("Paren name", parentNode)
+        parentTree.remove_node(nodeName)  # remove duplicate nodes to be added in main tree
+        parentTree.paste(parentNode, subtree)  # paste subtree onto parent
+
+        return parentTree
+
+
+    # def getLeaf(self, branch, trees=[]):
+    #     # if branch.multiChildBranch():
+    #     #     return "MULTI"
+    #
+    #     if not branch.hasChildren(): #reached leaf nodes
+    #         print("at branch in leaf", branch.name)
+    #         return branch.ruleTree
+    #     else:
+    #         print("br childs", [x.name for x in branch.getChildBranches()])
+    #         for opt in branch.getChildBranches():
+    #             print("opt", opt.name)
+    #             rt = self.getLeaf(opt, trees)
+    #             print("Got rule tree", rt)
+    #             # print(rt.toString() + "\n")
+    #
+    #     return trees
+
+    # def getLeaf(self, branch, trees=[]):
+    #     # if branch.multiChildBranch():
+    #     #     return "MULTI"
+    #
+    #     if not branch.hasChildren(): #reached leaf nodes
+    #         trees.append(branch.ruleTree)
+    #     else:
+    #         for opt in branch.getChildBranches():
+    #             self.getLeaf(opt, trees)
+    #
+    #     return trees
+
+    # def generateRuleSet(self):
+    #     leafs = self.getLeafBranches()
+    #     ruleSet = []
+    #
+    #     for l in leafs:
+    #         ruleSet.append(l.ruleTree)
+    #
+    #     # stlFac = STLFactory()  # Check if structure correct
+    #     # ft = stlFac.constructFormulaTree(rle.toStringWithParams() + "\n")
+    #
+    #     return ruleSet
 
 
 

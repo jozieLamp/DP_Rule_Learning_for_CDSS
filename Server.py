@@ -113,9 +113,9 @@ class Server :
             self.mcLogger.info("----SEARCH COMPLETED----\n")
 
         self.ruleSet = self.templateTree.generateRuleSet()
-        self.logRuleSet()
-
-        self.logger.info("Completed " + str(self.numQueries) + " queries")
+        # self.logRuleSet()
+        #
+        # self.logger.info("Completed " + str(self.numQueries) + " queries")
 
 
 

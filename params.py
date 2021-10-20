@@ -7,7 +7,7 @@ popSize = 10  # 8106 #Size of population
 
 
 # PROTOCOL PARAMS
-verbose = True
+verbose = False
 template = None
 
 # MCTS PARAMS

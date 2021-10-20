@@ -69,7 +69,31 @@ def runProtocol(params):
 
 
     s.runMCTS(branchName='[eval1]')
-    # s.runMCTS(branchName='[statementList1]')
+    #
+    # # import treelib
+    # from RuleTemplate.RuleTree import RuleTree
+    # t = RuleTree()
+    # t.create_node(identifier='a', parent= None)
+    # t.create_node(identifier='b', parent = 'a')
+    # t.create_node(identifier='c', parent='a')
+    # t.create_node(identifier='d', parent='b')
+    # t.show()
+    #
+    # r = RuleTree()
+    # r.create_node(identifier='1', parent=None)
+    # r.create_node(identifier='2', parent='1')
+    # r.create_node(identifier='3', parent='2')
+    # r.create_node(identifier='4', parent='2')
+    # r.create_node(identifier='5', parent='1')
+    # r.show()
+    #
+    #
+    #
+    # subtree = r.subtree('2')
+    # t.paste('c', subtree) #paste subtree onto parent
+    #
+    # t.show()
+
 
 
 
