@@ -59,13 +59,11 @@ class Server :
         usedBudget = 0
 
         '''
-        TODO NEXT 
-        
-        #2.5 Figure out getting multiple pathways down from branch for searching and for printing out the final rules ...
-        
+        TODO NEXT         
         #3. Figure out how to allocate budget amongst queries
         #4. Figure out beam search part where prunes branches ...
         #5. (?) Look at searching down multiple path ways for branch children (eg stl & stl) 
+        # Fix until rule problems with these --> figure out why valid rules not being formatted properly
         '''
 
 
@@ -108,14 +106,15 @@ class Server :
                 else:
                     self.backpropagation(X, result)
 
-
         if self.verbose:
             self.mcLogger.info("----SEARCH COMPLETED----\n")
 
-        self.ruleSet = self.templateTree.generateRuleSet()
-        # self.logRuleSet()
-        #
-        # self.logger.info("Completed " + str(self.numQueries) + " queries")
+        #TODO - fix until rule problems with these --> figure out why valid rules not being formatted properly
+        #Get final rule set
+        self.ruleSet = self.templateTree.generateRuleSet(verbose=self.verbose)
+        self.logRuleSet()
+
+        self.logger.info("Completed " + str(self.numQueries) + " queries")
 
 
 
@@ -158,7 +157,8 @@ class Server :
         for node in branch.nodes:
             for child in node.children:
                 if child.visits == 0.0: #univisited child branch
-                    self.mcLogger.info("Found univisited child branch " + child.name)
+                    if self.verbose:
+                        self.mcLogger.info("Found univisited child branch " + child.name)
                     return child #child = child branch from node
 
         if self.verbose:

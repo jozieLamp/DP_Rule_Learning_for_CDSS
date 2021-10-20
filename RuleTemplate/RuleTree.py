@@ -48,7 +48,7 @@ class RuleTree(treelib.Tree):
                 idx = rop.index(val)
 
                 if varCounter >= len(self.varList):
-                    str += "Variable" + " " + ropSymbol[idx] + " " + "?"
+                    str += " Variable" + " " + ropSymbol[idx] + " " + "?"
                 elif re.sub('[0-9]', '', at1) == "Variable":
                     str += self.varList[varCounter] + " " + ropSymbol[idx] + " " + "?"
                     varCounter += 1
@@ -98,7 +98,7 @@ class RuleTree(treelib.Tree):
                 idx = rop.index(val)
 
                 if varCounter >= len(self.varList):
-                    str += "Variable" + " " + ropSymbol[idx] + " " + "0.0"
+                    str += " Variable" + " " + ropSymbol[idx] + " " + "0.0"
                 elif re.sub('[0-9]', '', at1) == "Variable":
                     str += self.varList[varCounter] + " " + ropSymbol[idx] + " " + "0.0"
                     varCounter += 1

@@ -24,9 +24,9 @@ class STLFactory:
             # formulaTree.printTree()
             return formulaTree
         except:
-            logging.error("ERROR parsing tree, improper formula supplied")
-            logging.error("Rule supplied was: " + '%s' % str(rule))
-            print(rule)
+            # logging.error("ERROR parsing tree, improper formula supplied")
+            # logging.error("Rule supplied was: " + '%s' % str(rule))
+            # print(rule)
             return None
 
 

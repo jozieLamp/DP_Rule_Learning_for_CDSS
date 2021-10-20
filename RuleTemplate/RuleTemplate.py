@@ -16,7 +16,8 @@ from SignalTemporalLogic.STLFactory import STLFactory
 stlGrammarDict = {
     "eval": [["statementList"]],
     "statementList": [["statement"]],
-    "statement": [["(","boolExpr",")"]],
+    # "statement": [["(","boolExpr",")"]],
+    "statement": [["boolExpr"]],
     "boolExpr": [["stlTerm"], ["stlTerm", "AND", "stlTerm"], ["stlTerm", "OR", "stlTerm"], ["stlTerm", "IMPLIES", "stlTerm"] ],
     "stlTerm": [["BooleanAtomic", "U", "timeBound",  "BooleanAtomic"], ["F", "timeBound", "BooleanAtomic"], ["G", "timeBound", "BooleanAtomic"], ["BooleanAtomic"]],
     # "timeBound": [["[","atomic",",","atomic","]"]],
@@ -277,11 +278,19 @@ class RuleTemplate():
 
         return brList
 
-    def generateRuleSet(self):
+    def generateRuleSet(self, verbose):
+        '''
+        Code to generate fule rule set from template
+        :return: rule set
+        '''
         ruleSet = []
         branch = self._branches[self.root]
-        trees = self.getLeaf(branch)
+        trees = self.traverseLeaf(branch)
 
+        #Remove duplicate rules
+        trees = list(set(trees))
+
+        #Only get correctly formatted rules
         for t in trees:
             stlFac = STLFactory()  # Check if structure correct
             ft = stlFac.constructFormulaTree(t.toStringWithParams() + "\n")
@@ -289,9 +298,18 @@ class RuleTemplate():
             if ft != None:  # Formula is not improper
                 ruleSet.append(t)
 
+        # Print first set of rules
+        if verbose:
+            self.logger.info("Produced Rule Structures: ")
+            for t in trees:
+                self.logger.info(t.toString())
+
+        self.logger.info("Produced " + str(len(trees)) + " Rule Structures")
+        self.logger.info("Generated " + str(len(ruleSet)) + " Formatted Rules\n")
+
         return ruleSet
 
-    def getLeaf(self, branch, trees=[]):
+    def traverseLeaf(self, branch, trees=[]):
         if branch.multiChildBranch():
             # print("Reached multi branch", branch.name)
 
@@ -302,7 +320,7 @@ class RuleTemplate():
             for n in branch.nodes: #Get all leaf options for this split
                 sub = []
                 for c in n.children:
-                    sub.extend(self.getLeaf(c, trees=[]))
+                    sub.extend(self.traverseLeaf(c, trees=[]))
 
                 if sub != []:
                     nodeList.append(n)
@@ -326,7 +344,7 @@ class RuleTemplate():
             return trees
         else:
             for opt in branch.getChildBranches():
-                trees = self.getLeaf(opt, trees)
+                trees = self.traverseLeaf(opt, trees)
 
         return trees
 
@@ -351,51 +369,4 @@ class RuleTemplate():
         parentTree.paste(parentNode, subtree)  # paste subtree onto parent
 
         return parentTree
-
-
-    # def getLeaf(self, branch, trees=[]):
-    #     # if branch.multiChildBranch():
-    #     #     return "MULTI"
-    #
-    #     if not branch.hasChildren(): #reached leaf nodes
-    #         print("at branch in leaf", branch.name)
-    #         return branch.ruleTree
-    #     else:
-    #         print("br childs", [x.name for x in branch.getChildBranches()])
-    #         for opt in branch.getChildBranches():
-    #             print("opt", opt.name)
-    #             rt = self.getLeaf(opt, trees)
-    #             print("Got rule tree", rt)
-    #             # print(rt.toString() + "\n")
-    #
-    #     return trees
-
-    # def getLeaf(self, branch, trees=[]):
-    #     # if branch.multiChildBranch():
-    #     #     return "MULTI"
-    #
-    #     if not branch.hasChildren(): #reached leaf nodes
-    #         trees.append(branch.ruleTree)
-    #     else:
-    #         for opt in branch.getChildBranches():
-    #             self.getLeaf(opt, trees)
-    #
-    #     return trees
-
-    # def generateRuleSet(self):
-    #     leafs = self.getLeafBranches()
-    #     ruleSet = []
-    #
-    #     for l in leafs:
-    #         ruleSet.append(l.ruleTree)
-    #
-    #     # stlFac = STLFactory()  # Check if structure correct
-    #     # ft = stlFac.constructFormulaTree(rle.toStringWithParams() + "\n")
-    #
-    #     return ruleSet
-
-
-
-
-
 
