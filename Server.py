@@ -25,6 +25,7 @@ class Server :
         #mcts params
         self.cp = params.cp
         self.maxTreeDepth = params.maxTreeDepth
+        self.cutoffThresh = params.cutoffThresh
 
         #Privacy budget params
         self.epsilon = params.epsilon
@@ -91,7 +92,7 @@ class Server :
             expandedBranch = self.expansion(selectedBranch)
 
             if expandedBranch != None:
-                result = self.simulation(expandedBranch) #result is in form [percentCount, activeClients]
+                result = self.getQuery(expandedBranch) #result is in form [percentCount, activeClients]
 
                 if result[0] == "BUDGET USED":
                     self.logger.info("BUDGET USED\n")
@@ -109,6 +110,10 @@ class Server :
                     break
                 else:
                     self.backpropagation(selectedBranch, result)
+
+            #TODO  HERE!!!!
+            # Perform pruning step --> prune any branches who have a query result < cutoff threshold
+            self.templateTree.pruneTree(self.cutoffThresh)
 
         if self.verbose:
             self.mcLogger.info("----SEARCH COMPLETED----\n")
@@ -284,17 +289,17 @@ class Server :
 
             return sel
 
-    #### SIMULATION
-    def simulation(self, selectedBranch):
+    #### QUERY (this part is normally called simulation in traditional MCTS)
+    def getQuery(self, selectedBranch):
         '''
-        Get some type of simulation result for entire rule at this node --> query of number of client matches
+        Get some type of query result for entire rule at this node --> query of number of client matches
         Note: this is the only place in the search where an actual query is conducted
 
         :param selectedBranch: branch to simulate results for
-        :return: simulation result (right now match count to rule)
+        :return: query result (right now match count to rule)
         '''
         if self.verbose:
-            self.mcLogger.info("----SIMULATION PHASE----")
+            self.mcLogger.info("----QUERY PHASE----")
             self.mcLogger.info("Simulating Branch: " + selectedBranch.name)
             selectedBranch.ruleTree.show()
 
@@ -307,6 +312,7 @@ class Server :
 
         return percentCount, activeClients
 
+    #TODO HERE --> update UCT scores to be sum of child nodes in back prop!!!
     def backpropagation(self, startingBranch, score):
         '''
         Backpropagate UCT score up tree

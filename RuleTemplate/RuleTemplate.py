@@ -21,7 +21,8 @@ stlGrammarDict = {
     "boolExpr": [["stlTerm"], ["stlTerm", "AND", "stlTerm"], ["stlTerm", "OR", "stlTerm"], ["stlTerm", "IMPLIES", "stlTerm"] ],
     "stlTerm": [["BooleanAtomic", "U", "timeBound",  "BooleanAtomic"], ["F", "timeBound", "BooleanAtomic"], ["G", "timeBound", "BooleanAtomic"], ["BooleanAtomic"]],
     # "timeBound": [["[","atomic",",","atomic","]"]],
-    "BooleanAtomic": [["GT"], ["GE"], ["LT"], ["LE"], ["EQ"], ["NEQ"], ["(","boolExpr",")"], ["NOT", "BooleanAtomic"]],
+    # "BooleanAtomic": [["GT"], ["GE"], ["LT"], ["LE"], ["EQ"], ["NEQ"], ["(","boolExpr",")"], ["NOT", "BooleanAtomic"]],
+    "BooleanAtomic": [["GT"], ["LT"], ["EQ"], ["NEQ"], ["(", "boolExpr", ")"],["NOT", "BooleanAtomic"]],
     "GT": [["Variable", "Parameter"]],
     "GE": [["Variable", "Parameter"]],
     "LT": [["Variable", "Parameter"]],
@@ -216,6 +217,9 @@ class RuleTemplate():
         if branchName in self._branches.keys():
             del self._branches[branchName] #remove node from node list
 
+    #Prune any branches who have a match score < cutoff
+    def pruneTree(self, cuttoff):
+        pass
 
     # generate unique node ids for tree
     def generateID(self, type):
