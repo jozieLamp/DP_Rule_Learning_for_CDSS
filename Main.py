@@ -46,7 +46,19 @@ def runProtocol(params):
     s = Server(clientList, varDict, params)
 
     #Run MCTS
-    s.runMCTS(branchName='[eval1]')
+    # s.runMCTS(branchName='[eval1]')
+
+    from RuleTemplate.RuleTemplate import RuleTemplate
+    test = RuleTemplate()
+    test.addBranch(["statementList"], "eval1")
+    test.addBranch(["statement"], "statementList1")
+    test.addBranch(["boolExpr"], "statement1")
+    test.addBranch(["stlTerm"], "boolExpr1")
+    test.addBranch(["stlTerm", "AND", "stlTerm"], "boolExpr1")
+    test.addBranch(["stlTerm", "OR", "stlTerm"], "boolExpr1")
+    test.addBranch(["stlTerm", "IMPLIES", "stlTerm"], "boolExpr1")
+
+    test.showGraph()
 
 
 
