@@ -107,7 +107,7 @@ class RuleTemplate():
         self.dotGraph = pydot.Dot(graph_type='digraph', forcelabels=True) # Make pydot graph to visualize rule template
         self.logger = logging.getLogger('Rule Template')
 
-        self.graphNum = 1
+        self.graphNum = 0
 
         if default: self.makeDefaultTree()
 
@@ -220,10 +220,22 @@ class RuleTemplate():
             del self._branches[branchName] #remove node from node list
 
     #Prune any branches who have a match score < cutoff
-    def pruneTree(self, cuttoff):
+    def pruneTree(self, cutoff):
+        delNames = []
+        for key, br in self._branches.items():
+            if br.visits > 0 and br.getCurrentScore() < cutoff:
+                self.logger.info("PRUNING BRANCH " +  key)
+                self.logger.info("Got score " + str(br.getCurrentScore() + " < cutoff thresh " + str(cutoff)))
+                delNames.append(key)
 
-        pass
-        #prune branches -- and then do check, if branch has all children pruned, remove parent branch also ...
+        for n in delNames:
+            self.removeBranch(n)
+
+        if delNames != []:
+            self.saveGraph(graphName='PRUNED TREE')
+            self.logger.info("**Saved Graph " + str(self.graphNum) + "_" + 'Pruning Step\n')
+        else:
+            self.logger.info("Nothing to prune\n")
 
 
     # generate unique node ids for tree
@@ -344,7 +356,9 @@ class RuleTemplate():
 
                 for i in range(len(com)): #for each subtree to be added from combos
                     rt = self.addSubtreeToRuleTree(parentTree=rt, childTree=com[i], nodeName=nodeList[i].name)
-
+                    print("Multi child tree gen")
+                    rt.show()
+                    print(rt.toString())
                     #add combined trees
                     realTrees.append(rt)
 

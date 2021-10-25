@@ -52,19 +52,64 @@ def runProtocol(params):
     test = RuleTemplate()
     test.addBranch(["statementList"], "eval1")
     test.addBranch(["statement"], "statementList1")
-    test.addBranch(["boolExpr"], "statement1")
+    test.addBranch(["(", "boolExpr", ")"], "statement1")
     test.addBranch(["stlTerm"], "boolExpr1")
     test.addBranch(["stlTerm", "AND", "stlTerm"], "boolExpr1")
     test.addBranch(["stlTerm", "OR", "stlTerm"], "boolExpr1")
     test.addBranch(["stlTerm", "IMPLIES", "stlTerm"], "boolExpr1")
 
+    #stl1
     test.addBranch(["BooleanAtomic", "U", "timeBound",  "BooleanAtomic"], "stlTerm1")
     test.addBranch(["F", "timeBound", "BooleanAtomic"], "stlTerm1")
     test.addBranch(["G", "timeBound", "BooleanAtomic"], "stlTerm1")
     test.addBranch(["BooleanAtomic"], "stlTerm1")
 
+    # #stl7
+    # test.addBranch(["BooleanAtomic", "U", "timeBound", "BooleanAtomic"], "stlTerm7")
+    # test.addBranch(["F", "timeBound", "BooleanAtomic"], "stlTerm7")
+    # test.addBranch(["G", "timeBound", "BooleanAtomic"], "stlTerm7")
+    # test.addBranch(["BooleanAtomic"], "stlTerm7")
+    #
+    # #stl6
+    # test.addBranch(["BooleanAtomic", "U", "timeBound", "BooleanAtomic"], "stlTerm6")
+    # test.addBranch(["F", "timeBound", "BooleanAtomic"], "stlTerm6")
+    # test.addBranch(["G", "timeBound", "BooleanAtomic"], "stlTerm6")
+    # test.addBranch(["BooleanAtomic"], "stlTerm6")
 
-    test.showGraph()
+    test.addBranch(["(", "boolExpr", ")"], "BooleanAtomic1")
+    test.addBranch(["stlTerm"], "boolExpr2")
+    test.addBranch(["BooleanAtomic"], "stlTerm8")
+    test.addBranch(["LE"], "BooleanAtomic6")
+    test.addBranch(["Variable", "Parameter"], "LE1")
+
+    test.addBranch(["(", "boolExpr", ")"], "BooleanAtomic2")
+    test.addBranch(["stlTerm"], "boolExpr3")
+    test.addBranch(["BooleanAtomic"], "stlTerm9")
+    test.addBranch(["GE"], "BooleanAtomic7")
+    test.addBranch(["Variable", "Parameter"], "GE1")
+
+    #G part
+    test.addBranch(["(", "boolExpr", ")"], "BooleanAtomic4")
+    test.addBranch(["stlTerm", "AND", "stlTerm"], "boolExpr4")
+    test.addBranch(["BooleanAtomic"], "stlTerm11")
+    test.addBranch(["BooleanAtomic"], "stlTerm10")
+
+    test.addBranch(["LE"], "BooleanAtomic9")
+    test.addBranch(["Variable", "Parameter"], "LE2")
+    test.addBranch(["GE"], "BooleanAtomic8")
+    test.addBranch(["Variable", "Parameter"], "GE2")
+
+    # test.addBranch(["LE"], "BooleanAtomic1")
+    # test.addBranch(["Variable", "Parameter"], "LE1")
+    # test.addBranch(["GE"], "BooleanAtomic2")
+    # test.addBranch(["Variable", "Parameter"], "GE1")
+
+    rules = test.generateRuleSet(verbose=True)
+    print("FORMATTED RULES:")
+    for r in rules:
+        print(r.toString())
+
+    # test.showGraph()
 
 
 

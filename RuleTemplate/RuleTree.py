@@ -13,12 +13,11 @@ class RuleTree(treelib.Tree):
     #     super().__init__(tree, deep, node_class)
     #     # super(RuleTree, self).__init__()
 
-
     def toString(self):
 
         str = ""
         varCounter = 0
-        printList = ["G", "F", "U","[", "]", "(", ")", "atomic"]
+        printList = ["G", "F", "U", "[", "]", "(", ")", "atomic"]
         rop = ["GT", "GE", "LT", "LE", "EQ", "NEQ"]
         ropSymbol = [">", ">=", "<", "<=", "=", "!="]
 
@@ -48,7 +47,7 @@ class RuleTree(treelib.Tree):
                 idx = rop.index(val)
 
                 if varCounter >= len(self.varList):
-                    str += " Variable" + " " + ropSymbol[idx] + " " + "?"
+                    str += "Variable" + " " + ropSymbol[idx] + " " + "?"
                 elif re.sub('[0-9]', '', at1) == "Variable":
                     str += self.varList[varCounter] + " " + ropSymbol[idx] + " " + "?"
                     varCounter += 1
@@ -94,11 +93,11 @@ class RuleTree(treelib.Tree):
                     at1 = next(gen)
                 except:
                     pass
-                #at2 = next(gen)
+                # at2 = next(gen)
                 idx = rop.index(val)
 
                 if varCounter >= len(self.varList):
-                    str += " Variable" + " " + ropSymbol[idx] + " " + "0.0"
+                    str += "Variable" + " " + ropSymbol[idx] + " " + "0.0"
                 elif re.sub('[0-9]', '', at1) == "Variable":
                     str += self.varList[varCounter] + " " + ropSymbol[idx] + " " + "0.0"
                     varCounter += 1

@@ -115,9 +115,11 @@ class Server :
 
             #TODO  HERE!!!!
             # Perform pruning step --> prune any branches who have a query result < cutoff threshold
-            self.templateTree.pruneTree(self.cutoffThresh)
             if self.verbose:
-                self.mcLogger.info("Performing pruning step\n")
+                self.mcLogger.info("----PRUNING PHASE----")
+
+            self.templateTree.pruneTree(self.cutoffThresh)
+
 
             totalIters += 1
 
@@ -350,6 +352,9 @@ class Server :
 
             if self.verbose:
                 self.mcLogger.info("Calculated UTC for node " + br.name + ": " + str(br.utc))
+
+        if self.verbose:
+            self.mcLogger.info("Backprop completed\n")
 
     def utcScore(self, branch, score):
         if branch.parent == None:
