@@ -14,6 +14,11 @@ class Server :
         self.varDict = varDict  # variable dictionary to store vars + ranges
         self.variables = list(self.varDict.keys())
 
+        # Output params
+        self.verbose = params.verbose
+        self.logger = logging.getLogger('SERVER')
+        self.mcLogger = logging.getLogger('MCTS')
+
         #template params
         if params.template == None:
             # make default rule template tree to start
@@ -23,6 +28,7 @@ class Server :
             pass
 
         #mcts params
+        self.iters = params.iters
         self.cp = params.cp
         self.maxTreeDepth = params.maxTreeDepth
         self.cutoffThresh = params.cutoffThresh
@@ -32,13 +38,12 @@ class Server :
         self.clientsWithUsedBudgets = []  # list of clients who have used budget
         self.numQueries = 0
 
+        self.logger.info("Setting privacy budget to: " + str(self.epsilon))
+
         #Ruleset
         self.ruleSet = [] #set of rule trees
 
-        #Output params
-        self.verbose = params.verbose
-        self.logger = logging.getLogger('SERVER')
-        self.mcLogger = logging.getLogger('MCTS')
+
 
     def logRuleSet(self):
         self.logger.info("Retrieved Rules:")
@@ -71,11 +76,11 @@ class Server :
         '''
 
 
-
-        while not self.globalBudgetUsed():
+        totalIters = 1
+        while not self.globalBudgetUsed() and totalIters <= self.iters:
             # SELECTION
             if (self.verbose):
-                self.mcLogger.info("Begin Search Round\n")
+                self.mcLogger.info("BEGIN SEARCH ROUND, ITERATION: " + str(totalIters) + "\n")
 
             currBranch = self.templateTree._branches[branchName]
 
@@ -114,6 +119,10 @@ class Server :
             #TODO  HERE!!!!
             # Perform pruning step --> prune any branches who have a query result < cutoff threshold
             self.templateTree.pruneTree(self.cutoffThresh)
+            if self.verbose:
+                self.mcLogger.info("Performing pruning step\n")
+
+            totalIters += 1
 
         if self.verbose:
             self.mcLogger.info("----SEARCH COMPLETED----\n")
@@ -366,43 +375,55 @@ class Server :
 
         activeClients = len(self.clientList)#TODO fix this part ...
 
-        # get count from clients of who have template
-        yesCount = 0
-        trueYesses = 0
-        p = None
+        #Non private model
+        if self.epsilon == 'inf':
+            yesCount = 0
+            for c in self.clientList:
+                yesCount += self.clientList[c].queryStructuralRuleMatch(tempNodes)
 
-        for c in self.clientList:
-            resp, truResp, p = self.clientList[c].randResponseQueryStruct(tempNodes)
-
-            if resp == "BUDGET USED":
-                self.clientsWithUsedBudgets.append(c)
-            else:
-                yesCount += resp
-                trueYesses += truResp
-
-        if not self.globalBudgetUsed():
-            q = 1-p
-            estTrueCount = (yesCount - (len(self.clientList) * q)) / (p-q)
-            percentCount = float(estTrueCount / len(self.clientList))
-
-            truePerCount = float(trueYesses / len(self.clientList)) #Real percent
-
-            #Fix negative estimates
-            if percentCount < 0:
-                percentCount = 0.0
-
-            #Fix over estimates
-            if percentCount > 1.0:
-                percentCount = 1.0
-
-            if self.verbose:
-                # print("yes cnt", yesCount, "p", p, "q", q, "est true count", estTrueCount)
-                self.logger.info("True Percent " + str(truePerCount) +  ", Est Percent " + str(percentCount))
+            percentCount = float(yesCount / len(self.clientList))
 
             return percentCount, activeClients
 
-        # else:
-        return "BUDGET USED", activeClients
+        #Private model
+        else:
+            # get count from clients of who have template
+            yesCount = 0
+            trueYesses = 0
+            p = None
+
+            for c in self.clientList:
+                resp, truResp, p = self.clientList[c].randResponseQueryStruct(tempNodes)
+
+                if resp == "BUDGET USED":
+                    self.clientsWithUsedBudgets.append(c)
+                else:
+                    yesCount += resp
+                    trueYesses += truResp
+
+            if not self.globalBudgetUsed():
+                q = 1-p
+                estTrueCount = (yesCount - (len(self.clientList) * q)) / (p-q)
+                percentCount = float(estTrueCount / len(self.clientList))
+
+                truePerCount = float(trueYesses / len(self.clientList)) #Real percent
+
+                #Fix negative estimates
+                if percentCount < 0:
+                    percentCount = 0.0
+
+                #Fix over estimates
+                if percentCount > 1.0:
+                    percentCount = 1.0
+
+                if self.verbose:
+                    # print("yes cnt", yesCount, "p", p, "q", q, "est true count", estTrueCount)
+                    self.logger.info("True Percent " + str(truePerCount) +  ", Est Percent " + str(percentCount))
+
+                return percentCount, activeClients
+
+            # else:
+            return "BUDGET USED", activeClients
 
     # Get list of nodes from template
     def getTemplateNodes(self, temp):

@@ -47,4 +47,5 @@ variables = {'LOS': [0.0, 122.0], 'ICU_Pt_Days': [0.0, 120.0], 'Mort': [0.0, 1.0
 
 
 # PRIVACY BUDGET PARAMS
-epsilon = 1
+epsilon = 'inf' #set epsilon to 'inf' to run nonprivate model
+iters = 50

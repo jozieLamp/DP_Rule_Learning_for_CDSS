@@ -219,8 +219,10 @@ class RuleTemplate():
 
     #Prune any branches who have a match score < cutoff
     def pruneTree(self, cuttoff):
+
         pass
         #prune branches -- and then do check, if branch has all children pruned, remove parent branch also ...
+
 
     # generate unique node ids for tree
     def generateID(self, type):

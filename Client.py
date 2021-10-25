@@ -49,6 +49,7 @@ class Client:
         else:
             return False
 
+    #Get randomized response query to rule template
     def randResponseQueryStruct(self, tempNodes, varList=None, pLossBudg=0.05):
 
         if not self.privacyBudgetUsed():  # first check privacy budget not used
@@ -84,7 +85,7 @@ class Client:
             return "BUDGET USED", None, None
 
     # check for structural match
-    def queryStructuralRuleMatch(self, tempNodes, varList):
+    def queryStructuralRuleMatch(self, tempNodes, varList=None):
         for r in self.ruleSet:
             # check if variables in rule
             hasVars = True
