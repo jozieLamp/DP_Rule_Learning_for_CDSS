@@ -63,18 +63,14 @@ class Server :
 
     # RUN Monte Carlo Tree Search
     def runMCTS(self, branchName):
-        usedBudget = 0
+
 
         '''
         TODO NEXT         
         #3. Figure out how to allocate budget amongst queries
-        #4. Figure out beam search part where prunes branches ...
-        
-        
         #5. (?) Look at searching down multiple path ways for branch children (eg stl & stl) 
         # Fix until rule problems with these --> figure out why valid rules not being formatted properly
         '''
-
 
         totalIters = 1
         while not self.globalBudgetUsed() and totalIters <= self.iters:
@@ -96,8 +92,9 @@ class Server :
             #EXPANSION
             expandedBranch = self.expansion(selectedBranch)
 
+            #QUERYING AND BACKPROPAGATION
             if expandedBranch != None:
-                result = self.getQuery(expandedBranch) #result is in form [percentCount, activeClients]
+                result = self.getQuery(expandedBranch) #result is in form [matchCount, activeClients]
 
                 if result[0] == "BUDGET USED":
                     self.logger.info("BUDGET USED\n")
@@ -106,7 +103,7 @@ class Server :
                     self.backpropagation(expandedBranch, result)
 
             else:
-                result = self.queryClientRuleMatch(selectedBranch.ruleTree) #result is in form [percentCount, activeClients]
+                result = self.getQuery(selectedBranch.ruleTree) #result is in form [matchCount, activeClients]
                 if (self.verbose):
                     self.mcLogger.info("Got result " + str(result[0]) + " " + str(result[1]) + "\n")
 
@@ -309,17 +306,18 @@ class Server :
         '''
         if self.verbose:
             self.mcLogger.info("----QUERY PHASE----")
-            self.mcLogger.info("Simulating Branch: " + selectedBranch.name)
+            self.mcLogger.info("Querying Branch: " + selectedBranch.name)
             selectedBranch.ruleTree.show()
 
-        #Traditional result here is the number of wins or losses --> for us could be # clients with match ???
         #Note - this part could be where the p budgets are tested / evaluated ...
-        percentCount, activeClients = self.queryClientRuleMatch(selectedBranch.ruleTree)
+        matchCount, activeClients = self.queryClientRuleMatch(selectedBranch.ruleTree)
+
+        percentCount = matchCount / len(activeClients)
 
         if self.verbose:
             self.mcLogger.info("Rule Match Percentage: " + str(percentCount) + "\n")
 
-        return percentCount, activeClients
+        return matchCount, activeClients
 
     #TODO HERE --> update UCT scores to be sum of child nodes in back prop!!!
     def backpropagation(self, startingBranch, score):
@@ -336,7 +334,6 @@ class Server :
         startingBranch.matchScores.append(score) #update score list
         startingBranch.visits += 1 #add visit to this node
         startingBranch.utc = self.utcScore(startingBranch, startingBranch.getCurrentScore()) #calc utc for this branch
-
 
         if self.verbose:
             self.mcLogger.info("Backpropogating Score: " + str(score[0]))
@@ -365,6 +362,7 @@ class Server :
 
 
     # Get a % of how many clients have a match to the template
+    # Return a COUNT with the total num clients
     def queryClientRuleMatch(self, template):
         #add to num queries sent out by server
         self.numQueries += 1
@@ -373,7 +371,7 @@ class Server :
         tempNodes = self.getTemplateNodes(template)
         # print("temp nodes", tempNodes)
 
-        activeClients = len(self.clientList)#TODO fix this part ...
+        activeClients = self.clientList#TODO fix this part ...
 
         #Non private model
         if self.epsilon == 'inf':
@@ -381,9 +379,8 @@ class Server :
             for c in self.clientList:
                 yesCount += self.clientList[c].queryStructuralRuleMatch(tempNodes)
 
-            percentCount = float(yesCount / len(self.clientList))
 
-            return percentCount, activeClients
+            return yesCount, activeClients
 
         #Private model
         else:
@@ -420,7 +417,7 @@ class Server :
                     # print("yes cnt", yesCount, "p", p, "q", q, "est true count", estTrueCount)
                     self.logger.info("True Percent " + str(truePerCount) +  ", Est Percent " + str(percentCount))
 
-                return percentCount, activeClients
+                return estTrueCount, activeClients #percentCount, activeClients
 
             # else:
             return "BUDGET USED", activeClients

@@ -48,9 +48,11 @@ class Branch: #Set of nodes in tree
 
         self.ruleTree = RuleTree()
 
-    def getCurrentScore(self): #return average percent match score
-        pers = [item[0] for item in self.matchScores]
-        return sum(pers) / len(self.matchScores)
+    def getCurrentScore(self): #return sum of percent match score
+        counts = [item[0] for item in self.matchScores]
+        numClients = [len(item[1]) for item in self.matchScores]
+        perCount = sum(counts) / sum(numClients)
+        return perCount
 
     def hasChildren(self):
         for n in self.nodes:

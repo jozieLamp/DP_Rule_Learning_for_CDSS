@@ -46,25 +46,25 @@ def runProtocol(params):
     s = Server(clientList, varDict, params)
 
     #Run MCTS
-    s.runMCTS(branchName='[eval1]')
+    # s.runMCTS(branchName='[eval1]')
 
-    # from RuleTemplate.RuleTemplate import RuleTemplate
-    # test = RuleTemplate()
-    # test.addBranch(["statementList"], "eval1")
-    # test.addBranch(["statement"], "statementList1")
-    # test.addBranch(["boolExpr"], "statement1")
-    # test.addBranch(["stlTerm"], "boolExpr1")
-    # test.addBranch(["stlTerm", "AND", "stlTerm"], "boolExpr1")
-    # test.addBranch(["stlTerm", "OR", "stlTerm"], "boolExpr1")
-    # test.addBranch(["stlTerm", "IMPLIES", "stlTerm"], "boolExpr1")
-    #
-    # test.addBranch(["BooleanAtomic", "U", "timeBound",  "BooleanAtomic"], "stlTerm1")
-    # test.addBranch(["F", "timeBound", "BooleanAtomic"], "stlTerm1")
-    # test.addBranch(["G", "timeBound", "BooleanAtomic"], "stlTerm1")
-    # test.addBranch(["BooleanAtomic"], "stlTerm1")
+    from RuleTemplate.RuleTemplate import RuleTemplate
+    test = RuleTemplate()
+    test.addBranch(["statementList"], "eval1")
+    test.addBranch(["statement"], "statementList1")
+    test.addBranch(["boolExpr"], "statement1")
+    test.addBranch(["stlTerm"], "boolExpr1")
+    test.addBranch(["stlTerm", "AND", "stlTerm"], "boolExpr1")
+    test.addBranch(["stlTerm", "OR", "stlTerm"], "boolExpr1")
+    test.addBranch(["stlTerm", "IMPLIES", "stlTerm"], "boolExpr1")
+
+    test.addBranch(["BooleanAtomic", "U", "timeBound",  "BooleanAtomic"], "stlTerm1")
+    test.addBranch(["F", "timeBound", "BooleanAtomic"], "stlTerm1")
+    test.addBranch(["G", "timeBound", "BooleanAtomic"], "stlTerm1")
+    test.addBranch(["BooleanAtomic"], "stlTerm1")
 
 
-    # test.showGraph()
+    test.showGraph()
 
 
 

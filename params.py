@@ -2,7 +2,7 @@
 import math
 
 # GENERAL INPUT PARAMS
-popSize = 10  # 8106 #Size of population
+popSize = 100  # 8106 #Size of population
 #popSize = 40337 #Sepsis size
 
 
@@ -11,6 +11,7 @@ verbose = True
 template = None
 
 # MCTS PARAMS
+iters = 50 #Number of iterations to run MCTS
 cp = 1/math.sqrt(2) #UCT param to increase or decrease the amount of exploration performed
 maxTreeDepth = 17 #Maximum depth of tree
 cutoffThresh = 0.001 #Match score cutoff threshold to prune branches
@@ -48,4 +49,3 @@ variables = {'LOS': [0.0, 122.0], 'ICU_Pt_Days': [0.0, 120.0], 'Mort': [0.0, 1.0
 
 # PRIVACY BUDGET PARAMS
 epsilon = 'inf' #set epsilon to 'inf' to run nonprivate model
-iters = 50
