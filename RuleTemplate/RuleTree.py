@@ -45,7 +45,10 @@ class RuleTree(treelib.Tree):
                 else:
                     btw = " " + printDict[val] + " "
 
-                g = next(gen)
+                try:
+                    g = next(gen)
+                except:
+                    pass
 
                 test = ""
                 while True:
@@ -128,7 +131,10 @@ class RuleTree(treelib.Tree):
                 else:
                     btw = " " + printDict[val] + " "
 
-                g = next(gen)
+                try:
+                    g = next(gen)
+                except:
+                    pass
 
                 test = ""
                 while True:

@@ -52,6 +52,10 @@ class Branch: #Set of nodes in tree
         counts = [item[0] for item in self.matchScores]
         numClients = [len(item[1]) for item in self.matchScores]
         perCount = sum(counts) / sum(numClients)
+        # print("\n", self.name)
+        # print("counts:", counts)
+        # print("num clients", numClients)
+        # print("per count", perCount)
         return perCount
 
     def hasChildren(self):
@@ -356,9 +360,9 @@ class RuleTemplate():
 
                 for i in range(len(com)): #for each subtree to be added from combos
                     rt = self.addSubtreeToRuleTree(parentTree=rt, childTree=com[i], nodeName=nodeList[i].name)
-                    print("Multi child tree gen")
-                    rt.show()
-                    print(rt.toString())
+                    # print("Multi child tree gen")
+                    # rt.show()
+                    # print(rt.toString())
                     #add combined trees
                     realTrees.append(rt)
 

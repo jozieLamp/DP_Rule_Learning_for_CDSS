@@ -99,14 +99,20 @@ class Client:
                 # print(self.clientNum, "has vars")
                 # check for structural match
                 clientNodes = []
-                parent = None
-                for node in r.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
-                    if r.parent(node) != parent:
-                        parent = r.parent(node)
-                        clientNodes.append("newLevel")
+                # parent = None
+                # for node in r.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
+                #     if r.parent(node) != parent:
+                #         parent = r.parent(node)
+                #         clientNodes.append("newLevel")
+                #
+                #     n = re.sub('[0-9]', '', node)
+                #     clientNodes.append(n)
 
+
+                for node in r.expand_tree(mode=treelib.Tree.DEPTH, sorting=True):
                     n = re.sub('[0-9]', '', node)
                     clientNodes.append(n)
+
 
                 # print("client nodes", clientNodes)
                 if self.nodeListMatch(tempNodes, clientNodes):
@@ -116,18 +122,45 @@ class Client:
 
     # check for match  between two lists of template nodes + client nodes
     def nodeListMatch(self, tempList, cList):
-        lMatches = ["LE", "LT"]
-        gMatches = ["GE", "GT"]
+        # print("tempList", tempList)
+        # print("clist", cList)
 
-        for i in range(len(tempList)):
-            if tempList[i] != cList[i] and tempList[i] != "?":
-                if (tempList[i] in lMatches and cList[i] in lMatches) or (
-                        tempList[i] in gMatches and cList[i] in gMatches):  # allow match btw < and <= / > and >=
-                    pass
-                else:
-                    return False
+        #Fix relop matches
+        tempList[:] = [x if x != "LT" else "LE" for x in tempList]
+        tempList[:] = [x if x != "GT" else "GE" for x in tempList]
+        cList[:] = [x if x != "LT" else "LE" for x in cList]
+        cList[:] = [x if x != "GT" else "GE" for x in cList]
 
-        if len(tempList) != len(cList) and cList[i + 1] != "newLevel":
-            return False
+        i = 0
+        while i < len(tempList):
+            if tempList[i] in cList:
+                idx = cList.index(tempList[i]) #get idx of element of cList
+                cList = cList[idx+1:]
+            else:
+                return False
+
+            i = i+1
 
         return True
+
+
+    # # check for match  between two lists of template nodes + client nodes
+    # def nodeListMatch(self, tempList, cList):
+    #     lMatches = ["LE", "LT"]
+    #     gMatches = ["GE", "GT"]
+    #     print("tempList", tempList)
+    #     print("clist", cList)
+    #
+    #     for i in range(len(tempList)):
+    #         if tempList[i] != cList[i] and tempList[i] != "?":
+    #
+    #             if (tempList[i] in lMatches and cList[i] in lMatches) or (tempList[i] in gMatches and cList[i] in gMatches) \
+    #                     or (tempList[i] == cList[i+2]):  # allow match btw < and <= / > and >= and check for half matches
+    #                 pass
+    #             else:
+    #                 return False
+    #
+    #     if len(tempList) != len(cList) and cList[i + 1] != "newLevel":
+    #         return False
+    #
+    #     return True

@@ -104,9 +104,6 @@ class Server :
 
             else:
                 result = self.getQuery(selectedBranch) #result is in form [matchCount, activeClients]
-                if (self.verbose):
-                    self.mcLogger.info("Got result " + str(result[0]) + " " + str(result[1]) + "\n")
-
                 if result[0] == "BUDGET USED":
                     self.logger.info("BUDGET USED\n")
                     break
@@ -194,8 +191,10 @@ class Server :
 
         for node in branch.nodes:
             for child in node.children:
+                #TODO - note, changed selection policy to be using UCT as well ...
                 # utc = self.utcScore(child)
-                score = child.getCurrentScore()
+                # score = child.getCurrentScore()
+                score = self.utcScore(child, child.getCurrentScore())
 
                 if self.verbose:
                     self.logger.info("Score for " + child.name + " : " + str(score))
@@ -363,6 +362,12 @@ class Server :
             parenVisits = branch.parent.branch.visits
 
         uct = score + self.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+
+        # uct = score * (1/(parenVisits + branch.visits))
+        # #Add discount factor for terminal branches so they don't get searched
+        # if branch.terminalBranch():
+        #     uct = uct * 0.4
+
         return uct
 
 
@@ -432,15 +437,27 @@ class Server :
         nodes = []
         parent = None
         ignoreList = ["(", ")"]
-        for n in temp.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
-            if temp.parent(n) != parent:
-                parent = temp.parent(n)
-                nodes.append("newLevel")
+        # for n in temp.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
+        #     if temp.parent(n) != parent:
+        #         parent = temp.parent(n)
+        #         nodes.append("newLevel")
+        #
+        #     nd = temp.get_node(n)
+        #     id = re.sub('[0-9]', '', nd.identifier)
+        #
+        #     if id not in ignoreList:
+        #         nodes.append(id)  # remove numbers, append name
+
+
+        for n in temp.expand_tree(mode=treelib.Tree.DEPTH, sorting=True):
+            # if temp.parent(n) != parent:
+            #     parent = temp.parent(n)
+            #     nodes.append("newLevel")
 
             nd = temp.get_node(n)
             id = re.sub('[0-9]', '', nd.identifier)
 
             if id not in ignoreList:
-                nodes.append(id)  # remove numbers, append name
+                nodes.append(id)
 
         return nodes

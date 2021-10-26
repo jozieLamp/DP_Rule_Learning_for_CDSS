@@ -67,9 +67,12 @@ def runProtocol(params):
     # test.addBranch(["(", "boolExpr", ")"], "BooleanAtomic1")
     # test.addBranch(["stlTerm"], "boolExpr2")
     # test.addBranch(["BooleanAtomic"], "stlTerm8")
-    # test.addBranch(["LE"], "BooleanAtomic6")
-    # test.addBranch(["Variable", "Parameter"], "LE1")
+    # test.addBranch(["LT"], "BooleanAtomic6")
+    # test.addBranch(["Variable", "Parameter"], "LT1")
     #
+    #
+    # s.getQuery(test._branches['[LT1]'])
+
     # test.addBranch(["(", "boolExpr", ")"], "BooleanAtomic2")
     # test.addBranch(["stlTerm"], "boolExpr3")
     # test.addBranch(["BooleanAtomic"], "stlTerm9")
