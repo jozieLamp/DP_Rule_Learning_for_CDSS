@@ -2,7 +2,7 @@
 import math
 
 # GENERAL INPUT PARAMS
-popSize = 10  # 8106 #Size of population
+popSize = 100  # 8106 #Size of population
 #popSize = 40337 #Sepsis size
 
 

@@ -103,7 +103,7 @@ class Server :
                     self.backpropagation(expandedBranch, result)
 
             else:
-                result = self.getQuery(selectedBranch.ruleTree) #result is in form [matchCount, activeClients]
+                result = self.getQuery(selectedBranch) #result is in form [matchCount, activeClients]
                 if (self.verbose):
                     self.mcLogger.info("Got result " + str(result[0]) + " " + str(result[1]) + "\n")
 

@@ -71,6 +71,7 @@ class RuleTree(treelib.Tree):
             except:
                 break
 
+        str = self.checkString(str)
         return str
 
     def getSymbol(self, val, gen, varCounter):
@@ -153,6 +154,7 @@ class RuleTree(treelib.Tree):
             except:
                 break
 
+        str = self.checkString(str)
         return str
 
     def getSymbolParams(self, val, gen, varCounter):
@@ -181,3 +183,16 @@ class RuleTree(treelib.Tree):
                 str += printDict[val]
 
         return str, varCounter
+
+    #Check string for any inconsistencies
+    def checkString(self, str):
+        paren1 = str.count("(")
+        paren2 = str.count(")")
+
+        dif = paren1 - paren2
+
+        if dif > 0:
+            for i in range(dif):
+                str += ")"
+
+        return str
