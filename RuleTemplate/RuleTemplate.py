@@ -225,7 +225,7 @@ class RuleTemplate():
         for key, br in self._branches.items():
             if br.visits > 0 and br.getCurrentScore() < cutoff:
                 self.logger.info("PRUNING BRANCH " +  key)
-                self.logger.info("Got score " + str(br.getCurrentScore() + " < cutoff thresh " + str(cutoff)))
+                self.logger.info("Got score " + str(br.getCurrentScore()) + " < cutoff thresh " + str(cutoff))
                 delNames.append(key)
 
         for n in delNames:
