@@ -2,7 +2,7 @@
 import math
 
 # GENERAL INPUT PARAMS
-popSize = 100  # 8106 #Size of population
+popSize = 10  # 8106 #Size of population
 #popSize = 40337 #Sepsis size
 
 
@@ -11,7 +11,7 @@ verbose = True
 template = None
 
 # MCTS PARAMS
-iters = 300 #Number of iterations to run MCTS
+iters = 90 #Number of iterations to run MCTS
 cp = 1/math.sqrt(2) #UCT param to increase or decrease the amount of exploration performed
 maxTreeDepth = 17 #Maximum depth of tree
 cutoffThresh = 0.001 #Match score cutoff threshold to prune branches

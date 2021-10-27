@@ -113,11 +113,12 @@ class Node: #single STL type
 
 #Full Rule Template
 class RuleTemplate():
-    def __init__(self, default=True):
+    def __init__(self, varDict, default=True):
         self.root = None #name of root node
         self.nodeIDDict = {}  # tracking current IDs of node
         self._nodes = {} #dict of nodes in template- nodeName: node object
         self._branches = {}
+        self._varDict= varDict
         self.dotGraph = pydot.Dot(graph_type='digraph', forcelabels=True) # Make pydot graph to visualize rule template
         self.logger = logging.getLogger('Rule Template')
 
@@ -127,10 +128,7 @@ class RuleTemplate():
 
     def makeDefaultTree(self):
         self.addBranch(branch=['eval'], parentName=None)
-        # self.getBranch('[eval1]').visits = 1
-        # self.addBranch(branch=['statementList'], parentName="eval1")
-        # self.addBranch(branch=['statement'], parentName="statementList1")
-        # self.addBranch(branch=['boolExpr'], parentName="statement1")
+
 
     def getBranch(self, name):
         try:
@@ -138,7 +136,7 @@ class RuleTemplate():
         except:
             self.logger.error("Branch name not found")
 
-    def addBranch(self, branch, parentName):
+    def addBranch(self, branch, parentName, varBranch=False):
         #get actual parent node from rule template
         if parentName != None:
             parentNode = self._nodes[parentName]
@@ -168,9 +166,19 @@ class RuleTemplate():
         clusterBranch = pydot.Cluster(brID, label=brID)
         self.dotGraph.add_subgraph(clusterBranch)
 
+
         for n in nodeNames:
             nod = Node(n) #make node object
             nod.branch = br #link node to its branch
+
+            if varBranch: #fix type of node not to var name but to be variable
+                vars = []
+                if re.sub('[0-9]', '', n) != "Parameter":
+                    nod.type = "Variable"
+                    vars.append(re.sub('[0-9]', '', n))
+
+                br.ruleTree.varList.extend(vars) #add vars to varList
+
             br.nodes.append(nod) #add node to branch
 
             #add nodes to rule temp
@@ -186,6 +194,7 @@ class RuleTemplate():
             br.ruleTree.create_node(identifier=n, parent=parentName)
 
         return br #return added branch
+
 
     def removeNode(self, nodeName):
         try:

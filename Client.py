@@ -50,7 +50,7 @@ class Client:
             return False
 
     #Get randomized response query to rule template
-    def randResponseQueryStruct(self, tempNodes, varList=None, pLossBudg=0.05):
+    def randResponseQueryStruct(self, tempNodes, varList, pLossBudg=0.05):
 
         if not self.privacyBudgetUsed():  # first check privacy budget not used
 
@@ -85,34 +85,21 @@ class Client:
             return "BUDGET USED", None, None
 
     # check for structural match
-    def queryStructuralRuleMatch(self, tempNodes, varList=None):
+    def queryStructuralRuleMatch(self, tempNodes, varList):
         for r in self.ruleSet:
             # check if variables in rule
             hasVars = True
-
-            #TODO- will need to adjust variable checking at some point
-            # for v in varList:
-            #     if v not in r.getAllVars():
-            #         hasVars = False
+            for v in varList:
+                if v not in r.getAllVars():
+                    hasVars = False
 
             if hasVars:
-                # print(self.clientNum, "has vars")
                 # check for structural match
                 clientNodes = []
-                # parent = None
-                # for node in r.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
-                #     if r.parent(node) != parent:
-                #         parent = r.parent(node)
-                #         clientNodes.append("newLevel")
-                #
-                #     n = re.sub('[0-9]', '', node)
-                #     clientNodes.append(n)
-
 
                 for node in r.expand_tree(mode=treelib.Tree.DEPTH, sorting=True):
                     n = re.sub('[0-9]', '', node)
                     clientNodes.append(n)
-
 
                 # print("client nodes", clientNodes)
                 if self.nodeListMatch(tempNodes, clientNodes):
@@ -143,24 +130,3 @@ class Client:
 
         return True
 
-
-    # # check for match  between two lists of template nodes + client nodes
-    # def nodeListMatch(self, tempList, cList):
-    #     lMatches = ["LE", "LT"]
-    #     gMatches = ["GE", "GT"]
-    #     print("tempList", tempList)
-    #     print("clist", cList)
-    #
-    #     for i in range(len(tempList)):
-    #         if tempList[i] != cList[i] and tempList[i] != "?":
-    #
-    #             if (tempList[i] in lMatches and cList[i] in lMatches) or (tempList[i] in gMatches and cList[i] in gMatches) \
-    #                     or (tempList[i] == cList[i+2]):  # allow match btw < and <= / > and >= and check for half matches
-    #                 pass
-    #             else:
-    #                 return False
-    #
-    #     if len(tempList) != len(cList) and cList[i + 1] != "newLevel":
-    #         return False
-    #
-    #     return True

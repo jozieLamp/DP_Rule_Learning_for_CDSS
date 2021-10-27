@@ -22,7 +22,8 @@ class Server :
         #template params
         if params.template == None:
             # make default rule template tree to start
-            self.templateTree = RuleTemplate(default=True)
+            self.templateTree = RuleTemplate(varDict=self.varDict, default=True)
+
 
         else: #TODO - add option to start from preset template
             pass
@@ -110,20 +111,19 @@ class Server :
                 else:
                     self.backpropagation(selectedBranch, result)
 
-            #TODO  HERE!!!!
+
             # Perform pruning step --> prune any branches who have a query result < cutoff threshold
             if self.verbose:
                 self.mcLogger.info("----PRUNING PHASE----")
 
             self.templateTree.pruneTree(self.cutoffThresh)
 
-
             totalIters += 1
 
         if self.verbose:
             self.mcLogger.info("----SEARCH COMPLETED----\n")
 
-        #TODO - fix until rule problems with these --> figure out why valid rules not being formatted properly
+        #TODO - maybe do final query on each rule to ensure enough client matches
         #Get final rule set
         self.ruleSet = self.templateTree.generateRuleSet(verbose=self.verbose)
         self.logRuleSet()
@@ -179,20 +179,13 @@ class Server :
             self.mcLogger.info("All children visited, selecting node with highest score value")
 
 
-        #Select branch with highest score (UTC??) value
-
-        #Note - currently treats each child as separate (even if parent has combined children options ...)
-        # TODO HERE -->
-        #get all combinations of child nodes
-        #for each child combo, get max UTC, update the UTC of each node in the branch
-
+        #Select branch with highest score (UTC) value
         maxScore = -1
         bestChild = None
 
         for node in branch.nodes:
             for child in node.children:
-                #TODO - note, changed selection policy to be using UCT as well ...
-                # utc = self.utcScore(child)
+                #Note, changed selection policy to be using UCT as well ...
                 # score = child.getCurrentScore()
                 score = self.utcScore(child, child.getCurrentScore())
 
@@ -261,19 +254,34 @@ class Server :
         for node in branch.nodes:
             if node.type in stlGrammarDict.keys(): #node is expandable
                 childChoices = stlGrammarDict[node.type] #get possible child branches
-                if self.verbose:
-                    self.mcLogger.info("For node " + node.name + " found Possible Child Branches: {}".format(' '.join(map(str, childChoices))))
 
-                #TODO - evaluate more types of conditions here to add the branches to the node ...
-                for choice in childChoices:
-                    #Check depth condition
-                    if choice not in terminalNodes and branch.depth + 1 > self.maxTreeDepth:
-                        if self.verbose:
-                            self.mcLogger.info("Reached max depth of " + str(branch.depth) + " - no children to expand")
-                        pass
-                    else:
-                        br = self.templateTree.addBranch(choice, node.name) #add all children to branch
+                if "Variable" in childChoices[0]: #Get variable combo level
+                    childChoices = []
+                    for v in self.variables:
+                        childChoices.append([v, "Parameter"])
+
+                    if self.verbose:
+                        self.mcLogger.info("For node " + node.name + " found Possible Child Branches: {}".format(
+                            ' '.join(map(str, childChoices))))
+
+                    for choice in childChoices:
+                        br = self.templateTree.addBranch(choice, node.name, varBranch=True)  # add all children to branch
                         branchChildren.append(br)
+
+
+                else: #non variable terminal nodes
+                    if self.verbose:
+                        self.mcLogger.info("For node " + node.name + " found Possible Child Branches: {}".format(' '.join(map(str, childChoices))))
+
+                    for choice in childChoices:
+                        #Check depth condition
+                        if choice not in terminalNodes and branch.depth + 1 > self.maxTreeDepth:
+                            if self.verbose:
+                                self.mcLogger.info("Reached max depth of " + str(branch.depth) + " - no children to expand")
+                            pass
+                        else:
+                            br = self.templateTree.addBranch(choice, node.name) #add all children to branch
+                            branchChildren.append(br)
 
         return branchChildren
 
@@ -309,6 +317,7 @@ class Server :
             self.mcLogger.info("----QUERY PHASE----")
             self.mcLogger.info("Querying Branch: " + selectedBranch.name)
             selectedBranch.ruleTree.show()
+            print("Variables for rule tree:", selectedBranch.ruleTree.varList)
 
         #Note - this part could be where the p budgets are tested / evaluated ...
         matchCount, activeClients = self.queryClientRuleMatch(selectedBranch.ruleTree)
@@ -387,7 +396,7 @@ class Server :
         if self.epsilon == 'inf':
             yesCount = 0
             for c in self.clientList:
-                yesCount += self.clientList[c].queryStructuralRuleMatch(tempNodes)
+                yesCount += self.clientList[c].queryStructuralRuleMatch(tempNodes, template.varList)
 
 
             return yesCount, activeClients
@@ -400,7 +409,7 @@ class Server :
             p = None
 
             for c in self.clientList:
-                resp, truResp, p = self.clientList[c].randResponseQueryStruct(tempNodes)
+                resp, truResp, p = self.clientList[c].randResponseQueryStruct(tempNodes, template.varList)
 
                 if resp == "BUDGET USED":
                     self.clientsWithUsedBudgets.append(c)

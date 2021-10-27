@@ -81,7 +81,7 @@ class RuleTree(treelib.Tree):
         rop = ["GT", "GE", "LT", "LE", "EQ", "NEQ"]
         str = ""
 
-        if val in printDict.keys():
+        if val in printDict.keys() or val in self.varList:
 
             if val in rop:  # format leaf parts
                 try:
@@ -89,15 +89,7 @@ class RuleTree(treelib.Tree):
                 except:
                     pass
 
-                if varCounter >= len(self.varList):
-                    str += "Variable" + " " + printDict[val] + " " + "?"
-                elif re.sub('[0-9]', '', atomic) == "Variable":
-                    str += self.varList[varCounter] + " " + printDict[val] + " " + "?"
-                    varCounter += 1
-                else:
-                    str += "?" + " " + printDict[val] + self.varList[varCounter]
-                    varCounter += 1
-
+                str += atomic + " " + printDict[val] + " " + "?"
 
             else:
                 str += printDict[val]
@@ -167,7 +159,7 @@ class RuleTree(treelib.Tree):
         rop = ["GT", "GE", "LT", "LE", "EQ", "NEQ"]
         str = ""
 
-        if val in printDict.keys():
+        if val in printDict.keys() or val in self.varList:
 
             if val in rop:  # format leaf parts
                 try:
@@ -175,15 +167,7 @@ class RuleTree(treelib.Tree):
                 except:
                     pass
 
-                if varCounter >= len(self.varList):
-                    str += "Variable" + " " + printDict[val] + " " + "0.0"
-                elif re.sub('[0-9]', '', atomic) == "Variable":
-                    str += self.varList[varCounter] + " " + printDict[val] + " " + "0.0"
-                    varCounter += 1
-                else:
-                    str += "0.0" + " " + printDict[val] + self.varList[varCounter]
-                    varCounter += 1
-
+                str += atomic + " " + printDict[val] + " " + "?"
 
             else:
                 str += printDict[val]
