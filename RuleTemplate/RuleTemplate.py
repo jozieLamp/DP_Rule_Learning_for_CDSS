@@ -85,11 +85,21 @@ class Branch: #Set of nodes in tree
         return childs
 
     def terminalBranch(self):
+        # print("\ntesting term branch for ", self.name)
+        # print([n.type for n in self.nodes])
+        # print([n.name for n in self.nodes])
+
+        #Check for empty node list
+        if self.nodes == []:
+            return False
+
         for n in self.nodes:
             if n.type not in terminalNodes:
+                # print("n type not in term nodes", n.type)
                 return False
 
         return True
+
 
 
 class Node: #single STL type
@@ -326,10 +336,10 @@ class RuleTemplate():
                 ruleSet.append(t)
 
         # Print first set of rules
-        if verbose:
-            self.logger.info("Produced Rule Structures: ")
-            for t in trees:
-                self.logger.info(t.toString())
+        # if verbose:
+        #     self.logger.info("Produced Rule Structures: ")
+        #     for t in trees:
+        #         self.logger.info(t.toString())
 
         self.logger.info("Produced " + str(len(trees)) + " Rule Structures")
         self.logger.info("Generated " + str(len(ruleSet)) + " Formatted Rules\n")
@@ -364,12 +374,22 @@ class RuleTemplate():
                     # rt.show()
                     # print(rt.toString())
                     #add combined trees
-                    realTrees.append(rt)
+
+                    #Make sure all leaf nodes actually leaves --> var or param
+                    trueLeaf = True
+                    leaves = rt.leaves()
+                    for l in leaves:
+                        if re.sub('[0-9]', '', l.identifier) not in terminalNodes:
+                            trueLeaf = False
+
+                    if trueLeaf:
+                        realTrees.append(rt)
 
             return realTrees
 
         if not branch.hasChildren(): #reached leaf nodes
-            trees.append(branch.ruleTree)
+            if branch.terminalBranch(): #only append rule if is true leaf node --> var or param
+                trees.append(branch.ruleTree)
             return trees
         else:
             for opt in branch.getChildBranches():
