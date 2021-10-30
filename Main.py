@@ -48,6 +48,10 @@ def runProtocol(params):
     #Run MCTS
     s.runMCTS(branchName='[eval1]')
 
+    #Save Rules to File
+    s.saveRules(params.resultsFilename)
+
+
     # from RuleTemplate.RuleTemplate import RuleTemplate
     # test = RuleTemplate()
     # test.addBranch(["statementList"], "eval1")

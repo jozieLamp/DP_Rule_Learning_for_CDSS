@@ -202,7 +202,8 @@ class STLTree(treelib.Tree):
         for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
             obj = self[node].data
             if obj.type == AtomicEnum.Variable:
-                varList.append(obj.toString())
+                if not re.match('^[0-9\.]*$', obj.toString()):
+                    varList.append(obj.toString())
 
         return varList
 

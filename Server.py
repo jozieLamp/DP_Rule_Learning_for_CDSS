@@ -53,6 +53,14 @@ class Server :
             self.logger.info(r.toString())
         self.logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
 
+    def saveRules(self, filename):
+        textfile = open(filename, "w")
+
+        for r in self.ruleSet:
+            textfile.write(r.toStringWithParams() + "\n")
+
+        textfile.close()
+
     def globalBudgetUsed(self):
         if list(self.clientList.keys()) == set(self.clientsWithUsedBudgets):
             return True

@@ -18,6 +18,7 @@ cutoffThresh = 0.001 #Match score cutoff threshold to prune branches
 
 # DATA PARAMETERS
 dataFilename = "Data/ICU/Best/"
+resultsFilename = "Results/ICU_Ruleset_MCTS_Baseline.txt"
 # variables with guess ranges
 # ICU Dataset
 variables = {'LOS': [0.0, 122.0], 'ICU_Pt_Days': [0.0, 120.0], 'Mort': [0.0, 1.0], 'n_evts': [0.0, 5.0],
