@@ -334,6 +334,7 @@ class RuleTemplate():
         trees = self.traverseLeaf(branch)
 
         #Remove duplicate rules
+        #TODO here --> fix this part to make sure duplicates are NOT returned
         trees = list(set(trees))
 
         #Only get correctly formatted rules
