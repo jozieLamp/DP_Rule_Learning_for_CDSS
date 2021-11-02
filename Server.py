@@ -29,7 +29,7 @@ class Server :
             pass
 
         #mcts params
-        self.iters = params.iters
+        self.maxQueries = params.maxQueries
         self.cp = params.cp
         self.maxTreeDepth = params.maxTreeDepth
         self.cutoffThresh = params.cutoffThresh
@@ -73,16 +73,8 @@ class Server :
     # RUN Monte Carlo Tree Search
     def runMCTS(self, branchName):
 
-
-        '''
-        TODO NEXT         
-        #3. Figure out how to allocate budget amongst queries
-        #5. (?) Look at searching down multiple path ways for branch children (eg stl & stl) 
-        # Fix until rule problems with these --> figure out why valid rules not being formatted properly
-        '''
-
-        totalIters = 1
-        while not self.globalBudgetUsed() and totalIters <= self.iters:
+        totalIters = 1 #to track the number of iterations that are completed
+        while not self.globalBudgetUsed() and self.numQueries < self.maxQueries:
             # SELECTION
             if (self.verbose):
                 self.mcLogger.info("BEGIN SEARCH ROUND, ITERATION: " + str(totalIters) + "\n")
@@ -127,6 +119,8 @@ class Server :
             self.templateTree.pruneTree(self.cutoffThresh)
 
             totalIters += 1
+
+
 
         if self.verbose:
             self.mcLogger.info("----SEARCH COMPLETED----\n")

@@ -16,6 +16,13 @@ class RuleTree(treelib.Tree):
     #     self.varList = []
     #     super().__init__(tree, deep, node_class)
     #     # super(RuleTree, self).__init__()
+    
+    #Make rule trees hashable ..
+    def __eq__(self, other):
+        return self.toString() == other.toString()
+
+    def __hash__(self):
+        return hash(('string', self.toString()))
 
 
     def toString(self):
