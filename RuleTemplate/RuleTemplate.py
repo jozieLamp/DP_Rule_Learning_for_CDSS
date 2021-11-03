@@ -51,8 +51,15 @@ class Branch: #Set of nodes in tree
     def getCurrentScore(self): #return sum of percent match score
         counts = [item[0] for item in self.matchScores]
         numClients = [len(item[1]) for item in self.matchScores]
-        perCount = sum(counts) / sum(numClients)
+
+        if self.visits == 0.0:
+            #node has not been visited yet, so get parent per count
+            perCount = self.parent.branch.getCurrentScore()
+        else:
+            perCount = sum(counts) / sum(numClients)
+
         # print("\n", self.name)
+        # print(self.ruleTree.show())
         # print("counts:", counts)
         # print("num clients", numClients)
         # print("per count", perCount)
@@ -113,13 +120,15 @@ class Node: #single STL type
 
 #Full Rule Template
 class RuleTemplate():
-    def __init__(self, varDict, default=True):
+    def __init__(self, varDict, default=True, verbose=True):
         self.root = None #name of root node
+        self.verbose = verbose
         self.nodeIDDict = {}  # tracking current IDs of node
         self._nodes = {} #dict of nodes in template- nodeName: node object
         self._branches = {}
         self._varDict= varDict
         self.dotGraph = pydot.Dot(graph_type='digraph', forcelabels=True) # Make pydot graph to visualize rule template
+
         self.logger = logging.getLogger('Rule Template')
 
         self.graphNum = 0
@@ -217,7 +226,8 @@ class RuleTemplate():
 
         #check if all child nodes have been removed from the branch - if so, remove branch
         if node.branch.nodes == []:
-            self.logger.info("All nodes removed from branch, removing branch from template")
+            if self.verbose:
+                self.logger.info("All nodes removed from branch, removing branch from template")
             self.removeBranch(node.branch.name)
 
 
@@ -247,8 +257,9 @@ class RuleTemplate():
         delNames = []
         for key, br in self._branches.items():
             if br.visits > 0 and br.getCurrentScore() < cutoff:
-                self.logger.info("PRUNING BRANCH " +  key)
-                self.logger.info("Got score " + str(br.getCurrentScore()) + " < cutoff thresh " + str(cutoff))
+                if self.verbose:
+                    self.logger.info("PRUNING BRANCH " +  key)
+                    self.logger.info("Got score " + str(br.getCurrentScore()) + " < cutoff thresh " + str(cutoff))
                 delNames.append(key)
 
         for n in delNames:
@@ -256,9 +267,11 @@ class RuleTemplate():
 
         if delNames != []:
             self.saveGraph(graphName='PRUNED TREE')
-            self.logger.info("**Saved Graph " + str(self.graphNum) + "_" + 'Pruning Step\n')
+            if self.verbose:
+                self.logger.info("**Saved Graph " + str(self.graphNum) + "_" + 'Pruning Step\n')
         else:
-            self.logger.info("Nothing to prune\n")
+            if self.verbose:
+                self.logger.info("Nothing to prune\n")
 
 
     # generate unique node ids for tree
@@ -324,10 +337,10 @@ class RuleTemplate():
 
         return brList
 
-    def generateRuleSet(self, verbose):
+    def generateRuleSet(self):
         '''
         Code to generate fule rule set from template
-        :return: rule set
+        :return: Rule Set
         '''
         ruleSet = []
         branch = self._branches[self.root]
@@ -345,7 +358,7 @@ class RuleTemplate():
                 ruleSet.append(t)
 
         # Print first set of rules
-        # if verbose:
+        # if self.verbose:
         #     self.logger.info("Produced Rule Structures: ")
         #     for t in trees:
         #         self.logger.info(t.toString())
@@ -398,6 +411,7 @@ class RuleTemplate():
 
         if not branch.hasChildren(): #reached leaf nodes
             if branch.terminalBranch(): #only append rule if is true leaf node --> var or param
+                branch.ruleTree.percentCount = branch.getCurrentScore() #add percent count to rule tree
                 trees.append(branch.ruleTree)
             return trees
         else:

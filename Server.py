@@ -4,6 +4,7 @@ import treelib
 import re
 import math
 import random
+import pandas as pd
 from RuleTemplate.RuleTemplate import RuleTemplate, Node, stlGrammarDict, terminalNodes
 
 
@@ -22,7 +23,7 @@ class Server :
         #template params
         if params.template == None:
             # make default rule template tree to start
-            self.templateTree = RuleTemplate(varDict=self.varDict, default=True)
+            self.templateTree = RuleTemplate(varDict=self.varDict, default=True, verbose=self.verbose)
 
 
         else: #TODO - add option to start from preset template
@@ -53,13 +54,14 @@ class Server :
             self.logger.info(r.toString())
         self.logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
 
-    def saveRules(self, filename):
-        textfile = open(filename, "w")
-
+    def getRulesetDF(self):
+        # make dataframe of rules and their client counts
+        lst = []
         for r in self.ruleSet:
-            textfile.write(r.toStringWithParams() + "\n")
+            lst.append([r.toStringWithParams(), r.percentCount])
 
-        textfile.close()
+        df = pd.DataFrame(lst, columns=["Rule", "Percent Count"])
+        return df
 
     def globalBudgetUsed(self):
         if list(self.clientList.keys()) == set(self.clientsWithUsedBudgets):
@@ -82,7 +84,7 @@ class Server :
             currBranch = self.templateTree._branches[branchName]
 
             #query here in utc score part ...
-            selectedBranch = self.selection(currBranch) #TODO - may need to fix selection to do multiple paths from branches with multi nodes
+            selectedBranch = self.selection(currBranch)
             if self.verbose:
                 clus = self.templateTree.dotGraph.get_subgraph('"cluster_' + selectedBranch.name + '"')[0]
                 clus.set('color', 'red')
@@ -127,8 +129,10 @@ class Server :
 
         #TODO - maybe do final query on each rule to ensure enough client matches
         #Get final rule set
-        self.ruleSet = self.templateTree.generateRuleSet(verbose=self.verbose)
-        self.logRuleSet()
+        self.ruleSet = self.templateTree.generateRuleSet()
+
+        if self.verbose:
+            self.logRuleSet()
 
         self.logger.info("Completed " + str(self.numQueries) + " queries")
 

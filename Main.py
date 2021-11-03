@@ -48,8 +48,9 @@ def runProtocol(params):
     #Run MCTS
     s.runMCTS(branchName='[eval1]')
 
-    #Save Rules to File
-    s.saveRules(params.resultsFilename)
+    # Get dataframe of the generated rules and their percent counts
+    df = s.getRulesetDF()
+    df.to_csv(params.resultsFilename) #Save Rules to File
 
 
     # from RuleTemplate.RuleTemplate import RuleTemplate

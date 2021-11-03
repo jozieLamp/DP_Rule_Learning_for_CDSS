@@ -10,6 +10,7 @@ class RuleTree(treelib.Tree):
     def __init__(self,  *args, **kw):
         super().__init__(*args, **kw)
         self.varList = []
+        self.percentCount = None
 
     # def __init__(self, tree=None, deep=False, node_class=None):
     #     # super().__init__(self)
