@@ -328,6 +328,14 @@ class RuleTemplate():
 
         test.show()
 
+    #Get number of terminal branches
+    def getNumTerminalBranches(self):
+        num = 0
+        for key, br in self._branches.items():
+            if br.terminalBranch():
+                num += 1
+
+        return num
 
     def getLeafBranches(self):
         brList = []
