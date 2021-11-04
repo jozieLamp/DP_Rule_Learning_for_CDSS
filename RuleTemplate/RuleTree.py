@@ -175,12 +175,13 @@ class RuleTree(treelib.Tree):
                 except:
                     pass
 
-                str += atomic + " " + printDict[val] + " " + "?"
+                str += atomic + " " + printDict[val] + " " + "0.000"
 
             else:
                 str += printDict[val]
 
         return str, varCounter
+
 
     #Check string for any inconsistencies
     def checkString(self, str):
