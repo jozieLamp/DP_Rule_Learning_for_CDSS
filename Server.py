@@ -8,7 +8,39 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from RuleTemplate.RuleTemplate import RuleTemplate, Node, stlGrammarDict, terminalNodes
+from SignalTemporalLogic.STLFactory import STLFactory
 from MCTS.MCTS_Baseline import MCTS_Baseline
+
+#Make Ruleset Object to store all pieces of final ruleset
+class RuleSet:
+    def __init__(self, ruleTrees, rules):
+        self.ruleTrees = ruleTrees #Rule templates
+        self.rules = rules #Actual rule structures (STL Grammar Trees)
+        self.logger = logging.getLogger('SERVER')
+
+        #Make ruleset df
+        self.getRulesetDF()
+
+
+    def getRulesetDF(self):
+        # make dataframe of rules and their client counts
+        if len(self.ruleTrees) != len(self.rules):
+            self.logger.error("ERROR- Rule Trees and Rules are not same length, cannot complete RuleSet DF generation.")
+            return
+
+        lst = []
+        for i in range(len(self.ruleTrees)):
+            lst.append([self.rules[i].toString(), self.ruleTrees[i].percentCount])
+
+        self.ruleSetDF = pd.DataFrame(lst, columns=["Rule", "Percent Count"])
+
+
+    def logRuleSet(self):
+        self.logger.info("Retrieved Rules:")
+        self.logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        for r in self.rules:
+            self.logger.info(r.toString())
+        self.logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
 
 
 class Server :
@@ -43,26 +75,8 @@ class Server :
 
         self.logger.info("Setting privacy budget to: " + str(self.epsilon))
 
-        #Ruleset
-        self.ruleSet = [] #set of rule trees
 
 
-
-    def logRuleSet(self):
-        self.logger.info("Retrieved Rules:")
-        self.logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        for r in self.ruleSet:
-            self.logger.info(r.toString())
-        self.logger.info("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
-
-    def getRulesetDF(self):
-        # make dataframe of rules and their client counts
-        lst = []
-        for r in self.ruleSet:
-            lst.append([r.toStringWithParams(), r.percentCount])
-
-        df = pd.DataFrame(lst, columns=["Rule", "Percent Count"])
-        return df
 
     def globalBudgetUsed(self):
         if list(self.clientList.keys()) == set(self.clientsWithUsedBudgets):
@@ -76,9 +90,9 @@ class Server :
     # RUN Monte Carlo Tree Search
     def runProtocol(self, branchName):
 
+        #### RUN MONTE CARLO TREE SEARCH TO FIND RULE STRUCTURES
         #Make MCTS Baseline
         mcts = MCTS_Baseline(server=self, verbose=self.verbose)
-
 
         totalIters = 1 #to track the number of iterations that are completed
         while not self.globalBudgetUsed() and self.numQueries < self.maxQueries:
@@ -89,18 +103,45 @@ class Server :
 
             totalIters += 1
 
-
         if self.verbose:
-            self.logger.info("----SEARCH COMPLETED----\n")
+            self.logger.info("----MCTS SEARCH COMPLETED----\n")
 
         #TODO - maybe do final query on each rule to ensure enough client matches
-        #Get final rule set
-        self.ruleSet = self.templateTree.generateRuleSet()
 
+
+        #GET FINAL RULESET BY TRAVERSING TEMPLATE TREE
+        ruleTrees = self.templateTree.generateRuleSet() #returns a set of rule templates
+
+        #### ESTIMATE PARAMETERS FOR EACH RULE IN THE RULESET
         if self.verbose:
-            self.logRuleSet()
+            self.logger.info("----PARAMETER ESTIMATION PHASE----")
 
-        self.logger.info("Returned " + str(len(self.ruleSet)) + " rule structures")
+        stlFac = STLFactory()
+        rules = []
+        #query params and make final STL Rule Structures (STL Trees)
+        for t in ruleTrees:
+            #Query params for tree
+            tempParams = self.queryParameters(t)
+
+            #Only get correctly formatted rules
+            ft = stlFac.constructFormulaTree(t.toStringWithParams() + "\n") # Check if structure correct
+
+            if ft != None:  # Formula is not improper
+                #TODO - might have to do something where if rule is improper, remove it from the RuleTree list so the other functions are not messed up
+                ft.updateParams(tempParams)# Update params in structure
+                rules.append(ft)
+
+
+        #Make Rule Set Object to store output rule set
+        self.finalRuleSet = RuleSet(ruleTrees, rules)
+
+
+        # OUTPUT FINAL RETURNED RULE STRUCTURES
+        if self.verbose:
+            self.finalRuleSet.logRuleSet()
+
+        self.logger.info("Produced " + str(len(self.finalRuleSet.ruleTrees)) + " Rule Tree Structures")
+        self.logger.info("Generated " + str(len(self.finalRuleSet.rules)) + " Formatted Rules")
         self.logger.info("Completed " + str(self.numQueries) + " queries")
 
 
@@ -189,12 +230,11 @@ class Server :
         # add to num queries sent out by server
         self.numQueries += 1
 
+        activeClients = self.clientList  # TODO fix this part ...
+
         # get template node list
         tempNodes = self.getTemplateNodes(template)
         # print("temp nodes", tempNodes)
-
-        activeClients = self.clientList  # TODO fix this part ...
-
         tempParams = template.getMissingParams()
 
         #Get param values from clients
@@ -205,22 +245,31 @@ class Server :
                 for k in tempParams.keys():
                     tempParams[k].append(params[k])
 
-        print("Updated params", tempParams)
-
         #Get Protocol Param Values
 
         #TODO - get param value that encompasses > x threshold of client population ...
         #prolly will be hyperparam that set
 
-        #plot distributions of params
-        if self.verbose:
-            for p in tempParams.keys():
-                plt.figure(figsize=(10, 5))
-                plt.title('Distribution of Param ' + str(p))
-                plt.xlabel('Param Value')
-                plt.ylabel('Client Count')
-                plt.hist(tempParams.get(p))
-                plt.show()
+
+        # #plot distributions of params
+        # if self.verbose:
+        #     for p in tempParams.keys():
+        #         plt.figure(figsize=(10, 5))
+        #         plt.title('Distribution of Param ' + str(p))
+        #         plt.xlabel('Param Value')
+        #         plt.ylabel('Client Count')
+        #         plt.hist(tempParams.get(p))
+        #         plt.show()
+
+        finalParams = {}
+        for k in tempParams.keys():
+            vals = [float(x) for x in tempParams[k]]
+            finalParams[k] = sum(vals) / len(vals)
+
+        print("New Aggregate Params", finalParams)
+
+        # return param set
+        return finalParams
 
 
 

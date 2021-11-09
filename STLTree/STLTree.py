@@ -22,74 +22,6 @@ class STLTree(treelib.Tree):
     def printTree(self):
         print(self.toString())
 
-    def getRelevantNodes(self):
-        relExpr = {}
-        time = []
-
-        for node in self.expand_tree(mode=treelib.Tree.DEPTH, sorting=False):
-            obj = self[node].data
-
-            if obj.type == ExprEnum.timeBound:
-                time.append(obj)
-            elif isinstance(obj, RelationalOperator):
-                relExpr[obj.atomic1.toString()] = [obj.symbol, obj.atomic2.toString()]
-                #relExpr.append(obj)
-            else:
-                pass
-
-        return time, relExpr
-
-    def updateTimebounds(self, newTime):
-        count = 0
-        for node in self.expand_tree(mode=treelib.Tree.DEPTH, sorting=False):
-            obj = self[node].data
-            if obj.type == ExprEnum.timeBound:
-                obj.timeBound = newTime[count].timeBound
-                obj.lowerBound = newTime[count].lowerBound
-                obj.upperBound = newTime[count].upperBound
-                count += 1
-
-    def updateRelExpr(self, newRel):
-
-        for node in self.expand_tree(mode=treelib.Tree.DEPTH, sorting=False):
-            obj = self[node].data
-            if isinstance(obj, RelationalOperator):
-                var = obj.atomic1.toString()
-                exp = newRel[var]
-
-                if (obj.symbol == ">=" and exp[0] == ">") or (obj.symbol == "<" and exp[0] == "<="):
-                    param = str(float(exp[1]) + 0.01)
-                elif (obj.symbol == ">" and exp[0] == ">=") or (obj.symbol == "<=" and exp[0] == "<"):
-                    param = str(float(exp[1]) - 0.01)
-                else: #symbols same
-                    param = exp[1]
-
-                obj.atomic1.value = var
-                obj.atomic2.value = param
-
-
-
-
-
-    def getFormulaNoParams(self):
-        for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
-            obj = self[node].data
-            if obj.type == AtomicEnum.Parameter:
-                obj.value = None
-                obj.value = 0
-
-            if obj.type == AtomicEnum.Variable: #check for scientific notation
-                v = obj.value
-                v = v.replace("e","")
-
-                if not re.search('[a-zA-Z]', v):
-                    obj.value = '0.000'
-
-            if obj.type == ExprEnum.timeBound:
-                obj.lowerBound = 0
-                obj.upperBound = 0
-
-
     def evaluateRobustness(self, traj, timeIndex):
         for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
             obj = self[node].data
@@ -114,6 +46,17 @@ class STLTree(treelib.Tree):
 
         except:
             pass
+
+    #get all variables in formula tree
+    def getAllVars(self):
+        varList =  []
+        for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
+            obj = self[node].data
+            if obj.type == AtomicEnum.Variable:
+                if not re.match('^[0-9\.]*$', obj.toString()):
+                    varList.append(obj.toString())
+
+        return varList
 
     #return dict of param names and their values
     def getAllParams(self):
@@ -142,110 +85,203 @@ class STLTree(treelib.Tree):
 
         return pList
 
-
-    def getAllVarParams(self):
-        pList = []
-        for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
-            obj = self[node].data
-            if obj.type == AtomicEnum.Parameter:
-                pList.append(obj.value)
-            else:
-                pass
-
-        return pList
-
-    def getVarsTime(self):
-        vars = []
-        for n in self.expand_tree(mode=treelib.Tree.DEPTH, sorting=False):
-            obj = self[n].data
-            if obj.type == AtomicEnum.Variable:
-                if obj.value != "?":
-                    vars.append(obj.value)
-            elif obj.type == ExprEnum.timeBound:
-                vars.append("timeLower")
-                vars.append("timeUpper")
-            else:
-                pass
-
-
-        return vars
-
-    def getAllRelops(self):
-        rList = []
-        for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
-            obj = self[node].data
-            if isinstance(obj, RelationalOperator):
-                rList.append(obj.symbol)
-            else:
-                pass
-
-        return rList
-
-
-
+    #return dict of param names and their values
     def updateParams(self, newParams):
-        count = 0
+        tbNum = 1
+        prevKey = None
+
         for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
             obj = self[node].data
-            if obj.type == AtomicEnum.Parameter:
-                obj.value = newParams[count]
-                count += 1
-            elif obj.type == ExprEnum.timeBound:
-                if newParams[count] > newParams[count+1]: #switch if ub > lb
-                    lb = newParams[count+1]
-                    ub = newParams[count]
+
+            if obj.type == AtomicEnum.Variable:
+                if prevKey != None:
+                    # pList[prevKey] = obj.value
+                    obj.value = newParams[prevKey]
+                    prevKey = None
                 else:
-                    lb = newParams[count]
-                    ub = newParams[count+1]
-                obj.lowerBound = lb
-                obj.upperBound  = ub
-                count += 2
+                    prevKey = obj.value
+
+            elif obj.type == ExprEnum.timeBound:
+                # pList['timeBoundLower' + str(tbNum)] = obj.lowerBound
+                # pList['timeBoundUpper' + str(tbNum)] = obj.upperBound
+
+                obj.lowerBound = newParams['timeBoundLower' + str(tbNum)]
+                obj.upperBound = newParams['timeBoundUpper' + str(tbNum)]
+                tbNum += 1
+
+            elif obj.type == AtomicEnum.Parameter:
+                # pList[prevKey] = obj.value
+                obj.value = newParams[prevKey]
+
+                prevKey = None
             else:
                 pass
 
-    #get all variables in formula tree
-    def getAllVars(self):
-        varList =  []
-        for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
-            obj = self[node].data
-            if obj.type == AtomicEnum.Variable:
-                if not re.match('^[0-9\.]*$', obj.toString()):
-                    varList.append(obj.toString())
+
+    # def getAllVarParams(self):
+    #     pList = []
+    #     for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
+    #         obj = self[node].data
+    #         if obj.type == AtomicEnum.Parameter:
+    #             pList.append(obj.value)
+    #         else:
+    #             pass
+    #
+    #     return pList
+    #
+    # def getVarsTime(self):
+    #     vars = []
+    #     for n in self.expand_tree(mode=treelib.Tree.DEPTH, sorting=False):
+    #         obj = self[n].data
+    #         if obj.type == AtomicEnum.Variable:
+    #             if obj.value != "?":
+    #                 vars.append(obj.value)
+    #         elif obj.type == ExprEnum.timeBound:
+    #             vars.append("timeLower")
+    #             vars.append("timeUpper")
+    #         else:
+    #             pass
+    #
+    #
+    #     return vars
+    #
+    # def getAllRelops(self):
+    #     rList = []
+    #     for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
+    #         obj = self[node].data
+    #         if isinstance(obj, RelationalOperator):
+    #             rList.append(obj.symbol)
+    #         else:
+    #             pass
+    #
+    #     return rList
+    #
+    #
+    #
+    # def updateParams(self, newParams):
+    #     count = 0
+    #     for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
+    #         obj = self[node].data
+    #         if obj.type == AtomicEnum.Parameter:
+    #             obj.value = newParams[count]
+    #             count += 1
+    #         elif obj.type == ExprEnum.timeBound:
+    #             if newParams[count] > newParams[count+1]: #switch if ub > lb
+    #                 lb = newParams[count+1]
+    #                 ub = newParams[count]
+    #             else:
+    #                 lb = newParams[count]
+    #                 ub = newParams[count+1]
+    #             obj.lowerBound = lb
+    #             obj.upperBound  = ub
+    #             count += 2
+    #         else:
+    #             pass
+    #
+
+    #
+    # #get all time bounds in formula tree as timebound objects
+    # def getAllTimebounds(self):
+    #     timeList = []
+    #     for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
+    #         obj = self[node].data
+    #         if obj.type == ExprEnum.timeBound:
+    #             timeList.append(obj)
+    #
+    #     return timeList
+    #
+    # #Get all time bounds in formula tree in  a list format
+    # def  getAllTimeboundsList(self):
+    #     timeList = []
+    #
+    #     for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
+    #         obj = self[node].data
+    #         if obj.type == ExprEnum.timeBound:
+    #             timeList.append(obj.lowerBound)
+    #             timeList.append(obj.upperBound)
+    #
+    #     return timeList
+    #
+    #
+    #
+    # def getAllNodes(self):
+    #     nList=[]
+    #     for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
+    #         obj = self[node].data
+    #         nList.append(obj)
+    #
+    #     return nList
+
+    # def getRelevantNodes(self):
+    #     relExpr = {}
+    #     time = []
+    #
+    #     for node in self.expand_tree(mode=treelib.Tree.DEPTH, sorting=False):
+    #         obj = self[node].data
+    #
+    #         if obj.type == ExprEnum.timeBound:
+    #             time.append(obj)
+    #         elif isinstance(obj, RelationalOperator):
+    #             relExpr[obj.atomic1.toString()] = [obj.symbol, obj.atomic2.toString()]
+    #             #relExpr.append(obj)
+    #         else:
+    #             pass
+    #
+    #     return time, relExpr
+    #
+    # def updateTimebounds(self, newTime):
+    #     count = 0
+    #     for node in self.expand_tree(mode=treelib.Tree.DEPTH, sorting=False):
+    #         obj = self[node].data
+    #         if obj.type == ExprEnum.timeBound:
+    #             obj.timeBound = newTime[count].timeBound
+    #             obj.lowerBound = newTime[count].lowerBound
+    #             obj.upperBound = newTime[count].upperBound
+    #             count += 1
+    #
+    # def updateRelExpr(self, newRel):
+    #
+    #     for node in self.expand_tree(mode=treelib.Tree.DEPTH, sorting=False):
+    #         obj = self[node].data
+    #         if isinstance(obj, RelationalOperator):
+    #             var = obj.atomic1.toString()
+    #             exp = newRel[var]
+    #
+    #             if (obj.symbol == ">=" and exp[0] == ">") or (obj.symbol == "<" and exp[0] == "<="):
+    #                 param = str(float(exp[1]) + 0.01)
+    #             elif (obj.symbol == ">" and exp[0] == ">=") or (obj.symbol == "<=" and exp[0] == "<"):
+    #                 param = str(float(exp[1]) - 0.01)
+    #             else: #symbols same
+    #                 param = exp[1]
+    #
+    #             obj.atomic1.value = var
+    #             obj.atomic2.value = param
+    #
 
 
-        return varList
 
-    #get all time bounds in formula tree as timebound objects
-    def getAllTimebounds(self):
-        timeList = []
-        for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
-            obj = self[node].data
-            if obj.type == ExprEnum.timeBound:
-                timeList.append(obj)
-
-        return timeList
-
-    #Get all time bounds in formula tree in  a list format
-    def  getAllTimeboundsList(self):
-        timeList = []
-
-        for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
-            obj = self[node].data
-            if obj.type == ExprEnum.timeBound:
-                timeList.append(obj.lowerBound)
-                timeList.append(obj.upperBound)
-
-        return timeList
+    #
+    # def getFormulaNoParams(self):
+    #     for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
+    #         obj = self[node].data
+    #         if obj.type == AtomicEnum.Parameter:
+    #             obj.value = None
+    #             obj.value = 0
+    #
+    #         if obj.type == AtomicEnum.Variable: #check for scientific notation
+    #             v = obj.value
+    #             v = v.replace("e","")
+    #
+    #             if not re.search('[a-zA-Z]', v):
+    #                 obj.value = '0.000'
+    #
+    #         if obj.type == ExprEnum.timeBound:
+    #             obj.lowerBound = 0
+    #             obj.upperBound = 0
+    #
 
 
 
-    def getAllNodes(self):
-        nList=[]
-        for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
-            obj = self[node].data
-            nList.append(obj)
-
-        return nList
 
     def show(self, nid=None, level=treelib.Tree.ROOT, idhidden=True, filter=None,
              key=None, reverse=False, line_type='ascii-ex', data_property=None, stdout=True):

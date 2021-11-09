@@ -40,8 +40,8 @@ def runProtocol(params):
     s.runProtocol(branchName='[eval#1]')
 
     # Get dataframe of the generated rules and their percent counts
-    df = s.getRulesetDF()
-    df.to_csv(params.resultsFilename) #Save Rules to File
+    print(s.finalRuleSet.ruleSetDF)
+    s.finalRuleSet.ruleSetDF.to_csv(params.resultsFilename) #Save Rules to File
 
 
 if __name__ == "__main__":

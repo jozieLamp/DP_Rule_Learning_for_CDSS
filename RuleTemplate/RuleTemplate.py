@@ -358,24 +358,8 @@ class RuleTemplate():
         #Remove duplicate rules
         trees = list(set(trees))
 
-        #Only get correctly formatted rules
-        for t in trees:
-            stlFac = STLFactory()  # Check if structure correct
-            ft = stlFac.constructFormulaTree(t.toStringWithParams() + "\n")
+        return trees
 
-            if ft != None:  # Formula is not improper
-                ruleSet.append(t)
-
-        # Print first set of rules
-        # if self.verbose:
-        #     self.logger.info("Produced Rule Structures: ")
-        #     for t in trees:
-        #         self.logger.info(t.toString())
-
-        self.logger.info("Produced " + str(len(trees)) + " Rule Structures")
-        self.logger.info("Generated " + str(len(ruleSet)) + " Formatted Rules\n")
-
-        return ruleSet
 
     def traverseLeaf(self, branch, trees=[]):
         if branch.multiChildBranch():
