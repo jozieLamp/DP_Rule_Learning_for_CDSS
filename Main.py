@@ -46,7 +46,7 @@ def runProtocol(params):
     s = Server(clientList, varDict, params)
 
     #Run MCTS
-    s.runMCTS(branchName='[eval1]')
+    s.startProtocol(branchName='[eval1]')
 
     # Get dataframe of the generated rules and their percent counts
     df = s.getRulesetDF()
