@@ -39,11 +39,11 @@ class RuleTree(treelib.Tree):
 
         g = next(gen)
         while True:
-            val = re.sub('[0-9]', '', g)
+            val = re.sub(r'\#.*', '', g)
 
             if val in btwNode:
                 #get sibling nodes of btw node
-                sibNames = [x.identifier for x in self.siblings(g) if re.sub('[0-9]', '', x.identifier) != 'timeBound']
+                sibNames = [x.identifier for x in self.siblings(g) if re.sub(r'\#.*', '', x.identifier) != 'timeBound']
 
                 if val == "U":
                     btw = " " + printDict[val]
@@ -60,7 +60,7 @@ class RuleTree(treelib.Tree):
 
                 test = ""
                 while True:
-                    val = re.sub('[0-9]', '', g)
+                    val = re.sub(r'\#.*', '', g)
                     newStr, varCounter = self.getSymbol(val, gen, varCounter)
                     test += newStr
 
@@ -93,7 +93,7 @@ class RuleTree(treelib.Tree):
 
             if val in rop:  # format leaf parts
                 try:
-                    atomic = re.sub('[0-9]', '', next(gen))
+                    atomic = re.sub(r'\#.*', '', next(gen))
                 except:
                     pass
 
@@ -117,11 +117,11 @@ class RuleTree(treelib.Tree):
 
         g = next(gen)
         while True:
-            val = re.sub('[0-9]', '', g)
+            val = re.sub(r'\#.*', '', g)
 
             if val in btwNode:
                 #get sibling nodes of btw node
-                sibNames = [x.identifier for x in self.siblings(g) if re.sub('[0-9]', '', x.identifier) != 'timeBound']
+                sibNames = [x.identifier for x in self.siblings(g) if re.sub(r'\#.*', '', x.identifier) != 'timeBound']
 
                 if val == "U":
                     btw = " " + printDict[val]
@@ -138,7 +138,7 @@ class RuleTree(treelib.Tree):
 
                 test = ""
                 while True:
-                    val = re.sub('[0-9]', '', g)
+                    val = re.sub(r'\#.*', '', g)
                     newStr, varCounter = self.getSymbolParams(val, gen, varCounter)
                     test += newStr
 
@@ -171,7 +171,7 @@ class RuleTree(treelib.Tree):
 
             if val in rop:  # format leaf parts
                 try:
-                    atomic = re.sub('[0-9]', '', next(gen))
+                    atomic = re.sub(r'\#.*', '', next(gen))
                 except:
                     pass
 

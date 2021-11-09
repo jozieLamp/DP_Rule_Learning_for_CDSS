@@ -72,7 +72,7 @@ class Server :
 
 
     # RUN Monte Carlo Tree Search
-    def startProtocol(self, branchName):
+    def runProtocol(self, branchName):
 
         #Make MCTS Baseline
         mcts = MCTS_Baseline(server=self, verbose=self.verbose)
@@ -98,9 +98,8 @@ class Server :
         if self.verbose:
             self.logRuleSet()
 
+        self.logger.info("Returned " + str(len(self.ruleSet)) + " rule structures")
         self.logger.info("Completed " + str(self.numQueries) + " queries")
-
-
 
 
 
@@ -169,27 +168,11 @@ class Server :
     # Get list of nodes from template
     def getTemplateNodes(self, temp):
         nodes = []
-        parent = None
         ignoreList = ["(", ")"]
-        # for n in temp.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
-        #     if temp.parent(n) != parent:
-        #         parent = temp.parent(n)
-        #         nodes.append("newLevel")
-        #
-        #     nd = temp.get_node(n)
-        #     id = re.sub('[0-9]', '', nd.identifier)
-        #
-        #     if id not in ignoreList:
-        #         nodes.append(id)  # remove numbers, append name
-
 
         for n in temp.expand_tree(mode=treelib.Tree.DEPTH, sorting=True):
-            # if temp.parent(n) != parent:
-            #     parent = temp.parent(n)
-            #     nodes.append("newLevel")
-
             nd = temp.get_node(n)
-            id = re.sub('[0-9]', '', nd.identifier)
+            id = re.sub(r'\#.*', '', nd.identifier)
 
             if id not in ignoreList:
                 nodes.append(id)

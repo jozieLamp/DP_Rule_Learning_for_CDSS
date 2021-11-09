@@ -43,6 +43,10 @@ class MCTS_Baseline :
             else:
                 self.backpropagation(selectedBranch, result)
 
+            #Estimate parameters for terminal branch
+            if selectedBranch.terminalBranch():
+                print("~~~~~~~~~~~~~~~~In exp non and TERM BRANCH!!!")
+
         # Perform pruning step --> prune any branches who have a query result < cutoff threshold
         if self.verbose:
             self.mcLogger.info("----PRUNING PHASE----")

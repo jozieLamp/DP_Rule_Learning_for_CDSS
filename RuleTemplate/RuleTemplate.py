@@ -52,11 +52,13 @@ class Branch: #Set of nodes in tree
         counts = [item[0] for item in self.matchScores]
         numClients = [len(item[1]) for item in self.matchScores]
 
-        if self.visits == 0.0:
-            #node has not been visited yet, so get parent per count
-            perCount = self.parent.branch.getCurrentScore()
-        else:
-            perCount = sum(counts) / sum(numClients)
+        # if self.visits == 0.0:
+        #     print(self.name, "HAS NOT BEEN VISITED!!!")
+        #     #node has not been visited yet, so get parent per count
+        #     perCount = self.parent.branch.getCurrentScore()
+        # else:
+
+        perCount = sum(counts) / sum(numClients)
 
         # print("\n", self.name)
         # print(self.ruleTree.show())
@@ -112,8 +114,7 @@ class Branch: #Set of nodes in tree
 class Node: #single STL type
     def __init__(self, name):
         self.name = name
-        self.type = re.sub('[0-9]', '', self.name)  # type of node (name stripped of number ID)
-
+        self.type = re.sub(r'\#.*', '', self.name)  # type of node (name stripped of number ID)
         self.branch = None
         self.children = [] #list of branch children
 
@@ -182,9 +183,9 @@ class RuleTemplate():
 
             if varBranch: #fix type of node not to var name but to be variable
                 vars = []
-                if re.sub('[0-9]', '', n) != "Parameter":
+                if re.sub(r'\#.*', '', n) != "Parameter":
                     nod.type = "Variable"
-                    vars.append(re.sub('[0-9]', '', n))
+                    vars.append(re.sub(r'\#.*', '', n))
 
                 br.ruleTree.varList.extend(vars) #add vars to varList
 
@@ -283,7 +284,7 @@ class RuleTemplate():
             val = 1
             self.nodeIDDict[type] = val
 
-        return type + str(val)
+        return type + "#" + str(val)
 
     #Pydot Graph Functions
     def showGraph(self, title=None):
@@ -409,7 +410,8 @@ class RuleTemplate():
                     trueLeaf = True
                     leaves = rt.leaves()
                     for l in leaves:
-                        if re.sub('[0-9]', '', l.identifier) not in terminalNodes:
+
+                        if re.sub(r'\#.*', '', l.identifier) not in terminalNodes:
                             trueLeaf = False
 
                     if trueLeaf:
@@ -418,7 +420,7 @@ class RuleTemplate():
             return realTrees
 
         if not branch.hasChildren(): #reached leaf nodes
-            if branch.terminalBranch(): #only append rule if is true leaf node --> var or param
+            if branch.terminalBranch() and branch.visits > 0: #only append rule if is true leaf node that has been visited--> var or param
                 branch.ruleTree.percentCount = branch.getCurrentScore() #add percent count to rule tree
                 trees.append(branch.ruleTree)
             return trees

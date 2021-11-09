@@ -2,7 +2,7 @@
 import math
 
 # GENERAL INPUT PARAMS
-popSize = 10  # 8000 #Size of ICU population
+popSize = 100  # 8000 #Size of ICU population
 #popSize = 40337 #Sepsis size
 
 
@@ -11,7 +11,7 @@ verbose = True
 template = None
 
 # MCTS PARAMS
-maxQueries = 70 #Maximum number of queries allowed (to define for nonprivate model)
+maxQueries = 100 #Maximum number of queries allowed (to define for nonprivate model)
 cp = 1/math.sqrt(2) #UCT param to increase or decrease the amount of exploration performed
 maxTreeDepth = 17 #Maximum depth of tree
 cutoffThresh = 0.001 #Match score cutoff threshold to prune branches
