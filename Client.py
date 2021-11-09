@@ -9,13 +9,16 @@ import re
 
 
 class Client:
-    def __init__(self, clientNum, epsilon, ruleSet):
+    def __init__(self, clientNum, epsilon, ruleSet, paramNoise=1):
         self.clientNum = clientNum
         self.epsilon = epsilon
         self.ruleSet = ruleSet
 
         self.logger = logging.getLogger('CLIENT')
         self.budgetUsed = 0
+        self.paramNoise = paramNoise
+
+        self.numQueries = 0
 
 
     def loadRuleSet(self, textfile):
@@ -54,6 +57,8 @@ class Client:
 
         if not self.privacyBudgetUsed():  # first check privacy budget not used
 
+            self.numQueries += 1 #update to add another query
+
             p = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
 
             response = None
@@ -84,10 +89,15 @@ class Client:
         else:
             return "BUDGET USED", None, None
 
+
     # check for structural match
     def queryStructuralRuleMatch(self, tempNodes, varList):
         for r in self.ruleSet:
             # check if variables in rule
+            self.varsFull = False
+            if varList != []:
+                self.varsFull = True
+
             hasVars = True
             for v in varList:
                 if v not in r.getAllVars():
@@ -98,7 +108,7 @@ class Client:
                 clientNodes = []
 
                 for node in r.expand_tree(mode=treelib.Tree.DEPTH, sorting=True):
-                    n = re.sub('[0-9]', '', node)
+                    n = re.sub(r'\#.*', '', node)
                     clientNodes.append(n)
 
                 # print("client nodes", clientNodes)
@@ -107,10 +117,40 @@ class Client:
 
         return 0
 
+    # check for structural match and return rule
+    def queryStructuralRuleMatchReturn(self, tempNodes, varList):
+        for r in self.ruleSet:
+            # check if variables in rule
+            self.varsFull = False
+            if varList != []:
+                self.varsFull = True
+
+            hasVars = True
+            for v in varList:
+                if v not in r.getAllVars():
+                    hasVars = False
+
+            if hasVars:
+                # check for structural match
+                clientNodes = []
+
+                for node in r.expand_tree(mode=treelib.Tree.DEPTH, sorting=True):
+                    n = re.sub(r'\#.*', '', node)
+                    clientNodes.append(n)
+
+                # print("client nodes", clientNodes)
+                if self.nodeListMatch(tempNodes, clientNodes):
+                    return r  # found match
+
+        return None
+
     # check for match  between two lists of template nodes + client nodes
     def nodeListMatch(self, tempList, cList):
-        # print("tempList", tempList)
-        # print("clist", cList)
+
+        if self.varsFull:
+            # print("tempList", tempList)
+            # print("clist", cList)
+            self.varsFull = False
 
         #Fix relop matches
         tempList[:] = [x if x != "LT" else "LE" for x in tempList]
@@ -129,4 +169,56 @@ class Client:
             i = i+1
 
         return True
+
+    def queryParams(self, tempNodes, varList, varDict):
+
+        #First find possible rule match
+        rule = self.queryStructuralRuleMatchReturn(tempNodes, varList)
+        self.numQueries += 1 #add count to queries
+
+        if rule != None: #found rule
+            # print("\n")
+            # print(rule.toString())
+            pList = rule.getAllParams()
+            # print("orig plist", pList)
+
+            if self.epsilon != 'inf': #private model, need to noise params
+                for key, value in pList.items():
+                    if 'timeBound' in key:
+                        newVal = self.addNoiseToParams(param=float(value), lower=varDict['timeBound'][0], upper=varDict['timeBound'][1])
+                    else:
+                        newVal = self.addNoiseToParams(param=float(value), lower=varDict[key][0], upper=varDict[key][1])
+
+                    pList[key] = newVal
+
+
+            return pList
+
+        else:
+            return None
+
+    #TODO here- fix issues with noise addition
+    def addNoiseToParams(self, param, lower, upper):
+        # add noise
+        sensitivity = float(upper) - float(lower)
+        # noise = np.random.laplace(0, 1 / self.epsilon)
+        # noise = np.random.laplace(0, sensitivity / self.pLoss)
+        noise = np.random.laplace(0, sensitivity / self.paramNoise)
+
+        # print("noise to be added", noise)
+
+        # clip values
+        if (param + noise < lower):
+            x = lower
+        elif (param + noise > upper):
+            x = upper
+        else:
+            x = param + noise
+
+        # update privacy budget
+        # NOTE- currently cut this out since budget management excludes param aggregation
+        # self.budgetUsed = float(self.budgetUsed)
+        # self.budgetUsed += self.paramNoise #self.pLoss
+
+        return x
 

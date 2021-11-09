@@ -301,5 +301,5 @@ class STLExtendedVisitor(SignalTemporalLogicVisitor):
             val = 1
             self.idDict[type] = val
 
-        return type.name + str(val)
+        return type.name + "#" + str(val)
 

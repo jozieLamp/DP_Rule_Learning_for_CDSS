@@ -25,7 +25,7 @@ class MCTS_Baseline :
         # EXPANSION
         expandedBranch = self.expansion(selectedBranch)
 
-        # QUERYING AND BACKPROPAGATION
+        # QUERYING, BACKPROPAGATION and PARAM ESTIMATION if terminal branch
         if expandedBranch != None:
             result = self.getQuery(expandedBranch)  # result is in form [matchCount, activeClients]
 
@@ -35,6 +35,15 @@ class MCTS_Baseline :
             else:
                 self.backpropagation(expandedBranch, result)
 
+            # Estimate parameters for terminal branch
+            if expandedBranch.terminalBranch():
+                if self.verbose:
+                    self.mcLogger.info("----PARAMETER ESTIMATION PHASE----")
+                    self.mcLogger.info("Estimating parameters for " + expandedBranch.name + "\n")
+
+                self.server.queryParameters(expandedBranch.ruleTree)
+
+
         else:
             result = self.getQuery(selectedBranch)  # result is in form [matchCount, activeClients]
             if result[0] == "BUDGET USED":
@@ -43,9 +52,13 @@ class MCTS_Baseline :
             else:
                 self.backpropagation(selectedBranch, result)
 
-            #Estimate parameters for terminal branch
+            # Estimate parameters for terminal branch
             if selectedBranch.terminalBranch():
-                print("~~~~~~~~~~~~~~~~In exp non and TERM BRANCH!!!")
+                if self.verbose:
+                    self.mcLogger.info("----PARAMETER ESTIMATION PHASE----")
+                    self.mcLogger.info("Estimating parameters for " + selectedBranch.name + "\n")
+
+                self.server.queryParameters(selectedBranch.ruleTree)
 
         # Perform pruning step --> prune any branches who have a query result < cutoff threshold
         if self.verbose:

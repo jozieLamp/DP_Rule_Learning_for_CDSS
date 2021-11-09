@@ -25,6 +25,24 @@ class RuleTree(treelib.Tree):
     def __hash__(self):
         return hash(('string', self.toString()))
 
+    # return dict of param names and their values
+    def getMissingParams(self):
+        params = {}
+        tbNum = 1
+        for node in self.expand_tree(mode=treelib.Tree.DEPTH, sorting=False):
+            val = re.sub(r'\#.*', '', node)
+
+            if val in self.varList:
+                params[val] = []
+            elif val == 'timeBound':
+                params['timeBoundLower' + str(tbNum) ] = []
+                params['timeBoundUpper' + str(tbNum)] = []
+                tbNum += 1
+            else:
+                pass
+
+        return params
+
 
     def toString(self):
         str = ""

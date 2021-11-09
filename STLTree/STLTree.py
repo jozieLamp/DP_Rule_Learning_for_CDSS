@@ -115,19 +115,33 @@ class STLTree(treelib.Tree):
         except:
             pass
 
+    #return dict of param names and their values
     def getAllParams(self):
-        pList = []
+        pList = {}
+        tbNum = 1
+        prevKey = None
         for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
             obj = self[node].data
-            if obj.type == AtomicEnum.Parameter:
-                pList.append(obj.value)
+
+            if obj.type == AtomicEnum.Variable:
+                if prevKey != None:
+                    pList[prevKey] = obj.value
+                    prevKey = None
+                else:
+                    prevKey = obj.value
+
             elif obj.type == ExprEnum.timeBound:
-                pList.append(obj.lowerBound)
-                pList.append(obj.upperBound)
+                pList['timeBoundLower' + str(tbNum)] = obj.lowerBound
+                pList['timeBoundUpper' + str(tbNum)] = obj.upperBound
+                tbNum += 1
+            elif obj.type == AtomicEnum.Parameter:
+                pList[prevKey] = obj.value
+                prevKey = None
             else:
                 pass
 
         return pList
+
 
     def getAllVarParams(self):
         pList = []
@@ -167,14 +181,7 @@ class STLTree(treelib.Tree):
 
         return rList
 
-    # def getAllParams(self):
-    #     pList = []
-    #     for node in self.expand_tree(mode=treelib.Tree.DEPTH, sorting=False):
-    #         obj = self[node].data
-    #         if obj.type == AtomicEnum.Parameter:
-    #             pList.append(obj.value)
-    #
-    #     return pList
+
 
     def updateParams(self, newParams):
         count = 0
@@ -204,6 +211,7 @@ class STLTree(treelib.Tree):
             if obj.type == AtomicEnum.Variable:
                 if not re.match('^[0-9\.]*$', obj.toString()):
                     varList.append(obj.toString())
+
 
         return varList
 

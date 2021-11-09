@@ -5,6 +5,8 @@ import re
 import math
 import random
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 from RuleTemplate.RuleTemplate import RuleTemplate, Node, stlGrammarDict, terminalNodes
 from MCTS.MCTS_Baseline import MCTS_Baseline
 
@@ -174,7 +176,52 @@ class Server :
             nd = temp.get_node(n)
             id = re.sub(r'\#.*', '', nd.identifier)
 
-            if id not in ignoreList:
+            if id in self.variables:
+                nodes.append("Variable")
+
+            elif id not in ignoreList:
                 nodes.append(id)
 
         return nodes
+
+    #receives a rule tree template
+    def queryParameters(self, template):
+        # add to num queries sent out by server
+        self.numQueries += 1
+
+        # get template node list
+        tempNodes = self.getTemplateNodes(template)
+        # print("temp nodes", tempNodes)
+
+        activeClients = self.clientList  # TODO fix this part ...
+
+        tempParams = template.getMissingParams()
+
+        #Get param values from clients
+        for c in self.clientList:
+            params = self.clientList[c].queryParams(tempNodes, template.varList, self.varDict)
+
+            if params != None:
+                for k in tempParams.keys():
+                    tempParams[k].append(params[k])
+
+        print("Updated params", tempParams)
+
+        #Get Protocol Param Values
+
+        #TODO - get param value that encompasses > x threshold of client population ...
+        #prolly will be hyperparam that set
+
+        #plot distributions of params
+        if self.verbose:
+            for p in tempParams.keys():
+                plt.figure(figsize=(10, 5))
+                plt.title('Distribution of Param ' + str(p))
+                plt.xlabel('Param Value')
+                plt.ylabel('Client Count')
+                plt.hist(tempParams.get(p))
+                plt.show()
+
+
+
+
