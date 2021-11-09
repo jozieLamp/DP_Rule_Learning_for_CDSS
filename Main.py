@@ -36,11 +36,10 @@ def runProtocol(params):
 
     s = Server(clientList, varDict, params)
 
-    #Run MCTS
+    # Run Protocol
     s.runProtocol(branchName='[eval#1]')
 
     # Get dataframe of the generated rules and their percent counts
-    print(s.finalRuleSet.ruleSetDF)
     s.finalRuleSet.ruleSetDF.to_csv(params.resultsFilename) #Save Rules to File
 
 

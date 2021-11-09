@@ -351,7 +351,6 @@ class RuleTemplate():
         Code to generate fule rule set from template
         :return: Rule Set
         '''
-        ruleSet = []
         branch = self._branches[self.root]
         trees = self.traverseLeaf(branch)
 

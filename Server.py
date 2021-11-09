@@ -5,6 +5,7 @@ import re
 import math
 import random
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from RuleTemplate.RuleTemplate import RuleTemplate, Node, stlGrammarDict, terminalNodes
@@ -67,6 +68,7 @@ class Server :
         self.cp = params.cp
         self.maxTreeDepth = params.maxTreeDepth
         self.cutoffThresh = params.cutoffThresh
+        self.paramPercentile = params.paramPercentile
 
         #Privacy budget params
         self.epsilon = params.epsilon
@@ -114,7 +116,7 @@ class Server :
 
         #### ESTIMATE PARAMETERS FOR EACH RULE IN THE RULESET
         if self.verbose:
-            self.logger.info("----PARAMETER ESTIMATION PHASE----")
+            self.logger.info("----PARAMETER ESTIMATION PHASE----\n")
 
         stlFac = STLFactory()
         rules = []
@@ -134,7 +136,6 @@ class Server :
 
         #Make Rule Set Object to store output rule set
         self.finalRuleSet = RuleSet(ruleTrees, rules)
-
 
         # OUTPUT FINAL RETURNED RULE STRUCTURES
         if self.verbose:
@@ -246,27 +247,23 @@ class Server :
                     tempParams[k].append(params[k])
 
         #Get Protocol Param Values
-
-        #TODO - get param value that encompasses > x threshold of client population ...
-        #prolly will be hyperparam that set
-
-
-        # #plot distributions of params
-        # if self.verbose:
-        #     for p in tempParams.keys():
-        #         plt.figure(figsize=(10, 5))
-        #         plt.title('Distribution of Param ' + str(p))
-        #         plt.xlabel('Param Value')
-        #         plt.ylabel('Client Count')
-        #         plt.hist(tempParams.get(p))
-        #         plt.show()
-
         finalParams = {}
         for k in tempParams.keys():
-            vals = [float(x) for x in tempParams[k]]
-            finalParams[k] = sum(vals) / len(vals)
+            vals = sorted([float(x) for x in tempParams[k]])
 
-        print("New Aggregate Params", finalParams)
+            # #plot distributions of params
+            # if self.verbose:
+            #     plt.figure(figsize=(10, 5))
+            #     plt.title('Distribution of Param ' + str(k))
+            #     plt.xlabel('Param Value')
+            #     plt.ylabel('Client Count')
+            #     plt.hist(vals)
+            #     plt.show()
+
+            # score at or below which (inclusive) 50% of the scores in the distribution may be found
+            p = np.percentile(vals, self.paramPercentile)
+
+            finalParams[k] = p
 
         # return param set
         return finalParams
