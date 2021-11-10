@@ -237,21 +237,31 @@ class MCTS_Baseline :
 
         # Note - this part could be where the p budgets are tested / evaluated ...
         matchCount, activeClients = self.server.queryClientRuleMatch(selectedBranch)
-        percentCount = matchCount / len(selectedBranch.activeClients)
 
-        if self.verbose:
-            self.mcLogger.info("Rule Match Percentage: " + str(percentCount) + "\n")
+        if matchCount != "BUDGET USED":
+            # Fix negative estimates
+            if matchCount < 0:
+                matchCount = 0.0
+
+            # Fix over estimates
+            if matchCount > len(selectedBranch.activeClients):
+                matchCount = len(selectedBranch.activeClients)
+
+            percentCount = matchCount / len(selectedBranch.activeClients)
+
+            if self.verbose:
+                self.mcLogger.info("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount) + "\n")
 
 
-        #If terminal node, preserve budget needed for the param estimation
-        if selectedBranch.terminalBranch():
-            self.server.numQueries += 1
+            #If terminal node, preserve budget needed for the param estimation
+            if selectedBranch.terminalBranch():
+                self.server.numQueries += 1
 
-            #for each active client, add to pbudget param noise amount FOR EACH param in term node
-            #add one to the client queries (only doing one actual query for the entire rule and its params)
+                #for each active client, add to pbudget param noise amount FOR EACH param in term node
+                #add one to the client queries (only doing one actual query for the entire rule and its params)
 
 
-            #TODO - do for private model here!!!
+                #TODO - do for private model here!!!
 
         return matchCount, activeClients
 

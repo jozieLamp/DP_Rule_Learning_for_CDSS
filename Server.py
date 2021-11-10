@@ -99,6 +99,9 @@ class Server :
 
             totalIters += 1
 
+            if self.globalBudgetUsed():
+                self.logger.info("GLOBAL BUDGET USED")
+
         if self.verbose:
             self.logger.info("----MCTS SEARCH COMPLETED----\n")
 
@@ -156,6 +159,7 @@ class Server :
         # print("temp nodes", tempNodes)
 
         updatedActiveClients = {}
+
         #Non private model
         if self.epsilon == 'inf':
             yesCount = 0
@@ -167,7 +171,6 @@ class Server :
                 if resp == 1:
                     updatedActiveClients[c] = branch.activeClients[c]
 
-
             return yesCount, updatedActiveClients
 
         #Private model
@@ -177,8 +180,8 @@ class Server :
             trueYesses = 0
             p = None
 
-            for c in self.clientList:
-                resp, truResp, p = self.clientList[c].randResponseQueryStruct(tempNodes, template.varList)
+            for c in branch.activeClients:
+                resp, truResp, p = branch.activeClients[c].randResponseQueryStruct(tempNodes, template.varList)
 
                 if resp == "BUDGET USED":
                     self.clientsWithUsedBudgets.append(c)
@@ -186,29 +189,73 @@ class Server :
                     yesCount += resp
                     trueYesses += truResp
 
+                    #check if client still active
+                    if branch.parent != None:
+                        priorProb = branch.parent.branch.getCurrentScore() #prior prob is % match count from parent
+                    else:
+                        priorProb = 0.5 #50% chance return true
+
+                    if self.checkClientActive(response=resp, p=p, priorProbTrue=priorProb): #if true, still active, add to updated active clients
+                        updatedActiveClients[c] = branch.activeClients[c]
+
             if not self.globalBudgetUsed():
                 q = 1-p
-                estTrueCount = (yesCount - (len(self.clientList) * q)) / (p-q)
-                percentCount = float(estTrueCount / len(self.clientList))
+                estTrueCount = float((yesCount - (len(self.clientList) * q)) / (p-q))
 
-                truePerCount = float(trueYesses / len(self.clientList)) #Real percent
-
-                #Fix negative estimates
-                if percentCount < 0:
-                    percentCount = 0.0
-
-                #Fix over estimates
-                if percentCount > 1.0:
-                    percentCount = 1.0
+                percentCount = float(estTrueCount / len(branch.activeClients))
+                truePerCount = float(trueYesses / len(branch.activeClients)) #Real percent
 
                 if self.verbose:
                     # print("yes cnt", yesCount, "p", p, "q", q, "est true count", estTrueCount)
+                    self.logger.info("True Count " + str(trueYesses) +  ", Est Count " + str(estTrueCount))
                     self.logger.info("True Percent " + str(truePerCount) +  ", Est Percent " + str(percentCount))
 
-                return estTrueCount, activeClients #percentCount, activeClients
+
+                return estTrueCount, updatedActiveClients
 
             # else:
-            return "BUDGET USED", activeClients
+            return "BUDGET USED", updatedActiveClients
+
+    # Check if the client is still active - client can still have true queries
+    def checkClientActive(self, response, p, priorProbTrue):
+        p = float(p)
+        priorProbTrue = float(priorProbTrue)
+
+        # Calculate prob true answer was yes using Bayes Theorem
+        if response == 1:
+            # print("\nresp, 1")
+            PT1 = priorProbTrue
+            PT0 = 1 - priorProbTrue
+            # print("PT1", PT1, "PT0", PT0)
+            R1gT1 = (p * PT1) / PT1  # if PT1 else 0
+            R1gT0 = ((1 - p) * PT0 * p) / PT0 if PT0 else 0
+            bayes = (R1gT1 * PT1) / ((R1gT1 * PT1) + (R1gT0 * PT0))  # PT1gR1
+            # print("r1g1", R1gT1, "r1gt0", R1gT0, "bayes", bayes)
+
+
+        else:  # resp == 0
+            # print("\nresp, 0")
+            PT1 = priorProbTrue
+            PT0 = 1 - priorProbTrue
+            # print("PT1", PT1, "PT0", PT0)
+            R0gT0 = (p * PT0) / PT0 if PT0 else 0
+            R0gT1 = ((1 - p) * PT1 * p) / PT1  # if PT1 else 0
+            bayes = (R0gT1 * PT1) / ((R0gT1 * PT1) + (R0gT0 * PT0))  # PT1gR0
+
+        # print("BAYES", bayes)
+
+        # Multiply by previous values
+        # print("Prior Prob", priorProbTrue)
+        cUpdatedProb = priorProbTrue * bayes
+        # print("Updated Prob", cUpdatedProb)
+
+        # If probability of returning a true answer is below the defined threshold, don't query this client any more
+        if cUpdatedProb < self.cutoffThresh:
+            # print("******************************client", idx, " not active anymore")
+            return False
+        else:
+            return True
+
 
     # Get list of nodes from template
     def getTemplateNodes(self, temp):

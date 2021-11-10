@@ -53,7 +53,7 @@ class Client:
             return False
 
     #Get randomized response query to rule template
-    def randResponseQueryStruct(self, tempNodes, varList, pLossBudg=0.05):
+    def randResponseQueryStruct(self, tempNodes, varList, pLossBudg=0.5):
 
         if not self.privacyBudgetUsed():  # first check privacy budget not used
 
