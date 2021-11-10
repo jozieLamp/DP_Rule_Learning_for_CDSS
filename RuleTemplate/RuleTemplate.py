@@ -412,6 +412,7 @@ class RuleTemplate():
         if not branch.hasChildren(): #reached leaf nodes
             if branch.terminalBranch() and branch.visits > 0: #only append rule if is true leaf node that has been visited--> var or param
                 branch.ruleTree.percentCount = branch.getCurrentScore() #add percent count to rule tree
+                branch.ruleTree.activeClients = branch.activeClients #add active clients to rule tree
                 trees.append(branch.ruleTree)
             return trees
         else:

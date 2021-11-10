@@ -11,6 +11,7 @@ class RuleTree(treelib.Tree):
         super().__init__(*args, **kw)
         self.varList = []
         self.percentCount = None
+        self.activeClients = None
 
     # def __init__(self, tree=None, deep=False, node_class=None):
     #     # super().__init__(self)

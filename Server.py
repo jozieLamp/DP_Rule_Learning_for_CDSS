@@ -277,16 +277,16 @@ class Server :
     #receives a rule tree template
     def queryParameters(self, template):
 
-        activeClients = self.clientList  # TODO fix this part ...
-
         # get template node list
         tempNodes = self.getTemplateNodes(template)
         # print("temp nodes", tempNodes)
         tempParams = template.getMissingParams()
 
+        print(template.toString())
+        print("active cls", template.activeClients.keys())
         #Get param values from clients
-        for c in self.clientList:
-            params = self.clientList[c].queryParams(tempNodes, tempParams, template.varList, self.varDict)
+        for c in template.activeClients:
+            params = template.activeClients[c].queryParams(tempNodes, tempParams, template.varList, self.varDict)
 
             if params != None:
                 for k in tempParams.keys():

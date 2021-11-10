@@ -252,16 +252,15 @@ class MCTS_Baseline :
             if self.verbose:
                 self.mcLogger.info("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount) + "\n")
 
-
             #If terminal node, preserve budget needed for the param estimation
             if selectedBranch.terminalBranch():
                 self.server.numQueries += 1
 
-                #for each active client, add to pbudget param noise amount FOR EACH param in term node
-                #add one to the client queries (only doing one actual query for the entire rule and its params)
-
-
-                #TODO - do for private model here!!!
+                #Preserve privacy budget for querying of params
+                #for each active client, add param budget amount FOR EACH param in term node
+                numParams = len(selectedBranch.ruleTree.getMissingParams())
+                for c in selectedBranch.activeClients:
+                    selectedBranch.activeClients[c].budgetUsed += (selectedBranch.activeClients[c].paramNoise * numParams)
 
         return matchCount, activeClients
 

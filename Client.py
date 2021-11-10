@@ -216,6 +216,7 @@ class Client:
         else:
             x = param + noise
 
+        #Note budget should not be updated here because it was already accounted for earlier ...
         # update privacy budget
         # NOTE- currently cut this out since budget management excludes param aggregation
         # self.budgetUsed = float(self.budgetUsed)
