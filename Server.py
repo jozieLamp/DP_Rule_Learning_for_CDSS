@@ -282,8 +282,6 @@ class Server :
         # print("temp nodes", tempNodes)
         tempParams = template.getMissingParams()
 
-        print(template.toString())
-        print("active cls", template.activeClients.keys())
         #Get param values from clients
         for c in template.activeClients:
             params = template.activeClients[c].queryParams(tempNodes, tempParams, template.varList, self.varDict)
