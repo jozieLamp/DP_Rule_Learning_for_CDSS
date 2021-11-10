@@ -35,28 +35,22 @@ terminalNodes = ["Variable", "Parameter"]
 
 
 class Branch: #Set of nodes in tree
-    def __init__(self, name, parentNode):
+    def __init__(self, name, parentNode, activeClients):
         self.name = name
         self.parent = parentNode #parent node branch belongs to
+        self.activeClients = activeClients #list of active clients at this branch
         self.visits = 0.0
         self.depth = 0
         self.nodes = []
 
         self.matchScores = [] #list of match count scores + number of clients queried in format [percentage, num clients]
         self.uct = 0.0 #UCT score of branch
-        #TODO - make adaptive active client thing here ...
 
         self.ruleTree = RuleTree()
 
     def getCurrentScore(self): #return sum of percent match score
         counts = [item[0] for item in self.matchScores]
         numClients = [len(item[1]) for item in self.matchScores]
-
-        # if self.visits == 0.0:
-        #     print(self.name, "HAS NOT BEEN VISITED!!!")
-        #     #node has not been visited yet, so get parent per count
-        #     perCount = self.parent.branch.getCurrentScore()
-        # else:
 
         perCount = sum(counts) / sum(numClients)
 
@@ -121,8 +115,9 @@ class Node: #single STL type
 
 #Full Rule Template
 class RuleTemplate():
-    def __init__(self, varDict, default=True, verbose=True):
+    def __init__(self, varDict, default=True, clientList=None, verbose=True):
         self.root = None #name of root node
+        self.clientList = clientList #dict of clients
         self.verbose = verbose
         self.nodeIDDict = {}  # tracking current IDs of node
         self._nodes = {} #dict of nodes in template- nodeName: node object
@@ -132,7 +127,7 @@ class RuleTemplate():
 
         self.logger = logging.getLogger('Rule Template')
 
-        self.graphNum = 0
+        self.graphNum = 1
 
         if default: self.makeDefaultTree()
 
@@ -150,8 +145,10 @@ class RuleTemplate():
         #get actual parent node from rule template
         if parentName != None:
             parentNode = self._nodes[parentName]
+            ac = parentNode.branch.activeClients
         else:
             parentNode = None
+            ac = self.clientList
 
         #get subnode name IDs
         nodeNames = []
@@ -161,7 +158,7 @@ class RuleTemplate():
 
         # make branch object and add it to parentNode
         brID = "[" + ' '.join(map(str, nodeNames)) + "]"
-        br = Branch(name=brID, parentNode=parentNode)
+        br = Branch(name=brID, parentNode=parentNode, activeClients=ac)
         self._branches[brID] = br
 
         if parentNode == None:
@@ -221,15 +218,19 @@ class RuleTemplate():
         del self._nodes[nodeName] #remove node from node list
 
         #remove node from graph
-        self.dotGraph.del_edge(node.branch.parent.name, nodeName) #delete edge
-        cluster = self.dotGraph.get_subgraph('"cluster_' + node.branch.name + '"')[0] #delete node from cluster
-        cluster.del_node(nodeName)
+        # print("del edge", node.branch.parent.name, nodeName)
+        self.dotGraph.del_edge('"' + node.branch.parent.name + '"', '"' + nodeName + '"') #delete edge
+        # print("edge list", [x.__str__() for x in self.dotGraph.get_edge_list()])
 
-        #check if all child nodes have been removed from the branch - if so, remove branch
-        if node.branch.nodes == []:
-            if self.verbose:
-                self.logger.info("All nodes removed from branch, removing branch from template")
-            self.removeBranch(node.branch.name)
+        cluster = self.dotGraph.get_subgraph('"cluster_' + node.branch.name + '"')[0] #delete node from cluster
+        cluster.del_node('"' + nodeName + '"')
+
+
+        # #check if all child nodes have been removed from the branch - if so, remove branch
+        # if node.branch.nodes == []:
+        #     if self.verbose:
+        #         self.logger.info("All nodes removed from branch, removing branch from template")
+        #     self.removeBranch(node.branch.name)
 
 
     def removeBranch(self, branchName):
@@ -244,6 +245,9 @@ class RuleTemplate():
             self.logger.error("ERROR: cannot remove branch, one or more nodes have children")
             return
 
+        #remove branch from parent node
+        branch.parent.children.remove(branch)
+
         #remove nodes
         while len(branch.nodes) != 0:
             n = branch.nodes[0]
@@ -257,7 +261,10 @@ class RuleTemplate():
     def pruneTree(self, cutoff):
         delNames = []
         for key, br in self._branches.items():
-            if br.visits > 0 and br.getCurrentScore() < cutoff:
+            # if has been visited and score < cutoff or no more active clients, prune branch
+            # if (br.visits > 0 and br.getCurrentScore() < cutoff) or len(br.activeClients) == 0:
+            if br.visits > 0 and br.getCurrentScore() < cutoff :
+
                 if self.verbose:
                     self.logger.info("PRUNING BRANCH " +  key)
                     self.logger.info("Got score " + str(br.getCurrentScore()) + " < cutoff thresh " + str(cutoff))
@@ -267,9 +274,9 @@ class RuleTemplate():
             self.removeBranch(n)
 
         if delNames != []:
-            self.saveGraph(graphName='PRUNED TREE')
             if self.verbose:
                 self.logger.info("**Saved Graph " + str(self.graphNum) + "_" + 'Pruning Step\n')
+            self.saveGraph(graphName='PRUNED TREE')
         else:
             if self.verbose:
                 self.logger.info("Nothing to prune\n")

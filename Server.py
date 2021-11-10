@@ -55,7 +55,7 @@ class Server :
         self.logger = logging.getLogger('SERVER')
 
         # make default rule template tree to start
-        self.templateTree = RuleTemplate(varDict=self.varDict, default=True, verbose=self.verbose)
+        self.templateTree = RuleTemplate(varDict=self.varDict, default=True, clientList=clientList, verbose=self.verbose)
 
         #mcts params
         self.mctsType = params.mctsType
@@ -145,7 +145,9 @@ class Server :
 
     # Get a % of how many clients have a match to the template
     # Return a COUNT with the total num clients
-    def queryClientRuleMatch(self, template):
+    def queryClientRuleMatch(self, branch):
+        template = branch.ruleTree
+
         #add to num queries sent out by server
         self.numQueries += 1
 
@@ -153,16 +155,20 @@ class Server :
         tempNodes = self.getTemplateNodes(template)
         # print("temp nodes", tempNodes)
 
-        activeClients = self.clientList#TODO fix this part ...
-
+        updatedActiveClients = {}
         #Non private model
         if self.epsilon == 'inf':
             yesCount = 0
-            for c in self.clientList:
-                yesCount += self.clientList[c].queryStructuralRuleMatch(tempNodes, template.varList)
+            for c in branch.activeClients:
+                resp = branch.activeClients[c].queryStructuralRuleMatch(tempNodes, template.varList)
+                yesCount += resp
+
+                #Remove client if has no match
+                if resp == 1:
+                    updatedActiveClients[c] = branch.activeClients[c]
 
 
-            return yesCount, activeClients
+            return yesCount, updatedActiveClients
 
         #Private model
         else:
@@ -223,8 +229,6 @@ class Server :
 
     #receives a rule tree template
     def queryParameters(self, template):
-        # add to num queries sent out by server
-        self.numQueries += 1
 
         activeClients = self.clientList  # TODO fix this part ...
 
@@ -269,6 +273,6 @@ class Server :
             lst.append([self.clientList[c].clientNum, self.clientList[c].numQueries])
 
         #Make dataframe of client nums and their queries
-        df = pd.DataFrame(lst, columns=['Client', 'Num Queries'])
+        df = pd.DataFrame(lst, columns=['Client', 'Num Queries']).set_index('Client')
 
         return df

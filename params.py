@@ -2,7 +2,7 @@
 import math
 
 # GENERAL INPUT PARAMS
-popSize = 100  # 8000 #Size of ICU population
+popSize = 10  # 8000 #Size of ICU population
 #popSize = 40337 #Sepsis size
 
 
@@ -13,7 +13,7 @@ paramPercentile = 85 #Percentile wanted for params - score at or below which (in
 
 
 # MCTS PARAMS
-maxQueries = 300 #Maximum number of queries allowed (to define for nonprivate model)
+maxQueries = 90 #Maximum number of server queries allowed (to define for nonprivate model)
 cp = 1/math.sqrt(2) #UCT param to increase or decrease the amount of exploration performed
 maxTreeDepth = 17 #Maximum depth of tree
 cutoffThresh = 0.001 #Match score cutoff threshold to prune branches
@@ -21,7 +21,7 @@ cutoffThresh = 0.001 #Match score cutoff threshold to prune branches
 
 # DATA PARAMETERS
 dataFilename = "Data/ICU/Best/"
-resultsFilename = "Results/ICU_Ruleset_MCTS_Baseline_TEST.csv"
+resultsFilename = "Results/ICU_Ruleset_MCTS_Baseline_TEST"
 # variables with guess ranges
 #NOTE - added time bound as an explicit variable in these
 

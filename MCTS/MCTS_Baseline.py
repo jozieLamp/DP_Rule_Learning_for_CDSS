@@ -18,8 +18,8 @@ class MCTS_Baseline :
         if self.verbose:
             clus = self.server.templateTree.dotGraph.get_subgraph('"cluster_' + selectedBranch.name + '"')[0]
             clus.set('color', 'red')
-            self.server.templateTree.saveGraph(graphName='Selection Step')
             self.mcLogger.info("**Saved Graph " + str(self.server.templateTree.graphNum) + "_" + 'Selection Step\n')
+            self.server.templateTree.saveGraph(graphName='Selection Step')
             clus.set('color', 'black')
 
         # EXPANSION
@@ -27,21 +27,21 @@ class MCTS_Baseline :
 
         # QUERYING, BACKPROPAGATION
         if expandedBranch != None:
-            result = self.getQuery(expandedBranch)  # result is in form [matchCount, activeClients]
+            matchCount, activeClients = self.getQuery(expandedBranch)  # result is in form [matchCount, activeClients]
 
-            if result[0] == "BUDGET USED":
+            if matchCount == "BUDGET USED":
                 self.mcLogger.info("BUDGET USED\n")
                 return
             else:
-                self.backpropagation(expandedBranch, result)
+                self.backpropagation(expandedBranch, matchCount, activeClients)
 
         else:
-            result = self.getQuery(selectedBranch)  # result is in form [matchCount, activeClients]
-            if result[0] == "BUDGET USED":
+            matchCount, activeClients = self.getQuery(selectedBranch)  # result is in form [matchCount, activeClients]
+            if matchCount == "BUDGET USED":
                 self.mcLogger.info("BUDGET USED\n")
                 return
             else:
-                self.backpropagation(selectedBranch, result)
+                self.backpropagation(selectedBranch, matchCount, activeClients)
 
         # Perform pruning step --> prune any branches who have a query result < cutoff threshold
         if self.verbose:
@@ -143,8 +143,8 @@ class MCTS_Baseline :
                     self.mcLogger.info("Updated Template Tree")
                     clus = self.server.templateTree.dotGraph.get_subgraph('"cluster_' + selectedBranch.name + '"')[0]
                     clus.set('color', 'red')
+                    self.mcLogger.info("**Saved Graph " + str(self.server.templateTree.graphNum) + "_" + 'Expansion Step')
                     self.server.templateTree.saveGraph(graphName='Expansion Step')
-                    self.mcLogger.info("**Saved Graph " + str(self.server.templateTree.graphNum) + "_" + 'Selection Step')
                     clus.set('color', 'black')
             else:  # branch has children already
                 branchChildren = []
@@ -236,17 +236,27 @@ class MCTS_Baseline :
             print("Variables for rule tree:", selectedBranch.ruleTree.varList)
 
         # Note - this part could be where the p budgets are tested / evaluated ...
-        matchCount, activeClients = self.server.queryClientRuleMatch(selectedBranch.ruleTree)
-
-        percentCount = matchCount / len(activeClients)
+        matchCount, activeClients = self.server.queryClientRuleMatch(selectedBranch)
+        percentCount = matchCount / len(selectedBranch.activeClients)
 
         if self.verbose:
             self.mcLogger.info("Rule Match Percentage: " + str(percentCount) + "\n")
 
+
+        #If terminal node, preserve budget needed for the param estimation
+        if selectedBranch.terminalBranch():
+            self.server.numQueries += 1
+
+            #for each active client, add to pbudget param noise amount FOR EACH param in term node
+            #add one to the client queries (only doing one actual query for the entire rule and its params)
+
+
+            #TODO - do for private model here!!!
+
         return matchCount, activeClients
 
     #### BACKPROPAGATION
-    def backpropagation(self, startingBranch, score):
+    def backpropagation(self, startingBranch, matchCount, activeClients):
         '''
         Backpropagate UCT score up tree
         :param startingBranch: branch to start backpropagation from
@@ -257,19 +267,19 @@ class MCTS_Baseline :
             self.mcLogger.info("----BACKPROPAGATION PHASE----")
 
         # Update current branch
-        startingBranch.matchScores.append(score)  # update score list
+        startingBranch.matchScores.append([matchCount, startingBranch.activeClients])  # update score list
         startingBranch.visits += 1  # add visit to this node
         startingBranch.utc = self.utcScore(startingBranch, startingBranch.getCurrentScore())  # calc utc for this branch
 
         if self.verbose:
-            self.mcLogger.info("Backpropogating Score: " + str(score[0]))
+            self.mcLogger.info("Backpropogating Score: " + str(matchCount))
             self.mcLogger.info("Calculated UTC for node " + startingBranch.name + ": " + str(startingBranch.utc))
 
         # prop scores
         br = startingBranch
         while br.parent != None:
             br = br.parent.branch
-            br.matchScores.append(score)  # add score to parent node
+            br.matchScores.append([matchCount, startingBranch.activeClients])  # add score to parent node
             br.visits += 1  # add visit to this node
             br.utc = self.utcScore(br, br.getCurrentScore())  # calc utc for this branch
 
@@ -278,6 +288,10 @@ class MCTS_Baseline :
 
         if self.verbose:
             self.mcLogger.info("Backprop completed\n")
+
+        # Update active clients at this branch
+        startingBranch.activeClients = activeClients #updated active clients
+
 
     def utcScore(self, branch, score):
         if branch.parent == None:
