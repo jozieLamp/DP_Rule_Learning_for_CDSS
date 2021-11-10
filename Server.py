@@ -54,16 +54,11 @@ class Server :
         self.verbose = params.verbose
         self.logger = logging.getLogger('SERVER')
 
-        #template params
-        if params.template == None:
-            # make default rule template tree to start
-            self.templateTree = RuleTemplate(varDict=self.varDict, default=True, verbose=self.verbose)
-
-
-        else: #TODO - add option to start from preset template
-            pass
+        # make default rule template tree to start
+        self.templateTree = RuleTemplate(varDict=self.varDict, default=True, verbose=self.verbose)
 
         #mcts params
+        self.mctsType = params.mctsType
         self.maxQueries = params.maxQueries
         self.cp = params.cp
         self.maxTreeDepth = params.maxTreeDepth
@@ -76,8 +71,6 @@ class Server :
         self.numQueries = 0
 
         self.logger.info("Setting privacy budget to: " + str(self.epsilon))
-
-
 
 
     def globalBudgetUsed(self):
@@ -93,8 +86,9 @@ class Server :
     def runProtocol(self, branchName):
 
         #### RUN MONTE CARLO TREE SEARCH TO FIND RULE STRUCTURES
-        #Make MCTS Baseline
-        mcts = MCTS_Baseline(server=self, verbose=self.verbose)
+        if self.mctsType == 'baseline':
+            #Make MCTS Baseline
+            mcts = MCTS_Baseline(server=self, verbose=self.verbose)
 
         totalIters = 1 #to track the number of iterations that are completed
         while not self.globalBudgetUsed() and self.numQueries < self.maxQueries:
@@ -143,7 +137,8 @@ class Server :
 
         self.logger.info("Produced " + str(len(self.finalRuleSet.ruleTrees)) + " Rule Tree Structures")
         self.logger.info("Generated " + str(len(self.finalRuleSet.rules)) + " Formatted Rules")
-        self.logger.info("Completed " + str(self.numQueries) + " queries")
+        self.logger.info("Completed " + str(self.numQueries) + " server queries")
+
 
 
 
@@ -240,7 +235,7 @@ class Server :
 
         #Get param values from clients
         for c in self.clientList:
-            params = self.clientList[c].queryParams(tempNodes, template.varList, self.varDict)
+            params = self.clientList[c].queryParams(tempNodes, tempParams, template.varList, self.varDict)
 
             if params != None:
                 for k in tempParams.keys():
@@ -268,6 +263,12 @@ class Server :
         # return param set
         return finalParams
 
+    def getClientQueryCount(self):
+        lst = []
+        for c in self.clientList:
+            lst.append([self.clientList[c].clientNum, self.clientList[c].numQueries])
 
+        #Make dataframe of client nums and their queries
+        df = pd.DataFrame(lst, columns=['Client', 'Num Queries'])
 
-
+        return df

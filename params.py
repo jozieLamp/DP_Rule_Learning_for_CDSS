@@ -8,15 +8,16 @@ popSize = 100  # 8000 #Size of ICU population
 
 # PROTOCOL PARAMS
 verbose = True
-template = None
+mctsType = 'baseline' #options are baseline,
+paramPercentile = 85 #Percentile wanted for params - score at or below which (inclusive) x% of the scores in the distribution may be found
+
 
 # MCTS PARAMS
-maxQueries = 90 #Maximum number of queries allowed (to define for nonprivate model)
+maxQueries = 300 #Maximum number of queries allowed (to define for nonprivate model)
 cp = 1/math.sqrt(2) #UCT param to increase or decrease the amount of exploration performed
 maxTreeDepth = 17 #Maximum depth of tree
 cutoffThresh = 0.001 #Match score cutoff threshold to prune branches
 
-paramPercentile = 85 #Percentile wanted for params - score at or below which (inclusive) x% of the scores in the distribution may be found
 
 # DATA PARAMETERS
 dataFilename = "Data/ICU/Best/"

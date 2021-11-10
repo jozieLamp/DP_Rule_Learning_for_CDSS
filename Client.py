@@ -170,17 +170,18 @@ class Client:
 
         return True
 
-    def queryParams(self, tempNodes, varList, varDict):
+    def queryParams(self, tempNodes, tempParams, varList, varDict):
 
         #First find possible rule match
         rule = self.queryStructuralRuleMatchReturn(tempNodes, varList)
-        self.numQueries += 1 #add count to queries
 
         if rule != None: #found rule
             # print("\n")
             # print(rule.toString())
             pList = rule.getAllParams()
             # print("orig plist", pList)
+
+            self.numQueries += len(tempParams)  # add count to queries
 
             if self.epsilon != 'inf': #private model, need to noise params
                 for key, value in pList.items():
