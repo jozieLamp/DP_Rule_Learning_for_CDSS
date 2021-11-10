@@ -181,8 +181,6 @@ class Client:
             pList = rule.getAllParams()
             # print("orig plist", pList)
 
-            self.numQueries += len(tempParams)  # add count to queries
-
             if self.epsilon != 'inf': #private model, need to noise params
                 for key, value in pList.items():
                     if 'timeBound' in key:

@@ -158,18 +158,18 @@ class Server :
         tempNodes = self.getTemplateNodes(template)
         # print("temp nodes", tempNodes)
 
-        updatedActiveClients = {}
+        updatedActiveClients = []
 
         #Non private model
         if self.epsilon == 'inf':
             yesCount = 0
             for c in branch.activeClients:
-                resp = branch.activeClients[c].queryStructuralRuleMatch(tempNodes, template.varList)
+                resp = self.clientList[c].queryStructuralRuleMatch(tempNodes, template.varList)
                 yesCount += resp
 
                 #Remove client if has no match
                 if resp == 1:
-                    updatedActiveClients[c] = branch.activeClients[c]
+                    updatedActiveClients.append(c)
 
             return yesCount, updatedActiveClients
 
@@ -181,7 +181,7 @@ class Server :
             p = None
 
             for c in branch.activeClients:
-                resp, truResp, p = branch.activeClients[c].randResponseQueryStruct(tempNodes, template.varList)
+                resp, truResp, p = self.clientList[c].randResponseQueryStruct(tempNodes, template.varList)
 
                 if resp == "BUDGET USED":
                     self.clientsWithUsedBudgets.append(c)
@@ -196,7 +196,7 @@ class Server :
                         priorProb = 0.5 #50% chance return true
 
                     if self.checkClientActive(response=resp, p=p, priorProbTrue=priorProb): #if true, still active, add to updated active clients
-                        updatedActiveClients[c] = branch.activeClients[c]
+                        updatedActiveClients.append(c)
 
             if not self.globalBudgetUsed():
                 q = 1-p
@@ -284,7 +284,7 @@ class Server :
 
         #Get param values from clients
         for c in template.activeClients:
-            params = template.activeClients[c].queryParams(tempNodes, tempParams, template.varList, self.varDict)
+            params = self.clientList[c].queryParams(tempNodes, tempParams, template.varList, self.varDict)
 
             if params != None:
                 for k in tempParams.keys():

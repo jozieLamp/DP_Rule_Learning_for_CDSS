@@ -260,7 +260,8 @@ class MCTS_Baseline :
                 #for each active client, add param budget amount FOR EACH param in term node
                 numParams = len(selectedBranch.ruleTree.getMissingParams())
                 for c in selectedBranch.activeClients:
-                    selectedBranch.activeClients[c].budgetUsed += (selectedBranch.activeClients[c].paramNoise * numParams)
+                    self.server.clientList[c].budgetUsed += (self.server.clientList[c].paramNoise * numParams)
+                    self.server.clientList[c].numQueries += numParams  # add count to queries
 
         return matchCount, activeClients
 

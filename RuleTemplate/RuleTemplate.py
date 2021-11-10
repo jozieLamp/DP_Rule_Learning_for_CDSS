@@ -38,7 +38,7 @@ class Branch: #Set of nodes in tree
     def __init__(self, name, parentNode, activeClients):
         self.name = name
         self.parent = parentNode #parent node branch belongs to
-        self.activeClients = activeClients #list of active clients at this branch
+        self.activeClients = activeClients #list of active client numbers at this branch
         self.visits = 0.0
         self.depth = 0
         self.nodes = []
@@ -148,7 +148,7 @@ class RuleTemplate():
             ac = parentNode.branch.activeClients
         else:
             parentNode = None
-            ac = self.clientList
+            ac = list(self.clientList.keys())
 
         #get subnode name IDs
         nodeNames = []
