@@ -11,6 +11,7 @@ import seaborn as sns
 from RuleTemplate.RuleTemplate import RuleTemplate, Node, stlGrammarDict, terminalNodes
 from SignalTemporalLogic.STLFactory import STLFactory
 from MCTS.MCTS_Baseline import MCTS_Baseline
+from MCTS.MCTS import MCTS
 
 #Make Ruleset Object to store all pieces of final ruleset
 class RuleSet:
@@ -89,6 +90,8 @@ class Server :
         if self.mctsType == 'baseline':
             #Make MCTS Baseline
             mcts = MCTS_Baseline(server=self, verbose=self.verbose)
+        else:
+            mcts = MCTS(server=self, verbose=self.verbose)
 
         totalIters = 1 #to track the number of iterations that are completed
         while not self.globalBudgetUsed() and self.numQueries < self.maxQueries:
@@ -266,7 +269,7 @@ class Server :
             nd = temp.get_node(n)
             id = re.sub(r'\#.*', '', nd.identifier)
 
-            if id in self.variables:
+            if id in self.variables and id != 'timeBound':
                 nodes.append("Variable")
 
             elif id not in ignoreList:

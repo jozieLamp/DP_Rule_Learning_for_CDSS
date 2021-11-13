@@ -443,3 +443,10 @@ class RuleTemplate():
 
         return parentTree
 
+    def getBranchesNoChildren(self):
+        lst = []
+        for b, br in self._branches.items():
+            if not br.hasChildren():
+                lst.append(br)
+
+        return lst

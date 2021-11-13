@@ -92,7 +92,11 @@ class Client:
 
     # check for structural match
     def queryStructuralRuleMatch(self, tempNodes, varList):
+        # print("Temp vars", varList)
+        # print("temp nodes", tempNodes)
+
         for r in self.ruleSet:
+            # print("rule vars", r.getAllVars())
             # check if variables in rule
             self.varsFull = False
             if varList != []:
@@ -104,6 +108,7 @@ class Client:
                     hasVars = False
 
             if hasVars:
+                # print("HAS VARS")
                 # check for structural match
                 clientNodes = []
 
@@ -113,6 +118,7 @@ class Client:
 
                 # print("client nodes", clientNodes)
                 if self.nodeListMatch(tempNodes, clientNodes):
+                    # print("MATCH")
                     return 1  # found match
 
         return 0
