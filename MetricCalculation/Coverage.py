@@ -24,7 +24,7 @@ def compareFoundRuleCounts(countDF, name):
     plt.xlabel("Rule Number")
     plt.ylabel("Percent Count")
     plt.title("Comparison of Percent Count Scores in Found Rules")
-    plt.savefig(name + "FoundRulePercentCountComparison")
+    plt.savefig(name + "FoundRulePercentCountComparison.png")
     plt.show()
 
     plt.figure(figsize=(12, 7))
@@ -33,7 +33,7 @@ def compareFoundRuleCounts(countDF, name):
     plt.xlabel("Rule Number")
     plt.ylabel("Error Percentage")
     plt.title("Error in Percent Count Scores in Found Rules - sorted by highest client count to lowest")
-    plt.savefig(name + "PercentCountError")
+    plt.savefig(name + "PercentCountError.png")
     plt.show()
 
 
@@ -137,9 +137,10 @@ def graphRuleCounts(clientDF, ldpDF, name):
     sns.distplot(ldpDF['Percent Count'].values, bins=1000, kde=True, label='LDP')
     plt.legend()
     plt.xscale('log')
+    plt.title("Dist Plot of Counts of Found Rules")
     plt.xlabel("Percent of Population")
     plt.ylabel("Number of Rules")
-    plt.savefig(name + "Distplot")
+    plt.savefig(name + "Distplot.png")
     plt.show()
     ##########
 
@@ -154,9 +155,10 @@ def graphRuleCounts(clientDF, ldpDF, name):
     plt.plot(cdf.keys(), cdf.values(), label='Client')
     plt.plot(ldf.keys(), ldf.values(), label='LDP')
     plt.legend()
+    plt.title("Line Plot of Counts of Found Rules")
     plt.xlabel("Percent of Population")
     plt.ylabel("Number of Rules")
-    plt.savefig(name + "LineGraph")
+    plt.savefig(name + "LineGraph.png")
     plt.show()
 
 

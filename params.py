@@ -7,7 +7,7 @@ popSize = 100  # 8000 #Size of ICU population
 
 
 # PROTOCOL PARAMS
-verbose = True
+verbose = False
 mctsType = 'cov' #options are 'baseline',
 paramPercentile = 50 #Percentile wanted for params - score at or below which (inclusive) x% of the scores in the distribution may be found
 

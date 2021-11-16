@@ -8,9 +8,13 @@ import copy
 from RuleTemplate.RuleTemplate import RuleTemplate, Node, stlGrammarDict, terminalNodes
 
 class MCTS :
-    def __init__(self, server, verbose):
+    def __init__(self, server, verbose, method, utcWeighting):
         self.server = server
         self.verbose = verbose
+
+        self.distMethod = method
+        self.utcWeighting = utcWeighting
+
         self.mcLogger = logging.getLogger('MCTS')
 
     def runMCTSRound(self, branchName):
@@ -106,7 +110,7 @@ class MCTS :
             for child in node.children:
                 # Note, changed selection policy to be using UCT as well ...
                 # score = child.getCurrentScore()
-                score = self.utcScore(child, child.getCurrentScore())
+                score = self.utcScore(child, child.getCurrentScore(), utcWeighting=self.utcWeighting)
 
                 if self.verbose:
                     self.mcLogger.info("Score for " + child.name + " : " + str(score))
@@ -219,7 +223,7 @@ class MCTS :
         else:
             scores = []
             for b in branchOptions:
-                scores.append(self.getCoverageScore(self.server.templateTree, b))
+                scores.append(self.getCoverageScore(self.server.templateTree, b, self.distMethod))
 
             #if all distances same, select randomly
             if all(element == scores[0] for element in scores):
@@ -300,7 +304,7 @@ class MCTS :
         # Update current branch
         startingBranch.matchScores.append([matchCount, startingBranch.activeClients])  # update score list
         startingBranch.visits += 1  # add visit to this node
-        startingBranch.utc = self.utcScore(startingBranch, startingBranch.getCurrentScore())  # calc utc for this branch
+        startingBranch.utc = self.utcScore(startingBranch, startingBranch.getCurrentScore(), utcWeighting=self.utcWeighting)  # calc utc for this branch
 
         if self.verbose:
             self.mcLogger.info("Backpropogating Score: " + str(matchCount))
@@ -312,7 +316,7 @@ class MCTS :
             br = br.parent.branch
             br.matchScores.append([matchCount, startingBranch.activeClients])  # add score to parent node
             br.visits += 1  # add visit to this node
-            br.utc = self.utcScore(br, br.getCurrentScore())  # calc utc for this branch
+            br.utc = self.utcScore(br, br.getCurrentScore(), utcWeighting=self.utcWeighting)  # calc utc for this branch
 
             if self.verbose:
                 self.mcLogger.info("Calculated UTC for node " + br.name + ": " + str(br.utc))
@@ -324,14 +328,14 @@ class MCTS :
         startingBranch.activeClients = activeClients #updated active clients
 
 
-    def utcScore(self, branch, score):
+    def utcScore(self, branch, score, utcWeighting):
         if branch.parent == None:
             parenVisits = branch.visits
         else:
             parenVisits = branch.parent.branch.visits
 
         #Get Coverage metric - average tree edit distance (want largest edit dist)
-        editDist = self.getCoverageScore(self.server.templateTree, branch)
+        editDist = self.getCoverageScore(self.server.templateTree, branch, self.distMethod)
 
         #Normalize edit distance to be btw 0 and 1
         # editDist = editDist
@@ -339,11 +343,11 @@ class MCTS :
             self.mcLogger.info("SCORE " + str(score) + " EDIT DISTANCE " + str(editDist))
 
         #was score * 2
-        uct = score + editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        uct = (utcWeighting[0] * score) + (utcWeighting[1] * editDist) + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
 
         return uct
 
-    def getCoverageScore(self, temp, branch):
+    def getCoverageScore(self, temp, branch, method):
         '''
         Get coverage score (Tree edit distance) of current branch compared to current trees
         Calculates ordered edit distance btw two templates and returns average score
@@ -385,9 +389,17 @@ class MCTS :
             distances.append(dist)
 
         #Get maximum of the min of tree distances
-        editDist = statistics.median(distances)
-        # editDist = min(distances)
-        #sum(distances) / len(distances) #to do average
+        #edit distance method options are: 'median', 'avg', 'min', 'max'
+
+        if method == 'median':
+            editDist = statistics.median(distances)
+        elif method == 'min':
+            editDist = min(distances)
+        elif method == 'max':
+            editDist = max(distances)
+        else: #elif method == 'avg':
+            editDist = sum(distances) / len(distances)
+
 
         # print("Getting Coverage Score for branch " + branch.name)
         # print("distances:", distances)
