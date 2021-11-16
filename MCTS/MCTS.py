@@ -3,6 +3,7 @@ import math
 import random
 import re
 import treelib
+import statistics
 import copy
 from RuleTemplate.RuleTemplate import RuleTemplate, Node, stlGrammarDict, terminalNodes
 
@@ -331,7 +332,7 @@ class MCTS :
         editDist = self.getCoverageScore(self.server.templateTree, branch)
 
         #Normalize edit distance to be btw 0 and 1
-        editDist = editDist/100
+        # editDist = editDist
         self.mcLogger.info("SCORE " + str(score) + " EDIT DISTANCE " + str(editDist))
 
         #was score * 2
@@ -342,6 +343,8 @@ class MCTS :
     def getCoverageScore(self, temp, branch):
         '''
         Get coverage score (Tree edit distance) of current branch compared to current trees
+        Calculates ordered edit distance btw two templates and returns average score
+
         :param temp: Full template
         :param branch: current branch to compare
         :return:
@@ -378,7 +381,11 @@ class MCTS :
 
             distances.append(dist)
 
-        editDist = sum(distances) / len(distances)
+        #Get maximum of the min of tree distances
+        editDist = statistics.median(distances)
+        # editDist = min(distances)
+        #sum(distances) / len(distances) #to do average
+
         # print("Getting Coverage Score for branch " + branch.name)
         # print("distances:", distances)
         # print("edit distance", editDist)

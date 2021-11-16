@@ -117,6 +117,24 @@ class STLTree(treelib.Tree):
             else:
                 pass
 
+    def getFormulaNoParams(self):
+        for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
+            obj = self[node].data
+            if obj.type == AtomicEnum.Parameter:
+                obj.value = None
+                obj.value = 0
+
+            if obj.type == AtomicEnum.Variable: #check for scientific notation
+                v = obj.value
+                v = v.replace("e","")
+
+                if not re.search('[a-zA-Z]', v):
+                    obj.value = '0.000'
+
+            if obj.type == ExprEnum.timeBound:
+                obj.lowerBound = 0
+                obj.upperBound = 0
+
 
     # def getAllVarParams(self):
     #     pList = []
@@ -256,28 +274,6 @@ class STLTree(treelib.Tree):
     #
     #             obj.atomic1.value = var
     #             obj.atomic2.value = param
-    #
-
-
-
-    #
-    # def getFormulaNoParams(self):
-    #     for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
-    #         obj = self[node].data
-    #         if obj.type == AtomicEnum.Parameter:
-    #             obj.value = None
-    #             obj.value = 0
-    #
-    #         if obj.type == AtomicEnum.Variable: #check for scientific notation
-    #             v = obj.value
-    #             v = v.replace("e","")
-    #
-    #             if not re.search('[a-zA-Z]', v):
-    #                 obj.value = '0.000'
-    #
-    #         if obj.type == ExprEnum.timeBound:
-    #             obj.lowerBound = 0
-    #             obj.upperBound = 0
     #
 
 
