@@ -343,7 +343,19 @@ class MCTS :
             self.mcLogger.info("SCORE " + str(score) + " EDIT DISTANCE " + str(editDist))
 
         #was score * 2
-        uct = (utcWeighting[0] * score) + (utcWeighting[1] * editDist) + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        if utcWeighting == 'scoreXeditDist':
+            uct = (editDist * score) +  editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        elif utcWeighting == 'scaledBy100':
+            uct = score + (editDist/100) + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        elif utcWeighting == 'scaledBy10':
+            uct = score + (editDist/10) + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        elif utcWeighting == 'scoreX10':
+            uct = (score*10) + editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        elif utcWeighting == 'scoreX100':
+            uct = (score * 100) + editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+
+        else:
+            uct = score + editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
 
         return uct
 

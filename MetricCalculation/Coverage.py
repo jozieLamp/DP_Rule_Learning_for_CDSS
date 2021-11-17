@@ -123,7 +123,9 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
         else:
             nonRules += 1
 
-    lst = [len(clientRules), foundRules, nonRules, foundRules / (foundRules + nonRules)]
+    bot = foundRules + nonRules
+    prec = foundRules / bot if bot else 0
+    lst = [len(clientRules), foundRules, nonRules, prec]
     covDF = pd.DataFrame([lst], columns=["Total Client Rules", "Found Rules", "Non Rules", "Precision"])
 
     # Make DF that compares the count percentages of the ldp and client rules that were found
