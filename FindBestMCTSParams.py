@@ -40,10 +40,14 @@ def main():
 
     # Params -- weighting btw scores for uct score and what to return for edit distance (median, min, avg)
     # edit distance method options are: 'median', 'avg', 'min', 'max'
-    methods = ['median', 'avg', 'min', 'max']
-    # UTC weighting is [score weight, edit dist weight]
-    weights = ['scoreXeditDist', 'scaledBy100', 'scaledBy10', 'scoreX10', 'scoreX100']
+    # methods = ['median', 'avg', 'min', 'max']
+    # # UTC weighting is [score weight, edit dist weight]
+    # weights = ['scoreXeditDist', 'scaledBy100', 'scaledBy10', 'scoreX10', 'scoreX100']
     # weights = [[1, 0.5], []]
+
+    methods = ['median', 'avg', 'min', 'max']
+    weights = ['log10', 'log2', 'ln', 'log10x2']
+
     for method in methods:
         for utcWeighting in weights:
 
@@ -54,7 +58,6 @@ def main():
             ldpFilename = "Param_Results/ICU_" + "method" + method + "_weighting" + utcWeighting
             graphName = 'Param_Results/Graphs/' + "method" + method + "_weighting" + utcWeighting #"_score" + str(utcWeighting[0]) + "_editDist" + str(utcWeighting[1])  # Name of count coverage graphs
             popThresh = 0.001  # Percentage match count
-
 
             # Make Server
             logging.info("Initializing Server")
