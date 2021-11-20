@@ -343,26 +343,35 @@ class MCTS :
             self.mcLogger.info("SCORE " + str(score) + " EDIT DISTANCE " + str(editDist))
 
         #was score * 2
-        # if utcWeighting == 'scoreXeditDist':
-        #     uct = (editDist * score) +  editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
-        # elif utcWeighting == 'scaledBy100':
-        #     uct = score + (editDist/100) + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
-        # elif utcWeighting == 'scaledBy10':
-        #     uct = score + (editDist/10) + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
-        # elif utcWeighting == 'scoreX10':
-        #     uct = (score*10) + editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
-        # elif utcWeighting == 'scoreX100':
-        #     uct = (score * 100) + editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        if utcWeighting == 'scoreXeditDist':
+            uct = (editDist * score) +  editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        elif utcWeighting == 'scaledBy100':
+            uct = score + (editDist/100) + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        elif utcWeighting == 'scaledBy10':
+            uct = score + (editDist/10) + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        elif utcWeighting == 'scoreX10':
+            uct = (score*10) + editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        elif utcWeighting == 'scoreX100':
+            uct = (score * 100) + editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
 
-        if utcWeighting == 'log10':
+        elif utcWeighting == 'log10':
             #log of distance
             if editDist != 0:
                 ed = math.log(editDist, 10)
             else:
                 ed = editDist
 
-            self.mcLogger.info("SCORE " + str(score) + " EDIT DISTANCE " + str(editDist) + " log ed " + str(ed) + " visit part " + str(math.sqrt(math.log(parenVisits) / branch.visits)))
+            # self.mcLogger.info("SCORE " + str(score) + " EDIT DISTANCE " + str(editDist) + " log ed " + str(ed) + " visit part " + str(math.sqrt(math.log(parenVisits) / branch.visits)))
             # uct = score + ed + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+            uct = score + ed + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+
+        elif utcWeighting == 'log10NoCp':
+            #log of distance
+            if editDist != 0:
+                ed = math.log(editDist, 10)
+            else:
+                ed = editDist
+
             uct = score + ed + math.sqrt(math.log(parenVisits) / branch.visits)
 
         elif utcWeighting == 'log2':
@@ -372,7 +381,7 @@ class MCTS :
             else:
                 ed = editDist
 
-            uct = score + ed + math.sqrt(math.log(parenVisits) / branch.visits)
+            uct = score + ed + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
         elif utcWeighting == 'ln':
             #log of distance
             if editDist != 0:
@@ -380,7 +389,7 @@ class MCTS :
             else:
                 ed = editDist
 
-            uct = score + ed + math.sqrt(math.log(parenVisits) / branch.visits)
+            uct = score + ed + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
 
         elif utcWeighting == 'log10x2':
             #log of distance
@@ -389,7 +398,7 @@ class MCTS :
             else:
                 ed = editDist
 
-            uct = score + ed + math.sqrt(math.log(parenVisits) / branch.visits)
+            uct = score + ed + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
 
         elif utcWeighting == 'logscorex2':
             #log of distance
@@ -398,12 +407,11 @@ class MCTS :
             else:
                 ed = editDist
 
-            uct = (2*score) + ed + math.sqrt(math.log(parenVisits) / branch.visits)
+            uct = (2*score) + ed + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
 
 
         else:
-            pass
-            #uct = score + editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+            uct = score + editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
 
         return uct
 

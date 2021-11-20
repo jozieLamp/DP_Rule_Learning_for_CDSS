@@ -45,8 +45,8 @@ def main():
     # weights = ['scoreXeditDist', 'scaledBy100', 'scaledBy10', 'scoreX10', 'scoreX100']
     # weights = [[1, 0.5], []]
 
-    methods = ['median', 'min']
-    weights = ['log10', 'log2', 'ln', 'log10x2', 'logscorex2']
+    methods = ['median', 'avg', 'min', 'max']
+    weights = ['log10', 'log10NoCp', 'log2', 'ln', 'log10x2', 'logscorex2','scoreXeditDist', 'scaledBy100', 'scaledBy10', 'scoreX10', 'scoreX100']
 
     for method in methods:
         for utcWeighting in weights:
