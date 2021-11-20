@@ -45,8 +45,8 @@ def main():
     # weights = ['scoreXeditDist', 'scaledBy100', 'scaledBy10', 'scoreX10', 'scoreX100']
     # weights = [[1, 0.5], []]
 
-    methods = ['median', 'avg', 'min', 'max']
-    weights = ['log10', 'log2', 'ln', 'log10x2']
+    methods = ['median', 'min']
+    weights = ['log10', 'log2', 'ln', 'log10x2', 'logscorex2']
 
     for method in methods:
         for utcWeighting in weights:
@@ -78,13 +78,13 @@ def main():
 
             #Get coverage results
             ldpDF, ldpTrees, ldpRules = cov.loadLDPRuleset(ldpFilename + ".csv")
-            cov.graphRuleCounts(clientDF, ldpDF, graphName)
+            # cov.graphRuleCounts(clientDF, ldpDF, graphName)
 
             covDF, countDF = cov.getCoverageTable(popThresh, ldpDF, ldpTrees, clientDF)
             print(covDF)
             print(countDF)
 
-            cov.compareFoundRuleCounts(countDF, graphName)
+            # cov.compareFoundRuleCounts(countDF, graphName)
 
 
 if __name__ == "__main__":

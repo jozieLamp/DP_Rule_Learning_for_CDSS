@@ -259,22 +259,33 @@ class Server :
         else:
             return True
 
-
     # Get list of nodes from template
     def getTemplateNodes(self, temp):
         nodes = []
         ignoreList = ["(", ")"]
+        parent = None
+        subNodes = []
+        level = 0
 
-        for n in temp.expand_tree(mode=treelib.Tree.DEPTH, sorting=True):
+        for n in temp.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
+            if temp.parent(n) != parent:
+                parent = temp.parent(n)
+                subNodes.append(level)  # add level at end
+                nodes.append(subNodes)
+                subNodes = []
+
             nd = temp.get_node(n)
             id = re.sub(r'\#.*', '', nd.identifier)
+            level = temp.level(n)
 
             if id in self.variables and id != 'timeBound':
-                nodes.append("Variable")
+                subNodes.append("Variable")
 
             elif id not in ignoreList:
-                nodes.append(id)
+                subNodes.append(id)
 
+        subNodes.append(level)
+        nodes.append(subNodes)
         return nodes
 
     #receives a rule tree template

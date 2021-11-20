@@ -93,7 +93,7 @@ class Client:
     # check for structural match
     def queryStructuralRuleMatch(self, tempNodes, varList):
         # print("Temp vars", varList)
-        # print("temp nodes", tempNodes)
+        # print("templt nodes", tempNodes)
 
         for r in self.ruleSet:
             # print("rule vars", r.getAllVars())
@@ -111,14 +111,28 @@ class Client:
                 # print("HAS VARS")
                 # check for structural match
                 clientNodes = []
+                subNodes = []
+                parent = None
+                level = 0
+                for node in r.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
+                    if r.parent(node) != parent:
+                        parent = r.parent(node)
+                        subNodes.append(level)
+                        clientNodes.append(subNodes)
+                        subNodes = []
 
-                for node in r.expand_tree(mode=treelib.Tree.DEPTH, sorting=True):
                     n = re.sub(r'\#.*', '', node)
-                    clientNodes.append(n)
+                    level = r.level(node)
+                    subNodes.append(n)
+
+                subNodes.append(level)
+                clientNodes.append(subNodes)
 
                 # print("client nodes", clientNodes)
                 if self.nodeListMatch(tempNodes, clientNodes):
                     # print("MATCH")
+                    # print("temp", tempNodes)
+                    # print("clnt", clientNodes)
                     return 1  # found match
 
         return 0
@@ -139,23 +153,34 @@ class Client:
             if hasVars:
                 # check for structural match
                 clientNodes = []
+                subNodes = []
+                parent = None
+                level = 0
+                for node in r.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
+                    if r.parent(node) != parent:
+                        parent = r.parent(node)
+                        subNodes.append(level)
+                        clientNodes.append(subNodes)
+                        subNodes = []
 
-                for node in r.expand_tree(mode=treelib.Tree.DEPTH, sorting=True):
                     n = re.sub(r'\#.*', '', node)
-                    clientNodes.append(n)
+                    level = r.level(node)
+                    subNodes.append(n)
 
-                # print("client nodes", clientNodes)
+                subNodes.append(level)
+                clientNodes.append(subNodes)
+
                 if self.nodeListMatch(tempNodes, clientNodes):
                     return r  # found match
 
-        return None
+            return None
 
     # check for match  between two lists of template nodes + client nodes
     def nodeListMatch(self, tempList, cList):
+        # print("tempList", tempList)
+        # print("clist", cList)
 
         if self.varsFull:
-            # print("tempList", tempList)
-            # print("clist", cList)
             self.varsFull = False
 
         #Fix relop matches
@@ -166,15 +191,28 @@ class Client:
 
         i = 0
         while i < len(tempList):
+            #get current branch of nodes
             if tempList[i] in cList:
-                idx = cList.index(tempList[i]) #get idx of element of cList
-                cList = cList[idx+1:]
+                idx = cList.index(tempList[i])  # get idx of element of cList
+                cList = cList[idx + 1:]
             else:
                 return False
 
-            i = i+1
+            i = i + 1
 
         return True
+
+        # i = 0
+        # while i < len(tempList):
+        #     if tempList[i] in cList:
+        #         idx = cList.index(tempList[i]) #get idx of element of cList
+        #         cList = cList[idx+1:]
+        #     else:
+        #         return False
+        #
+        #     i = i+1
+        #
+        # return True
 
     def queryParams(self, tempNodes, tempParams, varList, varDict):
 
