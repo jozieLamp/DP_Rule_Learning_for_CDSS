@@ -151,6 +151,7 @@ class Client:
                     hasVars = False
 
             if hasVars:
+                # print("Has vars")
                 # check for structural match
                 clientNodes = []
                 subNodes = []
@@ -170,7 +171,10 @@ class Client:
                 subNodes.append(level)
                 clientNodes.append(subNodes)
 
+                # print("temp nodes", tempNodes)
+                # print("clnt nodes", clientNodes)
                 if self.nodeListMatch(tempNodes, clientNodes):
+                    print("match found")
                     return r  # found match
 
             return None
@@ -186,8 +190,11 @@ class Client:
         #Fix relop matches
         tempList[:] = [x if x != "LT" else "LE" for x in tempList]
         tempList[:] = [x if x != "GT" else "GE" for x in tempList]
+        tempList[:] = [x if x != "EQ" else "LE" for x in tempList]
+
         cList[:] = [x if x != "LT" else "LE" for x in cList]
         cList[:] = [x if x != "GT" else "GE" for x in cList]
+        cList[:] = [x if x != "EQ" else "LE" for x in cList]
 
         i = 0
         while i < len(tempList):
@@ -202,17 +209,6 @@ class Client:
 
         return True
 
-        # i = 0
-        # while i < len(tempList):
-        #     if tempList[i] in cList:
-        #         idx = cList.index(tempList[i]) #get idx of element of cList
-        #         cList = cList[idx+1:]
-        #     else:
-        #         return False
-        #
-        #     i = i+1
-        #
-        # return True
 
     def queryParams(self, tempNodes, tempParams, varList, varDict):
 

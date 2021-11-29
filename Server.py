@@ -112,7 +112,10 @@ class Server :
 
 
         #GET FINAL RULESET BY TRAVERSING TEMPLATE TREE
+        print("***** GEN RULE SETTTTT ******")
         ruleTrees = self.templateTree.generateRuleSet() #returns a set of rule templates
+
+        print("Rule trees AFTER GEN RULE SET", ruleTrees)
 
         #### ESTIMATE PARAMETERS FOR EACH RULE IN THE RULESET
         if self.verbose:
@@ -120,22 +123,36 @@ class Server :
 
         stlFac = STLFactory()
         rules = []
+        finalTrees = []
         #query params and make final STL Rule Structures (STL Trees)
+        print("\n\nin rule trees")
         for t in ruleTrees:
-            #Query params for tree
-            tempParams = self.queryParameters(t)
+            print("t", t.toString())
+            print("t active clients", t.activeClients)
 
-            #Only get correctly formatted rules
-            ft = stlFac.constructFormulaTree(t.toStringWithParams() + "\n") # Check if structure correct
+            if t.activeClients != []:
 
-            if ft != None:  # Formula is not improper
-                #TODO - might have to do something where if rule is improper, remove it from the RuleTree list so the other functions are not messed up
-                ft.updateParams(tempParams)# Update params in structure
-                rules.append(ft)
+                #Query params for tree
+                #TODO - potentially make this a partial matching thing - where return any params that the rule does have and aggregate those ...
+                tempParams = self.queryParameters(t)
 
+                if tempParams != None:
 
+                    #Only get correctly formatted rules
+                    ft = stlFac.constructFormulaTree(t.toStringWithParams() + "\n") # Check if structure correct
+
+                    if ft != None:  # Formula is not improper
+                        #TODO - might have to do something where if rule is improper, remove it from the RuleTree list so the other functions are not messed up
+                        ft.updateParams(tempParams)# Update params in structure
+                        rules.append(ft)
+                        finalTrees.append(t)
+                else:
+                    print("No params found as no matching rules ...")
+
+        print("Final Rule Trees", finalTrees)
+        print("Final Rules", rules)
         #Make Rule Set Object to store output rule set
-        self.finalRuleSet = RuleSet(ruleTrees, rules)
+        self.finalRuleSet = RuleSet(finalTrees, rules)
 
         # OUTPUT FINAL RETURNED RULE STRUCTURES
         if self.verbose:
@@ -291,10 +308,13 @@ class Server :
     #receives a rule tree template
     def queryParameters(self, template):
 
+        print("in query params template", template.toString())
+
         # get template node list
         tempNodes = self.getTemplateNodes(template)
         # print("temp nodes", tempNodes)
         tempParams = template.getMissingParams()
+        print("template params", tempParams)
 
         #Get param values from clients
         for c in template.activeClients:
@@ -304,27 +324,35 @@ class Server :
                 for k in tempParams.keys():
                     tempParams[k].append(params[k])
 
-        #Get Protocol Param Values
-        finalParams = {}
-        for k in tempParams.keys():
-            vals = sorted([float(x) for x in tempParams[k]])
+        print("client params", tempParams)
 
-            # #plot distributions of params
-            # if self.verbose:
-            #     plt.figure(figsize=(10, 5))
-            #     plt.title('Distribution of Param ' + str(k))
-            #     plt.xlabel('Param Value')
-            #     plt.ylabel('Client Count')
-            #     plt.hist(vals)
-            #     plt.show()
+        #Check if no params returned
+        if all(x == [] for x in tempParams.values()):
+            return None
+        else:
+            #Get Protocol Param Values
+            finalParams = {}
+            for k in tempParams.keys():
+                vals = sorted([float(x) for x in tempParams[k]])
 
-            # score at or below which (inclusive) 50% of the scores in the distribution may be found
-            p = np.percentile(vals, self.paramPercentile)
+                print("vals", vals)
 
-            finalParams[k] = p
+                # #plot distributions of params
+                # if self.verbose:
+                #     plt.figure(figsize=(10, 5))
+                #     plt.title('Distribution of Param ' + str(k))
+                #     plt.xlabel('Param Value')
+                #     plt.ylabel('Client Count')
+                #     plt.hist(vals)
+                #     plt.show()
 
-        # return param set
-        return finalParams
+                # score at or below which (inclusive) 50% of the scores in the distribution may be found
+                p = np.percentile(vals, self.paramPercentile)
+
+                finalParams[k] = p
+
+            # return param set
+            return finalParams
 
     def getClientQueryCount(self):
         lst = []

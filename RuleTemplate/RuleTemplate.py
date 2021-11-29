@@ -32,7 +32,7 @@ stlGrammarDict = {
 }
 
 terminalNodes = ["Variable", "Parameter"]
-
+internalNodes = ["eval", "statementList", "statement", "boolExpr", "stlTerm", "BooleanAtomic", "GT", "GE", "LE", "LT", "EQ", "NEQ"]
 
 class Branch: #Set of nodes in tree
     def __init__(self, name, parentNode, activeClients):
@@ -361,13 +361,21 @@ class RuleTemplate():
         branch = self._branches[self.root]
         trees = self.traverseLeaf(branch)
 
+        print("trees after gen rule set", trees)
+
         #Remove duplicate rules
         trees = list(set(trees))
+
+        print("trees after set list", trees)
 
         return trees
 
 
     def traverseLeaf(self, branch, trees=[]):
+        if branch.visits > 0:
+            print("\nBRANCH", branch.name)
+            print("visits", branch.visits)
+
         if branch.multiChildBranch():
             # print("Reached multi branch", branch.name)
 
@@ -385,43 +393,74 @@ class RuleTemplate():
                     options.append(sub)
 
             #Get all combinations of the leaf items for each node in split
+            print("options", options)
             combos = list(itertools.product(*options))
             for com in combos:
                 rt = copy.deepcopy(branch.ruleTree) #make copy of current branch tree
 
                 for i in range(len(com)): #for each subtree to be added from combos
-                    rt = self.addSubtreeToRuleTree(parentTree=rt, childTree=com[i], nodeName=nodeList[i].name)
-                    # print("Multi child tree gen")
-                    # rt.show()
-                    # print(rt.toString())
+                    rt = self.addSubtreeToRuleTree(parentTree=rt, parenBranch=branch, childTree=com[i], nodeName=nodeList[i].name)
+                    print("Multi child tree gen")
+                    rt.show()
+                    print(rt.toString())
+
                     #add combined trees
 
                     #Make sure all leaf nodes actually leaves --> var or param
                     trueLeaf = True
                     leaves = rt.leaves()
-                    for l in leaves:
+                    print("full leaves", leaves)
 
-                        if re.sub(r'\#.*', '', l.identifier) not in terminalNodes:
+                    for l in leaves:
+                        print("leaf", l, "named", re.sub(r'\#.*', '', l.identifier))
+
+                        if re.sub(r'\#.*', '', l.identifier) in internalNodes: #Rule not complete - there are internal nodes that are not complete
+                            print("not true leaf", l.identifier)
                             trueLeaf = False
 
+
+                        # #TODO - issue is here- it has a complete rule but there are parts that are not leaf nodes so it says not true leaf
+                        # # need to figure out why not returning properly here ...
+                        # #TODO - NOTE WILL NEED TO UPDATE THIS TO BE THE VARS FROM THE GAME PART!!!
+                        # if (re.sub(r'\#.*', '', l.identifier) not in terminalNodes) or (re.sub(r'\#.*', '', l.identifier) not in namedVars):
+                        #     print("not true leaf", l.identifier)
+                        #     trueLeaf = False
+
                     if trueLeaf:
+                        print("true leaves", leaves)
                         realTrees.append(rt)
 
+
+
+            print("real trees", [r.toString() for r in realTrees])
             return realTrees
 
         if not branch.hasChildren(): #reached leaf nodes
             if branch.terminalBranch() and branch.visits > 0: #only append rule if is true leaf node that has been visited--> var or param
-                branch.ruleTree.percentCount = branch.getCurrentScore() #add percent count to rule tree
-                branch.ruleTree.activeClients = branch.activeClients #add active clients to rule tree
+                print("BRANCH in child part", branch.name)
+                print("trees", [t.toString() for t in trees])
+
+                print("branch active clients", branch.activeClients)
+                print("parent branch active clients", branch.parent.branch.activeClients)
+                print("branch per count", branch.getCurrentScore())
+
+                if branch.ruleTree.activeClients == []:
+                    branch.ruleTree.activeClients = branch.activeClients #add active clients to rule tree
+                    branch.ruleTree.percentCount = branch.getCurrentScore()  # add percent count to rule tree
+
                 trees.append(branch.ruleTree)
+                print("trees after appending", [t.toString() for t in trees])
             return trees
         else:
             for opt in branch.getChildBranches():
                 trees = self.traverseLeaf(opt, trees)
 
+        #TODO - figure out why no active clients in end of rules --> is this error or correct choices ...
+        print("final return trees", [t.toString() for t in trees])
+        print("length of final trees", len(trees))
         return trees
 
-    def addSubtreeToRuleTree(self, parentTree, childTree, nodeName):
+    def addSubtreeToRuleTree(self, parentTree, parenBranch, childTree, nodeName):
         #Node name is where subtree node will be added at in parent tree / cut off from subtree
 
         # print("Current parent tree")
@@ -440,6 +479,24 @@ class RuleTemplate():
         # print("Paren name", parentNode)
         parentTree.remove_node(nodeName)  # remove duplicate nodes to be added in main tree
         parentTree.paste(parentNode, subtree)  # paste subtree onto parent
+
+        #add active clients and percent counts to parent tree
+        print("parent branch ac", parenBranch.activeClients)
+        print("child tree ac", childTree.activeClients)
+        if childTree.activeClients != None:
+            ac = parenBranch.activeClients
+            ac.extend(childTree.activeClients)
+            ac = list(set(ac))
+        else:
+            ac = parenBranch.activeClients
+
+        parentTree.activeClients = ac
+        parentTree.varList.extend(childTree.varList)
+
+        if parenBranch.getCurrentScore() < childTree.percentCount:
+            parentTree.percentCount = childTree.percentCount
+        else:
+            parentTree.percentCount = parenBranch.getCurrentScore()
 
         return parentTree
 

@@ -298,6 +298,7 @@ class MCTS :
             self.mcLogger.info("----BACKPROPAGATION PHASE----")
 
         # Update current branch
+
         startingBranch.matchScores.append([matchCount, startingBranch.activeClients])  # update score list
         startingBranch.visits += 1  # add visit to this node
         startingBranch.utc = self.utcScore(startingBranch, startingBranch.getCurrentScore())  # calc utc for this branch

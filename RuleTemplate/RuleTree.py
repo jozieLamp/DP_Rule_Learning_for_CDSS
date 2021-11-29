@@ -11,7 +11,7 @@ class RuleTree(treelib.Tree):
         super().__init__(*args, **kw)
         self.varList = []
         self.percentCount = None
-        self.activeClients = None
+        self.activeClients = []
 
     # def __init__(self, tree=None, deep=False, node_class=None):
     #     # super().__init__(self)
@@ -30,6 +30,9 @@ class RuleTree(treelib.Tree):
     def getMissingParams(self):
         params = {}
         tbNum = 1
+
+        print("rule tree var list", self.varList)
+
         for node in self.expand_tree(mode=treelib.Tree.DEPTH, sorting=False):
             val = re.sub(r'\#.*', '', node)
 
