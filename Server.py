@@ -130,24 +130,20 @@ class Server :
             print("t", t.toString())
             print("t active clients", t.activeClients)
 
-            if t.activeClients != []:
+            # if t.activeClients != []:
+            #Query params for tree
+            #TODO - potentially make this a partial matching thing - where return any params that the rule does have and aggregate those ...
+            tempParams = self.queryParameters(t)
 
-                #Query params for tree
-                #TODO - potentially make this a partial matching thing - where return any params that the rule does have and aggregate those ...
-                tempParams = self.queryParameters(t)
+            #Only get correctly formatted rules
+            ft = stlFac.constructFormulaTree(t.toStringWithParams() + "\n") # Check if structure correct
 
+            if ft != None:  # Formula is not improper
+                #TODO - might have to do something where if rule is improper, remove it from the RuleTree list so the other functions are not messed up
                 if tempParams != None:
-
-                    #Only get correctly formatted rules
-                    ft = stlFac.constructFormulaTree(t.toStringWithParams() + "\n") # Check if structure correct
-
-                    if ft != None:  # Formula is not improper
-                        #TODO - might have to do something where if rule is improper, remove it from the RuleTree list so the other functions are not messed up
-                        ft.updateParams(tempParams)# Update params in structure
-                        rules.append(ft)
-                        finalTrees.append(t)
-                else:
-                    print("No params found as no matching rules ...")
+                    ft.updateParams(tempParams)# Update params in structure
+                rules.append(ft)
+                finalTrees.append(t)
 
         print("Final Rule Trees", finalTrees)
         print("Final Rules", rules)
@@ -305,6 +301,7 @@ class Server :
         nodes.append(subNodes)
         return nodes
 
+    #TODO - note, have issue if have rule with same var twice --> dictionary doesnt work here ...
     #receives a rule tree template
     def queryParameters(self, template):
 
@@ -318,7 +315,7 @@ class Server :
 
         #Get param values from clients
         for c in template.activeClients:
-            params = self.clientList[c].queryParams(tempNodes, tempParams, template.varList, self.varDict)
+            params = self.clientList[c].queryParams(tempNodes, template.varList, self.varDict)
 
             if params != None:
                 for k in tempParams.keys():
@@ -326,12 +323,14 @@ class Server :
 
         print("client params", tempParams)
 
+        finalParams = {}
         #Check if no params returned
         if all(x == [] for x in tempParams.values()):
+            print("SERVER QUERY - PARAMS ALL NONE")
             return None
+
         else:
             #Get Protocol Param Values
-            finalParams = {}
             for k in tempParams.keys():
                 vals = sorted([float(x) for x in tempParams[k]])
 
@@ -351,8 +350,8 @@ class Server :
 
                 finalParams[k] = p
 
-            # return param set
-            return finalParams
+        # return param set
+        return finalParams
 
     def getClientQueryCount(self):
         lst = []

@@ -2,7 +2,7 @@
 import math
 
 # GENERAL INPUT PARAMS
-popSize = 1000  # 8000 #Size of ICU population
+popSize = 100  # 8000 #Size of ICU population
 #popSize = 40337 #Sepsis size
 
 

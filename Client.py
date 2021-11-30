@@ -174,7 +174,7 @@ class Client:
                 # print("temp nodes", tempNodes)
                 # print("clnt nodes", clientNodes)
                 if self.nodeListMatch(tempNodes, clientNodes):
-                    print("match found")
+                    # print("match found")
                     return r  # found match
 
             return None
@@ -210,7 +210,7 @@ class Client:
         return True
 
 
-    def queryParams(self, tempNodes, tempParams, varList, varDict):
+    def queryParams(self, tempNodes, varList, varDict):
 
         #First find possible rule match
         rule = self.queryStructuralRuleMatchReturn(tempNodes, varList)

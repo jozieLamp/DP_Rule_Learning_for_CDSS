@@ -300,7 +300,9 @@ class MCTS_Baseline :
             self.mcLogger.info("Backprop completed\n")
 
         # Update active clients at this branch
-        startingBranch.activeClients = activeClients #updated active clients
+        #TODO - this part was updated
+        startingBranch.updatedActiveClients = activeClients #updated active clients
+        # startingBranch.activeClients = activeClients #updated active clients
 
 
     def utcScore(self, branch, score):
