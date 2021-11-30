@@ -125,13 +125,8 @@ class Server :
         rules = []
         finalTrees = []
         #query params and make final STL Rule Structures (STL Trees)
-        print("\n\nin rule trees")
         for t in ruleTrees:
-            print("t", t.toString())
-            print("t active clients", t.activeClients)
-
-            # if t.activeClients != []:
-            #Query params for tree
+            #Query missing params for tree
             #TODO - potentially make this a partial matching thing - where return any params that the rule does have and aggregate those ...
             tempParams = self.queryParameters(t)
 
@@ -305,7 +300,7 @@ class Server :
     #receives a rule tree template
     def queryParameters(self, template):
 
-        print("in query params template", template.toString())
+        print("\nIN query params template", template.toString())
 
         # get template node list
         tempNodes = self.getTemplateNodes(template)

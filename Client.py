@@ -145,13 +145,16 @@ class Client:
             if varList != []:
                 self.varsFull = True
 
+            print("var List", varList)
+            print("client vars", r.getAllVars())
+
             hasVars = True
             for v in varList:
                 if v not in r.getAllVars():
                     hasVars = False
 
             if hasVars:
-                # print("Has vars")
+                print("Has vars")
                 # check for structural match
                 clientNodes = []
                 subNodes = []
@@ -171,10 +174,10 @@ class Client:
                 subNodes.append(level)
                 clientNodes.append(subNodes)
 
-                # print("temp nodes", tempNodes)
-                # print("clnt nodes", clientNodes)
+                print("temp nodes", tempNodes)
+                print("clnt nodes", clientNodes)
                 if self.nodeListMatch(tempNodes, clientNodes):
-                    # print("match found")
+                    print("match found")
                     return r  # found match
 
             return None
