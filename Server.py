@@ -108,16 +108,8 @@ class Server :
         if self.verbose:
             self.logger.info("----MCTS SEARCH COMPLETED----\n")
 
-        #TODO - maybe do final query on each rule to ensure enough client matches
-
-
         #GET FINAL RULESET BY TRAVERSING TEMPLATE TREE
-        print("***** GEN RULE SETTTTT ******")
         ruleTrees = self.templateTree.generateRuleSet() #returns a set of rule templates
-
-        print("Rule trees AFTER GEN RULE SET")
-        for r in ruleTrees:
-            print(r.toString())
 
         #### ESTIMATE PARAMETERS FOR EACH RULE IN THE RULESET
         if self.verbose:
@@ -129,7 +121,6 @@ class Server :
         #query params and make final STL Rule Structures (STL Trees)
         for t in ruleTrees:
             #Query missing params for tree
-            #TODO - potentially make this a partial matching thing - where return any params that the rule does have and aggregate those ...
             tempParams = self.queryParameters(t)
 
             #Only get correctly formatted rules
@@ -142,7 +133,6 @@ class Server :
                 rules.append(ft)
                 finalTrees.append(t)
 
-
         #Make Rule Set Object to store output rule set
         self.finalRuleSet = RuleSet(finalTrees, rules)
 
@@ -153,8 +143,6 @@ class Server :
         self.logger.info("Produced " + str(len(self.finalRuleSet.ruleTrees)) + " Rule Tree Structures")
         self.logger.info("Generated " + str(len(self.finalRuleSet.rules)) + " Formatted Rules")
         self.logger.info("Completed " + str(self.numQueries) + " server queries")
-
-
 
 
 

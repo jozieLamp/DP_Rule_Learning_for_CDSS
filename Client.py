@@ -4,6 +4,7 @@ import treelib
 import logging
 import decimal
 import math
+import random
 from statistics import median
 import numpy as np
 import re
@@ -226,35 +227,40 @@ class Client:
         rule = self.queryStructuralRuleMatchReturn(tempNodes, varList)
 
         if rule != None: #found complete rule
-            print("FOUND COMPLETE RULE IN QUERY PARAMS")
+            # print("FOUND COMPLETE RULE IN QUERY PARAMS")
             pList = rule.getAllParams()
 
         else: #Try partial rule match
             pList = self.queryPartialStructureParamReturn(template, tempParams, varList)
 
-        print("\nclient plist", pList)
+        # print("\nclient plist", pList)
 
-        #TODO - uncomment this part potentially ...
+        #No match found, return random params
+        missing = list(set(tempParams.keys()) - set(pList.keys()))
+        # print("Missing params in plist", missing)
+        for m in missing:
+            v = m[:-1]
 
-        # #No match found, return random params
-        # missing = list(set(tempParams.keys()) - set(pList.keys()))
-        # # print("Missing params in plist", missing)
-        # for m in missing:
-        #     v = m[:-1]
-        #
-        #     if v == "timeBoundLower":
-        #         middle = int((varDict['timeBound'][1] - varDict['timeBound'][0]) / 2)  # get median / mean params
-        #         lower = median([varDict['timeBound'][0], middle])
-        #         pList[m] = lower
-        #     elif v == "timeBoundUpper":
-        #         middle = int((varDict['timeBound'][1] - varDict['timeBound'][0]) / 2)  # get median / mean params
-        #         upper = median([middle, varDict['timeBound'][1]])
-        #         pList[m] = upper
-        #     else:
-        #         lower = varDict[v][0]
-        #         upper = varDict[v][1]
-        #         pList[m] = (upper - lower) / 2  # get median / mean params
-        # # print("UPDATED client plist", pList)
+            if v =='timeBoundLower' or v == 'timeBoundUpper':
+                pList[m] = random.uniform(varDict['timeBound'][0], varDict['timeBound'][1])
+            else:
+                pList[m] = random.uniform(varDict[v][0], varDict[v][1])
+
+            #Draw from median value
+            # if v == "timeBoundLower":
+            #     middle = int((varDict['timeBound'][1] - varDict['timeBound'][0]) / 2)  # get median / mean params
+            #     lower = median([varDict['timeBound'][0], middle])
+            #     pList[m] = lower
+            # elif v == "timeBoundUpper":
+            #     middle = int((varDict['timeBound'][1] - varDict['timeBound'][0]) / 2)  # get median / mean params
+            #     upper = median([middle, varDict['timeBound'][1]])
+            #     pList[m] = upper
+            # else:
+            #     lower = varDict[v][0]
+            #     upper = varDict[v][1]
+            #     pList[m] = (upper - lower) / 2  # get median / mean params
+
+        # print("UPDATED client plist", pList)
 
         #Add noise to found params
         if self.epsilon != 'inf':  # private model, need to noise params
