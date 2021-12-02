@@ -300,7 +300,7 @@ class Server :
     #receives a rule tree template
     def queryParameters(self, template):
 
-        # print("\nIN query params template", template.toString())
+        print("\nIN query params template", template.toString())
 
         # get template node list
         tempNodes = self.getTemplateNodes(template)
