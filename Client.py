@@ -226,6 +226,7 @@ class Client:
         rule = self.queryStructuralRuleMatchReturn(tempNodes, varList)
 
         if rule != None: #found complete rule
+            print("FOUND COMPLETE RULE IN QUERY PARAMS")
             pList = rule.getAllParams()
 
         else: #Try partial rule match

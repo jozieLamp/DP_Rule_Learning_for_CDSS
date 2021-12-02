@@ -142,8 +142,7 @@ class Server :
                 rules.append(ft)
                 finalTrees.append(t)
 
-        print("Final Rule Trees", finalTrees)
-        print("Final Rules", rules)
+
         #Make Rule Set Object to store output rule set
         self.finalRuleSet = RuleSet(finalTrees, rules)
 
