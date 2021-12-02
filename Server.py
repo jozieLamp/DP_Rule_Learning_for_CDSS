@@ -308,12 +308,9 @@ class Server :
         # print("template params", tempParams)
         # print("template var list", template.varList)
 
-        #TODO Do partial query match here ... if not match to entire template then check for partial - see if operator plus var has param plus any temporal operators
-
         #Get param values from clients
         for c in template.activeClients:
             params = self.clientList[c].queryParams(tempNodes, template, tempParams, template.varList, self.varDict)
-
 
             if params != None:
                 for k in tempParams.keys():

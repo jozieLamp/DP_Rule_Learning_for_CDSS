@@ -232,7 +232,7 @@ class Client:
         else: #Try partial rule match
             pList = self.queryPartialStructureParamReturn(template, tempParams, varList)
 
-        # print("\nclient plist", pList)
+        print("\nclient plist", pList)
 
         #TODO - uncomment this part potentially ...
 
