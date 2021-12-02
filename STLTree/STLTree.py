@@ -61,6 +61,7 @@ class STLTree(treelib.Tree):
     #return dict of param names and their values
     def getAllParams(self):
         pList = {}
+        varNum = {}
         tbNum = 1
         prevKey = None
         for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
@@ -68,7 +69,13 @@ class STLTree(treelib.Tree):
 
             if obj.type == AtomicEnum.Variable:
                 if prevKey != None:
-                    pList[prevKey] = obj.value
+                    if prevKey in varNum:
+                        varNum[prevKey] += 1
+                    else:
+                        varNum[prevKey] = 1
+
+                    pList[prevKey + str(varNum[prevKey])] = obj.value
+
                     prevKey = None
                 else:
                     prevKey = obj.value
@@ -78,7 +85,13 @@ class STLTree(treelib.Tree):
                 pList['timeBoundUpper' + str(tbNum)] = obj.upperBound
                 tbNum += 1
             elif obj.type == AtomicEnum.Parameter:
-                pList[prevKey] = obj.value
+                if prevKey in varNum:
+                    varNum[prevKey] += 1
+                else:
+                    varNum[prevKey] = 1
+
+                pList[prevKey + str(varNum[prevKey])] = obj.value
+
                 prevKey = None
             else:
                 pass
@@ -88,6 +101,7 @@ class STLTree(treelib.Tree):
     #return dict of param names and their values
     def updateParams(self, newParams):
         tbNum = 1
+        varNum = {}
         prevKey = None
 
         for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
@@ -96,7 +110,13 @@ class STLTree(treelib.Tree):
             if obj.type == AtomicEnum.Variable:
                 if prevKey != None:
                     # pList[prevKey] = obj.value
-                    obj.value = newParams[prevKey]
+
+                    if prevKey in varNum:
+                        varNum[prevKey] += 1
+                    else:
+                        varNum[prevKey] = 1
+
+                    obj.value = newParams[prevKey + str(varNum[prevKey])]
                     prevKey = None
                 else:
                     prevKey = obj.value
@@ -111,7 +131,13 @@ class STLTree(treelib.Tree):
 
             elif obj.type == AtomicEnum.Parameter:
                 # pList[prevKey] = obj.value
-                obj.value = newParams[prevKey]
+                # obj.value = newParams[prevKey]
+                if prevKey in varNum:
+                    varNum[prevKey] += 1
+                else:
+                    varNum[prevKey] = 1
+
+                obj.value = newParams[prevKey + str(varNum[prevKey])]
 
                 prevKey = None
             else:
@@ -134,6 +160,54 @@ class STLTree(treelib.Tree):
             if obj.type == ExprEnum.timeBound:
                 obj.lowerBound = 0
                 obj.upperBound = 0
+
+    def getOperators(self):
+        ops = ['G', 'F', 'U', 'AND', 'OR', 'IMPLIES']
+        relops = ['GT', 'GE', 'LT', 'LE', "EQ", 'NEQ']
+        nodes = []
+        subNodes = []
+        parent = None
+        level = 0
+
+        varList = self.getAllVars()
+        vCounter = 0
+
+        for node in self.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
+            # obj = self[node].data
+            n = re.sub(r'\#.*', '', node)
+            if n in ops:
+                if self.parent(node) != parent:
+                    parent = self.parent(node)
+                    subNodes.append(level)
+                    nodes.append(subNodes)
+                    subNodes = []
+
+                level = self.level(node)
+                subNodes.append(n)
+
+            elif n in relops:
+                if self.parent(node) != parent:
+                    parent = self.parent(node)
+                    subNodes.append(level)
+                    nodes.append(subNodes)
+                    subNodes = []
+
+                level = self.level(node)
+                subNodes.append(n)
+
+                #append children of node
+                for x in self.children(node):
+                    obj = self[x.identifier].data
+                    if obj.type == AtomicEnum.Variable:
+                        subNodes.append(varList[vCounter])
+                        vCounter += 1
+                    else:
+                        subNodes.append(re.sub(r'\#.*', '', x.identifier))
+
+        subNodes.append(level)
+        nodes.append(subNodes)
+
+        return nodes
 
 
     # def getAllVarParams(self):

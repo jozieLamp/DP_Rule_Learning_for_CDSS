@@ -31,6 +31,7 @@ class RuleTree(treelib.Tree):
     def getMissingParams(self):
         params = {}
         tbNum = 1
+        varNum = {}
 
         # print("RuleTree var list", self.varList)
 
@@ -38,7 +39,12 @@ class RuleTree(treelib.Tree):
             val = re.sub(r'\#.*', '', node)
 
             if val in self.varList:
-                params[val] = []
+                if val in varNum: #allow multiple of same var type
+                    params[val + str(varNum[val] + 1)] = []
+                else:
+                    varNum[val] = 1
+                    params[val + str(varNum[val])] = []
+
             elif val == 'timeBound':
                 params['timeBoundLower' + str(tbNum) ] = []
                 params['timeBoundUpper' + str(tbNum)] = []
@@ -46,7 +52,49 @@ class RuleTree(treelib.Tree):
             else:
                 pass
 
+        # print("getting missing template params", params)
         return params
+
+    def getOperators(self):
+        # Potentially remove relops
+        ops = ['G', 'F', 'U', 'AND', 'OR', 'IMPLIES']
+        relops = ['GT', 'GE', 'LT', 'LE', "EQ", 'NEQ']
+        nodes = []
+        subNodes = []
+        parent = None
+        level = 0
+        for node in self.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
+            n = re.sub(r'\#.*', '', node)
+            if n in ops:
+                if self.parent(node) != parent:
+                    parent = self.parent(node)
+                    subNodes.append(level)
+                    nodes.append(subNodes)
+                    subNodes = []
+
+                level = self.level(node)
+                subNodes.append(n)
+
+            elif n in relops:
+                if self.parent(node) != parent:
+                    parent = self.parent(node)
+                    subNodes.append(level)
+                    nodes.append(subNodes)
+                    subNodes = []
+
+                level = self.level(node)
+                subNodes.append(n)
+
+                #append children of node
+                for x in self.children(node):
+                    subNodes.append(re.sub(r'\#.*', '', x.identifier))
+
+
+
+        subNodes.append(level)
+        nodes.append(subNodes)
+
+        return nodes
 
 
     def toString(self):

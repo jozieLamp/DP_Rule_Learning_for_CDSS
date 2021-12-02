@@ -115,7 +115,9 @@ class Server :
         print("***** GEN RULE SETTTTT ******")
         ruleTrees = self.templateTree.generateRuleSet() #returns a set of rule templates
 
-        print("Rule trees AFTER GEN RULE SET", ruleTrees)
+        print("Rule trees AFTER GEN RULE SET")
+        for r in ruleTrees:
+            print(r.toString())
 
         #### ESTIMATE PARAMETERS FOR EACH RULE IN THE RULESET
         if self.verbose:
@@ -296,27 +298,30 @@ class Server :
         nodes.append(subNodes)
         return nodes
 
-    #TODO - note, have issue if have rule with same var twice --> dictionary doesnt work here ...
     #receives a rule tree template
     def queryParameters(self, template):
 
-        print("\nIN query params template", template.toString())
+        # print("\nIN query params template", template.toString())
 
         # get template node list
         tempNodes = self.getTemplateNodes(template)
-        # print("temp nodes", tempNodes)
         tempParams = template.getMissingParams()
-        print("template params", tempParams)
+        # print("template params", tempParams)
+        # print("template var list", template.varList)
+
+        #TODO Do partial query match here ... if not match to entire template then check for partial - see if operator plus var has param plus any temporal operators
 
         #Get param values from clients
         for c in template.activeClients:
-            params = self.clientList[c].queryParams(tempNodes, template.varList, self.varDict)
+            params = self.clientList[c].queryParams(tempNodes, template, tempParams, template.varList, self.varDict)
+
 
             if params != None:
                 for k in tempParams.keys():
-                    tempParams[k].append(params[k])
+                    if k in params:
+                        tempParams[k].append(params[k])
 
-        print("client params", tempParams)
+        # print("CLIENT PARAMS", tempParams)
 
         finalParams = {}
         #Check if no params returned
@@ -329,7 +334,7 @@ class Server :
             for k in tempParams.keys():
                 vals = sorted([float(x) for x in tempParams[k]])
 
-                print("vals", vals)
+                # print("vals", vals)
 
                 # #plot distributions of params
                 # if self.verbose:

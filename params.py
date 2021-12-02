@@ -21,8 +21,8 @@ cutoffThresh = 0.001 #Match score cutoff threshold to prune branches
 
 # DATA PARAMETERS
 dataFilename = "Data/ICU/Best/"
-resultsFilename = "Results/ICU_Ruleset_MCTS_Baseline_1000pop_500iters"
-# resultsFilename = "Results/ICU_Ruleset_MCTS_TEST"
+# resultsFilename = "Results/ICU_Ruleset_MCTS_Baseline_1000pop_500iters"
+resultsFilename = "Results/ICU_Ruleset_MCTS_TEST"
 
 # variables with guess ranges
 #NOTE - added time bound as an explicit variable in these
