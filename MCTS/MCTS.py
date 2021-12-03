@@ -298,7 +298,6 @@ class MCTS :
             self.mcLogger.info("----BACKPROPAGATION PHASE----")
 
         # Update current branch
-
         startingBranch.matchScores.append([matchCount, startingBranch.activeClients])  # update score list
         startingBranch.visits += 1  # add visit to this node
         startingBranch.utc = self.utcScore(startingBranch, startingBranch.getCurrentScore())  # calc utc for this branch
@@ -322,7 +321,8 @@ class MCTS :
             self.mcLogger.info("Backprop completed\n")
 
         # Update active clients at this branch
-        startingBranch.activeClients = activeClients #updated active clients
+        startingBranch.updatedActiveClients = activeClients #updated active clients
+        # startingBranch.activeClients = activeClients #updated active clients
 
 
     def utcScore(self, branch, score):

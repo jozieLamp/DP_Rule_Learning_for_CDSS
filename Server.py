@@ -288,8 +288,6 @@ class Server :
     #receives a rule tree template
     def queryParameters(self, template):
 
-        print("\nIN query params template", template.toString())
-
         # get template node list
         tempNodes = self.getTemplateNodes(template)
         tempParams = template.getMissingParams()
@@ -308,31 +306,25 @@ class Server :
         # print("CLIENT PARAMS", tempParams)
 
         finalParams = {}
-        #Check if no params returned
-        if all(x == [] for x in tempParams.values()):
-            print("SERVER QUERY - PARAMS ALL NONE")
-            return None
+        #Get Protocol Param Values
+        for k in tempParams.keys():
+            vals = sorted([float(x) for x in tempParams[k]])
 
-        else:
-            #Get Protocol Param Values
-            for k in tempParams.keys():
-                vals = sorted([float(x) for x in tempParams[k]])
+            # print("vals", vals)
 
-                # print("vals", vals)
+            # #plot distributions of params
+            # if self.verbose:
+            #     plt.figure(figsize=(10, 5))
+            #     plt.title('Distribution of Param ' + str(k))
+            #     plt.xlabel('Param Value')
+            #     plt.ylabel('Client Count')
+            #     plt.hist(vals)
+            #     plt.show()
 
-                # #plot distributions of params
-                # if self.verbose:
-                #     plt.figure(figsize=(10, 5))
-                #     plt.title('Distribution of Param ' + str(k))
-                #     plt.xlabel('Param Value')
-                #     plt.ylabel('Client Count')
-                #     plt.hist(vals)
-                #     plt.show()
+            # score at or below which (inclusive) 50% of the scores in the distribution may be found
+            p = np.percentile(vals, self.paramPercentile)
 
-                # score at or below which (inclusive) 50% of the scores in the distribution may be found
-                p = np.percentile(vals, self.paramPercentile)
-
-                finalParams[k] = p
+            finalParams[k] = p
 
         # return param set
         return finalParams
