@@ -110,7 +110,7 @@ class MCTS :
             for child in node.children:
                 # Note, changed selection policy to be using UCT as well ...
                 # score = child.getCurrentScore()
-                score = self.utcScore(child, child.getCurrentScore())
+                score = self.utcScore(child, child.getCurrentScore(), self.utcWeighting)
 
                 if self.verbose:
                     self.mcLogger.info("Score for " + child.name + " : " + str(score))
@@ -223,7 +223,7 @@ class MCTS :
         else:
             scores = []
             for b in branchOptions:
-                scores.append(self.getCoverageScore(self.server.templateTree, b))
+                scores.append(self.getCoverageScore(self.server.templateTree, b, self.distMethod))
 
             #if all distances same, select randomly
             if all(element == scores[0] for element in scores):
@@ -304,7 +304,7 @@ class MCTS :
         # Update current branch
         startingBranch.matchScores.append([matchCount, startingBranch.activeClients])  # update score list
         startingBranch.visits += 1  # add visit to this node
-        startingBranch.utc = self.utcScore(startingBranch, startingBranch.getCurrentScore())  # calc utc for this branch
+        startingBranch.utc = self.utcScore(startingBranch, startingBranch.getCurrentScore(), self.utcWeighting)  # calc utc for this branch
 
         if self.verbose:
             self.mcLogger.info("Backpropogating Score: " + str(matchCount))
@@ -316,7 +316,7 @@ class MCTS :
             br = br.parent.branch
             br.matchScores.append([matchCount, startingBranch.activeClients])  # add score to parent node
             br.visits += 1  # add visit to this node
-            br.utc = self.utcScore(br, br.getCurrentScore())  # calc utc for this branch
+            br.utc = self.utcScore(br, br.getCurrentScore(), self.utcWeighting)  # calc utc for this branch
 
             if self.verbose:
                 self.mcLogger.info("Calculated UTC for node " + br.name + ": " + str(br.utc))
@@ -329,26 +329,94 @@ class MCTS :
         # startingBranch.activeClients = activeClients #updated active clients
 
 
-    def utcScore(self, branch, score):
+    def utcScore(self, branch, score, utcWeighting):
         if branch.parent == None:
             parenVisits = branch.visits
         else:
             parenVisits = branch.parent.branch.visits
 
         #Get Coverage metric - average tree edit distance (want largest edit dist)
-        editDist = self.getCoverageScore(self.server.templateTree, branch)
+        editDist = self.getCoverageScore(self.server.templateTree, branch, self.distMethod)
 
         #Normalize edit distance to be btw 0 and 1
         # editDist = editDist
         if self.verbose:
             self.mcLogger.info("SCORE " + str(score) + " EDIT DISTANCE " + str(editDist))
 
-        #was score * 2
-        uct = score + editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        # was score * 2
+        if utcWeighting == 'scoreXeditDist':
+            uct = (editDist * score) + editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        elif utcWeighting == 'scaledBy100':
+            uct = score + (editDist / 100) + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        elif utcWeighting == 'scaledBy10':
+            uct = score + (editDist / 10) + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        elif utcWeighting == 'scoreX10':
+            uct = (score * 10) + editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        elif utcWeighting == 'scoreX100':
+            uct = (score * 100) + editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+
+        elif utcWeighting == 'log10':
+            # log of distance
+            if editDist != 0:
+                ed = math.log(editDist, 10)
+            else:
+                ed = editDist
+
+            # self.mcLogger.info("SCORE " + str(score) + " EDIT DISTANCE " + str(editDist) + " log ed " + str(ed) + " visit part " + str(math.sqrt(math.log(parenVisits) / branch.visits)))
+            # uct = score + ed + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+            uct = score + ed + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+
+        elif utcWeighting == 'log10NoCp':
+            # log of distance
+            if editDist != 0:
+                ed = math.log(editDist, 10)
+            else:
+                ed = editDist
+
+            uct = score + ed + math.sqrt(math.log(parenVisits) / branch.visits)
+
+        elif utcWeighting == 'log2':
+            # log of distance
+            if editDist != 0:
+                ed = math.log(editDist, 2)
+            else:
+                ed = editDist
+
+            uct = score + ed + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        elif utcWeighting == 'ln':
+            # log of distance
+            if editDist != 0:
+                ed = math.log(editDist)
+            else:
+                ed = editDist
+
+            uct = score + ed + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+
+        elif utcWeighting == 'log10x2':
+            # log of distance
+            if editDist != 0:
+                ed = 2 * math.log(editDist, 10)
+            else:
+                ed = editDist
+
+            uct = score + ed + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+
+        elif utcWeighting == 'logscorex2':
+            # log of distance
+            if editDist != 0:
+                ed = math.log(editDist, 10)
+            else:
+                ed = editDist
+
+            uct = (2 * score) + ed + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+
+
+        else:
+            uct = score + editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
 
         return uct
 
-    def getCoverageScore(self, temp, branch):
+    def getCoverageScore(self, temp, branch, method):
         '''
         Get coverage score (Tree edit distance) of current branch compared to current trees
         Calculates ordered edit distance btw two templates and returns average score
@@ -390,13 +458,22 @@ class MCTS :
             distances.append(dist)
 
         #Get maximum of the min of tree distances
-        editDist = statistics.median(distances)
+        # editDist = statistics.median(distances)
         # editDist = min(distances)
         #sum(distances) / len(distances) #to do average
 
         # print("Getting Coverage Score for branch " + branch.name)
         # print("distances:", distances)
         # print("edit distance", editDist)
+
+        if method == 'median':
+            editDist = statistics.median(distances)
+        elif method == 'min':
+            editDist = min(distances)
+        elif method == 'max':
+            editDist = max(distances)
+        else: #elif method == 'avg':
+            editDist = sum(distances) / len(distances)
 
         return editDist
 

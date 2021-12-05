@@ -13,88 +13,7 @@ import warnings
 import treelib
 import re
 
-
-def compareFoundRuleCounts(countDF, name):
-    cdf = countDF.sort_values("Client Count", ascending=False)
-
-    plt.figure(figsize=(12, 7))
-    plt.plot(cdf['Client Count'].values, label='Client')
-    plt.plot(cdf['LDP Count'].values, label='LDP')
-    plt.legend()
-    plt.xlabel("Rule Number")
-    plt.ylabel("Percent Count")
-    plt.title("Comparison of Percent Count Scores in Found Rules")
-    plt.savefig(name + "FoundRulePercentCountComparison.png")
-    plt.show()
-
-    plt.figure(figsize=(12, 7))
-    error = abs(cdf['Client Count'].values - cdf['LDP Count'].values)
-    plt.plot(error)
-    plt.xlabel("Rule Number")
-    plt.ylabel("Error Percentage")
-    plt.title("Error in Percent Count Scores in Found Rules - sorted by highest client count to lowest")
-    plt.savefig(name + "PercentCountError.png")
-    plt.show()
-
-
-# Get count of the number of true structures matched in client rules
-def getTemplateNodes(temp):
-    nodes = []
-
-    for node in temp.expand_tree(mode=treelib.Tree.DEPTH, sorting=True):
-        n = re.sub('[0-9]', '', node)
-        nodes.append(n)
-
-    return nodes
-
-def findRuleMatch(template, clientTrees):
-    ldpNodes = getTemplateNodes(template)
-    ldpVars = template.getAllVars()
-
-    for c in clientTrees:
-        # check if variables in rule
-        clVars = c.getAllVars()
-        hasVars = True
-        for v in ldpVars:
-            if v not in clVars:
-                hasVars = False
-
-        if hasVars:
-            # check for structural match
-            clientNodes = []
-
-            for node in c.expand_tree(mode=treelib.Tree.DEPTH, sorting=True):
-                n = re.sub('[0-9]', '', node)
-                clientNodes.append(n)
-
-            # print("client nodes", clientNodes)
-            if nodeListMatch(ldpNodes, clientNodes):
-                return True, c.toString()  # found match
-
-    return False, None
-
-
-# check for match  between two lists of template nodes + client nodes
-def nodeListMatch(tempList, cList):
-    # Fix relop matches
-    tempList[:] = [x if x != "LT" else "LE" for x in tempList]
-    tempList[:] = [x if x != "GT" else "GE" for x in tempList]
-    cList[:] = [x if x != "LT" else "LE" for x in cList]
-    cList[:] = [x if x != "GT" else "GE" for x in cList]
-
-    i = 0
-    while i < len(tempList):
-        if tempList[i] in cList:
-            idx = cList.index(tempList[i])  # get idx of element of cList
-            cList = cList[idx + 1:]
-        else:
-            return False
-
-        i = i + 1
-
-    return True
-
-
+#Get count of coverage
 def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
     stlFac = STLFactory()
 
@@ -114,13 +33,16 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
     matchLst = []
 
     for l in ldpTrees:
-        fnd, cRule = findRuleMatch(l, clientTrees)
-        if fnd:  # check structural match --> will count partial matches as a full match
+        print("\nTemplate", l.toString(), "Per Count", ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item())
+        cRule, cCount = findRuleMatch(l, clientTrees, ldpDF, clientDF)
+
+        if cRule != None:  # check structural match --> will count partial matches as a full match
             foundRules += 1
             lCount = ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item()
-            cCount = clientDF[clientDF["Rule"] == cRule]['Percent of Population'].item()
+            # cCount = clientDF[clientDF["Rule"] == cRule]['Percent of Population'].item()
             matchLst.append([l.toString(), cRule, lCount, cCount])
         else:
+            print("RULE NOT FOUND", l.toString())
             nonRules += 1
 
     bot = foundRules + nonRules
@@ -133,39 +55,201 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
 
     return covDF, countDF
 
-def graphRuleCounts(clientDF, ldpDF, name):
-    plt.figure(figsize=(12, 7))
-    sns.distplot(clientDF['Percent of Population'].values, bins=1000, kde=True, label='Client')
-    sns.distplot(ldpDF['Percent Count'].values, bins=1000, kde=True, label='LDP')
-    plt.legend()
-    plt.xscale('log')
-    plt.title("Dist Plot of Counts of Found Rules")
-    plt.xlabel("Percent of Population")
-    plt.ylabel("Number of Rules")
-    plt.savefig(name + "Distplot.png")
-    plt.show()
-    ##########
+def findRuleMatch(template, clientTrees, ldpDF, clientDF):
+    rule = queryStructuralFullMatch(template, clientTrees)
 
-    cdf = dict(Counter(clientDF['Percent of Population']))
-    cdf = dict(sorted(cdf.items(), key=operator.itemgetter(0), reverse=True))
-    ldf = dict(Counter(ldpDF['Percent Count']))
-    ldf = dict(sorted(ldf.items(), key=operator.itemgetter(0), reverse=True))
+    if rule != None:
+        print("Full Match Found")
+        rule = rule.toString()
+        cCount = clientDF[clientDF["Rule"] == rule]['Percent of Population'].item()
 
-    plt.figure(figsize=(12, 7))
-    plt.xscale('log')
-    plt.yscale('log')
-    plt.plot(cdf.keys(), cdf.values(), label='Client')
-    plt.plot(ldf.keys(), ldf.values(), label='LDP')
-    plt.legend()
-    plt.title("Line Plot of Counts of Found Rules")
-    plt.xlabel("Percent of Population")
-    plt.ylabel("Number of Rules")
-    plt.savefig(name + "LineGraph.png")
-    plt.show()
+    else: #try partial match
+        partials = queryPartialStructuralMatch(template, clientTrees, clientDF)
+
+        if partials != None:
+            key = list(partials.keys())[0]
+            for k in partials.keys():
+                if partials[k][1] > partials[key][1]:
+                    key = k
+
+            rule, cCount = partials[key]
+            rule = rule.toString()
+        else:
+            rule = None
+            cCount = None
+
+    return rule, cCount
+
+def queryPartialStructuralMatch(template, clientTrees, clientDF):
+    partials = {} #dict of partial match rules and their counts
+    tempOps = template.getOperators()
+    varList = template.getAllVars()
+    # print("temp ops", tempOps)
+    # print(template.toString())
+
+    print("Doing partial match")
+
+    for r in clientTrees:
+        # first check for overall order of operators correct
+        clientOps = r.getOperators()
+
+        rVars = r.getAllVars()
+        if any(item in varList for item in rVars) and operatorMatch(tempOps, clientOps):  # found operator match
+            print("partial match", r.toString())
+            for v in varList:
+                if v in rVars:
+                    cCount = clientDF[clientDF["Rule"] == r.toString()]['Percent of Population'].item()
+                    partials[v] = [r, cCount]
+
+        if set(partials.keys()) == set(varList):
+            return partials
+
+    return None
+
+def operatorMatch(tempList, cList):
+    # Fix relop matches
+    for t in tempList:
+        t[:] = [x if x != "LT" else "LE" for x in t]
+        t[:] = [x if x != "GT" else "GE" for x in t]
+        t[:] = [x if x != "EQ" else "LE" for x in t]
+
+    for c in cList:
+        c[:] = [x if x != "LT" else "LE" for x in c]
+        c[:] = [x if x != "GT" else "GE" for x in c]
+        c[:] = [x if x != "EQ" else "LE" for x in c]
+
+    # print("tlist", tempList)
+    # print("clist", cList)
+
+    foundVar = False
+
+    i = 0
+    while i < len(tempList):
+        # get current branch of nodes
+        if tempList[i] in cList:
+            if 'Parameter' in tempList[i]: #found a var match
+                foundVar = True
+            else:
+                idx = cList.index(tempList[i])  # get idx of element of cList
+                cList = cList[idx + 1:]
+
+        elif 'Parameter' not in tempList[i]: #non var match
+            return False
+
+        else:
+            pass
+
+        i = i + 1
+
+    if foundVar:
+        return True
+    else:
+        return False
 
 
+def queryStructuralFullMatch(template, clientTrees):
+    # print("Temp vars", varList)
+    # print("templt nodes", tempNodes)
+
+    ldpNodes = getTemplateNodes(template)
+    ldpVars = template.getAllVars()
+
+    for r in clientTrees:
+        # print("rule vars", r.getAllVars())
+        # check if variables in rule
+        hasVars = True
+        for v in ldpVars:
+            if v not in r.getAllVars():
+                hasVars = False
+
+        if hasVars:
+            # print("HAS VARS")
+            # check for structural match
+            clientNodes = []
+            subNodes = []
+            parent = None
+            level = 0
+            for node in r.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
+                if r.parent(node) != parent:
+                    parent = r.parent(node)
+                    subNodes.append(level)
+                    clientNodes.append(subNodes)
+                    subNodes = []
+
+                n = re.sub(r'\#.*', '', node)
+                level = r.level(node)
+                subNodes.append(n)
+
+            subNodes.append(level)
+            clientNodes.append(subNodes)
+
+            # print("client nodes", clientNodes)
+            if nodeListMatch(ldpNodes, clientNodes):
+                # print("MATCH")
+                # print("temp", tempNodes)
+                # print("clnt", clientNodes)
+                return r  # found match
+
+    return None
+
+def nodeListMatch(tempList, cList):
+    # print("tempList", tempList)
+    # print("clist", cList)
+
+    for t in tempList:
+        t[:] = [x if x != "LT" else "LE" for x in t]
+        t[:] = [x if x != "GT" else "GE" for x in t]
+        t[:] = [x if x != "EQ" else "LE" for x in t]
+
+    for c in cList:
+        c[:] = [x if x != "LT" else "LE" for x in c]
+        c[:] = [x if x != "GT" else "GE" for x in c]
+        c[:] = [x if x != "EQ" else "LE" for x in c]
+
+    i = 0
+    while i < len(tempList):
+        #get current branch of nodes
+        if tempList[i] in cList:
+            idx = cList.index(tempList[i])  # get idx of element of cList
+            cList = cList[idx + 1:]
+        else:
+            return False
+
+        i = i + 1
+
+    return True
 
 
+# Get list of nodes from template
+def getTemplateNodes(temp):
+    nodes = []
+    ignoreList = ["(", ")"]
+    parent = None
+    subNodes = []
+    level = 0
+
+    for n in temp.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
+        if temp.parent(n) != parent:
+            parent = temp.parent(n)
+            subNodes.append(level)  # add level at end
+            nodes.append(subNodes)
+            subNodes = []
+
+        nd = temp.get_node(n)
+        id = re.sub(r'\#.*', '', nd.identifier)
+        level = temp.level(n)
+
+        if id in temp.getAllVars() and id != 'timeBound':
+            subNodes.append("Variable")
+
+        elif id not in ignoreList:
+            subNodes.append(id)
+
+    subNodes.append(level)
+    nodes.append(subNodes)
+    return nodes
+
+#Load LDP rules
 def loadLDPRuleset(resultsFilename):
     ldpDF = pd.read_csv(resultsFilename, index_col=0)
 
@@ -190,7 +274,6 @@ def loadLDPRuleset(resultsFilename):
 
 
     return ldpDF, ldpTrees, ldpRules
-
 
 def loadClientRules(popSize, dataFilename):
     clientRules = []

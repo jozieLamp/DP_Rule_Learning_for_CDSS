@@ -81,8 +81,10 @@ def main():
             # cov.graphRuleCounts(clientDF, ldpDF, graphName)
 
             covDF, countDF = cov.getCoverageTable(popThresh, ldpDF, ldpTrees, clientDF)
+            print("\n")
             print(covDF)
             print(countDF)
+            print("\n")
 
             # cov.compareFoundRuleCounts(countDF, graphName)
 
