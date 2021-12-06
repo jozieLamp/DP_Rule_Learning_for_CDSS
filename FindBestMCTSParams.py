@@ -50,8 +50,8 @@ def main():
     recordLst = []
 
     methods = ['median', 'avg', 'min', 'max']
-    weights = ['baseline', 'log10', 'log2', 'logscorex2', 'scoreXeditDist','scaledBy100', 'scaledBy10', 'scoreX10', 'scoreX100']
-    cpOpts = [1, 1/math.sqrt(2), 2]
+    weights = ['baseline', 'noWeights', 'log10', 'log2', 'logscorex2', 'scoreXeditDist','scaledBy100', 'scaledBy10', 'scoreX10', 'scoreX100']
+    cpOpts = [1, 1/math.sqrt(2), 2, 10]
 
     for method in methods:
         for utcWeighting in weights:
@@ -63,9 +63,9 @@ def main():
                 print("Cp", cp)
 
                 if cp == 1/math.sqrt(2):
-                    ldpFilename = "Param_Results/ICU_" + "method" + method + "_weighting" + utcWeighting + "_cpSqrt"
+                    ldpFilename = "Param_Results/ICU_" + "method:" + method + "_weighting:" + utcWeighting + "_cp:sqrt"
                 else:
-                    ldpFilename = "Param_Results/ICU_" + "method" + method + "_weighting" + utcWeighting + "_cp" + str(cp)
+                    ldpFilename = "Param_Results/ICU_" + "method" + method + "_weighting" + utcWeighting + "_cp:" + str(cp)
 
                 # graphName = 'Param_Results/Graphs/' + "method" + method + "_weighting" + utcWeighting + "_cp" + str(cp)
                 popThresh = 0.001  # Percentage match count

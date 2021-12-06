@@ -344,6 +344,9 @@ class MCTS :
             self.mcLogger.info("SCORE " + str(score) + " EDIT DISTANCE " + str(editDist))
 
         if utcWeighting == 'baseline':
+            uct = score + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+
+        elif utcWeighting == 'noWeights':
             uct = score + editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
 
         elif utcWeighting == 'log10':
