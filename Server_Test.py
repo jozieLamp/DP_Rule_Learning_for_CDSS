@@ -258,6 +258,7 @@ class Server :
     # Get list of nodes from template
     def getTemplateNodes(self, temp):
         nodes = []
+        relops = ['GT', 'GE', 'LT', 'LE', "EQ", 'NEQ']
         ignoreList = ["(", ")"]
         parent = None
         subNodes = []
@@ -274,14 +275,33 @@ class Server :
             id = re.sub(r'\#.*', '', nd.identifier)
             level = temp.level(n)
 
-            if id in self.variables and id != 'timeBound':
-                subNodes.append("Variable")
+            # if id in self.variables and id != 'timeBound':
+            #     subNodes.append("Variable")
 
+            if id in relops:
+                if temp.parent(n) != parent:
+                    parent = temp.parent(n)
+                    subNodes.append(level)
+                    nodes.append(subNodes)
+                    subNodes = []
+
+                subNodes.append(id)
+
+                #append children of node
+                for x in temp.children(n):
+                    if x.identifier in self.variables:
+                        subNodes.append(id)
+                    else:
+                        subNodes.append(re.sub(r'\#.*', '', x.identifier))
+
+            elif id in self.variables or id == 'Parameter':
+                pass
             elif id not in ignoreList:
                 subNodes.append(id)
 
-        subNodes.append(level)
-        nodes.append(subNodes)
+        if subNodes != []:
+            subNodes.append(level)
+            nodes.append(subNodes)
         return nodes
 
     #receives a rule tree template

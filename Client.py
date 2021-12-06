@@ -1,5 +1,6 @@
 from SignalTemporalLogic.STLFactory import STLFactory
 from STLTree.STLTree import STLTree
+from STLTree.Atomic import AtomicEnum
 import treelib
 import logging
 import decimal
@@ -8,6 +9,7 @@ import random
 from statistics import median
 import numpy as np
 import re
+
 
 
 class Client:
@@ -92,6 +94,7 @@ class Client:
             return "BUDGET USED", None, None
 
 
+    #TODO here - need to change this to check for correct relop matches with the vars ...
     # check for structural match
     def queryStructuralRuleMatch(self, tempNodes, varList):
         # print("Temp vars", varList)
@@ -111,24 +114,7 @@ class Client:
 
             if hasVars:
                 # print("HAS VARS")
-                # check for structural match
-                clientNodes = []
-                subNodes = []
-                parent = None
-                level = 0
-                for node in r.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
-                    if r.parent(node) != parent:
-                        parent = r.parent(node)
-                        subNodes.append(level)
-                        clientNodes.append(subNodes)
-                        subNodes = []
-
-                    n = re.sub(r'\#.*', '', node)
-                    level = r.level(node)
-                    subNodes.append(n)
-
-                subNodes.append(level)
-                clientNodes.append(subNodes)
+                clientNodes = self.getClientNodes(r, varList)
 
                 # print("client nodes", clientNodes)
                 if self.nodeListMatch(tempNodes, clientNodes):
@@ -139,6 +125,60 @@ class Client:
 
         return 0
 
+    def getClientNodes(self, r, tempVars):
+        relops = ['GT', 'GE', 'LT', 'LE', "EQ", 'NEQ']
+
+        # check for structural match
+        clientNodes = []
+        subNodes = []
+        parent = None
+        level = 0
+        varList = r.getAllVars()
+        vCounter = 0
+
+        for node in r.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
+            n = re.sub(r'\#.*', '', node)
+            # level = r.level(node)
+
+            if n in relops:
+                if r.parent(node) != parent:
+                    parent = r.parent(node)
+                    subNodes.append(level)
+                    clientNodes.append(subNodes)
+                    subNodes = []
+
+                level = r.level(node)
+                subNodes.append(n)
+
+                if tempVars != []: #only append vars if at var level
+                    # append children of node
+                    for x in r.children(node):
+                        obj = r[x.identifier].data
+                        if obj.type == AtomicEnum.Variable:
+                            subNodes.append(varList[vCounter])
+                            vCounter += 1
+                        else:
+                            subNodes.append(re.sub(r'\#.*', '', x.identifier))
+
+            elif n == 'Variable' or n == 'Parameter' or n == 'timeBound':
+                pass
+            else:
+                if r.parent(node) != parent:
+                    parent = r.parent(node)
+                    subNodes.append(level)
+                    clientNodes.append(subNodes)
+                    subNodes = []
+
+                level = r.level(node)
+                subNodes.append(n)
+
+        if subNodes != []:
+            subNodes.append(level)
+            clientNodes.append(subNodes)
+
+        return clientNodes
+
+    #TODO - fix this one too
     # check for structural match and return rule
     def queryStructuralRuleMatchReturn(self, tempNodes, varList):
         for r in self.ruleSet:
@@ -153,39 +193,19 @@ class Client:
                     hasVars = False
 
             if hasVars:
-                # print("Has vars")
-                # check for structural match
-                clientNodes = []
-                subNodes = []
-                parent = None
-                level = 0
-                for node in r.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
-                    if r.parent(node) != parent:
-                        parent = r.parent(node)
-                        subNodes.append(level)
-                        clientNodes.append(subNodes)
-                        subNodes = []
+                clientNodes = self.getClientNodes(r, varList)
 
-                    n = re.sub(r'\#.*', '', node)
-                    level = r.level(node)
-                    subNodes.append(n)
-
-                subNodes.append(level)
-                clientNodes.append(subNodes)
-
-                # print("temp nodes", tempNodes)
-                # print("clnt nodes", clientNodes)
+                # print("client nodes", clientNodes)
                 if self.nodeListMatch(tempNodes, clientNodes):
-                    # print("match found")
+                    # print("temp", tempNodes)
+                    # print("clnt", clientNodes)
                     return r  # found match
 
             return None
 
+    #TODO - fix this to be like operator match for var part ...
     # check for match  between two lists of template nodes + client nodes
     def nodeListMatch(self, tempList, cList):
-        # print("tempList", tempList)
-        # print("clist", cList)
-
         if self.varsFull:
             self.varsFull = False
 
@@ -207,12 +227,16 @@ class Client:
             c[:] = [x if x != "GT" else "GE" for x in c]
             c[:] = [x if x != "EQ" else "LE" for x in c]
 
+        # print("tList", tempList)
+        # print("cList", cList)
+
         i = 0
         while i < len(tempList):
             #get current branch of nodes
             if tempList[i] in cList:
-                idx = cList.index(tempList[i])  # get idx of element of cList
-                cList = cList[idx + 1:]
+                if 'Parameter' not in tempList[i]:  # found a var match
+                    idx = cList.index(tempList[i])  # get idx of element of cList
+                    cList = cList[idx + 1:]
             else:
                 return False
 
