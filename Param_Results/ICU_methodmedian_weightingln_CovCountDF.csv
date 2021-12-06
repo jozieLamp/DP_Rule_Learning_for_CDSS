@@ -1,0 +1,20 @@
+,LDP Rule,Client Rule,LDP Count,Client Count
+0,"F[0,0]((HEMOGLOBIN > 0.000 & CHLORIDE = 0.000))","F[0,0]((HEMOGLOBIN > 0.000 & Mort > 0.000))",0.131,0.02
+1,"G[0,0]((AST_GOT < 0.000 | ALBUMIN = 0.000))","G[0,0]((ALBUMIN < 0.000 | PROTIME_INR < 0.000))",0.057,0.01
+2,"G[0,0]((PHOSPHORUS = 0.000 | ALBUMIN = 0.000))","G[0,0]((edrk < 0.000 | PHOSPHORUS < 0.000))",0.193,0.01
+3,"G[0,0]((Pulse < 0.000 & PARTIAL_THROMBOPLASTIN_TIME < 0.000))","G[0,0]((PARTIAL_THROMBOPLASTIN_TIME < 0.000 & Pulse < 0.000))",0.223,0.01
+4,"F[0,0]((lds = 0.000 -> cosen < 0.000))","F[0,0]((lds < 0.000 -> Mort > 0.000))",0.075,0.02
+5,"G[0,0]((SODIUM = 0.000 -> GLUCOSE = 0.000))","G[0,0]((GLUCOSE < 0.000 -> n_evts < 0.000))",0.146,0.02
+6,"G[0,0]((BLOOD_UREA_NITROGEN < 0.000 -> MAGNESIUM > 0.000))","G[0,0]((BLOOD_UREA_NITROGEN < 0.000 -> MAGNESIUM > 0.000))",0.187,0.01
+7,"F[0,0]((MAGNESIUM < 0.000 -> cosen < 0.000))","F[0,0]((cosen < 0.000 -> MET > 0.000))",0.075,0.01
+8,"G[0,0]((SODIUM = 0.000 -> AF < 0.000))","G[0,0]((AF < 0.000 -> death < 0.000))",0.156,0.02
+9,"G[0,0]((Pulse < 0.000 & death > 0.000))","G[0,0]((death < 0.000 & Pulse < 0.000))",0.223,0.02
+10,"G[0,0]((AST_GOT < 0.000 | GLUCOSE < 0.000))","G[0,0]((AST_GOT < 0.000 | GLUCOSE < 0.000))",0.227,0.01
+11,"F[0,0]((HEMOGLOBIN > 0.000 & HEMOGLOBIN < 0.000))","F[0,0]((death > 0.000 & HEMOGLOBIN < 0.000))",0.177,0.02
+12,"G[0,0]((SODIUM = 0.000 -> MAGNESIUM > 0.000))","G[0,0]((MAGNESIUM > 0.000 -> SBP > 0.000))",0.187,0.03
+13,"G[0,0]((PHOSPHORUS = 0.000 | GLUCOSE < 0.000))","G[0,0]((edrk < 0.000 | GLUCOSE < 0.000))",0.227,0.02
+14,"F[0,0]((lds = 0.000 -> O2_Flow = 0.000))","F[0,0]((lds < 0.000 -> MAGNESIUM > 0.000))",0.075,0.01
+15,"G[0,0]((BLOOD_UREA_NITROGEN < 0.000 -> AF < 0.000))","G[0,0]((BLOOD_UREA_NITROGEN < 0.000 -> CO2 > 0.000))",0.177,0.02
+16,"F[0,0]((HEMOGLOBIN > 0.000 & s8_hr > 0.000))","F[0,0]((ICU_Pt_Days > 0.000 & s8_hr > 0.000))",0.131,0.02
+17,"F[0,0]((MAGNESIUM < 0.000 -> O2_Flow = 0.000))","F[0,0]((O2_Flow < 0.000 -> s8_edrk > 0.000))",0.065,0.01
+18,"G[0,0]((BLOOD_UREA_NITROGEN < 0.000 -> GLUCOSE = 0.000))","G[0,0]((BLOOD_UREA_NITROGEN < 0.000 -> SBP < 0.000))",0.177,0.02

@@ -49,7 +49,7 @@ def main():
     recordLst = []
 
     methods = ['median', 'avg', 'min', 'max']
-    weights = ['log10', 'log10NoCp', 'log2', 'ln', 'log10x2', 'logscorex2','scoreXeditDist', 'scaledBy100', 'scaledBy10', 'scoreX10', 'scoreX100']
+    weights = ['baseline', 'log10', 'log10NoCp', 'log2', 'ln', 'log10x2', 'logscorex2','scoreXeditDist', 'scaledBy100', 'scaledBy10', 'scoreX10', 'scoreX100']
 
     for method in methods:
         for utcWeighting in weights:
@@ -95,13 +95,13 @@ def main():
             numUniqueStructs = cov.countUniqueStructuresNoVars(ldpTrees)
             print("Total Unique Structures:", numUniqueStructs)
 
-            recordLst.append([method, utcWeighting, covDF['Found Rules'], numUniqueStructs])
+            recordLst.append([method, utcWeighting, covDF['Found Rules'].item(), numUniqueStructs])
 
             #Update Summary DF
             summaryDF = pd.DataFrame(recordLst, columns=['Method', 'UTC Wtg', 'Found Rules', '# Unique'])
             print("Current Summary:")
             print(summaryDF)
-            summaryDF.to_csv("Summary_CoverageResults.csv")
+            summaryDF.to_csv("Param_Results/ICU_Summary_CoverageResults.csv")
 
             print("\n")
 
