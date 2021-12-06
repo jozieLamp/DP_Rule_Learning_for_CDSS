@@ -99,7 +99,7 @@ def main():
 
             #Update Summary DF
             summaryDF = pd.DataFrame(recordLst, columns=['Method', 'UTC Wtg', 'Found Rules', '# Unique'])
-            print("Current Summary:")
+            print("\nCurrent Summary:")
             print(summaryDF)
             summaryDF.to_csv("Param_Results/ICU_Summary_CoverageResults.csv")
 
