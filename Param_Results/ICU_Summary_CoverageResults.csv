@@ -3,3 +3,6 @@
 1,median,log10NoCp,199,19
 2,median,log2,23,23
 3,median,ln,19,19
+4,median,log10x2,20,20
+5,median,logscorex2,148,41
+6,median,scoreXeditDist,297,30

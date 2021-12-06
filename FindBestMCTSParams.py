@@ -4,6 +4,7 @@ import logging
 from Client import Client
 from Server_Test import Server
 import pandas as pd
+import math
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -49,61 +50,69 @@ def main():
     recordLst = []
 
     methods = ['median', 'avg', 'min', 'max']
-    weights = ['baseline', 'log10', 'log10NoCp', 'log2', 'ln', 'log10x2', 'logscorex2','scoreXeditDist', 'scaledBy100', 'scaledBy10', 'scoreX10', 'scoreX100']
+    weights = ['baseline', 'log10', 'log2', 'logscorex2', 'scoreXeditDist','scaledBy100', 'scaledBy10', 'scoreX10', 'scoreX100']
+    cpOpts = [1, 1/math.sqrt(2), 2]
 
     for method in methods:
         for utcWeighting in weights:
+            for cp in cpOpts:
 
-            print("******************************************************** NEW PARAMS ********************************************************")
-            print("METHOD:", method)
-            print("UTC Weighting", utcWeighting, "\n")
+                print("\n******************************************************** NEW PARAMS ********************************************************")
+                print("METHOD:", method)
+                print("UTC Weighting", utcWeighting, "\n")
+                print("Cp", cp)
 
-            ldpFilename = "Param_Results/ICU_" + "method" + method + "_weighting" + utcWeighting
-            graphName = 'Param_Results/Graphs/' + "method" + method + "_weighting" + utcWeighting #"_score" + str(utcWeighting[0]) + "_editDist" + str(utcWeighting[1])  # Name of count coverage graphs
-            popThresh = 0.001  # Percentage match count
+                if cp == 1/math.sqrt(2):
+                    ldpFilename = "Param_Results/ICU_" + "method" + method + "_weighting" + utcWeighting + "_cpSqrt"
+                else:
+                    ldpFilename = "Param_Results/ICU_" + "method" + method + "_weighting" + utcWeighting + "_cp" + str(cp)
 
-            # Make Server
-            logging.info("Initializing Server")
-            varDict = {}
-            for v in params.variables.keys():  # Make var dict of variables and their ranges
-                varDict[v] = params.variables.get(v)
+                # graphName = 'Param_Results/Graphs/' + "method" + method + "_weighting" + utcWeighting + "_cp" + str(cp)
+                popThresh = 0.001  # Percentage match count
 
-            s = Server(clientList, varDict, params)
+                # Make Server
+                logging.info("Initializing Server")
+                varDict = {}
+                for v in params.variables.keys():  # Make var dict of variables and their ranges
+                    varDict[v] = params.variables.get(v)
 
-            # Run Protocol
-            s.runProtocol('[eval#1]', method, utcWeighting)
+                s = Server(clientList, varDict, params)
 
-            # Get dataframe of the generated rules and their percent counts
-            s.finalRuleSet.ruleSetDF.to_csv(ldpFilename + ".csv") #Save Rules to File
+                #set cp
+                s.cp = cp
 
-            # Get count of client queries
-            # clientQs = s.getClientQueryCount()
-            # clientQs.to_csv(ldpFilename + "_ClientQueries.csv")
+                # Run Protocol
+                s.runProtocol('[eval#1]', method, utcWeighting)
 
-            #Get coverage results
-            ldpDF, ldpTrees, ldpRules = cov.loadLDPRuleset(ldpFilename + ".csv")
-            # cov.graphRuleCounts(clientDF, ldpDF, graphName)
+                # Get dataframe of the generated rules and their percent counts
+                s.finalRuleSet.ruleSetDF.to_csv(ldpFilename + ".csv") #Save Rules to File
 
-            covDF, countDF = cov.getCoverageTable(popThresh, ldpDF, ldpTrees, clientDF)
-            countDF.to_csv(ldpFilename + "_CovCountDF.csv")
-            # cov.compareFoundRuleCounts(countDF, graphName)
-            print("\n")
-            print(covDF)
-            print(countDF)
+                # Get count of client queries
+                # clientQs = s.getClientQueryCount()
+                # clientQs.to_csv(ldpFilename + "_ClientQueries.csv")
 
-            #get number of unique structure types, ignoring vars to get sense of coverage
-            numUniqueStructs = cov.countUniqueStructuresNoVars(ldpTrees)
-            print("Total Unique Structures:", numUniqueStructs)
+                #Get coverage results
+                ldpDF, ldpTrees, ldpRules = cov.loadLDPRuleset(ldpFilename + ".csv")
+                # cov.graphRuleCounts(clientDF, ldpDF, graphName)
 
-            recordLst.append([method, utcWeighting, covDF['Found Rules'].item(), numUniqueStructs])
+                covDF, countDF = cov.getCoverageTable(popThresh, ldpDF, ldpTrees, clientDF)
+                countDF.to_csv(ldpFilename + "_CovCountDF.csv")
+                # cov.compareFoundRuleCounts(countDF, graphName)
+                print("\n")
+                print(covDF)
+                print(countDF)
 
-            #Update Summary DF
-            summaryDF = pd.DataFrame(recordLst, columns=['Method', 'UTC Wtg', 'Found Rules', '# Unique'])
-            print("\nCurrent Summary:")
-            print(summaryDF)
-            summaryDF.to_csv("Param_Results/ICU_Summary_CoverageResults.csv")
+                #get number of unique structure types, ignoring vars to get sense of coverage
+                numUniqueStructs = cov.countUniqueStructuresNoVars(ldpTrees)
+                print("Total Unique Structures:", numUniqueStructs)
 
-            print("\n")
+                recordLst.append([method, utcWeighting, cp, covDF['Found Rules'].item(), numUniqueStructs])
+
+                #Update Summary DF
+                summaryDF = pd.DataFrame(recordLst, columns=['Method', 'UTC Wtg', 'Cp', 'Found Rules', '# Unique'])
+                print("\nCurrent Summary:")
+                print(summaryDF)
+                summaryDF.to_csv("Param_Results/ICU_Summary_CoverageResults.csv")
 
 
 
