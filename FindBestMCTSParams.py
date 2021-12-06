@@ -59,8 +59,8 @@ def main():
 
                 print("\n******************************************************** NEW PARAMS ********************************************************")
                 print("METHOD:", method)
-                print("UTC Weighting", utcWeighting, "\n")
-                print("Cp", cp)
+                print("UTC Weighting", utcWeighting)
+                print("Cp", cp, "\n")
 
                 if cp == 1/math.sqrt(2):
                     ldpFilename = "Param_Results/ICU_" + "method:" + method + "_weighting:" + utcWeighting + "_cp:sqrt"
