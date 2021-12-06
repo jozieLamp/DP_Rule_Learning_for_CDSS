@@ -3,6 +3,7 @@ import params
 import logging
 from Client import Client
 from Server_Test import Server
+import pandas as pd
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -45,6 +46,8 @@ def main():
     # weights = ['scoreXeditDist', 'scaledBy100', 'scaledBy10', 'scoreX10', 'scoreX100']
     # weights = [[1, 0.5], []]
 
+    recordLst = []
+
     methods = ['median', 'avg', 'min', 'max']
     weights = ['log10', 'log10NoCp', 'log2', 'ln', 'log10x2', 'logscorex2','scoreXeditDist', 'scaledBy100', 'scaledBy10', 'scoreX10', 'scoreX100']
 
@@ -72,21 +75,36 @@ def main():
 
             # Get dataframe of the generated rules and their percent counts
             s.finalRuleSet.ruleSetDF.to_csv(ldpFilename + ".csv") #Save Rules to File
+
             # Get count of client queries
-            clientQs = s.getClientQueryCount()
-            clientQs.to_csv(ldpFilename + "_ClientQueries.csv")
+            # clientQs = s.getClientQueryCount()
+            # clientQs.to_csv(ldpFilename + "_ClientQueries.csv")
 
             #Get coverage results
             ldpDF, ldpTrees, ldpRules = cov.loadLDPRuleset(ldpFilename + ".csv")
             # cov.graphRuleCounts(clientDF, ldpDF, graphName)
 
             covDF, countDF = cov.getCoverageTable(popThresh, ldpDF, ldpTrees, clientDF)
+            countDF.to_csv(ldpFilename + "_CovCountDF.csv")
+            # cov.compareFoundRuleCounts(countDF, graphName)
             print("\n")
             print(covDF)
             print(countDF)
+
+            #get number of unique structure types, ignoring vars to get sense of coverage
+            numUniqueStructs = cov.countUniqueStructuresNoVars(ldpTrees)
+            print("Total Unique Structures:", numUniqueStructs)
+
+            recordLst.append([method, utcWeighting, covDF['Found Rules'], numUniqueStructs])
+
+            #Update Summary DF
+            summaryDF = pd.DataFrame(recordLst, columns=['Method', 'UTC Wtg', 'Found Rules', '# Unique'])
+            print("Current Summary:")
+            print(summaryDF)
+            summaryDF.to_csv("Summary_CoverageResults.csv")
+
             print("\n")
 
-            # cov.compareFoundRuleCounts(countDF, graphName)
 
 
 if __name__ == "__main__":

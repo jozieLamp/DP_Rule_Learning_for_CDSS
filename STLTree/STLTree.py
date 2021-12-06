@@ -161,6 +161,14 @@ class STLTree(treelib.Tree):
                 obj.lowerBound = 0
                 obj.upperBound = 0
 
+    def getFormulaNoVars(self):
+        for node in self.expand_tree(mode=treelib.Tree.DEPTH,sorting=False):
+            obj = self[node].data
+
+            if obj.type == AtomicEnum.Variable:
+                obj.value = 'x'
+
+
     def getOperators(self):
         ops = ['G', 'F', 'U', 'AND', 'OR', 'IMPLIES']
         relops = ['GT', 'GE', 'LT', 'LE', "EQ", 'NEQ']
@@ -208,6 +216,7 @@ class STLTree(treelib.Tree):
         nodes.append(subNodes)
 
         return nodes
+
 
 
     # def getAllVarParams(self):

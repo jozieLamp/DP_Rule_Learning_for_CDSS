@@ -13,6 +13,21 @@ import warnings
 import treelib
 import re
 
+def countUniqueStructuresNoVars(ldpTrees):
+    lst = []
+    for lt in ldpTrees:
+        l = copy.deepcopy(lt)
+        l.getFormulaNoVars()
+        lst.append(l.toString())
+
+    # print("total structs to start", len(ldpTrees))
+    uniqStrcts = set(lst)
+    # print("unique structs", len(uniqStrcts))
+
+    return len(uniqStrcts)
+
+
+
 #Get count of coverage
 def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
     stlFac = STLFactory()
@@ -33,7 +48,7 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
     matchLst = []
 
     for l in ldpTrees:
-        print("\nTemplate", l.toString(), "Per Count", ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item())
+        # print("\nTemplate", l.toString(), "Per Count", ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item())
         cRule, cCount = findRuleMatch(l, clientTrees, ldpDF, clientDF)
 
         if cRule != None:  # check structural match --> will count partial matches as a full match
@@ -59,7 +74,7 @@ def findRuleMatch(template, clientTrees, ldpDF, clientDF):
     rule = queryStructuralFullMatch(template, clientTrees)
 
     if rule != None:
-        print("Full Match Found")
+        # print("Full Match Found")
         rule = rule.toString()
         cCount = clientDF[clientDF["Rule"] == rule]['Percent of Population'].item()
 
@@ -87,7 +102,7 @@ def queryPartialStructuralMatch(template, clientTrees, clientDF):
     # print("temp ops", tempOps)
     # print(template.toString())
 
-    print("Doing partial match")
+    # print("Doing partial match")
 
     for r in clientTrees:
         # first check for overall order of operators correct
@@ -95,7 +110,7 @@ def queryPartialStructuralMatch(template, clientTrees, clientDF):
 
         rVars = r.getAllVars()
         if any(item in varList for item in rVars) and operatorMatch(tempOps, clientOps):  # found operator match
-            print("partial match", r.toString())
+            # print("partial match", r.toString())
             for v in varList:
                 if v in rVars:
                     cCount = clientDF[clientDF["Rule"] == r.toString()]['Percent of Population'].item()
