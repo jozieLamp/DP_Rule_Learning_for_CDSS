@@ -1,0 +1,16 @@
+,LDP Rule,Client Rule,LDP Count,Client Count
+0,"G[0,0]((srr < 0.000 -> dfa = 0.000))","G[0,0]((dfa < 0.000 -> srr < 0.000))",0.219,0.02
+1,"G[0,0]((MAGNESIUM > 0.000 | Glasgow_Coma_Scale_Total = 0.000))","G[0,0]((AF < 0.000 | Glasgow_Coma_Scale_Total < 0.000))",0.284,0.04
+2,"F[0,0]((SBP = 0.000 & edrk < 0.000))","F[0,0]((edrk < 0.000 & y = 0.000))",0.135,0.04
+3,"G[0,0]((ICU_Pt_Days < 0.000 | Glasgow_Coma_Scale_Total = 0.000))","G[0,0]((Glasgow_Coma_Scale_Total < 0.000 | ICU_Pt_Days < 0.000))",0.364,0.02
+4,"F[0,0]((direct > 0.000 & edrk < 0.000))","F[0,0]((direct > 0.000 & edrk < 0.000))",0.434,0.02
+5,"G[0,0]((af = 0.000 -> dfa = 0.000))","G[0,0]((death > 0.000 -> dfa < 0.000))",0.125,0.01
+6,"G[0,0]((Resp > 0.000 & CHLORIDE > 0.000))","G[0,0]((direct < 0.000 & Resp > 0.000))",0.105,0.01
+7,"G[0,0]((y = 0.000 | SODIUM < 0.000))","G[0,0]((SODIUM < 0.000 | y < 0.000))",0.375,0.01
+8,"G[0,0]((af = 0.000 -> PLATELET_COUNT < 0.000))","G[0,0]((PLATELET_COUNT < 0.000 -> SODIUM > 0.000))",0.177,0.01
+9,"G[0,0]((srr < 0.000 & CHLORIDE > 0.000))","G[0,0]((Pulse < 0.000 & srr < 0.000))",0.085,0.01
+10,"G[0,0]((srr < 0.000 -> PLATELET_COUNT < 0.000))","G[0,0]((PLATELET_COUNT < 0.000 -> Temp > 0.000))",0.219,0.03
+11,"G[0,0]((MAGNESIUM > 0.000 | SODIUM < 0.000))","G[0,0]((MAGNESIUM > 0.000 | SODIUM < 0.000))",0.261,0.01
+12,"G[0,0]((ICU_Pt_Days < 0.000 | SODIUM < 0.000))","G[0,0]((ICU_Pt_Days < 0.000 | SODIUM < 0.000))",0.364,0.01
+13,"G[0,0]((y = 0.000 | Glasgow_Coma_Scale_Total = 0.000))","G[0,0]((Glasgow_Coma_Scale_Total < 0.000 | y < 0.000))",0.375,0.01
+14,"F[0,0]((ALT_GPT < 0.000 & edrk < 0.000))","F[0,0]((ALT_GPT < 0.000 & y = 0.000))",0.135,0.05

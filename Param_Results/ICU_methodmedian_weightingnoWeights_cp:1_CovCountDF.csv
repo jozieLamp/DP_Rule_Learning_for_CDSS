@@ -1,0 +1,9 @@
+,LDP Rule,Client Rule,LDP Count,Client Count
+0,"G[0,0]((MET = 0.000 -> n_evts < 0.000))","G[0,0]((MET < 0.000 -> n_evts < 0.000))",0.677,0.02
+1,"G[0,0]((ALBUMIN > 0.000 & SpO2 < 0.000))","G[0,0]((SpO2 < 0.000 & srr < 0.000))",0.064,0.01
+2,"F[0,0]((Sgy < 0.000 -> WHITE_BLOOD_CELL_COUNT < 0.000))","F[0,0]((WHITE_BLOOD_CELL_COUNT < 0.000 -> y = 0.000))",0.054,0.02
+3,"G[0,0]((ALBUMIN > 0.000 & s2_edrk > 0.000))","G[0,0]((Glasgow_Coma_Scale_Total > 0.000 & s2_edrk > 0.000))",0.147,0.01
+4,"F[0,0]((Sgy < 0.000 -> s24_edrk = 0.000))","F[0,0]((s24_edrk < 0.000 -> y = 0.000))",0.032,0.02
+5,"G[0,0]((MET = 0.000 -> BLOOD_UREA_NITROGEN > 0.000))","G[0,0]((BLOOD_UREA_NITROGEN > 0.000 -> tte > 0.000))",0.198,0.02
+6,"F[0,0]((SpO2 > 0.000 & s24_hr > 0.000))","F[0,0]((direct > 0.000 & s24_hr > 0.000))",0.091,0.02
+7,"F[0,0]((SpO2 > 0.000 & PROTIME_INR < 0.000))","F[0,0]((PROTIME_INR > 0.000 & SpO2 < 0.000))",0.083,0.01
