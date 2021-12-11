@@ -25,7 +25,6 @@ def runProtocol(params):
 
         num += 1
 
-
     logging.info("Total of %s Clients Found" % (len(clientList)))
 
     # Make Server
