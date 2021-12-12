@@ -13,35 +13,15 @@ import warnings
 import treelib
 import re
 
-def graphRuleCounts(clientDF, ldpDF, name):
-    plt.figure(figsize=(12, 7))
-    sns.distplot(clientDF['Percent of Population'].values, bins=1000, kde=True, label='Client')
-    sns.distplot(ldpDF['Percent Count'].values, bins=1000, kde=True, label='LDP')
-    plt.legend()
-    plt.xscale('log')
-    plt.title("Dist Plot of Counts of Found Rules")
-    plt.xlabel("Percent of Population")
-    plt.ylabel("Number of Rules")
-    plt.savefig(name + "Distplot.png")
-    plt.show()
-    ##########
 
-    cdf = dict(Counter(clientDF['Percent of Population']))
-    cdf = dict(sorted(cdf.items(), key=operator.itemgetter(0), reverse=True))
-    ldf = dict(Counter(ldpDF['Percent Count']))
-    ldf = dict(sorted(ldf.items(), key=operator.itemgetter(0), reverse=True))
+def getClientTreesFromCountDF(df):
+    stlFac = STLFactory()
+    clTrees = []
+    for c in df['Client Rule'].tolist():
+        c = stlFac.constructFormulaTree(c + "\n")
+        clTrees.append(c)
 
-    plt.figure(figsize=(12, 7))
-    plt.xscale('log')
-    plt.yscale('log')
-    plt.plot(cdf.keys(), cdf.values(), label='Client')
-    plt.plot(ldf.keys(), ldf.values(), label='LDP')
-    plt.legend()
-    plt.title("Line Plot of Counts of Found Rules")
-    plt.xlabel("Percent of Population")
-    plt.ylabel("Number of Rules")
-    plt.savefig(name + "LineGraph.png")
-    plt.show()
+    return clTrees
 
 def countUniqueStructuresNoVars(ldpTrees):
     lst = []
