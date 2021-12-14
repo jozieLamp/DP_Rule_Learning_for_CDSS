@@ -9,6 +9,7 @@ class MCTS_Baseline :
         self.verbose = verbose
         self.mcLogger = logging.getLogger('MCTS')
 
+    #TODO - add ending condition to check if all branches have been explored then end
     def runMCTSRound(self, branchName):
 
         # SELECTION
@@ -43,6 +44,7 @@ class MCTS_Baseline :
             else:
                 self.backpropagation(selectedBranch, matchCount, activeClients)
 
+
         # Perform pruning step --> prune any branches who have a query result < cutoff threshold
         if self.verbose:
             self.mcLogger.info("----PRUNING PHASE----")
@@ -60,6 +62,8 @@ class MCTS_Baseline :
         if self.verbose:
             self.mcLogger.info("----SELECTION PHASE----")
             self.mcLogger.info("Current Branch: " + currBranch.name)
+
+        #TODO may have to add check if current branch is nor completely explored ...???
 
         while currBranch.hasChildren():
             currBranch = self.selectChildBranch(currBranch)
@@ -100,16 +104,23 @@ class MCTS_Baseline :
 
         for node in branch.nodes:
             for child in node.children:
-                # Note, changed selection policy to be using UCT as well ...
-                # score = child.getCurrentScore()
-                score = self.utcScore(child, child.getCurrentScore())
 
-                if self.verbose:
-                    self.mcLogger.info("Score for " + child.name + " : " + str(score))
+                #TODO - note added check here
+                # add check to only look at child nodes that aren't completely explored
+                if not child.completelyExplored:
 
-                if score > maxScore:
-                    maxScore = score
-                    bestChild = child
+                    # Note, changed selection policy to be using UCT as well ...
+                    # score = child.getCurrentScore()
+                    score = self.utcScore(child, child.getCurrentScore())
+
+                    if self.verbose:
+                        self.mcLogger.info("Score for " + child.name + " : " + str(score))
+
+                    if score > maxScore:
+                        maxScore = score
+                        bestChild = child
+                else: #TODO added here
+                    self.mcLogger.info(child.name + " completely explored, so not adding to check ")
 
         return bestChild
 
@@ -281,9 +292,19 @@ class MCTS_Baseline :
         startingBranch.visits += 1  # add visit to this node
         startingBranch.utc = self.utcScore(startingBranch, startingBranch.getCurrentScore())  # calc utc for this branch
 
+        #TODO -updated here
+        #Added check to see if branch terminal or all child branches completely explored, set branch to be compl explored
+        if startingBranch.terminalBranch():
+            print("node terminal branch")
+            startingBranch.completelyExplored = True
+        if startingBranch.allChildrenCompletelyExplored():
+            print("all children comp explored")
+            startingBranch.completelyExplored = True
+
         if self.verbose:
             self.mcLogger.info("Backpropogating Score: " + str(matchCount))
             self.mcLogger.info("Calculated UTC for node " + startingBranch.name + ": " + str(startingBranch.utc))
+            self.mcLogger.info(startingBranch.name + "node completely explored " + str(startingBranch.completelyExplored)) #TODO added this
 
         # prop scores
         br = startingBranch
@@ -293,8 +314,14 @@ class MCTS_Baseline :
             br.visits += 1  # add visit to this node
             br.utc = self.utcScore(br, br.getCurrentScore())  # calc utc for this branch
 
+            #TODO updated here
+            #prop if child branches completely explored
+            if br.allChildrenCompletelyExplored():
+                br.completelyExplored = True
+
             if self.verbose:
                 self.mcLogger.info("Calculated UTC for node " + br.name + ": " + str(br.utc))
+                self.mcLogger.info(br.name + " node completely explored " + str(br.completelyExplored))  # TODO added this
 
         if self.verbose:
             self.mcLogger.info("Backprop completed\n")

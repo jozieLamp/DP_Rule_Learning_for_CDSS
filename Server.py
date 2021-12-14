@@ -94,7 +94,7 @@ class Server :
             mcts = MCTS(server=self, verbose=self.verbose)
 
         totalIters = 1 #to track the number of iterations that are completed
-        while not self.globalBudgetUsed() and self.numQueries < self.maxQueries:
+        while not self.globalBudgetUsed() and self.numQueries < self.maxQueries and not self.templateTree._branches[branchName].completelyExplored:
             if (self.verbose):
                 self.logger.info("BEGIN SEARCH ROUND, ITERATION: " + str(totalIters) + "\n")
 
@@ -104,6 +104,9 @@ class Server :
 
             if self.globalBudgetUsed():
                 self.logger.info("GLOBAL BUDGET USED")
+
+            if self.templateTree._branches[branchName].completelyExplored:
+                print("ROOT COMPLETELY EXPLORED DONE")
 
         if self.verbose:
             self.logger.info("----MCTS SEARCH COMPLETED----\n")

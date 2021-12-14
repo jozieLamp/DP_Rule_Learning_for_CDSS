@@ -57,6 +57,8 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
 
     for l in ldpTrees:
         # print("\nTemplate", l.toString(), "Per Count", ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item())
+
+        #TODO- figure out why returning partial matches when should only ret full ones ...
         cRule, cCount = findRuleMatch(l, clientTrees, ldpDF, clientDF)
 
         if cRule != None:  # check structural match --> will count partial matches as a full match
@@ -86,20 +88,24 @@ def findRuleMatch(template, clientTrees, ldpDF, clientDF):
         rule = rule.toString()
         cCount = clientDF[clientDF["Rule"] == rule]['Percent of Population'].item()
 
-    else: #try partial match
-        partials = queryPartialStructuralMatch(template, clientTrees, clientDF)
-
-        if partials != None:
-            key = list(partials.keys())[0]
-            for k in partials.keys():
-                if partials[k][1] > partials[key][1]:
-                    key = k
-
-            rule, cCount = partials[key]
-            rule = rule.toString()
-        else:
-            rule = None
-            cCount = None
+    # else: #try partial match
+    #     print("full match not found, trying partial match")
+    #     partials = queryPartialStructuralMatch(template, clientTrees, clientDF)
+    #
+    #     if partials != None:
+    #         key = list(partials.keys())[0]
+    #         for k in partials.keys():
+    #             if partials[k][1] > partials[key][1]:
+    #                 key = k
+    #
+    #         rule, cCount = partials[key]
+    #         rule = rule.toString()
+    #     else:
+    #         rule = None
+    #         cCount = None
+    else:
+        rule = None
+        cCount = None
 
     return rule, cCount
 

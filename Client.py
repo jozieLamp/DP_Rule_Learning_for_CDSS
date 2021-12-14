@@ -94,7 +94,6 @@ class Client:
             return "BUDGET USED", None, None
 
 
-    #TODO here - need to change this to check for correct relop matches with the vars ...
     # check for structural match
     def queryStructuralRuleMatch(self, tempNodes, varList):
         # print("Temp vars", varList)
@@ -178,7 +177,6 @@ class Client:
 
         return clientNodes
 
-    #TODO - fix this one too
     # check for structural match and return rule
     def queryStructuralRuleMatchReturn(self, tempNodes, varList):
         for r in self.ruleSet:
@@ -203,7 +201,6 @@ class Client:
 
             return None
 
-    #TODO - fix this to be like operator match for var part ...
     # check for match  between two lists of template nodes + client nodes
     def nodeListMatch(self, tempList, cList):
         if self.varsFull:

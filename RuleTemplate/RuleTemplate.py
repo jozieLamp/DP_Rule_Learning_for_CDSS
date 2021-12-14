@@ -43,6 +43,7 @@ class Branch: #Set of nodes in tree
         self.visits = 0.0
         self.depth = 0
         self.nodes = []
+        self.completelyExplored = False #Check if branch has been completely explored and should not be selected anymore
 
         self.matchScores = [] #list of match count scores + number of clients queried in format [percentage, num clients]
         self.uct = 0.0 #UCT score of branch
@@ -61,6 +62,18 @@ class Branch: #Set of nodes in tree
         # print("num clients", numClients)
         # print("per count", perCount)
         return perCount
+
+    def allChildrenCompletelyExplored(self):
+        if self.hasChildren():
+            for n in self.nodes:
+                for childBranch in n.children:
+                    if not childBranch.completelyExplored:
+                        return False
+
+            return True
+        else: #Node is not completely expanded, so return False
+            return False
+
 
     def hasChildren(self):
         for n in self.nodes:
