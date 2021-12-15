@@ -135,47 +135,6 @@ def queryPartialStructuralMatch(template, clientTrees, clientDF):
 
     return None
 
-def operatorMatch(tempList, cList):
-    # Fix relop matches
-    for t in tempList:
-        t[:] = [x if x != "LT" else "LE" for x in t]
-        t[:] = [x if x != "GT" else "GE" for x in t]
-        t[:] = [x if x != "EQ" else "LE" for x in t]
-
-    for c in cList:
-        c[:] = [x if x != "LT" else "LE" for x in c]
-        c[:] = [x if x != "GT" else "GE" for x in c]
-        c[:] = [x if x != "EQ" else "LE" for x in c]
-
-    # print("tlist", tempList)
-    # print("clist", cList)
-
-    foundVar = False
-
-    i = 0
-    while i < len(tempList):
-        # get current branch of nodes
-        if tempList[i] in cList:
-            if 'Parameter' in tempList[i]: #found a var match
-                foundVar = True
-            else:
-                idx = cList.index(tempList[i])  # get idx of element of cList
-                cList = cList[idx + 1:]
-
-        elif 'Parameter' not in tempList[i]: #non var match
-            return False
-
-        else:
-            pass
-
-        i = i + 1
-
-    if foundVar:
-        return True
-    else:
-        return False
-
-
 def queryStructuralFullMatch(template, clientTrees):
     # print("Temp vars", varList)
     # print("templt nodes", tempNodes)
@@ -221,26 +180,61 @@ def queryStructuralFullMatch(template, clientTrees):
 
     return None
 
+# check for match  between two lists of template nodes + client nodes
 def nodeListMatch(tempList, cList):
-    # print("tempList", tempList)
-    # print("clist", cList)
-
-    for t in tempList:
-        t[:] = [x if x != "LT" else "LE" for x in t]
-        t[:] = [x if x != "GT" else "GE" for x in t]
-        t[:] = [x if x != "EQ" else "LE" for x in t]
-
-    for c in cList:
-        c[:] = [x if x != "LT" else "LE" for x in c]
-        c[:] = [x if x != "GT" else "GE" for x in c]
-        c[:] = [x if x != "EQ" else "LE" for x in c]
+    relops = ['GT', 'GE', 'LT', 'LE', "EQ", 'NEQ']
 
     i = 0
     while i < len(tempList):
-        #get current branch of nodes
+        # get current branch of nodes
         if tempList[i] in cList:
-            idx = cList.index(tempList[i])  # get idx of element of cList
-            cList = cList[idx + 1:]
+            if 'Parameter' not in tempList[i]:  # found a var match
+                #                 idx = cList.index(tempList[i])  # get idx of element of cList
+                #                 cList = cList[idx + 1:]
+                cList.remove(tempList[i])
+
+        elif any(item in tempList[i] for item in relops):
+            # Try all match options
+            if 'GT' in tempList[i]:
+                test = [x if x != "GT" else "GE" for x in tempList[i]]
+                if test in cList:
+                    cList.remove(test)
+                else:
+                    return False
+            elif 'GE' in tempList[i]:
+                test1 = [x if x != "GE" else "GT" for x in tempList[i]]
+                test2 = [x if x != "GE" else "EQ" for x in tempList[i]]
+                if test1 in cList:
+                    cList.remove(test1)
+                elif test2 in cList:
+                    cList.remove(test2)
+                else:
+                    return False
+            elif 'LT' in tempList[i]:
+                test = [x if x != "LT" else "LE" for x in tempList[i]]
+                if test in cList:
+                    cList.remove(test)
+                else:
+                    return False
+            elif 'LE' in tempList[i]:
+                test1 = [x if x != "LE" else "LT" for x in tempList[i]]
+                test2 = [x if x != "LE" else "EQ" for x in tempList[i]]
+                if test1 in cList:
+                    cList.remove(test1)
+                elif test2 in cList:
+                    cList.remove(test2)
+                else:
+                    return False
+            elif 'EQ' in tempList[i]:
+                test1 = [x if x != "EQ" else "GE" for x in tempList[i]]
+                test2 = [x if x != "EQ" else "LE" for x in tempList[i]]
+                if test1 in cList:
+                    cList.remove(test1)
+                elif test2 in cList:
+                    cList.remove(test2)
+                else:
+                    return False
+
         else:
             return False
 
@@ -248,6 +242,79 @@ def nodeListMatch(tempList, cList):
 
     return True
 
+def operatorMatch(self, tempList, cList):
+    relops = ['GT', 'GE', 'LT', 'LE', "EQ", 'NEQ']
+
+    # print("tlist", tempList)
+    # print("clist", cList)
+
+    foundVar = False
+
+    i = 0
+    while i < len(tempList):
+        # get current branch of nodes
+        if tempList[i] in cList:
+            if 'Parameter' in tempList[i]:  # found a var match
+                foundVar = True
+            else:
+                # idx = cList.index(tempList[i])  # get idx of element of cList
+                # cList = cList[idx + 1:]
+                cList.remove(tempList[i])
+
+        elif any(item in tempList[i] for item in relops):
+            # Try all match options
+            if 'GT' in tempList[i]:
+                test = [x if x != "GT" else "GE" for x in tempList[i]]
+                if test in cList:
+                    cList.remove(test)
+                else:
+                    return False
+            elif 'GE' in tempList[i]:
+                test1 = [x if x != "GE" else "GT" for x in tempList[i]]
+                test2 = [x if x != "GE" else "EQ" for x in tempList[i]]
+                if test1 in cList:
+                    cList.remove(test1)
+                elif test2 in cList:
+                    cList.remove(test2)
+                else:
+                    return False
+            elif 'LT' in tempList[i]:
+                test = [x if x != "LT" else "LE" for x in tempList[i]]
+                if test in cList:
+                    cList.remove(test)
+                else:
+                    return False
+            elif 'LE' in tempList[i]:
+                test1 = [x if x != "LE" else "LT" for x in tempList[i]]
+                test2 = [x if x != "LE" else "EQ" for x in tempList[i]]
+                if test1 in cList:
+                    cList.remove(test1)
+                elif test2 in cList:
+                    cList.remove(test2)
+                else:
+                    return False
+            elif 'EQ' in tempList[i]:
+                test1 = [x if x != "EQ" else "GE" for x in tempList[i]]
+                test2 = [x if x != "EQ" else "LE" for x in tempList[i]]
+                if test1 in cList:
+                    cList.remove(test1)
+                elif test2 in cList:
+                    cList.remove(test2)
+                else:
+                    return False
+
+        elif 'Parameter' not in tempList[i]:  # non var match
+            return False
+
+        else:
+            pass
+
+        i = i + 1
+
+    if foundVar:
+        return True
+    else:
+        return False
 
 # Get list of nodes from template
 def getTemplateNodes(temp):

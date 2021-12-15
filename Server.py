@@ -105,14 +105,64 @@ class Server :
             if self.globalBudgetUsed():
                 self.logger.info("GLOBAL BUDGET USED")
 
+            if self.numQueries >= self.maxQueries:
+                self.logger.info("TOTAL QUERIES USED UP")
+
             if self.templateTree._branches[branchName].completelyExplored:
-                print("ROOT COMPLETELY EXPLORED DONE")
+                self.logger.info("TREE COMPLETELY EXPLORED")
+
 
         if self.verbose:
             self.logger.info("----MCTS SEARCH COMPLETED----\n")
 
+        if self.verbose:
+            self.logger.info("----GENERATE FULL RULESET FROM TEMPLATE TREE----")
         #GET FINAL RULESET BY TRAVERSING TEMPLATE TREE
-        ruleTrees = self.templateTree.generateRuleSet() #returns a set of rule templates
+        initialRuleTrees = self.templateTree.generateRuleSet() #returns a set of rule templates
+        if self.verbose:
+            self.logger.info("Generated " + str(len(initialRuleTrees)) + " initial rules\n")
+            self.logger.info("----PERFORM FINAL QUERY FOR EACH FULL RULE----")
+
+        # TODO - added here
+        # TODO - will need to allot for these queries in the final count when we add extra queries for the param estimation!!!!
+        # do one final query for each rule to make sure full rule has a match
+        ruleTrees = []
+        for r in initialRuleTrees:
+            # print(r)
+            print("\n" + r.toString())
+            matchCount, activeClients = self.queryFullRuleMatch(r)
+            # print("match count", matchCount)
+
+            # # Fix negative estimates
+            # if matchCount < 0:
+            #     matchCount = 0.0
+            #
+            # # Fix over estimates
+            # if matchCount > len(selectedBranch.activeClients):
+            #     matchCount = len(selectedBranch.activeClients)
+
+            percentCount = matchCount / len(activeClients) if len(activeClients) > 0 else 0
+
+            if self.verbose:
+                # self.logger.info(r.toString())
+                # self.logger.info("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount))
+                print(
+                    "Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount))
+                print("original ac", r.activeClients)
+                print("original per count", r.percentCount)
+
+            if percentCount >= self.cutoffThresh:
+                #update active clients
+                r.activeClients = activeClients  # add active clients to rule tree
+                r.percentCount = percentCount  # add percent count to rule tree
+                print("updated ac", r.activeClients)
+                print("updated per count", r.percentCount)
+
+                ruleTrees.append(r)
+
+        if self.verbose:
+            self.logger.info("Generated " + str(len(ruleTrees)) + " full rules\n")
+
 
         #### ESTIMATE PARAMETERS FOR EACH RULE IN THE RULESET
         if self.verbose:
@@ -148,6 +198,64 @@ class Server :
         self.logger.info("Completed " + str(self.numQueries) + " server queries")
 
 
+    def queryFullRuleMatch(self, template):
+        # add to num queries sent out by server
+        self.numQueries += 1 #TODO may need to remove this
+
+        # get template node list
+        tempNodes = self.getTemplateNodes(template)
+        print("temp nodes", tempNodes)
+
+        updatedActiveClients = []
+
+        # Non private model
+        if self.epsilon == 'inf':
+            yesCount = 0
+            for c in template.activeClients:
+                resp = self.clientList[c].queryStructuralRuleMatch(tempNodes, template.varList)
+                yesCount += resp
+
+                # Remove client if has no match
+                if resp == 1:
+                    updatedActiveClients.append(c)
+
+            return yesCount, updatedActiveClients
+
+        # Private model
+        else:
+            # get count from clients of who have template
+            yesCount = 0
+            trueYesses = 0
+            p = None
+
+            for c in template.activeClients:
+                resp, truResp, p = self.clientList[c].randResponseQueryStruct(tempNodes, template.varList)
+
+                if resp == "BUDGET USED":
+                    self.clientsWithUsedBudgets.append(c)
+                else:
+                    yesCount += resp
+                    trueYesses += truResp
+
+                if resp == 1:
+                    updatedActiveClients.append(c) #make active clients only the ones who said yes
+
+            if not self.globalBudgetUsed():
+                q = 1 - p
+                estTrueCount = float((yesCount - (len(self.clientList) * q)) / (p - q))
+
+                percentCount = float(estTrueCount / len(template.activeClients))
+                truePerCount = float(trueYesses / len(template.activeClients))  # Real percent
+
+                if self.verbose:
+                    # print("yes cnt", yesCount, "p", p, "q", q, "est true count", estTrueCount)
+                    self.logger.info("True Count " + str(trueYesses) + ", Est Count " + str(estTrueCount))
+                    self.logger.info("True Percent " + str(truePerCount) + ", Est Percent " + str(percentCount))
+
+                return estTrueCount, updatedActiveClients
+
+            # else:
+            return "BUDGET USED", updatedActiveClients
 
     # Get a % of how many clients have a match to the template
     # Return a COUNT with the total num clients
@@ -269,6 +377,7 @@ class Server :
         level = 0
 
         for n in temp.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
+
             if temp.parent(n) != parent:
                 parent = temp.parent(n)
                 subNodes.append(level)  # add level at end
@@ -278,6 +387,7 @@ class Server :
             nd = temp.get_node(n)
             id = re.sub(r'\#.*', '', nd.identifier)
             level = temp.level(n)
+            print("id", id, "level", level)
 
             # if id in self.variables and id != 'timeBound':
             #     subNodes.append("Variable")
@@ -303,9 +413,12 @@ class Server :
             elif id not in ignoreList:
                 subNodes.append(id)
 
+        print("last template nodes", nodes)
+        print("template subnodes", subNodes)
         if subNodes != []:
             subNodes.append(level)
             nodes.append(subNodes)
+
         return nodes
 
     #receives a rule tree template

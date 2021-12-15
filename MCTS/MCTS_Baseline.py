@@ -295,10 +295,8 @@ class MCTS_Baseline :
         #TODO -updated here
         #Added check to see if branch terminal or all child branches completely explored, set branch to be compl explored
         if startingBranch.terminalBranch():
-            print("node terminal branch")
             startingBranch.completelyExplored = True
         if startingBranch.allChildrenCompletelyExplored():
-            print("all children comp explored")
             startingBranch.completelyExplored = True
 
         if self.verbose:
