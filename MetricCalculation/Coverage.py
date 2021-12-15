@@ -63,6 +63,8 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
 
         if cRule != None:  # check structural match --> will count partial matches as a full match
             foundRules += 1
+            # print(l.toString())
+            # print(ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'])
             lCount = ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item()
             # cCount = clientDF[clientDF["Rule"] == cRule]['Percent of Population'].item()
             matchLst.append([l.toString(), cRule, lCount, cCount])
@@ -137,10 +139,11 @@ def queryPartialStructuralMatch(template, clientTrees, clientDF):
 
 def queryStructuralFullMatch(template, clientTrees):
     # print("Temp vars", varList)
-    # print("templt nodes", tempNodes)
-
+    # print("\ntemp", template.toString())
     ldpNodes = getTemplateNodes(template)
     ldpVars = template.getAllVars()
+
+    # print("templt nodes", ldpNodes)
 
     for r in clientTrees:
         # print("rule vars", r.getAllVars())
@@ -182,7 +185,7 @@ def queryStructuralFullMatch(template, clientTrees):
 
 # check for match  between two lists of template nodes + client nodes
 def nodeListMatch(tempList, cList):
-    relops = ['GT', 'GE', 'LT', 'LE', "EQ", 'NEQ']
+    relops = ['GT', 'GE', 'LT', 'LE', "EQ"]#, 'NEQ']
 
     i = 0
     while i < len(tempList):
@@ -242,8 +245,8 @@ def nodeListMatch(tempList, cList):
 
     return True
 
-def operatorMatch(self, tempList, cList):
-    relops = ['GT', 'GE', 'LT', 'LE', "EQ", 'NEQ']
+def operatorMatch(tempList, cList):
+    relops = ['GT', 'GE', 'LT', 'LE', "EQ"]#, 'NEQ']
 
     # print("tlist", tempList)
     # print("clist", cList)
@@ -345,6 +348,56 @@ def getTemplateNodes(temp):
     nodes.append(subNodes)
     return nodes
 
+# # Get list of nodes from template
+# def getTemplateNodes(temp):
+#     nodes = []
+#     relops = ['GT', 'GE', 'LT', 'LE', "EQ", 'NEQ']
+#     ignoreList = ["(", ")"]
+#     parent = None
+#     subNodes = []
+#     level = 0
+#
+#     for n in temp.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
+#         nd = temp.get_node(n)
+#         id = re.sub(r'\#.*', '', nd.identifier)
+#         level = temp.level(n)
+#
+#         # if id in self.variables and id != 'timeBound':
+#         #     subNodes.append("Variable")
+#
+#         if id in relops:
+#             if temp.parent(n) != parent:
+#                 parent = temp.parent(n)
+#                 subNodes.append(level)
+#                 nodes.append(subNodes)
+#                 subNodes = []
+#
+#             subNodes.append(id)
+#
+#             #append children of node
+#             for x in temp.children(n):
+#                 if x.identifier in temp.getAllVars():
+#                     subNodes.append(id)
+#                 else:
+#                     subNodes.append(re.sub(r'\#.*', '', x.identifier))
+#
+#         elif id in temp.getAllVars() or id == 'Parameter':
+#             pass
+#         elif id not in ignoreList:
+#             if temp.parent(n) != parent:
+#                 parent = temp.parent(n)
+#                 subNodes.append(level)  # add level at end
+#                 nodes.append(subNodes)
+#                 subNodes = []
+#
+#             subNodes.append(id)
+#
+#     if subNodes != []:
+#         subNodes.append(level)
+#         nodes.append(subNodes)
+#
+#     return nodes
+
 #Load LDP rules
 def loadLDPRuleset(resultsFilename):
     ldpDF = pd.read_csv(resultsFilename, index_col=0)
@@ -392,8 +445,8 @@ def loadClientRules(popSize, dataFilename):
     ct = []
     for t in clientTrees:
         strRl = t.toString()
-        strRl = re.sub('>=', '>', strRl)
-        strRl = re.sub('<=', '<', strRl)
+        # strRl = re.sub('>=', '>', strRl)
+        # strRl = re.sub('<=', '<', strRl)
 
         if strRl not in currRls:
             ct.append(t)
@@ -426,8 +479,8 @@ def loadRuleSet(num, textfile):
 
             # fix relop for string rule
             strRl = rule.toString()
-            strRl = re.sub('>=', '>', strRl)
-            strRl = re.sub('<=', '<', strRl)
+            # strRl = re.sub('>=', '>', strRl)
+            # strRl = re.sub('<=', '<', strRl)
             ruleSet.append(strRl)
 
         file.close()

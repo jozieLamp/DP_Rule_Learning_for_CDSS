@@ -97,7 +97,7 @@ class Client:
     # check for structural match
     def queryStructuralRuleMatch(self, tempNodes, varList):
         # print("Temp vars", varList)
-        print("templt nodes", tempNodes)
+        # print("templt nodes", tempNodes)
 
         for r in self.ruleSet:
             # print("rule vars", r.getAllVars())
@@ -115,10 +115,10 @@ class Client:
                 # print("HAS VARS")
                 clientNodes = self.getClientNodes(r, varList)
 
-                print("client nodes", clientNodes)
-                print(r.toString())
+                # print("client nodes", clientNodes)
+                # print(r.toString())
                 if self.nodeListMatch(tempNodes, clientNodes):
-                    print("MATCH")
+                    # print("MATCH")
                     # print("temp", tempNodes)
                     # print("clnt", clientNodes)
                     return 1  # found match
@@ -204,7 +204,7 @@ class Client:
 
     # check for match  between two lists of template nodes + client nodes
     def nodeListMatch(self, tempList, cList):
-        relops = ['GT', 'GE', 'LT', 'LE', "EQ", 'NEQ']
+        relops = ['GT', 'GE', 'LT', 'LE', "EQ"]#, 'NEQ']
 
         i = 0
         while i < len(tempList):
@@ -346,7 +346,7 @@ class Client:
         return pList #was none
 
     def operatorMatch(self, tempList, cList):
-        relops = ['GT', 'GE', 'LT', 'LE', "EQ", 'NEQ']
+        relops = ['GT', 'GE', 'LT', 'LE', "EQ"]#, 'NEQ']
 
         # print("tlist", tempList)
         # print("clist", cList)

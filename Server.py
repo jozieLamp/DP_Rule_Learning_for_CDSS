@@ -131,7 +131,7 @@ class Server :
             # print(r)
             print("\n" + r.toString())
             matchCount, activeClients = self.queryFullRuleMatch(r)
-            # print("match count", matchCount)
+            print("match count", matchCount)
 
             # # Fix negative estimates
             # if matchCount < 0:
@@ -141,7 +141,8 @@ class Server :
             # if matchCount > len(selectedBranch.activeClients):
             #     matchCount = len(selectedBranch.activeClients)
 
-            percentCount = matchCount / len(activeClients) if len(activeClients) > 0 else 0
+            percentCount = matchCount / len(self.clientList)
+            # percentCount = matchCount / len(activeClients) if len(activeClients) > 0 else 0
 
             if self.verbose:
                 # self.logger.info(r.toString())
@@ -204,7 +205,6 @@ class Server :
 
         # get template node list
         tempNodes = self.getTemplateNodes(template)
-        print("temp nodes", tempNodes)
 
         updatedActiveClients = []
 
@@ -377,17 +377,9 @@ class Server :
         level = 0
 
         for n in temp.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
-
-            if temp.parent(n) != parent:
-                parent = temp.parent(n)
-                subNodes.append(level)  # add level at end
-                nodes.append(subNodes)
-                subNodes = []
-
             nd = temp.get_node(n)
             id = re.sub(r'\#.*', '', nd.identifier)
-            level = temp.level(n)
-            print("id", id, "level", level)
+
 
             # if id in self.variables and id != 'timeBound':
             #     subNodes.append("Variable")
@@ -399,6 +391,7 @@ class Server :
                     nodes.append(subNodes)
                     subNodes = []
 
+                level = temp.level(n)
                 subNodes.append(id)
 
                 #append children of node
@@ -411,10 +404,15 @@ class Server :
             elif id in self.variables or id == 'Parameter':
                 pass
             elif id not in ignoreList:
+                if temp.parent(n) != parent:
+                    parent = temp.parent(n)
+                    subNodes.append(level)  # add level at end
+                    nodes.append(subNodes)
+                    subNodes = []
+
+                level = temp.level(n)
                 subNodes.append(id)
 
-        print("last template nodes", nodes)
-        print("template subnodes", subNodes)
         if subNodes != []:
             subNodes.append(level)
             nodes.append(subNodes)
