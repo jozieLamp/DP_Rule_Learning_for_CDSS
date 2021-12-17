@@ -56,7 +56,7 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
     matchLst = []
 
     for l in ldpTrees:
-        # print("\nTemplate", l.toString(), "Per Count", ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item())
+        print("\nTemplate", l.toString(), "Per Count", ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item())
 
         #TODO- figure out why returning partial matches when should only ret full ones ...
         cRule, cCount = findRuleMatch(l, clientTrees, ldpDF, clientDF)
@@ -105,9 +105,11 @@ def findRuleMatch(template, clientTrees, ldpDF, clientDF):
     #     else:
     #         rule = None
     #         cCount = None
+
     else:
         rule = None
         cCount = None
+
 
     return rule, cCount
 
@@ -143,7 +145,7 @@ def queryStructuralFullMatch(template, clientTrees):
     ldpNodes = getTemplateNodes(template)
     ldpVars = template.getAllVars()
 
-    # print("templt nodes", ldpNodes)
+    print("templt nodes", ldpNodes)
 
     for r in clientTrees:
         # print("rule vars", r.getAllVars())
@@ -154,7 +156,7 @@ def queryStructuralFullMatch(template, clientTrees):
                 hasVars = False
 
         if hasVars:
-            # print("HAS VARS")
+            print("HAS VARS")
             # check for structural match
             clientNodes = []
             subNodes = []
@@ -174,18 +176,19 @@ def queryStructuralFullMatch(template, clientTrees):
             subNodes.append(level)
             clientNodes.append(subNodes)
 
-            # print("client nodes", clientNodes)
+            print("client nodes", clientNodes)
             if nodeListMatch(ldpNodes, clientNodes):
-                # print("MATCH")
+                print("MATCH")
                 # print("temp", tempNodes)
                 # print("clnt", clientNodes)
                 return r  # found match
 
     return None
 
+
 # check for match  between two lists of template nodes + client nodes
 def nodeListMatch(tempList, cList):
-    relops = ['GT', 'GE', 'LT', 'LE', "EQ"]#, 'NEQ']
+    relops = ['GT', 'GE', 'LT', 'LE', "EQ"]  # , 'NEQ']
 
     i = 0
     while i < len(tempList):
@@ -200,6 +203,7 @@ def nodeListMatch(tempList, cList):
             # Try all match options
             if 'GT' in tempList[i]:
                 test = [x if x != "GT" else "GE" for x in tempList[i]]
+
                 if test in cList:
                     cList.remove(test)
                 else:
@@ -207,9 +211,19 @@ def nodeListMatch(tempList, cList):
             elif 'GE' in tempList[i]:
                 test1 = [x if x != "GE" else "GT" for x in tempList[i]]
                 test2 = [x if x != "GE" else "EQ" for x in tempList[i]]
-                if test1 in cList:
+
+                try:
+                    idx1 = cList.index(test1)
+                except:
+                    idx1 = 999999999
+                try:
+                    idx2 = cList.index(test2)
+                except:
+                    idx2 = 999999999
+
+                if test1 in cList and (idx1 < idx2):
                     cList.remove(test1)
-                elif test2 in cList:
+                elif test2 in cList and (idx2 < idx1):
                     cList.remove(test2)
                 else:
                     return False
@@ -222,18 +236,37 @@ def nodeListMatch(tempList, cList):
             elif 'LE' in tempList[i]:
                 test1 = [x if x != "LE" else "LT" for x in tempList[i]]
                 test2 = [x if x != "LE" else "EQ" for x in tempList[i]]
-                if test1 in cList:
+                try:
+                    idx1 = cList.index(test1)
+                except:
+                    idx1 = 999999999
+                try:
+                    idx2 = cList.index(test2)
+                except:
+                    idx2 = 999999999
+
+                if test1 in cList and (idx1 < idx2):
                     cList.remove(test1)
-                elif test2 in cList:
+                elif test2 in cList and (idx2 < idx1):
                     cList.remove(test2)
                 else:
                     return False
             elif 'EQ' in tempList[i]:
                 test1 = [x if x != "EQ" else "GE" for x in tempList[i]]
                 test2 = [x if x != "EQ" else "LE" for x in tempList[i]]
-                if test1 in cList:
+
+                try:
+                    idx1 = cList.index(test1)
+                except:
+                    idx1 = 999999999
+                try:
+                    idx2 = cList.index(test2)
+                except:
+                    idx2 = 999999999
+
+                if test1 in cList and (idx1 < idx2):
                     cList.remove(test1)
-                elif test2 in cList:
+                elif test2 in cList and (idx2 < idx1):
                     cList.remove(test2)
                 else:
                     return False
@@ -245,11 +278,12 @@ def nodeListMatch(tempList, cList):
 
     return True
 
+
 def operatorMatch(tempList, cList):
     relops = ['GT', 'GE', 'LT', 'LE', "EQ"]#, 'NEQ']
 
-    # print("tlist", tempList)
-    # print("clist", cList)
+    print("tlist", tempList)
+    print("clist", cList)
 
     foundVar = False
 

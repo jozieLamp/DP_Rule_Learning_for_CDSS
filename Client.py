@@ -202,9 +202,10 @@ class Client:
 
             return None
 
+    #TODO potentially here get relop matches that are in correct order ...?? also do this in operator match
     # check for match  between two lists of template nodes + client nodes
     def nodeListMatch(self, tempList, cList):
-        relops = ['GT', 'GE', 'LT', 'LE', "EQ"]#, 'NEQ']
+        relops = ['GT', 'GE', 'LT', 'LE', "EQ"]  # , 'NEQ']
 
         i = 0
         while i < len(tempList):
@@ -219,6 +220,7 @@ class Client:
                 # Try all match options
                 if 'GT' in tempList[i]:
                     test = [x if x != "GT" else "GE" for x in tempList[i]]
+
                     if test in cList:
                         cList.remove(test)
                     else:
@@ -226,9 +228,19 @@ class Client:
                 elif 'GE' in tempList[i]:
                     test1 = [x if x != "GE" else "GT" for x in tempList[i]]
                     test2 = [x if x != "GE" else "EQ" for x in tempList[i]]
-                    if test1 in cList:
+
+                    try:
+                        idx1 = cList.index(test1)
+                    except:
+                        idx1 = 999999999
+                    try:
+                        idx2 = cList.index(test2)
+                    except:
+                        idx2 = 999999999
+
+                    if test1 in cList and (idx1 < idx2):
                         cList.remove(test1)
-                    elif test2 in cList:
+                    elif test2 in cList and (idx2 < idx1):
                         cList.remove(test2)
                     else:
                         return False
@@ -241,18 +253,37 @@ class Client:
                 elif 'LE' in tempList[i]:
                     test1 = [x if x != "LE" else "LT" for x in tempList[i]]
                     test2 = [x if x != "LE" else "EQ" for x in tempList[i]]
-                    if test1 in cList:
+                    try:
+                        idx1 = cList.index(test1)
+                    except:
+                        idx1 = 999999999
+                    try:
+                        idx2 = cList.index(test2)
+                    except:
+                        idx2 = 999999999
+
+                    if test1 in cList and (idx1 < idx2):
                         cList.remove(test1)
-                    elif test2 in cList:
+                    elif test2 in cList and (idx2 < idx1):
                         cList.remove(test2)
                     else:
                         return False
                 elif 'EQ' in tempList[i]:
                     test1 = [x if x != "EQ" else "GE" for x in tempList[i]]
                     test2 = [x if x != "EQ" else "LE" for x in tempList[i]]
-                    if test1 in cList:
+
+                    try:
+                        idx1 = cList.index(test1)
+                    except:
+                        idx1 = 999999999
+                    try:
+                        idx2 = cList.index(test2)
+                    except:
+                        idx2 = 999999999
+
+                    if test1 in cList and (idx1 < idx2):
                         cList.remove(test1)
-                    elif test2 in cList:
+                    elif test2 in cList and (idx2 < idx1):
                         cList.remove(test2)
                     else:
                         return False
@@ -368,40 +399,77 @@ class Client:
                 # Try all match options
                 if 'GT' in tempList[i]:
                     test = [x if x != "GT" else "GE" for x in tempList[i]]
+
                     if test in cList:
                         cList.remove(test)
                     else:
                         return False
+
                 elif 'GE' in tempList[i]:
                     test1 = [x if x != "GE" else "GT" for x in tempList[i]]
                     test2 = [x if x != "GE" else "EQ" for x in tempList[i]]
-                    if test1 in cList:
+
+                    try:
+                        idx1 = cList.index(test1)
+                    except:
+                        idx1 = 999999999
+                    try:
+                        idx2 = cList.index(test2)
+                    except:
+                        idx2 = 999999999
+
+                    if test1 in cList and (idx1 < idx2):
                         cList.remove(test1)
-                    elif test2 in cList:
+
+                    elif test2 in cList and (idx2 < idx1):
                         cList.remove(test2)
                     else:
                         return False
+
                 elif 'LT' in tempList[i]:
                     test = [x if x != "LT" else "LE" for x in tempList[i]]
                     if test in cList:
                         cList.remove(test)
                     else:
                         return False
+
                 elif 'LE' in tempList[i]:
                     test1 = [x if x != "LE" else "LT" for x in tempList[i]]
                     test2 = [x if x != "LE" else "EQ" for x in tempList[i]]
-                    if test1 in cList:
+
+                    try:
+                        idx1 = cList.index(test1)
+                    except:
+                        idx1 = 999999999
+                    try:
+                        idx2 = cList.index(test2)
+                    except:
+                        idx2 = 999999999
+
+                    if test1 in cList and (idx1 < idx2):
                         cList.remove(test1)
-                    elif test2 in cList:
+                    elif test2 in cList and (idx2 < idx1):
                         cList.remove(test2)
                     else:
                         return False
+
                 elif 'EQ' in tempList[i]:
                     test1 = [x if x != "EQ" else "GE" for x in tempList[i]]
                     test2 = [x if x != "EQ" else "LE" for x in tempList[i]]
-                    if test1 in cList:
+
+                    try:
+                        idx1 = cList.index(test1)
+                    except:
+                        idx1 = 999999999
+
+                    try:
+                        idx2 = cList.index(test2)
+                    except:
+                        idx2 = 999999999
+
+                    if test1 in cList and (idx1 < idx2):
                         cList.remove(test1)
-                    elif test2 in cList:
+                    elif test2 in cList and (idx2 < idx1):
                         cList.remove(test2)
                     else:
                         return False
