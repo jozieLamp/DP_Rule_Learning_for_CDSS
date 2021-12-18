@@ -12,6 +12,8 @@ import operator
 import warnings
 import treelib
 import re
+from Client import Client
+from Server import Server
 
 
 def getClientTreesFromCountDF(df):
@@ -86,7 +88,7 @@ def findRuleMatch(template, clientTrees, ldpDF, clientDF):
     rule = queryStructuralFullMatch(template, clientTrees)
 
     if rule != None:
-        # print("Full Match Found")
+        print("Full Match Found")
         rule = rule.toString()
         cCount = clientDF[clientDF["Rule"] == rule]['Percent of Population'].item()
 
@@ -140,297 +142,23 @@ def queryPartialStructuralMatch(template, clientTrees, clientDF):
     return None
 
 def queryStructuralFullMatch(template, clientTrees):
+
+    client = Client(clientNum=1, epsilon='inf', ruleSet=clientTrees)
+    server = Server(clientList=[], varDict={}, params=None)
+
     # print("Temp vars", varList)
     # print("\ntemp", template.toString())
-    ldpNodes = getTemplateNodes(template)
+    ldpNodes = server.getTemplateNodes(template)
     ldpVars = template.getAllVars()
 
-    print("templt nodes", ldpNodes)
+    # print("templt nodes", ldpNodes)
 
-    for r in clientTrees:
-        # print("rule vars", r.getAllVars())
-        # check if variables in rule
-        hasVars = True
-        for v in ldpVars:
-            if v not in r.getAllVars():
-                hasVars = False
+    r = client.queryStructuralRuleMatchReturn(ldpNodes, ldpVars)
 
-        if hasVars:
-            print("HAS VARS")
-            # check for structural match
-            clientNodes = []
-            subNodes = []
-            parent = None
-            level = 0
-            for node in r.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
-                if r.parent(node) != parent:
-                    parent = r.parent(node)
-                    subNodes.append(level)
-                    clientNodes.append(subNodes)
-                    subNodes = []
-
-                n = re.sub(r'\#.*', '', node)
-                level = r.level(node)
-                subNodes.append(n)
-
-            subNodes.append(level)
-            clientNodes.append(subNodes)
-
-            print("client nodes", clientNodes)
-            if nodeListMatch(ldpNodes, clientNodes):
-                print("MATCH")
-                # print("temp", tempNodes)
-                # print("clnt", clientNodes)
-                return r  # found match
-
-    return None
+    return r
 
 
-# check for match  between two lists of template nodes + client nodes
-def nodeListMatch(tempList, cList):
-    relops = ['GT', 'GE', 'LT', 'LE', "EQ"]  # , 'NEQ']
 
-    i = 0
-    while i < len(tempList):
-        # get current branch of nodes
-        if tempList[i] in cList:
-            if 'Parameter' not in tempList[i]:  # found a var match
-                #                 idx = cList.index(tempList[i])  # get idx of element of cList
-                #                 cList = cList[idx + 1:]
-                cList.remove(tempList[i])
-
-        elif any(item in tempList[i] for item in relops):
-            # Try all match options
-            if 'GT' in tempList[i]:
-                test = [x if x != "GT" else "GE" for x in tempList[i]]
-
-                if test in cList:
-                    cList.remove(test)
-                else:
-                    return False
-            elif 'GE' in tempList[i]:
-                test1 = [x if x != "GE" else "GT" for x in tempList[i]]
-                test2 = [x if x != "GE" else "EQ" for x in tempList[i]]
-
-                try:
-                    idx1 = cList.index(test1)
-                except:
-                    idx1 = 999999999
-                try:
-                    idx2 = cList.index(test2)
-                except:
-                    idx2 = 999999999
-
-                if test1 in cList and (idx1 < idx2):
-                    cList.remove(test1)
-                elif test2 in cList and (idx2 < idx1):
-                    cList.remove(test2)
-                else:
-                    return False
-            elif 'LT' in tempList[i]:
-                test = [x if x != "LT" else "LE" for x in tempList[i]]
-                if test in cList:
-                    cList.remove(test)
-                else:
-                    return False
-            elif 'LE' in tempList[i]:
-                test1 = [x if x != "LE" else "LT" for x in tempList[i]]
-                test2 = [x if x != "LE" else "EQ" for x in tempList[i]]
-                try:
-                    idx1 = cList.index(test1)
-                except:
-                    idx1 = 999999999
-                try:
-                    idx2 = cList.index(test2)
-                except:
-                    idx2 = 999999999
-
-                if test1 in cList and (idx1 < idx2):
-                    cList.remove(test1)
-                elif test2 in cList and (idx2 < idx1):
-                    cList.remove(test2)
-                else:
-                    return False
-            elif 'EQ' in tempList[i]:
-                test1 = [x if x != "EQ" else "GE" for x in tempList[i]]
-                test2 = [x if x != "EQ" else "LE" for x in tempList[i]]
-
-                try:
-                    idx1 = cList.index(test1)
-                except:
-                    idx1 = 999999999
-                try:
-                    idx2 = cList.index(test2)
-                except:
-                    idx2 = 999999999
-
-                if test1 in cList and (idx1 < idx2):
-                    cList.remove(test1)
-                elif test2 in cList and (idx2 < idx1):
-                    cList.remove(test2)
-                else:
-                    return False
-
-        else:
-            return False
-
-        i = i + 1
-
-    return True
-
-
-def operatorMatch(tempList, cList):
-    relops = ['GT', 'GE', 'LT', 'LE', "EQ"]#, 'NEQ']
-
-    print("tlist", tempList)
-    print("clist", cList)
-
-    foundVar = False
-
-    i = 0
-    while i < len(tempList):
-        # get current branch of nodes
-        if tempList[i] in cList:
-            if 'Parameter' in tempList[i]:  # found a var match
-                foundVar = True
-            else:
-                # idx = cList.index(tempList[i])  # get idx of element of cList
-                # cList = cList[idx + 1:]
-                cList.remove(tempList[i])
-
-        elif any(item in tempList[i] for item in relops):
-            # Try all match options
-            if 'GT' in tempList[i]:
-                test = [x if x != "GT" else "GE" for x in tempList[i]]
-                if test in cList:
-                    cList.remove(test)
-                else:
-                    return False
-            elif 'GE' in tempList[i]:
-                test1 = [x if x != "GE" else "GT" for x in tempList[i]]
-                test2 = [x if x != "GE" else "EQ" for x in tempList[i]]
-                if test1 in cList:
-                    cList.remove(test1)
-                elif test2 in cList:
-                    cList.remove(test2)
-                else:
-                    return False
-            elif 'LT' in tempList[i]:
-                test = [x if x != "LT" else "LE" for x in tempList[i]]
-                if test in cList:
-                    cList.remove(test)
-                else:
-                    return False
-            elif 'LE' in tempList[i]:
-                test1 = [x if x != "LE" else "LT" for x in tempList[i]]
-                test2 = [x if x != "LE" else "EQ" for x in tempList[i]]
-                if test1 in cList:
-                    cList.remove(test1)
-                elif test2 in cList:
-                    cList.remove(test2)
-                else:
-                    return False
-            elif 'EQ' in tempList[i]:
-                test1 = [x if x != "EQ" else "GE" for x in tempList[i]]
-                test2 = [x if x != "EQ" else "LE" for x in tempList[i]]
-                if test1 in cList:
-                    cList.remove(test1)
-                elif test2 in cList:
-                    cList.remove(test2)
-                else:
-                    return False
-
-        elif 'Parameter' not in tempList[i]:  # non var match
-            return False
-
-        else:
-            pass
-
-        i = i + 1
-
-    if foundVar:
-        return True
-    else:
-        return False
-
-# Get list of nodes from template
-def getTemplateNodes(temp):
-    nodes = []
-    ignoreList = ["(", ")"]
-    parent = None
-    subNodes = []
-    level = 0
-
-    for n in temp.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
-        if temp.parent(n) != parent:
-            parent = temp.parent(n)
-            subNodes.append(level)  # add level at end
-            nodes.append(subNodes)
-            subNodes = []
-
-        nd = temp.get_node(n)
-        id = re.sub(r'\#.*', '', nd.identifier)
-        level = temp.level(n)
-
-        if id in temp.getAllVars() and id != 'timeBound':
-            subNodes.append("Variable")
-
-        elif id not in ignoreList:
-            subNodes.append(id)
-
-    subNodes.append(level)
-    nodes.append(subNodes)
-    return nodes
-
-# # Get list of nodes from template
-# def getTemplateNodes(temp):
-#     nodes = []
-#     relops = ['GT', 'GE', 'LT', 'LE', "EQ", 'NEQ']
-#     ignoreList = ["(", ")"]
-#     parent = None
-#     subNodes = []
-#     level = 0
-#
-#     for n in temp.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
-#         nd = temp.get_node(n)
-#         id = re.sub(r'\#.*', '', nd.identifier)
-#         level = temp.level(n)
-#
-#         # if id in self.variables and id != 'timeBound':
-#         #     subNodes.append("Variable")
-#
-#         if id in relops:
-#             if temp.parent(n) != parent:
-#                 parent = temp.parent(n)
-#                 subNodes.append(level)
-#                 nodes.append(subNodes)
-#                 subNodes = []
-#
-#             subNodes.append(id)
-#
-#             #append children of node
-#             for x in temp.children(n):
-#                 if x.identifier in temp.getAllVars():
-#                     subNodes.append(id)
-#                 else:
-#                     subNodes.append(re.sub(r'\#.*', '', x.identifier))
-#
-#         elif id in temp.getAllVars() or id == 'Parameter':
-#             pass
-#         elif id not in ignoreList:
-#             if temp.parent(n) != parent:
-#                 parent = temp.parent(n)
-#                 subNodes.append(level)  # add level at end
-#                 nodes.append(subNodes)
-#                 subNodes = []
-#
-#             subNodes.append(id)
-#
-#     if subNodes != []:
-#         subNodes.append(level)
-#         nodes.append(subNodes)
-#
-#     return nodes
 
 #Load LDP rules
 def loadLDPRuleset(resultsFilename):

@@ -51,27 +51,29 @@ class Server :
         self.varDict = varDict  # variable dictionary to store vars + ranges
         self.variables = list(self.varDict.keys())
 
-        # Output params
-        self.verbose = params.verbose
         self.logger = logging.getLogger('SERVER')
 
-        # make default rule template tree to start
-        self.templateTree = RuleTemplate(varDict=self.varDict, default=True, clientList=clientList, verbose=self.verbose)
+        if params != None:
+            # Output params
+            self.verbose = params.verbose
 
-        #mcts params
-        self.mctsType = params.mctsType
-        self.maxQueries = params.maxQueries
-        self.cp = params.cp
-        self.maxTreeDepth = params.maxTreeDepth
-        self.cutoffThresh = params.cutoffThresh
-        self.paramPercentile = params.paramPercentile
+            # make default rule template tree to start
+            self.templateTree = RuleTemplate(varDict=self.varDict, default=True, clientList=clientList, verbose=self.verbose)
 
-        #Privacy budget params
-        self.epsilon = params.epsilon
-        self.clientsWithUsedBudgets = []  # list of clients who have used budget
-        self.numQueries = 0
+            #mcts params
+            self.mctsType = params.mctsType
+            self.maxQueries = params.maxQueries
+            self.cp = params.cp
+            self.maxTreeDepth = params.maxTreeDepth
+            self.cutoffThresh = params.cutoffThresh
+            self.paramPercentile = params.paramPercentile
 
-        self.logger.info("Setting privacy budget to: " + str(self.epsilon))
+            #Privacy budget params
+            self.epsilon = params.epsilon
+            self.clientsWithUsedBudgets = []  # list of clients who have used budget
+            self.numQueries = 0
+
+            self.logger.info("Setting privacy budget to: " + str(self.epsilon))
 
 
     def globalBudgetUsed(self):
@@ -117,6 +119,7 @@ class Server :
 
         if self.verbose:
             self.logger.info("----GENERATE FULL RULESET FROM TEMPLATE TREE----")
+
         #GET FINAL RULESET BY TRAVERSING TEMPLATE TREE
         initialRuleTrees = self.templateTree.generateRuleSet() #returns a set of rule templates
         if self.verbose:
@@ -147,8 +150,7 @@ class Server :
             if self.verbose:
                 # self.logger.info(r.toString())
                 # self.logger.info("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount))
-                print(
-                    "Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount))
+                print("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount))
                 print("original ac", r.activeClients)
                 print("original per count", r.percentCount)
 
@@ -199,6 +201,7 @@ class Server :
         self.logger.info("Completed " + str(self.numQueries) + " server queries")
 
 
+    #TODO - potentially query all clients, not just the active ones in the final step (?)
     def queryFullRuleMatch(self, template):
         # add to num queries sent out by server
         self.numQueries += 1 #TODO may need to remove this
@@ -376,10 +379,12 @@ class Server :
         subNodes = []
         level = 0
 
+        varList = temp.getAllVars()
+        vCounter = 0
+
         for n in temp.expand_tree(mode=treelib.Tree.WIDTH, sorting=True):
             nd = temp.get_node(n)
             id = re.sub(r'\#.*', '', nd.identifier)
-
 
             # if id in self.variables and id != 'timeBound':
             #     subNodes.append("Variable")
@@ -396,12 +401,15 @@ class Server :
 
                 #append children of node
                 for x in temp.children(n):
-                    if x.identifier in self.variables:
-                        subNodes.append(id)
+                    xid = re.sub(r'\#.*', '', x.identifier)
+                    if xid in self.variables or xid== 'Variable':
+                        subNodes.append(varList[vCounter])
+                        vCounter += 1
+                        # subNodes.append(id)
                     else:
                         subNodes.append(re.sub(r'\#.*', '', x.identifier))
 
-            elif id in self.variables or id == 'Parameter':
+            elif id in self.variables or id == 'Parameter' or id =='Variable' or id == 'timeBound':
                 pass
             elif id not in ignoreList:
                 if temp.parent(n) != parent:

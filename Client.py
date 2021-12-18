@@ -180,6 +180,7 @@ class Client:
 
     # check for structural match and return rule
     def queryStructuralRuleMatchReturn(self, tempNodes, varList):
+
         for r in self.ruleSet:
             # check if variables in rule
             self.varsFull = False
@@ -200,9 +201,8 @@ class Client:
                     # print("clnt", clientNodes)
                     return r  # found match
 
-            return None
+        return None
 
-    #TODO potentially here get relop matches that are in correct order ...?? also do this in operator match
     # check for match  between two lists of template nodes + client nodes
     def nodeListMatch(self, tempList, cList):
         relops = ['GT', 'GE', 'LT', 'LE', "EQ"]  # , 'NEQ']

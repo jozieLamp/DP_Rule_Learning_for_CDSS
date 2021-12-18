@@ -96,6 +96,10 @@ class RuleTree(treelib.Tree):
 
         return nodes
 
+    #TODO - note added here ...
+    def getAllVars(self):
+        return self.varList
+
 
     def toString(self):
         str = ""
