@@ -88,7 +88,7 @@ class Server :
     # RUN Monte Carlo Tree Search
     def runProtocol(self, branchName):
 
-        #### RUN MONTE CARLO TREE SEARCH TO FIND RULE STRUCTURES
+        # RUN MONTE CARLO TREE SEARCH TO FIND RULE STRUCTURES
         if self.mctsType == 'baseline':
             #Make MCTS Baseline
             mcts = MCTS_Baseline(server=self, verbose=self.verbose)
@@ -120,7 +120,7 @@ class Server :
         if self.verbose:
             self.logger.info("----GENERATE FULL RULESET FROM TEMPLATE TREE----")
 
-        #GET FINAL RULESET BY TRAVERSING TEMPLATE TREE
+        # GET FINAL RULESET BY TRAVERSING TEMPLATE TREE
         initialRuleTrees = self.templateTree.generateRuleSet() #returns a set of rule templates
 
         if self.verbose:
@@ -157,7 +157,7 @@ class Server :
             self.logger.info("Generated " + str(len(ruleTrees)) + " full rules\n")
 
 
-        #### ESTIMATE PARAMETERS FOR EACH RULE IN THE RULESET
+        # ESTIMATE PARAMETERS FOR EACH RULE IN THE RULESET
         if self.verbose:
             self.logger.info("----PARAMETER ESTIMATION PHASE----\n")
 
@@ -173,7 +173,7 @@ class Server :
             ft = stlFac.constructFormulaTree(t.toStringWithParams() + "\n") # Check if structure correct
 
             if ft != None:  # Formula is not improper
-                #TODO - might have to do something where if rule is improper, remove it from the RuleTree list so the other functions are not messed up
+                #TODO - OPTION might have to do something where if rule is improper, remove it from the RuleTree list so the other functions are not messed up
                 if tempParams != None:
                     ft.updateParams(tempParams)# Update params in structure
                 rules.append(ft)
@@ -191,7 +191,7 @@ class Server :
         self.logger.info("Completed " + str(self.numQueries) + " server queries")
 
 
-    #TODO - potentially query all clients, not just the active ones in the final step (?)
+    #TODO - OPTION potentially query all clients, not just the active ones in the final step (?)
     def queryFullRuleMatch(self, template):
         # get template node list
         tempNodes = self.getTemplateNodes(template)

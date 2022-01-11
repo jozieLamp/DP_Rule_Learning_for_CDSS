@@ -9,7 +9,6 @@ class MCTS_Baseline :
         self.verbose = verbose
         self.mcLogger = logging.getLogger('MCTS')
 
-    #TODO - add ending condition to check if all branches have been explored then end
     def runMCTSRound(self, branchName):
 
         # SELECTION
@@ -28,7 +27,7 @@ class MCTS_Baseline :
 
         # QUERYING, BACKPROPAGATION
         if expandedBranch != None:
-            matchCount, activeClients = self.getQuery(expandedBranch)  # result is in form [matchCount, activeClients]
+            matchCount, activeClients = self.getQuery(expandedBranch)
 
             if matchCount == "BUDGET USED":
                 self.mcLogger.info("BUDGET USED\n")
@@ -37,7 +36,7 @@ class MCTS_Baseline :
                 self.backpropagation(expandedBranch, matchCount, activeClients)
 
         else:
-            matchCount, activeClients = self.getQuery(selectedBranch)  # result is in form [matchCount, activeClients]
+            matchCount, activeClients = self.getQuery(selectedBranch)
             if matchCount == "BUDGET USED":
                 self.mcLogger.info("BUDGET USED\n")
                 return
@@ -62,8 +61,6 @@ class MCTS_Baseline :
         if self.verbose:
             self.mcLogger.info("----SELECTION PHASE----")
             self.mcLogger.info("Current Branch: " + currBranch.name)
-
-        #TODO may have to add check if current branch is nor completely explored ...???
 
         while currBranch.hasChildren():
             currBranch = self.selectChildBranch(currBranch)
@@ -108,7 +105,6 @@ class MCTS_Baseline :
                 #TODO - note added check here
                 # add check to only look at child nodes that aren't completely explored
                 if not child.completelyExplored:
-
                     # Note, changed selection policy to be using UCT as well ...
                     # score = child.getCurrentScore()
                     score = self.utcScore(child, child.getCurrentScore())
@@ -313,7 +309,7 @@ class MCTS_Baseline :
             br.utc = self.utcScore(br, br.getCurrentScore())  # calc utc for this branch
 
             #TODO updated here
-            #prop if child branches completely explored
+            #propagate if child branches completely explored
             if br.allChildrenCompletelyExplored():
                 br.completelyExplored = True
 
