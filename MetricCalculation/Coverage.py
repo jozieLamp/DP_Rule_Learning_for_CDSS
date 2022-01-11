@@ -25,16 +25,37 @@ def getClientTreesFromCountDF(df):
 
     return clTrees
 
+# def countUniqueStructuresNoVars(ldpTrees):
+#     lst = []
+#     for lt in ldpTrees:
+#         print("orig", lt.toString())
+#         l = copy.deepcopy(lt)
+#         l.getFormulaNoVars()
+#         print("no vars", l.toString())
+#         lst.append(l.toString())
+#
+#     # print("total structs to start", len(ldpTrees))
+#     uniqStrcts = set(lst)
+#     # print("unique structs", len(uniqStrcts))
+#
+#     print(uniqStrcts)
+#
+#     return len(uniqStrcts)
+
 def countUniqueStructuresNoVars(ldpTrees):
     lst = []
     for lt in ldpTrees:
+        print("orig", lt.toString())
         l = copy.deepcopy(lt)
         l.getFormulaNoVars()
+        print("no vars", l.toString())
         lst.append(l.toString())
 
     # print("total structs to start", len(ldpTrees))
     uniqStrcts = set(lst)
     # print("unique structs", len(uniqStrcts))
+
+    print(uniqStrcts)
 
     return len(uniqStrcts)
 
@@ -52,18 +73,18 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
         c = stlFac.constructFormulaTree(c + "\n")
         clientTrees.append(c)
 
+    ## MAKE MAIN COVERAGE TABLE
     # Calculate num true rules, num false rules and precision (true rules / total rules found)
     foundRules = 0
     nonRules = 0
     matchLst = []
 
     for l in ldpTrees:
-        print("\nTemplate", l.toString(), "Per Count", ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item())
+        # print("\nTemplate", l.toString(), "Per Count", ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item())
 
-        #TODO- figure out why returning partial matches when should only ret full ones ...
-        cRule, cCount = findRuleMatch(l, clientTrees, ldpDF, clientDF)
+        cRule, cCount = findRuleMatch(l, clientTrees, clientDF)
 
-        if cRule != None:  # check structural match --> will count partial matches as a full match
+        if cRule != None:  # check structural match
             foundRules += 1
             # print(l.toString())
             # print(ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'])
@@ -79,42 +100,73 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
     lst = [len(clientRules), foundRules, nonRules, prec]
     covDF = pd.DataFrame([lst], columns=["Total Client Rules", "Found Rules", "Non Rules", "Precision"])
 
+    ## MAKE COUNT DF
     # Make DF that compares the count percentages of the ldp and client rules that were found
     countDF = pd.DataFrame(matchLst, columns=['LDP Rule', 'Client Rule', "LDP Count", "Client Count"])
 
-    return covDF, countDF
+    ## MAKE STRUCTURE DF
+    # Count unique structures with no vars
+    clientStructs = getUniqueStructures(clientTrees)
+    ldpStructs = getUniqueStructures(ldpTrees)
 
-def findRuleMatch(template, clientTrees, ldpDF, clientDF):
+    clientStrings = [x.toString() for x in clientStructs]
+
+    #TODO working here - need to check all client structs and see if the ldp process finds them --
+    # Then need to make sure all LDP structs are also found and no non rules are created
+    foundClientStructs = []
+
+    foundStructs = 0
+    nonStructs = 0
+    for l in ldpStructs:
+        cRule, cCount = findRuleMatch(l, clientStructs, None)
+        if cRule != None:  # check structural match
+            foundStructs += 1
+            if cRule in clientStrings:
+                clientStrings.remove(cRule)
+            print(l.toString(), cRule)
+        else:
+            print("STRUCT NOT FOUND", l.toString())
+            nonStructs += 1
+
+    #Adapt found structs
+    print("Client strings", clientStrings)
+
+    bot = foundStructs + nonStructs
+    prec = foundStructs / bot if bot else 0
+    lst = [len(clientStructs), foundStructs, nonStructs, prec]
+    structDF = pd.DataFrame([lst], columns=["Total Client Structures", "Found Structures", "Non Structures", "Precision"])
+
+    return covDF, countDF, structDF
+
+def getUniqueStructures(trees):
+    structs = []
+    strings = []
+    for lt in trees:
+        l = copy.deepcopy(lt)
+        l.getFormulaNoVars()
+        if l.toString() not in strings:
+            strings.append(l.toString())
+            structs.append(l)
+
+    return structs
+
+# def findRuleMatch(template, clientTrees, ldpDF, clientDF):
+def findRuleMatch(template, clientTrees, clientDF):
+    cCount = None
+
     rule = queryStructuralFullMatch(template, clientTrees)
 
     if rule != None:
-        print("Full Match Found")
+        # print("Full Match Found")
         rule = rule.toString()
-        cCount = clientDF[clientDF["Rule"] == rule]['Percent of Population'].item()
-
-    # else: #try partial match
-    #     print("full match not found, trying partial match")
-    #     partials = queryPartialStructuralMatch(template, clientTrees, clientDF)
-    #
-    #     if partials != None:
-    #         key = list(partials.keys())[0]
-    #         for k in partials.keys():
-    #             if partials[k][1] > partials[key][1]:
-    #                 key = k
-    #
-    #         rule, cCount = partials[key]
-    #         rule = rule.toString()
-    #     else:
-    #         rule = None
-    #         cCount = None
-
-    else:
-        rule = None
-        cCount = None
-
+        try:
+            cCount = clientDF[clientDF["Rule"] == rule]['Percent of Population'].item()
+        except:
+            pass
 
     return rule, cCount
 
+# TODO - delete this?
 def queryPartialStructuralMatch(template, clientTrees, clientDF):
     partials = {} #dict of partial match rules and their counts
     tempOps = template.getOperators()
