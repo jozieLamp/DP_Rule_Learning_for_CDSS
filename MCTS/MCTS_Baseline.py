@@ -263,9 +263,9 @@ class MCTS_Baseline :
             if self.verbose:
                 self.mcLogger.info("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount) + "\n")
 
-            #If terminal node, preserve budget needed for the param estimation
+            #If terminal node, preserve budget needed for the param estimation and final rule query
             if selectedBranch.terminalBranch():
-                self.server.numQueries += 1
+                self.server.numQueries += 2 #TODO updated this part
 
                 #Preserve privacy budget for querying of params
                 #for each active client, add param budget amount FOR EACH param in term node

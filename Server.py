@@ -122,45 +122,35 @@ class Server :
 
         #GET FINAL RULESET BY TRAVERSING TEMPLATE TREE
         initialRuleTrees = self.templateTree.generateRuleSet() #returns a set of rule templates
+
         if self.verbose:
             self.logger.info("Generated " + str(len(initialRuleTrees)) + " initial rules\n")
             self.logger.info("----PERFORM FINAL QUERY FOR EACH FULL RULE----")
 
         # TODO - added here
-        # TODO - will need to allot for these queries in the final count when we add extra queries for the param estimation!!!!
         # do one final query for each rule to make sure full rule has a match
         ruleTrees = []
         for r in initialRuleTrees:
-            # print(r)
-            print("\n" + r.toString())
+            origAC = r.activeClients
             matchCount, activeClients = self.queryFullRuleMatch(r)
-            print("match count", matchCount)
 
-            # # Fix negative estimates
-            # if matchCount < 0:
-            #     matchCount = 0.0
-            #
-            # # Fix over estimates
-            # if matchCount > len(selectedBranch.activeClients):
-            #     matchCount = len(selectedBranch.activeClients)
+            # Fix negative estimates
+            if matchCount < 0:
+                matchCount = 0.0
+            # Fix over estimates
+            if matchCount > len(origAC):
+                matchCount = len(origAC)
 
-            percentCount = matchCount / len(self.clientList)
-            # percentCount = matchCount / len(activeClients) if len(activeClients) > 0 else 0
+            percentCount = matchCount / len(origAC) if len(origAC) > 0 else 0
 
-            if self.verbose:
+            # if self.verbose:
                 # self.logger.info(r.toString())
                 # self.logger.info("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount))
-                print("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount))
-                print("original ac", r.activeClients)
-                print("original per count", r.percentCount)
 
             if percentCount >= self.cutoffThresh:
-                #update active clients
+                #update active clients to be only clients who said yes
                 r.activeClients = activeClients  # add active clients to rule tree
                 r.percentCount = percentCount  # add percent count to rule tree
-                print("updated ac", r.activeClients)
-                print("updated per count", r.percentCount)
-
                 ruleTrees.append(r)
 
         if self.verbose:
@@ -203,9 +193,6 @@ class Server :
 
     #TODO - potentially query all clients, not just the active ones in the final step (?)
     def queryFullRuleMatch(self, template):
-        # add to num queries sent out by server
-        self.numQueries += 1 #TODO may need to remove this
-
         # get template node list
         tempNodes = self.getTemplateNodes(template)
 
