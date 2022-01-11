@@ -15,7 +15,6 @@ import re
 from Client import Client
 from Server import Server
 
-
 def getClientTreesFromCountDF(df):
     stlFac = STLFactory()
     clTrees = []
@@ -24,40 +23,6 @@ def getClientTreesFromCountDF(df):
         clTrees.append(c)
 
     return clTrees
-
-# def countUniqueStructuresNoVars(ldpTrees):
-#     lst = []
-#     for lt in ldpTrees:
-#         print("orig", lt.toString())
-#         l = copy.deepcopy(lt)
-#         l.getFormulaNoVars()
-#         print("no vars", l.toString())
-#         lst.append(l.toString())
-#
-#     # print("total structs to start", len(ldpTrees))
-#     uniqStrcts = set(lst)
-#     # print("unique structs", len(uniqStrcts))
-#
-#     print(uniqStrcts)
-#
-#     return len(uniqStrcts)
-
-def countUniqueStructuresNoVars(ldpTrees):
-    lst = []
-    for lt in ldpTrees:
-        print("orig", lt.toString())
-        l = copy.deepcopy(lt)
-        l.getFormulaNoVars()
-        print("no vars", l.toString())
-        lst.append(l.toString())
-
-    # print("total structs to start", len(ldpTrees))
-    uniqStrcts = set(lst)
-    # print("unique structs", len(uniqStrcts))
-
-    print(uniqStrcts)
-
-    return len(uniqStrcts)
 
 #Get count of coverage
 def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
@@ -104,39 +69,38 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
     # Make DF that compares the count percentages of the ldp and client rules that were found
     countDF = pd.DataFrame(matchLst, columns=['LDP Rule', 'Client Rule', "LDP Count", "Client Count"])
 
+    return covDF, countDF, clientTrees
+
+def countUniqueStructuresNoVars(clientTrees, ldpTrees):
     ## MAKE STRUCTURE DF
     # Count unique structures with no vars
     clientStructs = getUniqueStructures(clientTrees)
     ldpStructs = getUniqueStructures(ldpTrees)
+    # clientStrings = [x.toString() for x in clientStructs]
 
-    clientStrings = [x.toString() for x in clientStructs]
-
-    #TODO working here - need to check all client structs and see if the ldp process finds them --
-    # Then need to make sure all LDP structs are also found and no non rules are created
-    foundClientStructs = []
-
+    # Check if find all client structures
     foundStructs = 0
     nonStructs = 0
-    for l in ldpStructs:
-        cRule, cCount = findRuleMatch(l, clientStructs, None)
+    for l in clientStructs:
+        cRule, cCount = findRuleMatch(l, ldpStructs, None)
         if cRule != None:  # check structural match
             foundStructs += 1
-            if cRule in clientStrings:
-                clientStrings.remove(cRule)
-            print(l.toString(), cRule)
         else:
-            print("STRUCT NOT FOUND", l.toString())
-            nonStructs += 1
+            print("CLIENT STRUCT NOT FOUND", l.toString())
 
-    #Adapt found structs
-    print("Client strings", clientStrings)
+    # Count non structs from LDP
+    for l in ldpStructs:
+        cRule, cCount = findRuleMatch(l, clientStructs, None)
+        if cRule == None:  # check structural match
+            print("LDP STRUCT NOT FOUND", l.toString())
+            nonStructs += 1
 
     bot = foundStructs + nonStructs
     prec = foundStructs / bot if bot else 0
     lst = [len(clientStructs), foundStructs, nonStructs, prec]
     structDF = pd.DataFrame([lst], columns=["Total Client Structures", "Found Structures", "Non Structures", "Precision"])
 
-    return covDF, countDF, structDF
+    return structDF
 
 def getUniqueStructures(trees):
     structs = []
