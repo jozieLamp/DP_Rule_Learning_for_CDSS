@@ -1,10 +1,14 @@
-import logging, math, random, statistics, re
+import logging
+import math
+import random
+import re
 import treelib
+import statistics
+import copy
 from RuleTemplate.RuleTemplate import RuleTemplate, Node, stlGrammarDict, terminalNodes
 
-class MCTS:
-    def __init__(self, method, server, verbose):
-        self.method = method
+class MCTS :
+    def __init__(self, server, verbose):
         self.server = server
         self.verbose = verbose
         self.mcLogger = logging.getLogger('MCTS')
@@ -15,19 +19,19 @@ class MCTS:
         currBranch = self.server.templateTree._branches[branchName]
 
         selectedBranch = self.selection(currBranch)
-        # if self.verbose:
-        #     clus = self.server.templateTree.dotGraph.get_subgraph('"cluster_' + selectedBranch.name + '"')[0]
-        #     clus.set('color', 'red')
-        #     self.mcLogger.info("**Saved Graph " + str(self.server.templateTree.graphNum) + "_" + 'Selection Step\n')
-        #     self.server.templateTree.saveGraph(graphName='Selection Step')
-        #     clus.set('color', 'black')
+        if self.verbose:
+            clus = self.server.templateTree.dotGraph.get_subgraph('"cluster_' + selectedBranch.name + '"')[0]
+            clus.set('color', 'red')
+            self.mcLogger.info("**Saved Graph " + str(self.server.templateTree.graphNum) + "_" + 'Selection Step\n')
+            self.server.templateTree.saveGraph(graphName='Selection Step')
+            clus.set('color', 'black')
 
         # EXPANSION
         expandedBranch = self.expansion(selectedBranch)
 
         # QUERYING, BACKPROPAGATION
         if expandedBranch != None:
-            matchCount, activeClients = self.getQuery(expandedBranch)
+            matchCount, activeClients = self.getQuery(expandedBranch)  # result is in form [matchCount, activeClients]
 
             if matchCount == "BUDGET USED":
                 self.mcLogger.info("BUDGET USED\n")
@@ -36,13 +40,12 @@ class MCTS:
                 self.backpropagation(expandedBranch, matchCount, activeClients)
 
         else:
-            matchCount, activeClients = self.getQuery(selectedBranch)
+            matchCount, activeClients = self.getQuery(selectedBranch)  # result is in form [matchCount, activeClients]
             if matchCount == "BUDGET USED":
                 self.mcLogger.info("BUDGET USED\n")
                 return
             else:
                 self.backpropagation(selectedBranch, matchCount, activeClients)
-
 
         # Perform pruning step --> prune any branches who have a query result < cutoff threshold
         if self.verbose:
@@ -101,22 +104,16 @@ class MCTS:
 
         for node in branch.nodes:
             for child in node.children:
+                # Note, changed selection policy to be using UCT as well ...
+                # score = child.getCurrentScore()
+                score = self.utcScore(child, child.getCurrentScore())
 
-                #TODO - note added check here
-                # add check to only look at child nodes that aren't completely explored
-                if not child.completelyExplored:
-                    # Note, changed selection policy to be using UCT as well ...
-                    # score = child.getCurrentScore()
-                    score = self.utcScore(child, child.getCurrentScore())
+                if self.verbose:
+                    self.mcLogger.info("Score for " + child.name + " : " + str(score))
 
-                    if self.verbose:
-                        self.mcLogger.info("Score for " + child.name + " : " + str(score))
-
-                    if score > maxScore:
-                        maxScore = score
-                        bestChild = child
-                else: #TODO added here
-                    self.mcLogger.info(child.name + " completely explored, so not adding to check ")
+                if score > maxScore:
+                    maxScore = score
+                    bestChild = child
 
         return bestChild
 
@@ -148,11 +145,11 @@ class MCTS:
 
                 if self.verbose:
                     self.mcLogger.info("Updated Template Tree")
-                #     clus = self.server.templateTree.dotGraph.get_subgraph('"cluster_' + selectedBranch.name + '"')[0]
-                #     clus.set('color', 'red')
-                #     self.mcLogger.info("**Saved Graph " + str(self.server.templateTree.graphNum) + "_" + 'Expansion Step')
-                #     self.server.templateTree.saveGraph(graphName='Expansion Step')
-                #     clus.set('color', 'black')
+                    clus = self.server.templateTree.dotGraph.get_subgraph('"cluster_' + selectedBranch.name + '"')[0]
+                    clus.set('color', 'red')
+                    self.mcLogger.info("**Saved Graph " + str(self.server.templateTree.graphNum) + "_" + 'Expansion Step')
+                    self.server.templateTree.saveGraph(graphName='Expansion Step')
+                    clus.set('color', 'black')
             else:  # branch has children already
                 branchChildren = []
                 for nod in selectedBranch.nodes:
@@ -220,32 +217,27 @@ class MCTS:
         if branchOptions == [] or branchOptions == None:
             return None
         else:
+            scores = []
+            for b in branchOptions:
+                scores.append(self.getCoverageScore(self.server.templateTree, b))
 
-            if self.method == 'baseline': #Baseline method selects branch randomly
+            #if all distances same, select randomly
+            if all(element == scores[0] for element in scores):
                 sel = random.choice(branchOptions)
-    
-                if self.verbose:
-                    self.mcLogger.info("Selected branch to explore " + sel.name + " according to default policy: random\n")
+            else:
+                # print("branch opts", [x.name for x in branchOptions])
+                # print("Cov scores", scores)
+                idx = scores.index(max(scores)) #select branch with max (highest) edit dist
+                # print("SELECTED:", branchOptions[idx].name)
 
-            else: #run coverage version
-                scores = []
-                for b in branchOptions:
-                    scores.append(self.getCoverageScore(self.server.templateTree, b))
+                sel = branchOptions[idx]
 
-                # if all distances same, select randomly
-                if all(element == scores[0] for element in scores):
-                    sel = random.choice(branchOptions)
-                else:
-                    # print("branch opts", [x.name for x in branchOptions])
-                    # print("Cov scores", scores)
-                    idx = scores.index(max(scores))  # select branch with max (highest) edit dist
-                    # print("SELECTED:", branchOptions[idx].name)
+            if self.verbose:
+                self.mcLogger.info("Selected branch to explore " + sel.name + " according to coverage selection policy\n")
 
-                    sel = branchOptions[idx]
-
-                if self.verbose:
-                    self.mcLogger.info(
-                        "Selected branch to explore " + sel.name + " according to coverage selection policy\n")
+            # sel = random.choice(branchOptions)
+            # if self.verbose:
+            #     self.mcLogger.info("Selected branch to explore " + sel.name + " according to default policy: random\n")
 
             return sel
 
@@ -281,9 +273,9 @@ class MCTS:
             if self.verbose:
                 self.mcLogger.info("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount) + "\n")
 
-            #If terminal node, preserve budget needed for the param estimation and final rule query
+            #If terminal node, preserve budget needed for the param estimation
             if selectedBranch.terminalBranch():
-                self.server.numQueries += 2 #TODO updated this part
+                self.server.numQueries += 1
 
                 #Preserve privacy budget for querying of params
                 #for each active client, add param budget amount FOR EACH param in term node
@@ -310,17 +302,9 @@ class MCTS:
         startingBranch.visits += 1  # add visit to this node
         startingBranch.utc = self.utcScore(startingBranch, startingBranch.getCurrentScore())  # calc utc for this branch
 
-        #TODO -updated here
-        #Added check to see if branch terminal or all child branches completely explored, set branch to be compl explored
-        if startingBranch.terminalBranch():
-            startingBranch.completelyExplored = True
-        if startingBranch.allChildrenCompletelyExplored():
-            startingBranch.completelyExplored = True
-
         if self.verbose:
             self.mcLogger.info("Backpropogating Score: " + str(matchCount))
             self.mcLogger.info("Calculated UTC for node " + startingBranch.name + ": " + str(startingBranch.utc))
-            self.mcLogger.info(startingBranch.name + "node completely explored " + str(startingBranch.completelyExplored)) #TODO added this
 
         # prop scores
         br = startingBranch
@@ -330,14 +314,8 @@ class MCTS:
             br.visits += 1  # add visit to this node
             br.utc = self.utcScore(br, br.getCurrentScore())  # calc utc for this branch
 
-            #TODO updated here
-            #propagate if child branches completely explored
-            if br.allChildrenCompletelyExplored():
-                br.completelyExplored = True
-
             if self.verbose:
                 self.mcLogger.info("Calculated UTC for node " + br.name + ": " + str(br.utc))
-                self.mcLogger.info(br.name + " node completely explored " + str(br.completelyExplored))  # TODO added this
 
         if self.verbose:
             self.mcLogger.info("Backprop completed\n")
@@ -353,18 +331,16 @@ class MCTS:
         else:
             parenVisits = branch.parent.branch.visits
 
-        if self.method == 'baseline': #do traditional UCT scoring method
-            uct = score + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
-        else: #Do coverage scoring for UCT
-            # Get Coverage metric - average tree edit distance (want largest edit dist)
-            editDist = self.getCoverageScore(self.server.templateTree, branch)
+        #Get Coverage metric - average tree edit distance (want largest edit dist)
+        editDist = self.getCoverageScore(self.server.templateTree, branch)
 
-            # Normalize edit distance to be btw 0 and 1
-            if self.verbose:
-                self.mcLogger.info("SCORE " + str(score) + " EDIT DISTANCE " + str(editDist))
+        #Normalize edit distance to be btw 0 and 1
+        # editDist = editDist
+        if self.verbose:
+            self.mcLogger.info("SCORE " + str(score) + " EDIT DISTANCE " + str(editDist))
 
-            # was score * 2
-            uct = score + editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
+        #was score * 2
+        uct = score + editDist + self.server.cp * math.sqrt(math.log(parenVisits) / branch.visits)
 
         return uct
 
@@ -419,6 +395,7 @@ class MCTS:
         # print("edit distance", editDist)
 
         return editDist
+
 
     # Get list of nodes from template - note temp here is a rule template
     def getTemplateNodes(self, temp):

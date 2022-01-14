@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from RuleTemplate.RuleTemplate import RuleTemplate, Node, stlGrammarDict, terminalNodes
 from SignalTemporalLogic.STLFactory import STLFactory
-from MCTS.MCTS_Baseline import MCTS_Baseline
 from MCTS.MCTS import MCTS
 
 #Make Ruleset Object to store all pieces of final ruleset
@@ -89,11 +88,7 @@ class Server :
     def runProtocol(self, branchName):
 
         # RUN MONTE CARLO TREE SEARCH TO FIND RULE STRUCTURES
-        if self.mctsType == 'baseline':
-            #Make MCTS Baseline
-            mcts = MCTS_Baseline(server=self, verbose=self.verbose)
-        else:
-            mcts = MCTS(server=self, verbose=self.verbose)
+        mcts = MCTS(method=self.mctsType, server=self, verbose=self.verbose)
 
         totalIters = 1 #to track the number of iterations that are completed
         while not self.globalBudgetUsed() and self.numQueries < self.maxQueries and not self.templateTree._branches[branchName].completelyExplored:
