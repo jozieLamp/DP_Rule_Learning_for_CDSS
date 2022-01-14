@@ -97,6 +97,8 @@ class Server :
 
             mcts.runMCTSRound(branchName=branchName)
 
+            #TODO here - add something to check and print or save # queries and total rules generated ...
+
             totalIters += 1
 
             if self.globalBudgetUsed():

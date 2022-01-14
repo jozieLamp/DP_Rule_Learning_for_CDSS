@@ -102,7 +102,6 @@ class MCTS:
         for node in branch.nodes:
             for child in node.children:
 
-                #TODO - note added check here
                 # add check to only look at child nodes that aren't completely explored
                 if not child.completelyExplored:
                     # Note, changed selection policy to be using UCT as well ...
@@ -115,7 +114,7 @@ class MCTS:
                     if score > maxScore:
                         maxScore = score
                         bestChild = child
-                else: #TODO added here
+                else:
                     self.mcLogger.info(child.name + " completely explored, so not adding to check ")
 
         return bestChild
@@ -281,9 +280,9 @@ class MCTS:
             if self.verbose:
                 self.mcLogger.info("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount) + "\n")
 
-            #If terminal node, preserve budget needed for the param estimation and final rule query
+            #If terminal node, preserve budget needed for the param estimation and final rule query (add two queries)
             if selectedBranch.terminalBranch():
-                self.server.numQueries += 2 #TODO updated this part
+                self.server.numQueries += 2
 
                 #Preserve privacy budget for querying of params
                 #for each active client, add param budget amount FOR EACH param in term node
@@ -310,7 +309,6 @@ class MCTS:
         startingBranch.visits += 1  # add visit to this node
         startingBranch.utc = self.utcScore(startingBranch, startingBranch.getCurrentScore())  # calc utc for this branch
 
-        #TODO -updated here
         #Added check to see if branch terminal or all child branches completely explored, set branch to be compl explored
         if startingBranch.terminalBranch():
             startingBranch.completelyExplored = True
@@ -320,7 +318,7 @@ class MCTS:
         if self.verbose:
             self.mcLogger.info("Backpropogating Score: " + str(matchCount))
             self.mcLogger.info("Calculated UTC for node " + startingBranch.name + ": " + str(startingBranch.utc))
-            self.mcLogger.info(startingBranch.name + "node completely explored " + str(startingBranch.completelyExplored)) #TODO added this
+            self.mcLogger.info(startingBranch.name + "node completely explored " + str(startingBranch.completelyExplored))
 
         # prop scores
         br = startingBranch
@@ -330,14 +328,13 @@ class MCTS:
             br.visits += 1  # add visit to this node
             br.utc = self.utcScore(br, br.getCurrentScore())  # calc utc for this branch
 
-            #TODO updated here
             #propagate if child branches completely explored
             if br.allChildrenCompletelyExplored():
                 br.completelyExplored = True
 
             if self.verbose:
                 self.mcLogger.info("Calculated UTC for node " + br.name + ": " + str(br.utc))
-                self.mcLogger.info(br.name + " node completely explored " + str(br.completelyExplored))  # TODO added this
+                self.mcLogger.info(br.name + " node completely explored " + str(br.completelyExplored))
 
         if self.verbose:
             self.mcLogger.info("Backprop completed\n")

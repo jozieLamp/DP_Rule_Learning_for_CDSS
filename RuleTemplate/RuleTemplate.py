@@ -137,7 +137,7 @@ class RuleTemplate():
         self._nodes = {} #dict of nodes in template- nodeName: node object
         self._branches = {}
         self._varDict= varDict
-        self.dotGraph = pydot.Dot(graph_type='digraph', forcelabels=True) # Make pydot graph to visualize rule template
+        # self.dotGraph = pydot.Dot(graph_type='digraph', forcelabels=True) # Make pydot graph to visualize rule template
 
         self.logger = logging.getLogger('Rule Template')
 
@@ -184,9 +184,9 @@ class RuleTemplate():
             br.ruleTree = copy.deepcopy(parentNode.branch.ruleTree)
             br.depth = parentNode.branch.depth + 1 #increment depth for branch
 
-        #add branch to dot graph
-        clusterBranch = pydot.Cluster(brID, label=brID)
-        self.dotGraph.add_subgraph(clusterBranch)
+        # #add branch to dot graph
+        # clusterBranch = pydot.Cluster(brID, label=brID)
+        # self.dotGraph.add_subgraph(clusterBranch)
 
 
         for n in nodeNames:
@@ -206,10 +206,10 @@ class RuleTemplate():
             #add nodes to rule temp
             self._nodes[n] = nod
 
-            #add node to dot graph
-            clusterBranch.add_node(pydot.Node(n))
-            if parentNode != None:
-                self.dotGraph.add_edge(pydot.Edge(parentName, n))  # connect edge btw parent and node
+            # #add node to dot graph
+            # clusterBranch.add_node(pydot.Node(n))
+            # if parentNode != None:
+            #     self.dotGraph.add_edge(pydot.Edge(parentName, n))  # connect edge btw parent and node
 
         #make rule template
         for n in nodeNames:
@@ -232,20 +232,13 @@ class RuleTemplate():
         node.branch.nodes.remove(node) #remove node from branch
         del self._nodes[nodeName] #remove node from node list
 
-        #remove node from graph
-        # print("del edge", node.branch.parent.name, nodeName)
-        self.dotGraph.del_edge('"' + node.branch.parent.name + '"', '"' + nodeName + '"') #delete edge
-        # print("edge list", [x.__str__() for x in self.dotGraph.get_edge_list()])
-
-        cluster = self.dotGraph.get_subgraph('"cluster_' + node.branch.name + '"')[0] #delete node from cluster
-        cluster.del_node('"' + nodeName + '"')
-
-
-        # #check if all child nodes have been removed from the branch - if so, remove branch
-        # if node.branch.nodes == []:
-        #     if self.verbose:
-        #         self.logger.info("All nodes removed from branch, removing branch from template")
-        #     self.removeBranch(node.branch.name)
+        # #remove node from graph
+        # # print("del edge", node.branch.parent.name, nodeName)
+        # self.dotGraph.del_edge('"' + node.branch.parent.name + '"', '"' + nodeName + '"') #delete edge
+        # # print("edge list", [x.__str__() for x in self.dotGraph.get_edge_list()])
+        #
+        # cluster = self.dotGraph.get_subgraph('"cluster_' + node.branch.name + '"')[0] #delete node from cluster
+        # cluster.del_node('"' + nodeName + '"')
 
 
     def removeBranch(self, branchName):
@@ -289,9 +282,10 @@ class RuleTemplate():
             self.removeBranch(n)
 
         if delNames != []:
-            if self.verbose:
-                self.logger.info("**Saved Graph " + str(self.graphNum) + "_" + 'Pruning Step\n')
-            self.saveGraph(graphName='PRUNED TREE')
+            # if self.verbose:
+            #     self.logger.info("**Saved Graph " + str(self.graphNum) + "_" + 'Pruning Step\n')
+            # self.saveGraph(graphName='PRUNED TREE')
+            pass
         else:
             if self.verbose:
                 self.logger.info("Nothing to prune\n")
