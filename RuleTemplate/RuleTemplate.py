@@ -159,7 +159,7 @@ class RuleTemplate():
         #get actual parent node from rule template
         if parentName != None:
             parentNode = self._nodes[parentName]
-            # ac = parentNode.branch.activeClients #TODO HERE
+            # ac = parentNode.branch.activeClients
             ac = parentNode.branch.updatedActiveClients
         else:
             parentNode = None

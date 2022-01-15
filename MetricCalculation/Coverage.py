@@ -169,7 +169,7 @@ def queryStructuralFullMatch(template, clientTrees):
 
     # print("templt nodes", ldpNodes)
 
-    r, cln = client.queryStructuralRuleMatchReturn(ldpNodes, ldpVars) #TODO del cln
+    r = client.queryStructuralRuleMatchReturn(ldpNodes, ldpVars)
 
     return r
 

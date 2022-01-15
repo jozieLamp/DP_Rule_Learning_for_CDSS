@@ -194,21 +194,15 @@ class Client:
             if hasVars:
                 clientNodes = self.getClientNodes(r, varList)
 
-                #TODO - del
-                import copy
-                clnNodeCopy = copy.deepcopy(clientNodes)
-
                 # print("clnt", clientNodes)
                 # print("temp", tempNodes)
                 if self.nodeListMatch(tempNodes, clientNodes):
                     # print("clnt", clientNodes)
                     # print("match")
-
-                    # return r  # found match
-                    return r, clnNodeCopy  # TODO - del extra return of client onodse
+                    return r  # found match
 
         # print("No match")
-        return None, None # TODO - del
+        return None
 
     # check for match  between two lists of template nodes + client nodes
     def nodeListMatch(self, tempList, cList):
@@ -306,7 +300,7 @@ class Client:
     def queryParams(self, tempNodes, template, tempParams, varList, varDict):
 
         #First find possible rule match
-        rule, clnNodes = self.queryStructuralRuleMatchReturn(tempNodes, varList) #TODO - del cln nodes
+        rule = self.queryStructuralRuleMatchReturn(tempNodes, varList)
 
         if rule != None: #found complete rule
             # print("FOUND COMPLETE RULE IN QUERY PARAMS")
