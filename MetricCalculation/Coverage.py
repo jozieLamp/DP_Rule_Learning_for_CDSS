@@ -57,7 +57,7 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
             # cCount = clientDF[clientDF["Rule"] == cRule]['Percent of Population'].item()
             matchLst.append([l.toString(), cRule, lCount, cCount])
         else:
-            print("RULE NOT FOUND", l.toString())
+            print("LDP RULE NOT FOUND", l.toString())
             nonRules += 1
 
     bot = foundRules + nonRules
@@ -169,7 +169,7 @@ def queryStructuralFullMatch(template, clientTrees):
 
     # print("templt nodes", ldpNodes)
 
-    r = client.queryStructuralRuleMatchReturn(ldpNodes, ldpVars)
+    r, cln = client.queryStructuralRuleMatchReturn(ldpNodes, ldpVars) #TODO del cln
 
     return r
 

@@ -180,7 +180,6 @@ class Client:
 
     # check for structural match and return rule
     def queryStructuralRuleMatchReturn(self, tempNodes, varList):
-
         for r in self.ruleSet:
             # check if variables in rule
             self.varsFull = False
@@ -195,13 +194,21 @@ class Client:
             if hasVars:
                 clientNodes = self.getClientNodes(r, varList)
 
-                # print("client nodes", clientNodes)
-                if self.nodeListMatch(tempNodes, clientNodes):
-                    # print("temp", tempNodes)
-                    # print("clnt", clientNodes)
-                    return r  # found match
+                #TODO - del
+                import copy
+                clnNodeCopy = copy.deepcopy(clientNodes)
 
-        return None
+                # print("clnt", clientNodes)
+                # print("temp", tempNodes)
+                if self.nodeListMatch(tempNodes, clientNodes):
+                    # print("clnt", clientNodes)
+                    # print("match")
+
+                    # return r  # found match
+                    return r, clnNodeCopy  # TODO - del extra return of client onodse
+
+        # print("No match")
+        return None, None # TODO - del
 
     # check for match  between two lists of template nodes + client nodes
     def nodeListMatch(self, tempList, cList):
@@ -299,7 +306,7 @@ class Client:
     def queryParams(self, tempNodes, template, tempParams, varList, varDict):
 
         #First find possible rule match
-        rule = self.queryStructuralRuleMatchReturn(tempNodes, varList)
+        rule, clnNodes = self.queryStructuralRuleMatchReturn(tempNodes, varList) #TODO - del cln nodes
 
         if rule != None: #found complete rule
             # print("FOUND COMPLETE RULE IN QUERY PARAMS")

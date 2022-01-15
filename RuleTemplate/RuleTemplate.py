@@ -275,7 +275,7 @@ class RuleTemplate():
 
                 if self.verbose:
                     self.logger.info("PRUNING BRANCH " +  key)
-                    self.logger.info("Got score " + str(br.getCurrentScore()) + " < cutoff thresh " + str(cutoff))
+                    self.logger.info("Got score " + str(br.getCurrentScore()) + " < cutoff thresh " + str(cutoff) + "\n")
                 delNames.append(key)
 
         for n in delNames:

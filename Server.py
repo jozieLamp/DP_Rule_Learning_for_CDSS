@@ -52,6 +52,8 @@ class Server :
 
         self.logger = logging.getLogger('SERVER')
 
+        self.params = params #TODO - delete this
+
         if params != None:
             # Output params
             self.verbose = params.verbose
@@ -124,13 +126,33 @@ class Server :
             self.logger.info("Generated " + str(len(initialRuleTrees)) + " initial rules\n")
             self.logger.info("----PERFORM FINAL QUERY FOR EACH FULL RULE----")
 
-        # TODO - added here
+        # TODO del ?
+        # Save initial rule trees to file
+        initialTreesDF = pd.DataFrame([x.toString() for x in initialRuleTrees])
+        initialTreesDF.to_csv(self.params.resultsFilename + "_InitialRules.csv")
+
         # do one final query for each rule to make sure full rule has a match
+        # TODO - checking here to see if full match is getting rid of rules with no real client matches ...
+        self.logger.info("Checking initial rules") #TODO - del
+        outputfile = open("Initial Rules Output.txt","w")
+
         ruleTrees = []
         for r in initialRuleTrees:
-            origAC = r.activeClients
-            matchCount, activeClients = self.queryFullRuleMatch(r)
 
+            #TODO del
+            print(r.toString())
+            r.show()
+
+            origAC = r.activeClients
+            matchCount, activeClients, clientRule, clientNodes = self.queryFullRuleMatch(r) #TODO - del last 2 return elem client rule
+
+            #TODO del this
+            # print("\n" + r.toString())
+            outputfile.write("\n" + r.toString() + "\n")
+            outputfile.write("orig Match Count " + str(matchCount) + "\n")
+
+            #TODO - guess is that this part is messing up on some match counts that return none <-- check for matches of 1 and 0
+            # and lengths of active clients > 1 ...
             # Fix negative estimates
             if matchCount < 0:
                 matchCount = 0.0
@@ -141,8 +163,36 @@ class Server :
             percentCount = matchCount / len(origAC) if len(origAC) > 0 else 0
 
             # if self.verbose:
-                # self.logger.info(r.toString())
-                # self.logger.info("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount))
+            #     self.logger.info(r.toString())
+            #     self.logger.info("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount))
+
+            #TODO - del
+            outputfile.write("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount) + "\n")
+            origACStr = [str(x) for x in origAC]
+            outputfile.write("Orig AC: ")
+            outputfile.writelines(origACStr)
+            if clientRule != None:
+                outputfile.write("Found Client Rule "+ clientRule.toString() + "\n")
+                activeClientsStr = [str(x) for x in activeClients]
+                outputfile.write("Updated AC: ")
+                outputfile.writelines(activeClientsStr)
+
+                outputfile.write("\nTEMP Nodes ")
+                tempNodes = self.getTemplateNodes(r)
+                for lst in tempNodes:
+                    outputfile.writelines([str(x) for x in lst])
+                    outputfile.write(", ")
+
+                outputfile.write("\nClnt Nodes ")
+                # print("client nodes", clientNodes)
+                for lst in clientNodes:
+                    outputfile.writelines([str(x) for x in lst])
+                    outputfile.write(", ")
+
+                outputfile.write("\n\n")
+            else:
+                outputfile.write("Found Client Rule NONE!" + "\n")
+
 
             if percentCount >= self.cutoffThresh:
                 #update active clients to be only clients who said yes
@@ -153,6 +203,7 @@ class Server :
         if self.verbose:
             self.logger.info("Generated " + str(len(ruleTrees)) + " full rules\n")
 
+        outputfile.close()#TODO del
 
         # ESTIMATE PARAMETERS FOR EACH RULE IN THE RULESET
         if self.verbose:
@@ -170,6 +221,7 @@ class Server :
             ft = stlFac.constructFormulaTree(t.toStringWithParams() + "\n") # Check if structure correct
 
             if ft != None:  # Formula is not improper
+
                 #TODO - OPTION might have to do something where if rule is improper, remove it from the RuleTree list so the other functions are not messed up
                 if tempParams != None:
                     ft.updateParams(tempParams)# Update params in structure
@@ -195,18 +247,31 @@ class Server :
 
         updatedActiveClients = []
 
+        finalRule = None
+        finalClientNodes = None
+
         # Non private model
         if self.epsilon == 'inf':
             yesCount = 0
             for c in template.activeClients:
-                resp = self.clientList[c].queryStructuralRuleMatch(tempNodes, template.varList)
-                yesCount += resp
+                # resp = self.clientList[c].queryStructuralRuleMatch(tempNodes, template.varList)
+                # yesCount += resp
+
+                #TODO - del
+                resp = 0
+                rule, clientNodes = self.clientList[c].queryStructuralRuleMatchReturn(tempNodes, template.varList) #TODO - del return of client nodes
+                if rule != None:
+                    yesCount += 1
+                    resp = 1
+                    finalRule = rule
+                    finalClientNodes = clientNodes
+
 
                 # Remove client if has no match
                 if resp == 1:
                     updatedActiveClients.append(c)
 
-            return yesCount, updatedActiveClients
+            return yesCount, updatedActiveClients, finalRule, finalClientNodes #TODO del last 2 elements
 
         # Private model
         else:
@@ -386,7 +451,15 @@ class Server :
                 #append children of node
                 for x in temp.children(n):
                     xid = re.sub(r'\#.*', '', x.identifier)
-                    if xid in self.variables or xid== 'Variable':
+
+                    #TODO - changed this part to see if it fixes incorrect temp node printing for vars and relops
+                    if xid in self.variables:
+                        subNodes.append(xid)
+                    elif xid == 'Variable':
+                        # print("VAR LIST ADDition")
+                        # print(varList)
+                        # print("var list at vcounter", varList[vCounter])
+
                         subNodes.append(varList[vCounter])
                         vCounter += 1
                         # subNodes.append(id)
