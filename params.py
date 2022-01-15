@@ -13,7 +13,7 @@ paramPercentile = 85 #Percentile wanted for params - score at or below which (in
 
 # MCTS PARAMS
 mctsType = 'baseline' #'baseline' #options are 'baseline', 'coverage'
-maxQueries = 2000 #Maximum number of server queries allowed (to define for nonprivate model)
+maxQueries = 3000 #Maximum number of server queries allowed (to define for nonprivate model)
 cp = 1/math.sqrt(2) #UCT param to increase or decrease the amount of exploration performed
 maxTreeDepth = 25 #Maximum depth of tree
 cutoffThresh = 0.01 #Match score cutoff threshold to prune branches

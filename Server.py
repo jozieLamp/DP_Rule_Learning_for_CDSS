@@ -452,7 +452,6 @@ class Server :
                 for x in temp.children(n):
                     xid = re.sub(r'\#.*', '', x.identifier)
 
-                    #TODO - changed this part to see if it fixes incorrect temp node printing for vars and relops
                     if xid in self.variables:
                         subNodes.append(xid)
                     elif xid == 'Variable':
