@@ -12,8 +12,8 @@ paramPercentile = 85 #Percentile wanted for params - score at or below which (in
 
 
 # MCTS PARAMS
-mctsType = 'baseline' #'baseline' #options are 'baseline', 'coverage'
-maxQueries = 3000 #Maximum number of server queries allowed (to define for nonprivate model)
+mctsType = 'baseline' #baseline' #'baseline' #options are 'baseline', 'coverage'
+maxQueries = 5000 #Maximum number of server queries allowed (to define for nonprivate model)
 cp = 1/math.sqrt(2) #UCT param to increase or decrease the amount of exploration performed
 maxTreeDepth = 25 #Maximum depth of tree
 cutoffThresh = 0.01 #Match score cutoff threshold to prune branches
@@ -25,7 +25,7 @@ dataFilename = "Data/ICU/Best/"
 # dataFilename = "Data/Sepsis/Best/"
 
 # resultsFilename = "Results/ICU_Ruleset_MCTS_Baseline_1000pop_500iters"
-resultsFilename = "Results/ICU_Base_TEST_2"
+resultsFilename = "Results/ICU_Base_PRIV"
 # resultsFilename = "Results/Sepsis_Base_TEST"
 
 # resultsFilename = "Results/ICU_Ruleset_MCTS_TEST"
@@ -71,4 +71,4 @@ variables = {'LOS': [0.0, 122.0], 'ICU_Pt_Days': [0.0, 120.0], 'Mort': [0.0, 1.0
 
 
 # PRIVACY BUDGET PARAMS
-epsilon = 'inf' #set epsilon to 'inf' to run nonprivate model
+epsilon = 100 #set epsilon to 'inf' to run nonprivate model

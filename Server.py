@@ -279,8 +279,11 @@ class Server :
             trueYesses = 0
             p = None
 
+            #TODO - added for fixed budget, will need to adapt for adaptive budget
+            pLossBudg = self.epsilon / self.maxQueries
+
             for c in branch.activeClients:
-                resp, truResp, p = self.clientList[c].randResponseQueryStruct(tempNodes, template.varList)
+                resp, truResp, p = self.clientList[c].randResponseQueryStruct(tempNodes, template.varList, pLossBudg)
 
                 if resp == "BUDGET USED":
                     self.clientsWithUsedBudgets.append(c)

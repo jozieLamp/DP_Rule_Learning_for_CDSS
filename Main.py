@@ -7,6 +7,7 @@ from Server import Server
 def runProtocol(params):
     logging.basicConfig(level=logging.INFO)
     logging.info("*** RUNNING LOCAL DIFFERENTIAL PRIVACY POPULATION RULE AGGREGATION PROTOCOL ***")
+    logging.info("*** MCTS VERSION: " + params.mctsType + " ***")
 
     logging.info("Initial Set Population Size is %s" % (params.popSize))
 
