@@ -51,6 +51,7 @@ class Server :
         self.variables = list(self.varDict.keys())
 
         self.logger = logging.getLogger('SERVER')
+        self.params = params
 
         if params != None:
             # Output params
@@ -120,6 +121,10 @@ class Server :
         # GET FINAL RULESET BY TRAVERSING TEMPLATE TREE
         initialRuleTrees = self.templateTree.generateRuleSet() #returns a set of rule templates
 
+        #Save initial rule trees
+        irtDF = pd.DataFrame([x.toString() for x in initialRuleTrees], columns=['Initial Rule Trees'])
+        irtDF.to_csv(self.params.resultsFilename + "InitialRules.csv")
+
         if self.verbose:
             self.logger.info("Generated " + str(len(initialRuleTrees)) + " initial rules\n")
             self.logger.info("----PERFORM FINAL QUERY FOR EACH FULL RULE----")
@@ -182,8 +187,8 @@ class Server :
         self.finalRuleSet = RuleSet(finalTrees, rules)
 
         # OUTPUT FINAL RETURNED RULE STRUCTURES
-        if self.verbose:
-            self.finalRuleSet.logRuleSet()
+        # if self.verbose:
+        #     self.finalRuleSet.logRuleSet()
 
         self.logger.info("Produced " + str(len(self.finalRuleSet.ruleTrees)) + " Rule Tree Structures")
         self.logger.info("Generated " + str(len(self.finalRuleSet.rules)) + " Formatted Rules")
@@ -196,54 +201,58 @@ class Server :
         tempNodes = self.getTemplateNodes(template)
         updatedActiveClients = []
 
-        # Non private model
-        if self.epsilon == 'inf':
-            yesCount = 0
-            for c in template.activeClients:
-                resp = self.clientList[c].queryStructuralRuleMatch(tempNodes, template.varList)
-                yesCount += resp
+        # # Non private model
+        # if self.epsilon == 'inf':
+        yesCount = 0
+        for c in template.activeClients:
+            resp = self.clientList[c].queryStructuralRuleMatch(tempNodes, template.varList)
+            yesCount += resp
 
-                # Remove client if has no match
-                if resp == 1:
-                    updatedActiveClients.append(c)
+            # Remove client if has no match
+            if resp == 1:
+                updatedActiveClients.append(c)
 
-            return yesCount, updatedActiveClients
+        return yesCount, updatedActiveClients
 
-        # Private model
-        else:
-            # get count from clients of who have template
-            yesCount = 0
-            trueYesses = 0
-            p = None
-
-            for c in template.activeClients:
-                resp, truResp, p = self.clientList[c].randResponseQueryStruct(tempNodes, template.varList)
-
-                if resp == "BUDGET USED":
-                    self.clientsWithUsedBudgets.append(c)
-                else:
-                    yesCount += resp
-                    trueYesses += truResp
-
-                if resp == 1:
-                    updatedActiveClients.append(c) #make active clients only the ones who said yes
-
-            if not self.globalBudgetUsed():
-                q = 1 - p
-                estTrueCount = float((yesCount - (len(self.clientList) * q)) / (p - q))
-
-                percentCount = float(estTrueCount / len(template.activeClients))
-                truePerCount = float(trueYesses / len(template.activeClients))  # Real percent
-
-                if self.verbose:
-                    # print("yes cnt", yesCount, "p", p, "q", q, "est true count", estTrueCount)
-                    self.logger.info("True Count " + str(trueYesses) + ", Est Count " + str(estTrueCount))
-                    self.logger.info("True Percent " + str(truePerCount) + ", Est Percent " + str(percentCount))
-
-                return estTrueCount, updatedActiveClients
-
-            # else:
-            return "BUDGET USED", updatedActiveClients
+        #TODO - fix private model querying part here ...
+        # # Private model
+        # else:
+        #     # get count from clients of who have template
+        #     yesCount = 0
+        #     trueYesses = 0
+        #     p = None
+        #
+        #     # TODO - added for fixed budget, will need to adapt for adaptive budget
+        #     pLossBudg = self.epsilon / self.maxQueries
+        #
+        #     for c in template.activeClients:
+        #         resp, truResp, p = self.clientList[c].randResponseQueryStruct(tempNodes, template.varList, pLossBudg)
+        #
+        #         if resp == "BUDGET USED":
+        #             self.clientsWithUsedBudgets.append(c)
+        #         else:
+        #             yesCount += resp
+        #             trueYesses += truResp
+        #
+        #         if resp == 1:
+        #             updatedActiveClients.append(c) #make active clients only the ones who said yes
+        #
+        #     if not self.globalBudgetUsed():
+        #         q = 1 - p
+        #         estTrueCount = float((yesCount - (len(self.clientList) * q)) / (p - q))
+        #
+        #         percentCount = float(estTrueCount / len(template.activeClients))
+        #         truePerCount = float(trueYesses / len(template.activeClients))  # Real percent
+        #
+        #         if self.verbose:
+        #             # print("yes cnt", yesCount, "p", p, "q", q, "est true count", estTrueCount)
+        #             self.logger.info("True Count " + str(trueYesses) + ", Est Count " + str(estTrueCount))
+        #             self.logger.info("True Percent " + str(truePerCount) + ", Est Percent " + str(percentCount))
+        #
+        #         return estTrueCount, updatedActiveClients
+        #
+        #     # else:
+        #     return "BUDGET USED", updatedActiveClients
 
     # Get a % of how many clients have a match to the template
     # Return a COUNT with the total num clients
@@ -283,7 +292,10 @@ class Server :
             pLossBudg = self.epsilon / self.maxQueries
 
             for c in branch.activeClients:
-                resp, truResp, p = self.clientList[c].randResponseQueryStruct(tempNodes, template.varList, pLossBudg)
+                resp, truResp, pNew = self.clientList[c].randResponseQueryStruct(tempNodes, template.varList, pLossBudg)
+
+                if pNew != None: #small error checking to make sure actual p val saved, even if some clients have used budgets
+                    p = pNew
 
                 if resp == "BUDGET USED":
                     self.clientsWithUsedBudgets.append(c)
@@ -301,6 +313,7 @@ class Server :
                         updatedActiveClients.append(c)
 
             if not self.globalBudgetUsed():
+                print("p", p)
                 q = 1-p
                 estTrueCount = float((yesCount - (len(self.clientList) * q)) / (p-q))
 

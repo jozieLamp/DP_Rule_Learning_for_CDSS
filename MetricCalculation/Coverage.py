@@ -43,6 +43,7 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
     foundRules = 0
     nonRules = 0
     matchLst = []
+    clientRulesFound = []
 
     for l in ldpTrees:
         # print("\nTemplate", l.toString(), "Per Count", ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item())
@@ -50,12 +51,14 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
         cRule, cCount = findRuleMatch(l, clientTrees, clientDF)
 
         if cRule != None:  # check structural match
-            foundRules += 1
-            # print(l.toString())
-            # print(ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'])
-            lCount = ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item()
-            # cCount = clientDF[clientDF["Rule"] == cRule]['Percent of Population'].item()
-            matchLst.append([l.toString(), cRule, lCount, cCount])
+            if cRule not in clientRulesFound:
+                clientRulesFound.append(cRule)
+                foundRules += 1
+                # print(l.toString())
+                # print(ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'])
+                lCount = ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item()
+                # cCount = clientDF[clientDF["Rule"] == cRule]['Percent of Population'].item()
+                matchLst.append([l.toString(), cRule, lCount, cCount])
         else:
             print("LDP RULE NOT FOUND", l.toString())
             nonRules += 1
@@ -64,6 +67,11 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
     prec = foundRules / bot if bot else 0
     lst = [len(clientRules), foundRules, nonRules, prec]
     covDF = pd.DataFrame([lst], columns=["Total Client Rules", "Found Rules", "Non Rules", "Precision"])
+
+    #Print missed client rules
+    missedRules = np.setdiff1d(clientRules, clientRulesFound)
+    print("Missed Client Rules:")
+    print(missedRules)
 
     ## MAKE COUNT DF
     # Make DF that compares the count percentages of the ldp and client rules that were found

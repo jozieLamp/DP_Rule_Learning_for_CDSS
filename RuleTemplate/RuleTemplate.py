@@ -405,24 +405,29 @@ class RuleTemplate():
                     # rt.show()
                     # print(rt.toString())
 
-                #add combined trees to real tree list
-                trueLeaf = True
-                leaves = rt.leaves()
-                # print("full leaves", leaves)
+                realTrees.append(rt)
 
-                #Make sure all leaf nodes actually leaves --> var or param
-                for l in leaves:
-                    # print("leaf", l, "named", re.sub(r'\#.*', '', l.identifier))
+                # #add combined trees to real tree list
+                # trueLeaf = True
+                # leaves = rt.leaves()
+                # # print("full leaves", leaves)
+                #
+                # #Make sure all leaf nodes actually leaves --> var or param
+                # for l in leaves:
+                #     # print("leaf", l, "named", re.sub(r'\#.*', '', l.identifier))
+                #
+                #     if re.sub(r'\#.*', '', l.identifier) in internalNodes: #Rule not complete - there are internal nodes that are not complete
+                #         # print("not true leaf", l.identifier)
+                #         trueLeaf = False
+                #
+                # if trueLeaf:
+                #     # print("true leaves", leaves)
+                #     realTrees.append(rt)
 
-                    if re.sub(r'\#.*', '', l.identifier) in internalNodes: #Rule not complete - there are internal nodes that are not complete
-                        # print("not true leaf", l.identifier)
-                        trueLeaf = False
-
-                if trueLeaf:
-                    # print("true leaves", leaves)
-                    realTrees.append(rt)
 
             # print("real trees", [r.toString() for r in realTrees])
+            # for retr in realTrees:
+            #     retr.show()
             return realTrees
 
         if not branch.hasChildren(): #reached leaf nodes
@@ -450,10 +455,10 @@ class RuleTemplate():
 
         # print("Current parent tree")
         # parentTree.show()
-        #
+
         # print("child tree to be added")
         # childTree.show()
-        #
+
         # print("Nodename getting subtree at:", nodeName)
         subtree = childTree.subtree(nodeName)  # make copy of subtree
         # print("subtree")
@@ -470,6 +475,8 @@ class RuleTemplate():
         parentTree.activeClients = list(set(ac))
         parentTree.varList.extend(childTree.varList) #add var list
 
+        # print("paren tree per count", parentTree.percentCount)
+        # print("child tree per count", childTree.percentCount)
         if parentTree.percentCount == None or childTree.percentCount > parentTree.percentCount:
             parentTree.percentCount = childTree.percentCount
 

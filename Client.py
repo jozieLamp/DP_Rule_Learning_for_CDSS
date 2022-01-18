@@ -338,16 +338,19 @@ class Client:
 
         # print("UPDATED client plist", pList)
 
-        #Add noise to found params
-        if self.epsilon != 'inf':  # private model, need to noise params
-            for key, value in pList.items():
-                if 'timeBound' in key:
-                    newVal = self.addNoiseToParams(param=float(value), lower=varDict['timeBound'][0],
-                                                   upper=varDict['timeBound'][1])
-                else:
-                    newVal = self.addNoiseToParams(param=float(value), lower=varDict[key][0], upper=varDict[key][1])
-
-                pList[key] = newVal
+        #TODO - fix param noise addition!!
+        # #Add noise to found params
+        # if self.epsilon != 'inf':  # private model, need to noise params
+        #     for key, value in pList.items():
+        #         print("key", key, "value", value)
+        #         key = re.sub(r'\#.*', '', key)
+        #         if 'timeBound' in key:
+        #             newVal = self.addNoiseToParams(param=float(value), lower=varDict['timeBound'][0],
+        #                                            upper=varDict['timeBound'][1])
+        #         else:
+        #             newVal = self.addNoiseToParams(param=float(value), lower=varDict[key][0], upper=varDict[key][1])
+        #
+        #         pList[key] = newVal
 
         return pList
 

@@ -66,7 +66,7 @@ class MCTS:
             currBranch = self.selectChildBranch(currBranch)
 
         if self.verbose:
-            self.mcLogger.info("Returned Branch: " + currBranch.name)
+            self.mcLogger.info("Returned Branch: " + currBranch.name + "\n")
 
         return currBranch
 
