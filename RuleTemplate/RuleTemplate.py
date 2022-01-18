@@ -475,9 +475,7 @@ class RuleTemplate():
         parentTree.activeClients = list(set(ac))
         parentTree.varList.extend(childTree.varList) #add var list
 
-        # print("paren tree per count", parentTree.percentCount)
-        # print("child tree per count", childTree.percentCount)
-        if parentTree.percentCount == None or childTree.percentCount > parentTree.percentCount:
+        if childTree.percentCount != None and (parentTree.percentCount == None or childTree.percentCount > parentTree.percentCount):
             parentTree.percentCount = childTree.percentCount
 
         return parentTree
