@@ -70,6 +70,7 @@ class Server :
 
             #Privacy budget params
             self.epsilon = params.epsilon
+            self.budgetAllocStrategy = params.budgetAllocMethod
             self.clientsWithUsedBudgets = []  # list of clients who have used budget
             self.numQueries = 0
 
@@ -288,8 +289,8 @@ class Server :
             trueYesses = 0
             p = None
 
-            #TODO - added for fixed budget, will need to adapt for adaptive budget
-            pLossBudg = self.epsilon / self.maxQueries
+            #Get PLoss budget for this query
+            pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy)
 
             for c in branch.activeClients:
                 resp, truResp, pNew = self.clientList[c].randResponseQueryStruct(tempNodes, template.varList, pLossBudg)
@@ -330,6 +331,14 @@ class Server :
 
             # else:
             return "BUDGET USED", updatedActiveClients
+
+    #Allocate budget for this query
+    def allocateQueryBudget(self, strategy):
+
+        if strategy == 'fixed':  #Fixed budget
+            pLossBudg = self.epsilon / self.maxQueries
+
+        return pLossBudg
 
     # Check if the client is still active - client can still have true queries
     def checkClientActive(self, response, p, priorProbTrue):
