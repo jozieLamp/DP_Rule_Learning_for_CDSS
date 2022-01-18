@@ -269,9 +269,8 @@ class RuleTemplate():
     def pruneTree(self, cutoff):
         delNames = []
         for key, br in self._branches.items():
-            # if has been visited and score < cutoff or no more active clients, prune branch
-            # if (br.visits > 0 and br.getCurrentScore() < cutoff) or len(br.activeClients) == 0:
-            if br.visits > 0 and br.getCurrentScore() < cutoff :
+            # if has been visited and score < cutoff or no more active clients (either at branch or after query completed in updated active clients), prune branch
+            if (br.visits > 0 and br.getCurrentScore() < cutoff) or len(br.activeClients) == 0 or (br.visits > 0 and len(br.updatedActiveClients) == 0):
 
                 if self.verbose:
                     self.logger.info("PRUNING BRANCH " +  key)

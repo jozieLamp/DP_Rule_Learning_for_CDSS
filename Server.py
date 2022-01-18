@@ -78,6 +78,8 @@ class Server :
 
 
     def globalBudgetUsed(self):
+        # print("Clients with used budgets:", self.clientsWithUsedBudgets)
+
         if list(self.clientList.keys()) == set(self.clientsWithUsedBudgets):
             return True
         elif len(set(self.clientsWithUsedBudgets)) > len(self.clientList)-3: #only a few clients without used budgets so end
@@ -125,6 +127,10 @@ class Server :
         #Save initial rule trees
         irtDF = pd.DataFrame([x.toString() for x in initialRuleTrees], columns=['Initial Rule Trees'])
         irtDF.to_csv(self.params.resultsFilename + "InitialRules.csv")
+        #TODO - del this
+        self.logger.info("Initial Rules")
+        for x in initialRuleTrees:
+            self.logger.info(x.toString())
 
         if self.verbose:
             self.logger.info("Generated " + str(len(initialRuleTrees)) + " initial rules\n")
@@ -161,6 +167,10 @@ class Server :
         if self.verbose:
             self.logger.info("Generated " + str(len(ruleTrees)) + " full rules\n")
 
+        self.logger.info("Generated Full Rules:")
+        for x in ruleTrees:
+            self.logger.info(x.toString())
+
         # ESTIMATE PARAMETERS FOR EACH RULE IN THE RULESET
         if self.verbose:
             self.logger.info("----PARAMETER ESTIMATION PHASE----\n")
@@ -188,8 +198,8 @@ class Server :
         self.finalRuleSet = RuleSet(finalTrees, rules)
 
         # OUTPUT FINAL RETURNED RULE STRUCTURES
-        # if self.verbose:
-        #     self.finalRuleSet.logRuleSet()
+        if self.verbose:
+            self.finalRuleSet.logRuleSet()
 
         self.logger.info("Produced " + str(len(self.finalRuleSet.ruleTrees)) + " Rule Tree Structures")
         self.logger.info("Generated " + str(len(self.finalRuleSet.rules)) + " Formatted Rules")
@@ -287,10 +297,14 @@ class Server :
             # get count from clients of who have template
             yesCount = 0
             trueYesses = 0
-            p = None
+            p = "TEST"
 
             #Get PLoss budget for this query
             pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy)
+
+            print("\nActive clients at CURRENT BRANCH", branch.name, ":", branch.activeClients)
+            if branch.parent != None:
+                print("active clients at parent branch", branch.parent.branch.name, ":", branch.parent.branch.activeClients)
 
             for c in branch.activeClients:
                 resp, truResp, pNew = self.clientList[c].randResponseQueryStruct(tempNodes, template.varList, pLossBudg)
@@ -310,8 +324,11 @@ class Server :
                     else:
                         priorProb = 0.5 #50% chance return true
 
+                    print("\nClient", c, "resp", resp)
                     if self.checkClientActive(response=resp, p=p, priorProbTrue=priorProb): #if true, still active, add to updated active clients
                         updatedActiveClients.append(c)
+
+            print("Updated active clients", updatedActiveClients)
 
             if not self.globalBudgetUsed():
                 print("p", p)
@@ -342,43 +359,45 @@ class Server :
 
     # Check if the client is still active - client can still have true queries
     def checkClientActive(self, response, p, priorProbTrue):
-        p = float(p)
-        priorProbTrue = float(priorProbTrue)
-
-        # Calculate prob true answer was yes using Bayes Theorem
-        if response == 1:
-            # print("\nresp, 1")
-            PT1 = priorProbTrue
-            PT0 = 1 - priorProbTrue
-            # print("PT1", PT1, "PT0", PT0)
-            R1gT1 = (p * PT1) / PT1  # if PT1 else 0
-            R1gT0 = ((1 - p) * PT0 * p) / PT0 if PT0 else 0
-            bayes = (R1gT1 * PT1) / ((R1gT1 * PT1) + (R1gT0 * PT0))  # PT1gR1
-            # print("r1g1", R1gT1, "r1gt0", R1gT0, "bayes", bayes)
-
-
-        else:  # resp == 0
-            # print("\nresp, 0")
-            PT1 = priorProbTrue
-            PT0 = 1 - priorProbTrue
-            # print("PT1", PT1, "PT0", PT0)
-            R0gT0 = (p * PT0) / PT0 if PT0 else 0
-            R0gT1 = ((1 - p) * PT1 * p) / PT1  # if PT1 else 0
-            bayes = (R0gT1 * PT1) / ((R0gT1 * PT1) + (R0gT0 * PT0))  # PT1gR0
-
+        return True
+        #TODO FIX THIS PART
+        # p = float(p)
+        # priorProbTrue = float(priorProbTrue)
+        #
+        # # Calculate prob true answer was yes using Bayes Theorem
+        # if response == 1:
+        #     print("resp, 1")
+        #     PT1 = priorProbTrue
+        #     PT0 = 1 - priorProbTrue
+        #     print("PT1", PT1, "PT0", PT0)
+        #     R1gT1 = (p * PT1) / PT1  # if PT1 else 0
+        #     R1gT0 = ((1 - p) * PT0 * p) / PT0 if PT0 else 0
+        #     bayes = (R1gT1 * PT1) / ((R1gT1 * PT1) + (R1gT0 * PT0))  # PT1gR1
+        #     print("r1g1", R1gT1, "r1gt0", R1gT0, "bayes", bayes)
+        #
+        #
+        # else:  # resp == 0
+        #     print("resp, 0")
+        #     PT1 = priorProbTrue
+        #     PT0 = 1 - priorProbTrue
+        #     print("PT1", PT1, "PT0", PT0)
+        #     R0gT0 = (p * PT0) / PT0 if PT0 else 0
+        #     R0gT1 = ((1 - p) * PT1 * p) / PT1  # if PT1 else 0
+        #     bayes = (R0gT1 * PT1) / ((R0gT1 * PT1) + (R0gT0 * PT0))  # PT1gR0
+        #
         # print("BAYES", bayes)
-
-        # Multiply by previous values
+        #
+        # # Multiply by previous values
         # print("Prior Prob", priorProbTrue)
-        cUpdatedProb = priorProbTrue * bayes
+        # cUpdatedProb = priorProbTrue * bayes
         # print("Updated Prob", cUpdatedProb)
-
-        # If probability of returning a true answer is below the defined threshold, don't query this client any more
-        if cUpdatedProb < self.cutoffThresh:
-            # print("******************************client", idx, " not active anymore")
-            return False
-        else:
-            return True
+        #
+        # # If probability of returning a true answer is below the defined threshold, don't query this client any more
+        # if cUpdatedProb < self.cutoffThresh:
+        #     print("******************************client not active anymore")
+        #     return False
+        # else:
+        #     return True
 
     # Get list of nodes from template
     def getTemplateNodes(self, temp):

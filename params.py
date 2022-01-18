@@ -69,5 +69,5 @@ variables = {'Pulse': [0.0, 400.0],  'hr': [30.0, 300.0], 'Mort': [0.0, 1.0], 'A
 
 
 # PRIVACY BUDGET PARAMS
-epsilon = 1000 #set epsilon to 'inf' to run nonprivate model
+epsilon = 100 #set epsilon to 'inf' to run nonprivate model
 budgetAllocMethod = 'fixed' #Options are 'fixed': epsilon/total queries,
