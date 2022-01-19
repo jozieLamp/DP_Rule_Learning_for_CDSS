@@ -302,9 +302,9 @@ class Server :
             #Get PLoss budget for this query
             pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy)
 
-            print("\nActive clients at CURRENT BRANCH", branch.name, ":", branch.activeClients)
-            if branch.parent != None:
-                print("active clients at parent branch", branch.parent.branch.name, ":", branch.parent.branch.activeClients)
+            # print("\nActive clients at CURRENT BRANCH", branch.name, ":", branch.activeClients)
+            # if branch.parent != None:
+                # print("active clients at parent branch", branch.parent.branch.name, ":", branch.parent.branch.activeClients)
 
             for c in branch.activeClients:
                 resp, truResp, pNew = self.clientList[c].randResponseQueryStruct(tempNodes, template.varList, pLossBudg)
@@ -324,14 +324,14 @@ class Server :
                     else:
                         priorProb = 0.5 #50% chance return true
 
-                    print("\nClient", c, "resp", resp)
+                    # print("\nClient", c, "resp", resp)
                     if self.checkClientActive(response=resp, p=p, priorProbTrue=priorProb): #if true, still active, add to updated active clients
                         updatedActiveClients.append(c)
 
-            print("Updated active clients", updatedActiveClients)
+            # print("Updated active clients", updatedActiveClients)
 
             if not self.globalBudgetUsed():
-                print("p", p)
+                # print("p", p)
                 q = 1-p
                 estTrueCount = float((yesCount - (len(self.clientList) * q)) / (p-q))
 

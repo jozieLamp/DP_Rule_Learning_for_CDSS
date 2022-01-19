@@ -1,6 +1,7 @@
 
 #Class to construct and recognize STL rules using parser and lexer
 from antlr4 import * #CommonTokenStream
+
 from SignalTemporalLogic.SignalTemporalLogicParser import SignalTemporalLogicParser
 from SignalTemporalLogic.SignalTemporalLogicLexer import SignalTemporalLogicLexer
 from SignalTemporalLogic.STLExtendedVisitor import STLExtendedVisitor
@@ -16,6 +17,10 @@ class STLFactory:
         lex = SignalTemporalLogicLexer(InputStream(rule))
         tokens = CommonTokenStream(lex)
         parser = SignalTemporalLogicParser(tokens)
+
+        # To silence lex error messages from std output
+        lex.removeErrorListeners()
+        parser.removeErrorListeners()
         tree = parser.evl()
 
         try:
