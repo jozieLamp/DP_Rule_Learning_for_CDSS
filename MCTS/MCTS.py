@@ -290,8 +290,9 @@ class MCTS:
                 for c in selectedBranch.activeClients:
                     xtraBudg = self.server.allocateQueryBudget(strategy=self.server.budgetAllocStrategy)
                     self.server.clientList[c].budgetUsed += xtraBudg #Preserve budget for final query of rule
-                    self.server.clientList[c].budgetUsed += (self.server.clientList[c].paramNoise * numParams)
-                    self.server.clientList[c].numQueries += numParams  # add count to queries
+                    # self.server.clientList[c].budgetUsed += (self.server.clientList[c].paramNoise * numParams)
+                    self.server.clientList[c].budgetUsed += (xtraBudg * numParams) #Preserve budget for noising of params
+                    self.server.clientList[c].numQueries += 2  # add count to queries
 
         return matchCount, activeClients
 

@@ -320,8 +320,7 @@ class Client:
         return True
 
 
-    def queryParams(self, tempNodes, template, tempParams, varList, varDict):
-
+    def queryParams(self, tempNodes, template, tempParams, varList, varDict, pLossBudg):
         #First find possible rule match
         rule = self.queryStructuralRuleMatchReturn(tempNodes, varList)
 
@@ -330,9 +329,10 @@ class Client:
             pList = rule.getAllParams()
 
         else: #Try partial rule match
+            # print("Did not find complete rule")
             pList = self.queryPartialStructureParamReturn(template, tempParams, varList)
 
-        # print("\nclient plist", pList)
+        # print("plist before missing", pList)
 
         #No match found, return random params
         missing = list(set(tempParams.keys()) - set(pList.keys()))
@@ -345,35 +345,18 @@ class Client:
             else:
                 pList[m] = random.uniform(varDict[v][0], varDict[v][1])
 
-            #Draw from median value
-            # if v == "timeBoundLower":
-            #     middle = int((varDict['timeBound'][1] - varDict['timeBound'][0]) / 2)  # get median / mean params
-            #     lower = median([varDict['timeBound'][0], middle])
-            #     pList[m] = lower
-            # elif v == "timeBoundUpper":
-            #     middle = int((varDict['timeBound'][1] - varDict['timeBound'][0]) / 2)  # get median / mean params
-            #     upper = median([middle, varDict['timeBound'][1]])
-            #     pList[m] = upper
-            # else:
-            #     lower = varDict[v][0]
-            #     upper = varDict[v][1]
-            #     pList[m] = (upper - lower) / 2  # get median / mean params
-
         # print("UPDATED client plist", pList)
 
-        #TODO - fix param noise addition!!
-        # #Add noise to found params
-        # if self.epsilon != 'inf':  # private model, need to noise params
-        #     for key, value in pList.items():
-        #         print("key", key, "value", value)
-        #         key = re.sub(r'\#.*', '', key)
-        #         if 'timeBound' in key:
-        #             newVal = self.addNoiseToParams(param=float(value), lower=varDict['timeBound'][0],
-        #                                            upper=varDict['timeBound'][1])
-        #         else:
-        #             newVal = self.addNoiseToParams(param=float(value), lower=varDict[key][0], upper=varDict[key][1])
-        #
-        #         pList[key] = newVal
+        #Add noise to found params
+        if self.epsilon != 'inf':  # private model, need to noise params
+            for key, value in pList.items():
+                v = key[:-1]
+                if 'timeBound' in key:
+                    newVal = self.addNoiseToParams(param=float(value), lower=varDict['timeBound'][0], upper=varDict['timeBound'][1], pLoss=pLossBudg)
+                else:
+                    newVal = self.addNoiseToParams(param=float(value), lower=varDict[v][0], upper=varDict[v][1], pLoss=pLossBudg)
+
+                pList[key] = newVal
 
         return pList
 
@@ -515,14 +498,15 @@ class Client:
             return False
 
 
-    #TODO here- fix issues with noise addition
-    def addNoiseToParams(self, param, lower, upper):
+    def addNoiseToParams(self, param, lower, upper, pLoss):
         # add noise
         sensitivity = float(upper) - float(lower)
         # noise = np.random.laplace(0, 1 / self.epsilon)
         # noise = np.random.laplace(0, sensitivity / self.pLoss)
-        noise = np.random.laplace(0, sensitivity / self.paramNoise)
+        # noise = np.random.laplace(0, sensitivity / self.paramNoise)
 
+        noise = np.random.laplace(0, sensitivity / pLoss)
+        # print("sensitivity", sensitivity)
         # print("noise to be added", noise)
 
         # clip values

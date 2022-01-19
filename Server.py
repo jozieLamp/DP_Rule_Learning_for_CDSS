@@ -207,8 +207,16 @@ class Server :
         self.logger.info("Generated " + str(len(self.finalRuleSet.rules)) + " Formatted Rules")
         self.logger.info("Completed " + str(self.numQueries) + " server queries")
 
+        #TODO del this part
+        if self.globalBudgetUsed():
+            self.logger.info("GLOBAL BUDGET USED")
+        if self.numQueries >= self.maxQueries:
+            self.logger.info("TOTAL QUERIES USED UP")
+        if self.templateTree._branches[branchName].completelyExplored:
+            self.logger.info("TREE COMPLETELY EXPLORED")
 
-    #TODO - OPTION potentially query all clients, not just the active ones in the final step (?)
+
+
     #Final query once have completed final rules generated from rule template
     def queryFullRuleMatch(self, template):
         # get template node list
@@ -218,7 +226,7 @@ class Server :
         # Non private model
         if self.epsilon == 'inf':
             yesCount = 0
-            for c in template.activeClients:
+            for c in template.activeClients: #TODO - OPTION potentially query all clients, not just the active ones in the final step (?)
                 resp = self.clientList[c].queryStructuralRuleMatch(tempNodes, template.varList)
                 yesCount += resp
 
@@ -238,7 +246,7 @@ class Server :
             pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy)
             p = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
 
-            for c in template.activeClients:
+            for c in template.activeClients: #TODO - OPTION potentially query all clients, not just the active ones in the final step (?)
                 resp, truResp = self.clientList[c].finalRandResponseQuery(tempNodes, template.varList, pLossBudg)
 
                 yesCount += resp
@@ -252,7 +260,6 @@ class Server :
             estTrueCount = float((yesCount - (len(template.activeClients) * q)) / (p - q))
             percentCount = float(estTrueCount / len(template.activeClients))
             truePerCount = float(trueYesses / len(template.activeClients))  # Real percent
-
 
             if self.verbose:
                 self.logger.info("Template: " + template.toString())
@@ -302,11 +309,7 @@ class Server :
             pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy)
             p = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
 
-            #TODO del this
-            print("\nActive clients at CURRENT BRANCH", branch.name, ":", branch.activeClients)
-            if branch.parent != None:
-                print("active clients at parent branch", branch.parent.branch.name, ":", branch.parent.branch.activeClients)
-
+            # print("\nActive clients at CURRENT BRANCH", branch.name, ":", branch.activeClients)
             for c in branch.activeClients:
                 resp, truResp = self.clientList[c].randResponseQueryStruct(tempNodes, template.varList, pLossBudg)
 
@@ -326,7 +329,7 @@ class Server :
                     if self.checkClientActive(response=resp, p=p, priorProbTrue=priorProb): #if true, still active, add to updated active clients
                         updatedActiveClients.append(c)
 
-            print("Updated active clients", updatedActiveClients)
+            # print("Updated active clients", updatedActiveClients)
 
             if not self.globalBudgetUsed():
                 q = 1-p
@@ -469,9 +472,12 @@ class Server :
         # print("template params", tempParams)
         # print("template var list", template.varList)
 
+        pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy)
+
         #Get param values from clients
         for c in template.activeClients:
-            params = self.clientList[c].queryParams(tempNodes, template, tempParams, template.varList, self.varDict)
+            # print("Client", c)
+            params = self.clientList[c].queryParams(tempNodes, template, tempParams, template.varList, self.varDict, pLossBudg)
 
             if params != None:
                 for k in tempParams.keys():
@@ -484,7 +490,6 @@ class Server :
         #Get Protocol Param Values
         for k in tempParams.keys():
             vals = sorted([float(x) for x in tempParams[k]])
-
             # print("vals", vals)
 
             # #plot distributions of params
@@ -496,12 +501,13 @@ class Server :
             #     plt.hist(vals)
             #     plt.show()
 
-            # score at or below which (inclusive) 50% of the scores in the distribution may be found
+            # score at or below which (inclusive) param percentile% of the scores in the distribution may be found
             p = np.percentile(vals, self.paramPercentile)
 
             finalParams[k] = p
 
         # return param set
+        # print("final params", finalParams, "\n")
         return finalParams
 
     def getClientQueryCount(self):
