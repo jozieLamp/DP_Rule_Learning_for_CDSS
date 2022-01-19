@@ -180,6 +180,7 @@ class Server :
         finalTrees = []
         #query params and make final STL Rule Structures (STL Trees)
         for t in ruleTrees:
+            print("t", t.toString())
             #Query missing params for tree
             tempParams = self.queryParameters(t)
 
@@ -195,6 +196,7 @@ class Server :
                 finalTrees.append(t)
 
         #Make Rule Set Object to store output rule set
+        print("Making final rule set")
         self.finalRuleSet = RuleSet(finalTrees, rules)
 
         # OUTPUT FINAL RETURNED RULE STRUCTURES

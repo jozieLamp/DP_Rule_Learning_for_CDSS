@@ -369,18 +369,41 @@ class RuleTemplate():
         branch = self._branches[self.root]
         trees = self.traverseLeaf(branch)
 
-        #Remove duplicate rules
+        # Remove duplicate rules
         trees = list(set(trees))
 
-        return trees
+        #TODO here - make sure incomplete rules are not returned!!
+        #Make sure only complete rules returned
+        finalTrees = []
+        for t in trees:
+            if self.completeRule(t):
+                finalTrees.append(t)
 
+        return finalTrees
+
+    #Check if a rule tree is a complete rule
+    def completeRule(self, ruleTree):
+        leaves = ruleTree.leaves()
+        # print("full leaves", leaves)
+
+        # Make sure all leaf nodes actually leaves --> var or param
+        for l in leaves:
+            # print("leaf", l, "named", re.sub(r'\#.*', '', l.identifier))
+
+            if re.sub(r'\#.*', '', l.identifier) in internalNodes:  # Rule not complete - there are internal nodes that are not complete
+                # print("not true leaf", l.identifier)
+                return False
+
+        return True
+
+    #Traverse giant rule template to get individual rule structures
     def traverseLeaf(self, branch, trees=[]):
-        print("Branch", branch.name)
+        # print("Branch", branch.name)
 
         if not branch.hasChildren():  # reached leaf nodes
-            print("BRANCH in child part", branch.name)
+            # print("BRANCH in child part", branch.name)
             if branch.terminalBranch() and branch.visits > 0: #only append rule if is true leaf node that has been visited--> var or param
-                print("True child")
+                # print("True child")
                 # print("trees", [t.toString() for t in trees])
 
                 if branch.ruleTree.activeClients == []:
@@ -394,7 +417,7 @@ class RuleTemplate():
             #     return []
 
         elif branch.multiChildBranch():
-            print("Multi child branch")
+            # print("Multi child branch")
 
             nodeList = [] #list of nodes with children getting combos for
             options = []
@@ -402,10 +425,7 @@ class RuleTemplate():
                 sub = []
                 for c in n.children:
                     mbr = self.traverseLeaf(c, trees=[])
-                    print("MBR returned", mbr)
-                    # print([type(item) for item in mbr])
-                    # for lst in mbr:
-                    #     print([m.toString() for m in lst])
+                    # print("MBR returned", mbr)
                     sub.extend(mbr)
 
                 if sub != []:
@@ -419,16 +439,16 @@ class RuleTemplate():
 
                 for i in range(len(com)): #for each subtree to be added from combos
                     rt = self.addSubtreeToRuleTree(parentTree=rt, childTree=com[i], nodeName=nodeList[i].name)
-                    print("Multi child tree gen")
-                    rt.show()
-                    print(rt.toString())
+                    # print("Multi child tree gen")
+                    # rt.show()
+                    # print(rt.toString())
 
                 trees.append(rt)
 
             return trees
 
         else: #single branch
-            print("Single branch")
+            # print("Single branch")
 
             for opt in branch.getChildBranches():
                 trees = self.traverseLeaf(opt, trees)
@@ -443,99 +463,19 @@ class RuleTemplate():
 
         return trees
 
-
-
-    # def traverseLeaf(self, branch, trees=[]):
-    #
-    #     if branch.multiChildBranch():
-    #         # print("Reached multi branch", branch.name)
-    #
-    #         realTrees = copy.deepcopy(trees)
-    #
-    #         nodeList = [] #list of nodes with children getting combos for
-    #         options = []
-    #         for n in branch.nodes: #Get all leaf options for this split
-    #             sub = []
-    #             for c in n.children:
-    #                 sub.extend(self.traverseLeaf(c, trees=[]))
-    #
-    #             if sub != []:
-    #                 nodeList.append(n)
-    #                 options.append(sub)
-    #
-    #         #Get all combinations of the leaf items for each node in split
-    #         combos = list(itertools.product(*options))
-    #         for com in combos:
-    #             rt = copy.deepcopy(branch.ruleTree) #make copy of current branch tree
-    #
-    #             for i in range(len(com)): #for each subtree to be added from combos
-    #                 rt = self.addSubtreeToRuleTree(parentTree=rt, childTree=com[i], nodeName=nodeList[i].name)
-    #                 # print("Multi child tree gen")
-    #                 # rt.show()
-    #                 # print(rt.toString())
-    #
-    #             realTrees.append(rt)
-    #
-    #             # #add combined trees to real tree list
-    #             # trueLeaf = True
-    #             # leaves = rt.leaves()
-    #             # # print("full leaves", leaves)
-    #             #
-    #             # #Make sure all leaf nodes actually leaves --> var or param
-    #             # for l in leaves:
-    #             #     # print("leaf", l, "named", re.sub(r'\#.*', '', l.identifier))
-    #             #
-    #             #     if re.sub(r'\#.*', '', l.identifier) in internalNodes: #Rule not complete - there are internal nodes that are not complete
-    #             #         # print("not true leaf", l.identifier)
-    #             #         trueLeaf = False
-    #             #
-    #             # if trueLeaf:
-    #             #     # print("true leaves", leaves)
-    #             #     realTrees.append(rt)
-    #
-    #
-    #         # print("real trees", [r.toString() for r in realTrees])
-    #         # for retr in realTrees:
-    #         #     retr.show()
-    #         return realTrees
-    #
-    #     if not branch.hasChildren(): #reached leaf nodes
-    #         if branch.terminalBranch() and branch.visits > 0: #only append rule if is true leaf node that has been visited--> var or param
-    #             # print("BRANCH in child part", branch.name)
-    #             # print("trees", [t.toString() for t in trees])
-    #
-    #             if branch.ruleTree.activeClients == []:
-    #                 branch.ruleTree.activeClients = copy.deepcopy(branch.activeClients) #add active clients to rule tree
-    #                 branch.ruleTree.percentCount = branch.getCurrentScore()  # add percent count to rule tree
-    #
-    #             trees.append(branch.ruleTree)
-    #             # print("trees after appending", [t.toString() for t in trees])
-    #         return trees
-    #     else:
-    #         for opt in branch.getChildBranches():
-    #             trees = self.traverseLeaf(opt, trees)
-    #
-    #     # print("final return trees", [t.toString() for t in trees])
-    #     # print("length of final trees", len(trees))
-    #     return trees
-
     def addSubtreeToRuleTree(self, parentTree, childTree, nodeName):
         #Node name is where subtree node will be added at in parent tree / cut off from subtree
 
-        print("Current parent tree")
-        parentTree.show()
+        # print("Current parent tree")
+        # parentTree.show()
+        #
+        # print("child tree to be added")
+        # childTree.show()
 
-        print("child tree to be added")
-        if type(childTree) == list:
-            print("\nChild tree LIST", childTree)
-            for c in childTree:
-                c.show()
-        childTree.show()
-
-        print("Nodename getting subtree at:", nodeName)
+        # print("Nodename getting subtree at:", nodeName)
         subtree = childTree.subtree(nodeName)  # make copy of subtree
-        print("subtree")
-        subtree.show()
+        # print("subtree")
+        # subtree.show()
 
         # Get parent node name in rule tree
         parentNode = parentTree.parent(nodeName).identifier
