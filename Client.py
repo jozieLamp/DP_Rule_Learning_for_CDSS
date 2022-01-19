@@ -65,8 +65,6 @@ class Client:
 
             p = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
 
-            response = None
-
             # prob to respond heads (true value) of p
             coin = np.random.binomial(1, p)
             if coin == 1:  # heads, return true value
@@ -88,10 +86,35 @@ class Client:
             #Get ground truth for experimental purposes
             trueResp = self.queryStructuralRuleMatch(tempNodes, varList)
 
-            return response, trueResp, p
+            return response, trueResp
 
         else:
-            return "BUDGET USED", None, None
+            return "BUDGET USED", None
+
+    # Get randomized response query to rule template
+    def finalRandResponseQuery(self, tempNodes, varList, pLossBudg=0.5):
+        p = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (
+                    1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
+
+        # prob to respond heads (true value) of p
+        coin = np.random.binomial(1, p)
+        if coin == 1:  # heads, return true value
+            response = self.queryStructuralRuleMatch(tempNodes, varList)
+
+        else:  # tails
+            coin2 = np.random.binomial(1, 1 - p)  # report any other value with prob q (1-p)
+            if coin2 == 1:
+                response = 1
+            else:
+                response = 0
+
+        # print("\n", self.clientNum, "real resp", self.queryStructuralRuleMatch(tempNodes, varList))
+
+        # Get ground truth for experimental purposes
+        trueResp = self.queryStructuralRuleMatch(tempNodes, varList)
+
+        return response, trueResp
+
 
 
     # check for structural match

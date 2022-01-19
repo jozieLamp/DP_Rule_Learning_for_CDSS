@@ -284,10 +284,12 @@ class MCTS:
             if selectedBranch.terminalBranch():
                 self.server.numQueries += 2
 
-                #Preserve privacy budget for querying of params
+                #Preserve privacy budget for querying of params and final rule query
                 #for each active client, add param budget amount FOR EACH param in term node
                 numParams = len(selectedBranch.ruleTree.getMissingParams())
                 for c in selectedBranch.activeClients:
+                    xtraBudg = self.server.allocateQueryBudget(strategy=self.server.budgetAllocStrategy)
+                    self.server.clientList[c].budgetUsed += xtraBudg #Preserve budget for final query of rule
                     self.server.clientList[c].budgetUsed += (self.server.clientList[c].paramNoise * numParams)
                     self.server.clientList[c].numQueries += numParams  # add count to queries
 

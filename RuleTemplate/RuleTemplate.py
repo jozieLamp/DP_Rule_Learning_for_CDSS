@@ -56,7 +56,7 @@ class Branch: #Set of nodes in tree
 
         perCount = sum(counts) / sum(numClients)
 
-        # print("\n", self.name)
+        # print("\nGetting current score for", self.name)
         # print(self.ruleTree.show())
         # print("counts:", counts)
         # print("num clients", numClients)
@@ -372,7 +372,6 @@ class RuleTemplate():
         # Remove duplicate rules
         trees = list(set(trees))
 
-        #TODO here - make sure incomplete rules are not returned!!
         #Make sure only complete rules returned
         finalTrees = []
         for t in trees:
