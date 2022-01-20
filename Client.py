@@ -122,6 +122,9 @@ class Client:
         # print("Temp vars", varList)
         # print("templt nodes", tempNodes)
 
+        if self.epsilon == 'inf':
+            self.numQueries += 1  # update to add another query
+
         for r in self.ruleSet:
             # print("rule vars", r.getAllVars())
             # check if variables in rule
@@ -203,6 +206,7 @@ class Client:
 
     # check for structural match and return rule
     def queryStructuralRuleMatchReturn(self, tempNodes, varList):
+
         for r in self.ruleSet:
             # check if variables in rule
             self.varsFull = False
@@ -320,7 +324,7 @@ class Client:
         return True
 
 
-    def queryParams(self, tempNodes, template, tempParams, varList, varDict, pLossBudg):
+    def queryParams(self, tempNodes, template, tempParams, varList, varDict, timeBounds, pLossBudg):
         #First find possible rule match
         rule = self.queryStructuralRuleMatchReturn(tempNodes, varList)
 
@@ -341,7 +345,7 @@ class Client:
             v = m[:-1]
 
             if v =='timeBoundLower' or v == 'timeBoundUpper':
-                pList[m] = random.uniform(varDict['timeBound'][0], varDict['timeBound'][1])
+                pList[m] = random.uniform(timeBounds[0], timeBounds[1])
             else:
                 pList[m] = random.uniform(varDict[v][0], varDict[v][1])
 
@@ -352,7 +356,7 @@ class Client:
             for key, value in pList.items():
                 v = key[:-1]
                 if 'timeBound' in key:
-                    newVal = self.addNoiseToParams(param=float(value), lower=varDict['timeBound'][0], upper=varDict['timeBound'][1], pLoss=pLossBudg)
+                    newVal = self.addNoiseToParams(param=float(value), lower=timeBounds[0], upper=timeBounds[1], pLoss=pLossBudg)
                 else:
                     newVal = self.addNoiseToParams(param=float(value), lower=varDict[v][0], upper=varDict[v][1], pLoss=pLossBudg)
 

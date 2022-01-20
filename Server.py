@@ -60,6 +60,7 @@ class Server :
 
             # make default rule template tree to start
             self.templateTree = RuleTemplate(varDict=self.varDict, default=True, clientList=clientList, verbose=self.verbose)
+            self.timeBounds = params.timeBounds
 
             #mcts params
             self.mctsType = params.mctsType
@@ -127,11 +128,12 @@ class Server :
 
         #Save initial rule trees
         irtDF = pd.DataFrame([x.toString() for x in initialRuleTrees], columns=['Initial Rule Trees'])
-        irtDF.to_csv(self.params.resultsFilename + "InitialRules.csv")
+        # irtDF.to_csv(self.params.resultsFilename + "InitialRules.csv")
         #TODO - del this
-        self.logger.info("Initial Rules")
-        for x in initialRuleTrees:
-            self.logger.info(x.toString())
+        if self.verbose:
+            self.logger.info("Initial Rules")
+            for x in initialRuleTrees:
+                self.logger.info(x.toString())
 
         if self.verbose:
             self.logger.info("Generated " + str(len(initialRuleTrees)) + " initial rules\n")
@@ -169,9 +171,10 @@ class Server :
             self.logger.info("Generated " + str(len(ruleTrees)) + " full rules\n")
 
         #TODO del this
-        self.logger.info("Generated Full Rules:")
-        for x in ruleTrees:
-            self.logger.info(x.toString())
+        if self.verbose:
+            self.logger.info("Generated Full Rules:")
+            for x in ruleTrees:
+                self.logger.info(x.toString())
 
         # ESTIMATE PARAMETERS FOR EACH RULE IN THE RULESET
         if self.verbose:
@@ -207,13 +210,13 @@ class Server :
         self.logger.info("Generated " + str(len(self.finalRuleSet.rules)) + " Formatted Rules")
         self.logger.info("Completed " + str(self.numQueries) + " server queries")
 
-        #TODO del this part
-        if self.globalBudgetUsed():
-            self.logger.info("GLOBAL BUDGET USED")
-        if self.numQueries >= self.maxQueries:
-            self.logger.info("TOTAL QUERIES USED UP")
-        if self.templateTree._branches[branchName].completelyExplored:
-            self.logger.info("TREE COMPLETELY EXPLORED")
+        # #TODO del this part
+        # if self.globalBudgetUsed():
+        #     self.logger.info("GLOBAL BUDGET USED")
+        # if self.numQueries >= self.maxQueries:
+        #     self.logger.info("TOTAL QUERIES USED UP")
+        # if self.templateTree._branches[branchName].completelyExplored:
+        #     self.logger.info("TREE COMPLETELY EXPLORED")
 
 
 
@@ -261,12 +264,12 @@ class Server :
             percentCount = float(estTrueCount / len(template.activeClients))
             truePerCount = float(trueYesses / len(template.activeClients))  # Real percent
 
-            if self.verbose:
-                self.logger.info("Template: " + template.toString())
-                self.logger.info(str(("Active clients ", template.activeClients)))
-                # print("yes cnt", yesCount, "p", p, "q", q, "est true count", estTrueCount)
-                self.logger.info("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) + ", Estimated True yesses " + str(estTrueCount))
-                self.logger.info("True Percent " + str(truePerCount) + ", Est Percent " + str(percentCount) + "\n")
+            # if self.verbose:
+            #     self.logger.info("Template: " + template.toString())
+            #     self.logger.info(str(("Active clients ", template.activeClients)))
+            #     # print("yes cnt", yesCount, "p", p, "q", q, "est true count", estTrueCount)
+            #     self.logger.info("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) + ", Estimated True yesses " + str(estTrueCount))
+            #     self.logger.info("True Percent " + str(truePerCount) + ", Est Percent " + str(percentCount) + "\n")
 
             return estTrueCount, updatedActiveClients
 
@@ -469,15 +472,19 @@ class Server :
         # get template node list
         tempNodes = self.getTemplateNodes(template)
         tempParams = template.getMissingParams()
+        # print("template", template.toString())
         # print("template params", tempParams)
         # print("template var list", template.varList)
 
-        pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy)
+        if self.epsilon != 'inf':
+            pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy)
+        else:
+            pLossBudg = None
 
         #Get param values from clients
         for c in template.activeClients:
             # print("Client", c)
-            params = self.clientList[c].queryParams(tempNodes, template, tempParams, template.varList, self.varDict, pLossBudg)
+            params = self.clientList[c].queryParams(tempNodes, template, tempParams, template.varList, self.varDict, self.timeBounds, pLossBudg)
 
             if params != None:
                 for k in tempParams.keys():

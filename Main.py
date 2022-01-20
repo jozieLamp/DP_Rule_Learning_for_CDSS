@@ -40,7 +40,7 @@ def runProtocol(params):
     s.runProtocol(branchName='[eval#1]')
 
     # Get dataframe of the generated rules and their percent counts
-    s.finalRuleSet.ruleSetDF.to_csv(params.resultsFilename + ".csv") #Save Rules to File
+    s.finalRuleSet.ruleSetDF.to_csv(params.resultsFilename + "_Rules.csv") #Save Rules to File
 
     # Get count of client queries
     clientQs = s.getClientQueryCount()

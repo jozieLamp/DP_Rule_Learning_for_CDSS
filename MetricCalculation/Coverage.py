@@ -60,7 +60,7 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
                 # cCount = clientDF[clientDF["Rule"] == cRule]['Percent of Population'].item()
                 matchLst.append([l.toString(), cRule, lCount, cCount])
         else:
-            print("LDP RULE NOT FOUND", l.toString())
+            # print("LDP RULE NOT FOUND", l.toString())
             nonRules += 1
 
     bot = foundRules + nonRules
@@ -70,8 +70,8 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
 
     #Print missed client rules
     missedRules = np.setdiff1d(clientRules, clientRulesFound)
-    print("Missed Client Rules:")
-    print(missedRules)
+    # print("Missed Client Rules:")
+    # print(missedRules)
 
     ## MAKE COUNT DF
     # Make DF that compares the count percentages of the ldp and client rules that were found
@@ -94,13 +94,14 @@ def countUniqueStructuresNoVars(clientTrees, ldpTrees):
         if cRule != None:  # check structural match
             foundStructs += 1
         else:
-            print("CLIENT STRUCT NOT FOUND", l.toString())
+            pass
+            # print("CLIENT STRUCT NOT FOUND", l.toString())
 
     # Count non structs from LDP
     for l in ldpStructs:
         cRule, cCount = findRuleMatch(l, clientStructs, None)
         if cRule == None:  # check structural match
-            print("LDP STRUCT NOT FOUND", l.toString())
+            # print("LDP STRUCT NOT FOUND", l.toString())
             nonStructs += 1
 
     bot = foundStructs + nonStructs
@@ -181,6 +182,55 @@ def queryStructuralFullMatch(template, clientTrees):
 
     return r
 
+#Plot LDP vs percent client counts of rules
+def plotLDPClientCounts(clientDF, countDF, save, title):
+    lst = []
+    for idx, row in clientDF.iterrows():
+        lst.extend([row['Percent of Population'] for i in range(row['Rule Count'])])
+
+    n_bins = 10
+    plt.figure(figsize=(12, 7))
+    # plt.hist([lst, countDF['LDP Count'].values], n_bins, density=True, histtype='bar', label=['Client', 'LDP'])
+    plt.hist([lst, countDF['LDP Count'].values], n_bins, density=False, histtype='bar', label=['Client', 'LDP'])
+
+    plt.title(title + " Population Percentage Comparison")
+    plt.xlabel("Percentage of Population")
+    plt.ylabel("Number of Rules")
+    plt.yscale('log')
+    plt.legend()
+    plt.savefig(save + "_Pop_%_Comparison")
+
+    plt.show()
+
+def plotQueryAnalysis(df, save):
+    #Plot Rules
+    rules = df["Percentage Found Rules"]
+    queries = df["Queries"]
+
+    plt.figure(figsize=(12, 7))
+    plt.title("Rule Coverage Query Analysis")
+    # plt.axhline(y=999, color='r', linestyle='-', label='Total Client Rules')
+    plt.plot(queries, rules, label='Baseline')
+    # plt.plot(queriesCov, rulesCov, label='Coverage')
+    plt.xlabel("Number of Queries")
+    plt.ylabel("Number of Rules")
+    plt.legend()
+    plt.savefig(save + "_Rule_Query_Analysis")
+    plt.show()
+
+    #Plot Structures
+    structs = df["Percentage Found Structures"]
+
+    plt.figure(figsize=(12, 7))
+    plt.title("Structure Coverage Query Analysis")
+    # plt.axhline(y=999, color='r', linestyle='-', label='Total Client Rules')
+    plt.plot(queries, structs, label='Baseline')
+    # plt.plot(queriesCov, rulesCov, label='Coverage')
+    plt.xlabel("Number of Queries")
+    plt.ylabel("Number of Structures")
+    plt.legend()
+    plt.savefig(save + "_Structure_Query_Analysis")
+    plt.show()
 
 
 
@@ -209,6 +259,8 @@ def loadLDPRuleset(resultsFilename):
 
 
     return ldpDF, ldpTrees, ldpRules
+
+
 
 def loadClientRules(popSize, dataFilename):
     clientRules = []

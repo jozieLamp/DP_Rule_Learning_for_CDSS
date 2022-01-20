@@ -267,6 +267,14 @@ class RuleTemplate():
 
     #Prune any branches who have a match score < cutoff
     def pruneTree(self, cutoff):
+
+        #TODO potentially add check here, where if prune children of branch and this makes that branch completely explored, update it ...
+        # # Added check to see if branch terminal or all child branches completely explored, set branch to be compl explored
+        # if startingBranch.terminalBranch():
+        #     startingBranch.completelyExplored = True
+        # if startingBranch.allChildrenCompletelyExplored():
+        #     startingBranch.completelyExplored = True
+
         delNames = []
         for key, br in self._branches.items():
             # if has been visited and score < cutoff or no more active clients (either at branch or after query completed in updated active clients), prune branch

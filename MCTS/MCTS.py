@@ -99,9 +99,14 @@ class MCTS:
         maxScore = -1
         bestChild = None
 
+        #TODO fix error here where returning none as the selected branch ...
         for node in branch.nodes:
-            for child in node.children:
 
+            if self.verbose:
+                self.mcLogger.info("Children of " + branch.name)
+                self.mcLogger.info(str((("Children ", [x.name for x in node.children]))))
+
+            for child in node.children:
                 # add check to only look at child nodes that aren't completely explored
                 if not child.completelyExplored:
                     # Note, changed selection policy to be using UCT as well ...
@@ -115,7 +120,11 @@ class MCTS:
                         maxScore = score
                         bestChild = child
                 else:
-                    self.mcLogger.info(child.name + " completely explored, so not adding to check ")
+                    if self.verbose:
+                        self.mcLogger.info(child.name + " completely explored, so not adding to check ")
+
+        if self.verbose:
+            self.mcLogger.info("Best Child "+ bestChild.name)
 
         return bestChild
 
@@ -288,11 +297,14 @@ class MCTS:
                 #for each active client, add param budget amount FOR EACH param in term node
                 numParams = len(selectedBranch.ruleTree.getMissingParams())
                 for c in selectedBranch.activeClients:
-                    xtraBudg = self.server.allocateQueryBudget(strategy=self.server.budgetAllocStrategy)
-                    self.server.clientList[c].budgetUsed += xtraBudg #Preserve budget for final query of rule
-                    # self.server.clientList[c].budgetUsed += (self.server.clientList[c].paramNoise * numParams)
-                    self.server.clientList[c].budgetUsed += (xtraBudg * numParams) #Preserve budget for noising of params
                     self.server.clientList[c].numQueries += 2  # add count to queries
+
+                    if self.server.epsilon != 'inf':
+                        xtraBudg = self.server.allocateQueryBudget(strategy=self.server.budgetAllocStrategy)
+                        self.server.clientList[c].budgetUsed += xtraBudg #Preserve budget for final query of rule
+                        # self.server.clientList[c].budgetUsed += (self.server.clientList[c].paramNoise * numParams)
+                        self.server.clientList[c].budgetUsed += (xtraBudg * numParams) #Preserve budget for noising of params
+
 
         return matchCount, activeClients
 

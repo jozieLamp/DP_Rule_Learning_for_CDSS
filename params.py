@@ -7,13 +7,13 @@ popSize = 10  # 8000 #Size of ICU population
 
 
 # PROTOCOL PARAMS
-verbose = True
+verbose = False
 paramPercentile = 85 #Percentile wanted for params - score at or below which (inclusive) x% of the scores in the distribution may be found
 
 
 # MCTS PARAMS
 mctsType = 'baseline' #baseline' #'baseline' #options are 'baseline', 'coverage'
-maxQueries = 500 #Maximum number of server queries allowed (to define for nonprivate model)
+maxQueries = 0 #Maximum number of server queries allowed (to define for nonprivate model)
 cp = 1/math.sqrt(2) #UCT param to increase or decrease the amount of exploration performed
 maxTreeDepth = 25 #Maximum depth of tree
 cutoffThresh = 0.01 #Match score cutoff threshold to prune branches
@@ -33,11 +33,13 @@ resultsFilename = "Results/TEST/ICU_Base_TEST"
 # resultsFilename = "Results/ICU_Ruleset_MCTS_TEST"
 # resultsFilename = "Results/Sepsis_Ruleset_MCTS_TEST"
 
-# variables with guess ranges
-#NOTE - added time bound as an explicit variable in these
 
+# time bounds
+timeBounds = [0.0, 1.0]
+
+# variables with guess ranges
 # ICU TESTER Dataset
-# variables = {'Pulse': [0.0, 400.0],  'hr': [30.0, 300.0], 'Mort': [0.0, 1.0], 'AF': [0.0, 1.0], 'n_evts': [0.0, 5.0], 'tte': [-60, 100], 'death': [0.0, 1.0],'timeBound':[0.0, 1.0]}
+# variables = {'Pulse': [0.0, 400.0],  'hr': [30.0, 300.0], 'Mort': [0.0, 1.0], 'AF': [0.0, 1.0], 'n_evts': [0.0, 5.0], 'tte': [-60, 100], 'death': [0.0, 1.0]}
 
 # ICU Dataset
 variables = {'LOS': [0.0, 122.0], 'ICU_Pt_Days': [0.0, 120.0], 'Mort': [0.0, 1.0], 'n_evts': [0.0, 5.0],
@@ -55,7 +57,7 @@ variables = {'LOS': [0.0, 122.0], 'ICU_Pt_Days': [0.0, 120.0], 'Mort': [0.0, 1.0
              'TROPONIN_I': [0.02, 23.5], 'WHITE_BLOOD_CELL_COUNT': [0.12, 26.0], 'hr': [30.0, 300.0],
              's2_hr': [-1, 1], 's8_hr': [-1, 1], 's24_hr': [-1, 1], 'n_edrk': [0.0, 1.0],
              'edrk': [2, 55], 's2_edrk': [-1, 1], 's8_edrk': [-1, 1], 's24_edrk': [-1, 1], 'srr': [0, 1],
-             'dfa': [-1, 5], 'cosen': [-5, 1], 'lds': [0.0, 5], 'af': [0.0, 1.0], 'AF': [0.0, 1.0], 'timeBound':[0.0, 1.0]}
+             'dfa': [-1, 5], 'cosen': [-5, 1], 'lds': [0.0, 5], 'af': [0.0, 1.0], 'AF': [0.0, 1.0]}
 
 # #Sepsis Dataset
 # variables = {'HR': [0.0, 280.0], 'O2Sat': [0.0, 100.0], 'Temp': [0.0, 50.0], 'SBP': [0.0, 300.0], 'MAP': [0.0, 300.0],
@@ -64,10 +66,12 @@ variables = {'LOS': [0.0, 122.0], 'ICU_Pt_Days': [0.0, 120.0], 'Mort': [0.0, 1.0
 #  'BUN': [0.0, 268.0], 'Alkalinephos': [0.0, 3833.0], 'Calcium': [0.0, 27.9], 'Chloride': [0.0, 145.0], 'Creatinine': [0.0, 46.6],
 #  'Bilirubin_direct': [0.0, 37.5], 'Glucose': [0.0, 988.0], 'Lactate': [0.0, 31.0], 'Magnesium': [0.0, 9.8], 'Phosphate': [0.0, 18.8],
 #  'Potassium': [0.0, 27.5], 'Bilirubin_total': [0.0, 49.6], 'TroponinI': [0.0, 440.0], 'Hct': [0.0, 71.7], 'Hgb': [0.0, 32.0],
-#  'PTT': [0.0, 250.0], 'WBC': [0.0, 440.0], 'Fibrinogen': [0.0, 1760.0], 'Platelets': [0.0, 2322.0], 'SepsisLabel': [0, 1], 'timeBound':[0.0, 1.0]}
-
+#  'PTT': [0.0, 250.0], 'WBC': [0.0, 440.0], 'Fibrinogen': [0.0, 1760.0], 'Platelets': [0.0, 2322.0], 'SepsisLabel': [0, 1]}
 
 
 # PRIVACY BUDGET PARAMS
-epsilon = 5000 #set epsilon to 'inf' to run nonprivate model
+epsilon = 'inf' #set epsilon to 'inf' to run nonprivate model
 budgetAllocMethod = 'fixed' #Options are 'fixed': epsilon/total queries,
+
+
+# cp = epsilon / maxQueries #UCT param to increase or decrease the amount of exploration performed
