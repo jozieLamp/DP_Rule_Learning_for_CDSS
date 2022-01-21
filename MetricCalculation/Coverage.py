@@ -232,6 +232,38 @@ def plotQueryAnalysis(df, save):
     plt.savefig(save + "_Structure_Query_Analysis")
     plt.show()
 
+def plotQueryAnalysisPrivate(df, save):
+    #Plot Rules
+    plt.figure(figsize=(12, 7))
+    plt.title("Rule Coverage Query Analysis")
+
+    for e in sorted(list(set(df['Epsilon']))):
+        miniDF = df.loc[df['Epsilon'] == e]
+        qs = miniDF['Queries']
+        rls = miniDF['Percentage Found Rules']
+        plt.plot(qs, rls, label="Eps: " + str(e))
+
+    plt.xlabel("Number of Queries")
+    plt.ylabel("Number of Rules")
+    plt.legend()
+    plt.savefig(save + "_Rule_Query_Analysis")
+    plt.show()
+
+    # #Plot Structures
+    plt.figure(figsize=(12, 7))
+    plt.title("Structure Coverage Query Analysis")
+
+    for e in sorted(list(set(df['Epsilon']))):
+        miniDF = df.loc[df['Epsilon'] == e]
+        qs = miniDF['Queries']
+        structs = miniDF['Percentage Found Structures']
+        plt.plot(qs, structs, label="Eps: " + str(e))
+
+    plt.xlabel("Number of Queries")
+    plt.ylabel("Number of Structures")
+    plt.legend()
+    plt.savefig(save + "_Structure_Query_Analysis")
+    plt.show()
 
 
 #Load LDP rules
