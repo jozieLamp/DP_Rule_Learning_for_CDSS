@@ -1,4 +1,5 @@
 from MetricCalculation import Coverage as cov
+from MetricCalculation import RuleQuality as RQ
 import params
 import logging
 from Client import Client
@@ -15,9 +16,24 @@ def main():
 
     #Load rules for experimental purposes
     params.popSize = 10
+
+    #Load client rules
     clientTrees, clientRules, clientDF = cov.loadClientRules(params.popSize, params.dataFilename)
+    #Load client data
+    clientData, clientLabels = RQ.loadClientData(params.popSize, "Data/ICU/DataFrames/")
+
+    #Calculate Rule Quality for client rules
+    print("First Calculating Client Rule Quality")
+    clientMCR = RQ.getRulesetMCR(clientRules, clientData, clientLabels)
+    clientCM = RQ.getSummaryConfusionMatrix(clientData, clientLabels, clientMCR, method='AVG')
+    clientPtCM = RQ.getPatientConfusionMatrix(clientData, clientLabels, clientMCR, method='AVG')
+    clientMCR.to_csv("Results/NonPrivate/"+ dataset + "/" + mctsType + "_Client_RulesetMCR.csv")
+    clientCM.to_csv("Results/NonPrivate/"+ dataset + "/" + mctsType + "_Client_CM.csv")
+    clientPtCM.to_csv("Results/NonPrivate/" + dataset + "/" + mctsType + "_Client_Patient_CM.csv")
+
 
     coverageLst = []
+    qualLst = []
     # numQueries = list(range(10000,0,-100))
     numQueries = [500, 100]
 
@@ -54,21 +70,46 @@ def main():
         coverageLst.append(lst)
 
         ## RULE QUALITY EXPS
+        # First get misclassification rate of each individual rule
+        ldpMCR = RQ.getRulesetMCR(ldpRules, clientData, clientLabels)
+        ldpMCR.to_csv(params.resultsFilename + "_RulesetMCR.csv")
+        print(ldpMCR)
+
+        # return confusion matrix summary across all patients
+        ldpCM = RQ.getSummaryConfusionMatrix(clientData, clientLabels, ldpMCR, method='AVG')
+        ldpCM.to_csv(params.resultsFilename + "_CM.csv")
+        print(ldpCM)
+        # return confusion matrix patient by patient
+        ldpPtCM = RQ.getPatientConfusionMatrix(clientData, clientLabels, ldpMCR, method='AVG')
+        ldpPtCM.to_csv(params.resultsFilename + "_Patient_CM.csv")
+        print(ldpPtCM)
+
+        q = [nq, ldpCM['Precision'].item(), ldpCM['Accuracy'].item(), ]
+        q.extend(ldpCM.iloc[0].tolist())
+        qualLst.append(q)
+        print("Current qual list", qualLst)
 
 
 
     #Make final result DFs
+    #Coverage DF
     df = pd.DataFrame(coverageLst, columns=["Queries", "Total Client Rules", "Percentage Found Rules", "Found Rules", "Non Rules", "Rule Precision",
                     "Total Client Structures","Percentage Found Structures", "Found Structures", "Non Structures", "Structure Precision"])
-
+    df.to_csv("Results/NonPrivate/"+ dataset + "/" + mctsType + "_CoverageSummaryDF.csv")
     print("COVERAGE DF:")
     print(df)
 
-    df.to_csv("Results/NonPrivate/"+ dataset + "/" + mctsType + "_CoverageSummaryDF.csv")
+    #Quality DF
+    qualDF = pd.DataFrame(qualLst, columns=['Queries', 'Precision', 'Accuracy'])
+    qualDF.to_csv("Results/NonPrivate/"+ dataset + "/" + mctsType + "_RuleQualitySummaryDF.csv")
+    print("RULE QUALITY DF")
+    print(qualDF)
 
-    #Make graphs of query analysis here
+    #Make graphs of query analysis for coverage
     cov.plotQueryAnalysis(df, save=params.resultsFilename)
 
+    # Make graphs of query analysis for rule quality
+    RQ.plotQueryAnalysis(qualDF, clientCM, save=params.resultsFilename)
 
 
 

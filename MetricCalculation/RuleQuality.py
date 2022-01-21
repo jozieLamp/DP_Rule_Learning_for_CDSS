@@ -374,25 +374,42 @@ def getMCRNegOutcome(negRules, dt, dataLabels):
 
     return mcrDF, totalSlices
 
+def plotQueryAnalysis(df, clientCM, save):
+    #Plot Rules
+    prec = df["Precision"]
+    acc = df['Accuracy']
+    queries = df["Queries"]
 
+    plt.figure(figsize=(12, 7))
+    plt.title("Rule Coverage Query Analysis")
+    plt.axhline(y=clientCM['Accuracy'].item(), color='r', linestyle='--', label='Client Accuracy')
+    plt.axhline(y=clientCM['Precision'].item(), color='b', linestyle='--', label='Client Precision')
+
+    plt.plot(queries, prec, label='Precision')
+    plt.plot(queries, acc, label='Accuracy')
+    plt.xlabel("Number of Queries")
+    plt.ylabel("Number of Rules")
+    plt.legend()
+    plt.savefig(save + "_RulesetQuality_Query_Analysis")
+    plt.show()
 
 
 
 #Load original raw data from clients as dataframe
-def loadClientData(popSize):
+def loadClientData(popSize, dataFilename):
     data = pd.DataFrame()
     labels = pd.DataFrame()
     for i in range(1, popSize+1):
 
         try:
-            dt = pd.read_csv('../Data/ICU/DataFrames/' + str(i) + 'DataFrame.csv', index_col=0)
-            lbls = pd.read_csv('../Data/ICU/DataFrames/' + str(i) + 'Labels.csv', index_col=0)
+            dt = pd.read_csv(dataFilename + str(i) + 'DataFrame.csv', index_col=0)
+            lbls = pd.read_csv(dataFilename + str(i) + 'Labels.csv', index_col=0)
 
             data = data.append(dt)
             labels = labels.append(lbls)
 
         except:
-            print("File not found for Client %d" % (i))
+            print("Data file not found for Client %d" % (i))
 
     labels = labels.reset_index()
     return data, labels
