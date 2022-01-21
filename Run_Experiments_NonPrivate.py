@@ -18,7 +18,8 @@ def main():
     clientTrees, clientRules, clientDF = cov.loadClientRules(params.popSize, params.dataFilename)
 
     coverageLst = []
-    numQueries = [500, 100]
+    numQueries = list(range(10000,0,-100))
+
 
     for nq in numQueries:
         print("\n\n**************** QUERIES:", nq, " ****************")
