@@ -18,8 +18,8 @@ def main():
     clientTrees, clientRules, clientDF = cov.loadClientRules(params.popSize, params.dataFilename)
 
     coverageLst = []
-    numQueries = list(range(10000,0,-100))
-
+    # numQueries = list(range(10000,0,-100))
+    numQueries = [500, 100]
 
     for nq in numQueries:
         print("\n\n**************** QUERIES:", nq, " ****************")
@@ -31,6 +31,7 @@ def main():
         #Run protocol
         runProt(params)
 
+        ## COVERAGE EXPs
         #Calculate experimental results
         ldpDF, ldpTrees, ldpRules = cov.loadLDPRuleset(params.resultsFilename + "_Rules.csv")
 
@@ -51,6 +52,10 @@ def main():
 
         print("LST", lst)
         coverageLst.append(lst)
+
+        ## RULE QUALITY EXPS
+
+
 
     #Make final result DFs
     df = pd.DataFrame(coverageLst, columns=["Queries", "Total Client Rules", "Percentage Found Rules", "Found Rules", "Non Rules", "Rule Precision",
