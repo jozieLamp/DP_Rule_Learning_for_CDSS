@@ -84,7 +84,7 @@ def main():
         ldpPtCM.to_csv(params.resultsFilename + "_Patient_CM.csv")
         print(ldpPtCM)
 
-        q = [nq, ldpCM['Precision'].item(), ldpCM['Accuracy'].item(), ]
+        q = [nq, ldpCM['Precision'].item(), ldpCM['Accuracy'].item(), ldpPtCM['Precision'].item(), ldpPtCM['Accuracy'].item()]
         q.extend(ldpCM.iloc[0].tolist())
         qualLst.append(q)
         print("Current qual list", qualLst)
@@ -100,7 +100,7 @@ def main():
     print(df)
 
     #Quality DF
-    qualDF = pd.DataFrame(qualLst, columns=['Queries', 'Precision', 'Accuracy'])
+    qualDF = pd.DataFrame(qualLst, columns=['Queries', 'Precision', 'Accuracy', 'Patient Precision', 'Patient Accuracy'])
     qualDF.to_csv("Results/NonPrivate/"+ dataset + "/" + mctsType + "_RuleQualitySummaryDF.csv")
     print("RULE QUALITY DF")
     print(qualDF)
@@ -109,7 +109,8 @@ def main():
     cov.plotQueryAnalysis(df, save=params.resultsFilename)
 
     # Make graphs of query analysis for rule quality
-    RQ.plotQueryAnalysis(qualDF, clientCM, save=params.resultsFilename)
+    RQ.plotQueryAnalysisCM(qualDF, clientCM, save=params.resultsFilename)
+    RQ.plotQueryAnalysisPatientCM(qualDF, clientPtCM, save=params.resultsFilename)
 
 
 

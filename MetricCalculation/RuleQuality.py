@@ -374,14 +374,14 @@ def getMCRNegOutcome(negRules, dt, dataLabels):
 
     return mcrDF, totalSlices
 
-def plotQueryAnalysis(df, clientCM, save):
+def plotQueryAnalysisCM(df, clientCM, save):
     #Plot Rules
     prec = df["Precision"]
     acc = df['Accuracy']
     queries = df["Queries"]
 
     plt.figure(figsize=(12, 7))
-    plt.title("Rule Coverage Query Analysis")
+    plt.title("Rule Quality Query Analysis")
     plt.axhline(y=clientCM['Accuracy'].item(), color='r', linestyle='--', label='Client Accuracy')
     plt.axhline(y=clientCM['Precision'].item(), color='b', linestyle='--', label='Client Precision')
 
@@ -391,6 +391,25 @@ def plotQueryAnalysis(df, clientCM, save):
     plt.ylabel("Number of Rules")
     plt.legend()
     plt.savefig(save + "_RulesetQuality_Query_Analysis")
+    plt.show()
+
+def plotQueryAnalysisPatientCM(df, clientCM, save):
+    #Plot Rules
+    prec = df["Patient Precision"]
+    acc = df['Patient Accuracy']
+    queries = df["Queries"]
+
+    plt.figure(figsize=(12, 7))
+    plt.title("Rule Quality By Patient Query Analysis")
+    plt.axhline(y=clientCM['Accuracy'].item(), color='r', linestyle='--', label='Client Accuracy')
+    plt.axhline(y=clientCM['Precision'].item(), color='b', linestyle='--', label='Client Precision')
+
+    plt.plot(queries, prec, label='Precision')
+    plt.plot(queries, acc, label='Accuracy')
+    plt.xlabel("Number of Queries")
+    plt.ylabel("Number of Rules")
+    plt.legend()
+    plt.savefig(save + "_RulesetQuality_Patient_Query_Analysis")
     plt.show()
 
 
