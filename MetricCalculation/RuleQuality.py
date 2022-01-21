@@ -385,8 +385,8 @@ def plotQueryAnalysisCM(df, clientCM, save):
     plt.axhline(y=clientCM['Accuracy'].item(), color='r', linestyle='--', label='Client Accuracy')
     plt.axhline(y=clientCM['Precision'].item(), color='b', linestyle='--', label='Client Precision')
 
-    plt.plot(queries, prec, label='Precision')
-    plt.plot(queries, acc, label='Accuracy')
+    plt.plot(queries, prec, color='b', label='Precision')
+    plt.plot(queries, acc, color='r', label='Accuracy')
     plt.xlabel("Number of Queries")
     plt.ylabel("Number of Rules")
     plt.legend()
@@ -404,8 +404,8 @@ def plotQueryAnalysisPatientCM(df, clientCM, save):
     plt.axhline(y=clientCM['Accuracy'].item(), color='r', linestyle='--', label='Client Accuracy')
     plt.axhline(y=clientCM['Precision'].item(), color='b', linestyle='--', label='Client Precision')
 
-    plt.plot(queries, prec, label='Precision')
-    plt.plot(queries, acc, label='Accuracy')
+    plt.plot(queries, prec, color='b', label='Precision')
+    plt.plot(queries, acc, color='r', label='Accuracy')
     plt.xlabel("Number of Queries")
     plt.ylabel("Number of Rules")
     plt.legend()

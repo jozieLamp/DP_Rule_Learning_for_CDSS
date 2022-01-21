@@ -85,7 +85,6 @@ def main():
         print(ldpPtCM)
 
         q = [nq, ldpCM['Precision'].item(), ldpCM['Accuracy'].item(), ldpPtCM['Precision'].item(), ldpPtCM['Accuracy'].item()]
-        q.extend(ldpCM.iloc[0].tolist())
         qualLst.append(q)
         print("Current qual list", qualLst)
 
