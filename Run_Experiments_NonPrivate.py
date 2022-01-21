@@ -28,8 +28,7 @@ def main():
         params.resultsFilename = "Results/NonPrivate/"+ dataset + "/" + mctsType + "_" + str(nq) + "_queries"
 
         #Run protocol
-        frs = runProt(params)
-        print(frs.ruleSetDF)
+        runProt(params)
 
         #Calculate experimental results
         ldpDF, ldpTrees, ldpRules = cov.loadLDPRuleset(params.resultsFilename + "_Rules.csv")
@@ -79,9 +78,6 @@ def runProt(params):
     logging.info("Loading Client Rules")
     clientList = {}  # dict of clients
 
-    print("Initial client lsit", clientList)
-    print("total queries", params.maxQueries)
-
     num = 1
     while len(clientList) < params.popSize:
         fileName = params.dataFilename + repr(num) + "Rules.txt"
@@ -92,9 +88,6 @@ def runProt(params):
             clientList[num] = c
 
         num += 1
-
-    print("after client list", clientList)
-    print("Clinet 1 num queries:", clientList[1].numQueries)
 
     logging.info("Total of %s Clients Found" % (len(clientList)))
 
@@ -116,7 +109,6 @@ def runProt(params):
     clientQs = s.getClientQueryCount()
     clientQs.to_csv(params.resultsFilename + "_ClientQueries.csv")
 
-    return s.finalRuleSet
 
 
 if __name__ == "__main__":

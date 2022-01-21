@@ -374,8 +374,9 @@ class RuleTemplate():
         Code to generate fule rule set from template
         :return: Rule Set
         '''
+
         branch = self._branches[self.root]
-        trees = self.traverseLeaf(branch)
+        trees = self.traverseLeaf(branch, trees=[])
 
         # Remove duplicate rules
         trees = list(set(trees))
