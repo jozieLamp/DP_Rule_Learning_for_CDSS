@@ -25,12 +25,21 @@ def main():
 
     #Calculate Rule Quality for client rules
     print("First Calculating Client Rule Quality")
-    clientMCR = RQ.getRulesetMCR(clientRules, clientData, clientLabels)
-    clientCM = RQ.getSummaryConfusionMatrix(clientData, clientLabels, clientMCR, method='AVG')
-    clientPtCM = RQ.getPatientConfusionMatrix(clientData, clientLabels, clientMCR, method='AVG')
-    clientMCR.to_csv("Results/Private/"+ dataset + "/" + mctsType + "_Client_RulesetMCR.csv")
-    clientCM.to_csv("Results/Private/"+ dataset + "/" + mctsType + "_Client_CM.csv")
-    clientPtCM.to_csv("Results/Private/" + dataset + "/" + mctsType + "_Client_Patient_CM.csv")
+    try:
+        clientMCR = pd.read_csv("Results/Private/"+ dataset + "/" + mctsType + "_Client_RulesetMCR.csv")
+    except FileNotFoundError:
+        clientMCR = RQ.getRulesetMCR(clientRules, clientData, clientLabels)
+        clientMCR.to_csv("Results/Private/"+ dataset + "/" + mctsType + "_Client_RulesetMCR.csv")
+    try:
+        clientCM = pd.read_csv("Results/Private/"+ dataset + "/" + mctsType + "_Client_CM.csv")
+    except FileNotFoundError:
+        clientCM = RQ.getSummaryConfusionMatrix(clientData, clientLabels, clientMCR, method='AVG')
+        clientCM.to_csv("Results/Private/"+ dataset + "/" + mctsType + "_Client_CM.csv")
+    try:
+        clientPtCM = pd.read_csv("Results/Private/" + dataset + "/" + mctsType + "_Client_Patient_CM.csv")
+    except FileNotFoundError:
+        clientPtCM = RQ.getPatientConfusionMatrix(clientData, clientLabels, clientMCR, method='AVG')
+        clientPtCM.to_csv("Results/Private/" + dataset + "/" + mctsType + "_Client_Patient_CM.csv")
 
 
     coverageLst = []
@@ -38,7 +47,7 @@ def main():
     # numQueries = list(range(10000,0,-100))
     numQueries = [1000, 500, 100]
     budgets= [1000, 100, 10, 1, 0.1, 0.01, 0.001]
-    cps = ['basic', 'epsDivqueries', 'eps', "1"]
+    cps = ['one']
 
 
     for cpMethod in cps:
