@@ -15,6 +15,8 @@ def main():
     mctsType = 'Base'
     budgetAllocMethod = 'fixed'
 
+    #TODO - add something to try different private budget strategies ...
+
     #Load rules for experimental purposes
     params.popSize = 10
     params.epsilon = 100
