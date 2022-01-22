@@ -38,7 +38,7 @@ def main():
     # numQueries = list(range(10000,0,-100))
     numQueries = [1000, 500, 100]
     budgets= [1000, 100, 10, 1, 0.1, 0.01, 0.001]
-    cps = ['epsDivqueries', 'eps', "1"]
+    cps = ['basic', 'epsDivqueries', 'eps', "1"]
 
 
     for cpMethod in cps:
