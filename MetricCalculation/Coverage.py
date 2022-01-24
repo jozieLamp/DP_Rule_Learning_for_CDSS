@@ -198,7 +198,7 @@ def plotLDPClientCounts(clientDF, countDF, save, title):
     plt.ylabel("Number of Rules")
     plt.yscale('log')
     plt.legend()
-    plt.savefig(save + "_Pop_%_Comparison")
+    plt.savefig(save + "_Pop_Percent_Comparison")
 
     plt.show()
 
