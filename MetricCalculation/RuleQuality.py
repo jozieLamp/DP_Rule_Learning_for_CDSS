@@ -393,54 +393,6 @@ def plotQueryAnalysisCM(df, clientCM, save):
     plt.savefig(save + "_RulesetQuality_Query_Analysis")
     plt.show()
 
-def plotPrivateCM(df, clientCM, save):
-    queries = df["Queries"]
-
-    for q in sorted(list(set(queries))):
-        miniDF = df.loc[df['Queries'] == q]
-        epsList = miniDF['Epsilon']
-        prec = miniDF["Precision"]
-        acc = miniDF['Accuracy']
-
-        plt.figure(figsize=(12, 7))
-        plt.title("Rule Quality Across Budgets for "+ str(q) + " Queries")
-        plt.axhline(y=clientCM['Accuracy'].item(), color='r', linestyle='--', label='Client Accuracy')
-        plt.axhline(y=clientCM['Precision'].item(), color='b', linestyle='--', label='Client Precision')
-
-        plt.plot(epsList, prec, color='b', label='Precision')
-        plt.plot(epsList, acc, color='r', label='Accuracy')
-        plt.xlabel("Epsilon")
-        plt.xscale('log')
-        plt.ylabel("Metric")
-        plt.legend()
-        save = save.replace(".", "-")
-        plt.savefig(save + "_RulesetQuality_Query_Analysis")
-        plt.show()
-
-def plotPrivatePatientCM(df, clientCM, save):
-    queries = df["Queries"]
-
-    for q in sorted(list(set(queries))):
-        miniDF = df.loc[df['Queries'] == q]
-        epsList = miniDF['Epsilon']
-        prec = miniDF["Patient Precision"]
-        acc = miniDF['Patient Accuracy']
-
-        plt.figure(figsize=(12, 7))
-        plt.title("Rule Quality By Patient Across Budgets for "+ str(q) + " Queries")
-        plt.axhline(y=clientCM['Accuracy'].item(), color='r', linestyle='--', label='Client Accuracy')
-        plt.axhline(y=clientCM['Precision'].item(), color='b', linestyle='--', label='Client Precision')
-
-        plt.plot(epsList, prec, color='b', label='Precision')
-        plt.plot(epsList, acc, color='r', label='Accuracy')
-        plt.xlabel("Epsilon")
-        plt.xscale('log')
-        plt.ylabel("Metric")
-        plt.legend()
-        save = save.replace(".", "-")
-        plt.savefig(save + "_RulesetQuality_Patient_Query_Analysis")
-        plt.show()
-
 def plotQueryAnalysisPatientCM(df, clientCM, save):
     #Plot Rules
     prec = df["Patient Precision"]
@@ -460,6 +412,31 @@ def plotQueryAnalysisPatientCM(df, clientCM, save):
     save = save.replace(".", "-")
     plt.savefig(save + "_RulesetQuality_Patient_Query_Analysis")
     plt.show()
+
+def plotPrivateCM(df, clientCM, metric, save):
+    queries = df["Queries"]
+
+    for q in sorted(list(set(queries))):
+        qDF = df.loc[df['Queries'] == q]
+
+        plt.figure(figsize=(12, 7))
+        plt.title(metric + " for " + str(q) + " Queries")
+
+        for method in sorted(list(set(qDF['Method']))):
+            miniDF = qDF.loc[qDF['Method'] == method]
+            eps = miniDF['Epsilon']
+            met = miniDF[metric]
+            plt.plot(eps, met, label="Method: " + method)
+
+        plt.axhline(y=clientCM[metric].item(), color='r', linestyle='--', label='Client ' + metric)
+        plt.xlabel("Epsilon")
+        plt.ylabel(metric)
+        plt.xscale('log')
+        plt.legend()
+        save = save.replace(".", "-")
+        plt.savefig(save + str(q) + "Queries_" + metric)
+        plt.show()
+
 
 
 
