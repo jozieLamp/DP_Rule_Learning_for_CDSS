@@ -254,6 +254,9 @@ class RuleTemplate():
             return
 
         #remove branch from parent node
+        print("branch", branch)
+        print(branchName)
+        print("branch parent", branch.parent, branch.parent.name)
         branch.parent.children.remove(branch)
 
         #remove nodes

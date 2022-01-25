@@ -413,6 +413,7 @@ def plotPrivateCM(df, clientCM, save):
         plt.xscale('log')
         plt.ylabel("Metric")
         plt.legend()
+        save = save.replace(".", "-")
         plt.savefig(save + "_RulesetQuality_Query_Analysis")
         plt.show()
 
@@ -436,6 +437,7 @@ def plotPrivatePatientCM(df, clientCM, save):
         plt.xscale('log')
         plt.ylabel("Metric")
         plt.legend()
+        save = save.replace(".", "-")
         plt.savefig(save + "_RulesetQuality_Patient_Query_Analysis")
         plt.show()
 
@@ -455,6 +457,7 @@ def plotQueryAnalysisPatientCM(df, clientCM, save):
     plt.xlabel("Number of Queries")
     plt.ylabel("Metric")
     plt.legend()
+    save = save.replace(".", "-")
     plt.savefig(save + "_RulesetQuality_Patient_Query_Analysis")
     plt.show()
 

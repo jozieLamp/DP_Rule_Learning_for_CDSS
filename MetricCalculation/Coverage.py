@@ -198,6 +198,8 @@ def plotLDPClientCounts(clientDF, countDF, save, title):
     plt.ylabel("Number of Rules")
     plt.yscale('log')
     plt.legend()
+    save = save.replace(".", "-")
+    print("Name" + save)
     plt.savefig(save + "_Pop_Percent_Comparison")
 
     plt.show()
@@ -246,6 +248,7 @@ def plotQueryAnalysisPrivate(df, save):
     plt.xlabel("Number of Queries")
     plt.ylabel("Number of Rules")
     plt.legend()
+    save = save.replace(".", "-")
     plt.savefig(save + "_Rule_Query_Analysis")
     plt.show()
 
