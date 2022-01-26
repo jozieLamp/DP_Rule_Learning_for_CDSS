@@ -52,8 +52,8 @@ def main():
                 params.name = "Cp" + cpMethod + "_Queries" + str(nq) + "_Eps" + str(eps)
                 params.resultsFilename = "Results/Private/"+ dataset + "/" + mctsType + "/Cp" + cpMethod + "_Queries" + str(nq) + "_Eps" + str(eps)
 
-                #Run protocol
-                runProt(params)
+                # #Run protocol
+                # runProt(params)
 
                 ## COVERAGE EXPs
                 ldpRules, covDF, structDF = calcIndivCoverage(clientDF)
@@ -149,6 +149,7 @@ def runProt(params):
     clientQs.to_csv(params.resultsFilename + "_ClientQueries.csv")
 
 def calcIndivRuleQuality(ldpRules, clientData, clientLabels):
+    print("\nCalculating Rule Quality")
     # First get misclassification rate of each individual rule
     ldpMCR = RQ.getRulesetMCR(ldpRules, clientData, clientLabels)
     ldpMCR.to_csv(params.resultsFilename + "_RulesetMCR.csv")
@@ -189,20 +190,23 @@ def loadClientQualityDFs(mctsType, popSize, clientRules):
     clientData, clientLabels = RQ.loadClientData(params.popSize, "Data/ICU/DataFrames/")
 
     # Calculate Rule Quality for client rules
-    print("First Calculating Client Rule Quality")
+    print("\nFirst Calculating Client Rule Quality")
     try:
         clientMCR = pd.read_csv("Results/Client/" + mctsType + "/" + str(popSize) + " Clients" + "/Client_RulesetMCR.csv")
     except FileNotFoundError:
+        print("Client MCR not found, calculating")
         clientMCR = RQ.getRulesetMCR(clientRules, clientData, clientLabels)
         clientMCR.to_csv("Results/Client/" + mctsType + "/" + str(popSize) + " Clients" + "/Client_RulesetMCR.csv")
     try:
         clientCM = pd.read_csv("Results/Client/" + mctsType + "/" + str(popSize) + " Clients" + "/Client_CM.csv")
     except FileNotFoundError:
+        print("Client CM not found, calculating")
         clientCM = RQ.getSummaryConfusionMatrix(clientData, clientLabels, clientMCR, method='AVG')
         clientCM.to_csv("Results/Client/" + mctsType + "/" + str(popSize) + " Clients" + "/Client_CM.csv")
     try:
         clientPtCM = pd.read_csv("Results/Client/" + mctsType + "/" + str(popSize) + " Clients" + "/Client_Patient_CM.csv")
     except FileNotFoundError:
+        print("Client Patient CM not found, calculating")
         clientPtCM = RQ.getPatientConfusionMatrix(clientData, clientLabels, clientMCR, method='AVG')
         clientPtCM.to_csv("Results/Client/" + mctsType + "/" + str(popSize) + " Clients" + "/Client_Patient_CM.csv")
 

@@ -209,7 +209,6 @@ def plotLDPClientCounts(clientDF, countDF, save, title):
     plt.yscale('log')
     plt.legend()
     save = save.replace(".", "-")
-    print("Name" + save)
     plt.savefig(save + "_Pop_Percent_Comparison")
 
     plt.show()
@@ -279,7 +278,7 @@ def plotQueryAnalysisPrivate(df, save):
         for method in sorted(list(set(qDF['Method']))):
             miniDF = qDF.loc[qDF['Method'] == method]
             eps = miniDF['Epsilon']
-            rls = miniDF['Percentage Found Client Structures']
+            rls = miniDF['Percentage Found Structures']
             plt.plot(eps, rls, label="Method: " + method)
 
         plt.xlabel("Epsilon")

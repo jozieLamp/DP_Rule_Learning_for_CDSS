@@ -1,0 +1,9 @@
+,Method,Queries,Epsilon,Total Client Rules,Percentage Found Rules,Found Rules,Non Rules,Rule Precision,Total Client Structures,Percentage Found Structures,Found Structures,Non Structures,Structure Precision
+0,basic,1000,1000,553,0.1717902350813743,95,0,1.0,43,0.7209302325581395,31,0,1.0
+1,basic,1000,100,553,0.18806509945750452,104,0,1.0,43,0.7441860465116279,32,0,1.0
+2,basic,100,1000,553,0.0,0,0,0.0,43,0.0,0,0,0.0
+3,basic,100,100,553,0.0,0,0,0.0,43,0.0,0,0,0.0
+4,epsDivqueries,1000,1000,553,0.189873417721519,105,0,1.0,43,0.6744186046511628,29,0,1.0
+5,epsDivqueries,1000,100,553,0.09041591320072333,50,0,1.0,43,0.6976744186046512,30,0,1.0
+6,epsDivqueries,100,1000,553,0.0,0,0,0.0,43,0.0,0,0,0.0
+7,epsDivqueries,100,100,553,0.0,0,0,0.0,43,0.0,0,0,0.0

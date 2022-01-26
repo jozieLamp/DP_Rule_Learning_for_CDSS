@@ -1,0 +1,2 @@
+,TP,TN,FP,FN,Actual Yes,Actual No,Predicted Yes,Predicted No,TPR/Sens,TNR/Spec,FPR,Precision,F1,Accuracy,MCR,BalancedAccuracy
+0,0,126,0,750,750,126,0,876,0.0,1.0,0.0,0,0,0.14383561643835616,0.8561643835616438,0.5
