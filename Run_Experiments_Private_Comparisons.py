@@ -13,7 +13,7 @@ def main():
     #Main params
     dataset = 'ICU'
     mctsType = 'Baseline'
-    computeRQ = True
+    computeRQ = False
     params.popSize = 10
 
     #Load client rules
@@ -60,7 +60,7 @@ def main():
                         params.cutoffThresh = -10000
 
                     #adjust name of cp method for prunes
-                    cpMethod = cpMethod + "prune_" + pruneMethod
+                    cpMethod =  cpMethod + "_Prune" + pruneMethod
 
                     params.maxQueries = nq
                     params.name = "Cp" + cpMethod + "_Queries" + str(nq) + "_Eps" + str(eps)
