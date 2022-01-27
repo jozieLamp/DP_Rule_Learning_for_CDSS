@@ -211,7 +211,7 @@ def plotLDPClientCounts(clientDF, countDF, save, title):
     save = save.replace(".", "-")
     plt.savefig(save + "_Pop_Percent_Comparison")
 
-    plt.show()
+    # plt.show()
 
 def plotQueryAnalysis(df, save):
     #Plot Rules
@@ -377,6 +377,63 @@ def plotQueryAnalysisPrivate(df, save):
         save = save.replace(".", "-")
         plt.savefig(save + str(q) + "Queries_Non_Rules")
         plt.show()
+
+    # Plot summary of found rules, non rules for each eps
+    for q in sorted(list(set(df['Queries']))):
+        qDF = df.loc[df['Queries'] == q]
+        methods = sorted(list(set(qDF['Method'])))
+        epsilons = sorted(list(set(qDF['Epsilon'])))
+
+        # plt.figure(figsize=(12, 7))
+        fig, axes = plt.subplots(figsize=(20,7), nrows=1, ncols=len(methods))
+        # plt.title("Rule Summary for " + str(q) + " Queries")
+        ax_position = 0
+        for concept in methods:
+            # idx = pd.IndexSlice
+            # subset = df.loc[idx[[concept], :],
+            #                 ['Found Rules', 'Non Rules']]
+            subset = qDF.loc[qDF['Method'] == concept][['Found Rules', 'Non Rules']]
+            print(subset.info())
+            # subset = subset.groupby(
+            #     subset.index.get_level_values('datetime').year).sum()
+
+            # ax = subset.plot(kind="bar", stacked=True, colormap="Blues",ax=axes[ax_position])
+            ax = subset.plot(kind="bar", stacked=True, ax=axes[ax_position])
+
+
+            if concept == methods[0]:
+                ax.set_ylabel("Total Rules")
+            if concept == methods[-1]:
+                ax.legend(['Found Rules', 'Non Rules'], loc='upper right')
+
+            ax.set_title(concept)
+            ax.set_xlabel("Epsilon")
+            # ax.set_title("Concept \"" + concept + "\"", fontsize=30, alpha=1.0)
+            # ax.set_ylabel("Total Rules", fontsize=30)
+            # ax.set_xlabel("Concept \"" + concept + "\"", fontsize=30, alpha=0.0)
+
+            # ax.set_ylim(0, 9000)
+            # ax.set_yticks(range(0, 9000, 1000))
+            # ax.set_yticklabels(labels=range(0, 9000, 1000), rotation=0,
+            #                    minor=False, fontsize=28)
+            ax.set_xticklabels(labels=epsilons, rotation=0,minor=False)
+            handles, labels = ax.get_legend_handles_labels()
+            ax_position += 1
+
+
+        # for method in sorted(list(set(qDF['Method']))):
+        #     miniDF = qDF.loc[qDF['Method'] == method]
+        #     eps = miniDF['Epsilon']
+        #     rls = miniDF['Percentage Found Rules']
+        #     plt.plot(eps, rls, label="Method: " + method)
+        #
+        # plt.xlabel("Epsilon")
+        # plt.ylabel("Percentage Found Client Client Rules")
+        # plt.xscale('log')
+        # plt.legend()
+        save = save.replace(".", "-")
+        fig.savefig(save + str(q) + "Queries_Summary_Rules_Nonrules")
+        fig.show()
 
 
 #Load LDP rules

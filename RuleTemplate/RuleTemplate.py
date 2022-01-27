@@ -253,11 +253,13 @@ class RuleTemplate():
             self.logger.error("ERROR: cannot remove branch, one or more nodes have children")
             return
 
+        if branch.name == self.root: #Don't remove root node
+            return
+
         #remove branch from parent node
-        # print("branch", branch)
-        # print(branchName)
-        # print("branch parent", branch.parent, branch.parent.name)
-        branch.parent.children.remove(branch)
+        if branch.parent != None:
+            branch.parent.children.remove(branch)
+
 
         #remove nodes
         while len(branch.nodes) != 0:

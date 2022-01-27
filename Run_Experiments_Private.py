@@ -73,6 +73,7 @@ def main():
                     params.cp = 1
 
                 params.maxQueries = nq
+                params.epsilon = eps
                 params.name = "Cp" + cpMethod + "_Queries" + str(nq) + "_Eps" + str(eps)
                 params.resultsFilename = "Results/Private/"+ dataset + "/" + mctsType + "/Cp" + cpMethod + "_Queries" + str(nq) + "_Eps" + str(eps)
 

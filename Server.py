@@ -338,8 +338,8 @@ class Server :
                 q = 1-p
                 # estTrueCount = float((yesCount - (len(self.clientList) * q)) / (p-q))
                 estTrueCount = float((yesCount - (len(branch.activeClients) * q)) / (p-q))
-                percentCount = float(estTrueCount / len(branch.activeClients))
-                truePerCount = float(trueYesses / len(branch.activeClients)) #Real percent
+                percentCount = float(estTrueCount / len(branch.activeClients)) if len(branch.activeClients) else 0
+                truePerCount = float(trueYesses / len(branch.activeClients)) if len(branch.activeClients) else 0#Real percent
 
                 if self.verbose:
                     # print("yes cnt", yesCount, "p", p, "q", q, "est true count", estTrueCount)
@@ -374,7 +374,7 @@ class Server :
             PT1 = priorProbTrue
             PT0 = 1 - priorProbTrue
             # print("PT1", PT1, "PT0", PT0)
-            R1gT1 = (p * PT1) / PT1  # if PT1 else 0
+            R1gT1 = (p * PT1) / PT1  if PT1 else 0
             R1gT0 = ((1 - p) * PT0 * p) / PT0 if PT0 else 0
             bayes = (R1gT1 * PT1) / ((R1gT1 * PT1) + (R1gT0 * PT0))  # PT1gR1
             # print("r1g1", R1gT1, "r1gt0", R1gT0, "bayes", bayes)
@@ -385,7 +385,7 @@ class Server :
             PT0 = 1 - priorProbTrue
             # print("PT1", PT1, "PT0", PT0)
             R0gT0 = (p * PT0) / PT0 if PT0 else 0
-            R0gT1 = ((1 - p) * PT1 * p) / PT1  # if PT1 else 0
+            R0gT1 = ((1 - p) * PT1 * p) / PT1  if PT1 else 0
             bayes = (R0gT1 * PT1) / ((R0gT1 * PT1) + (R0gT0 * PT0))  # PT1gR0
 
         # print("BAYES", bayes)
@@ -482,6 +482,16 @@ class Server :
             pLossBudg = None
 
         #Get param values from clients
+        # print("active clients", template.activeClients)
+        if template.activeClients == []:
+            params = self.clientList[1].queryParams(tempNodes, template, tempParams, template.varList, self.varDict, self.timeBounds, pLossBudg)
+
+            if params != None:
+                for k in tempParams.keys():
+                    if k in params:
+                        tempParams[k].append(params[k])
+
+
         for c in template.activeClients:
             # print("Client", c)
             params = self.clientList[c].queryParams(tempNodes, template, tempParams, template.varList, self.varDict, self.timeBounds, pLossBudg)

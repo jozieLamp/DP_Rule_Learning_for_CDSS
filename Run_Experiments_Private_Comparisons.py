@@ -30,15 +30,19 @@ def main():
     numQueries = [1000]
     budgets= [1000, 100, 10, 1, 0.1, 0.01, 0.001]
 
-    cps = ['basic', 'adaptiveCp', 'beta', 'eps']
+    cps = ['basic', 'beta', 'eps']
     prunes = ['basic', 'zero', 'small', 'beta', 'activeClients']
+
+    cps = ['basic', 'beta']
+    prunes = ['basic', 'activeClients']
 
     for cpMethod in cps:
         for pruneMethod in prunes:
+            # adjust name of cp method for prunes
+            cpMethodName = cpMethod + "_Prune" + pruneMethod
+
             for nq in numQueries:
                 for eps in budgets:
-                    print("\n\n**************** CP: " + cpMethod + "; QUERIES:", nq, "; EPSILON: ", eps, "****************")
-
                     # Update params
                     if cpMethod == 'basic':
                         params.cp = 1 / math.sqrt(2)
@@ -59,21 +63,21 @@ def main():
                     elif pruneMethod == 'activeClients': #only prune when active clients at 0
                         params.cutoffThresh = -10000
 
-                    #adjust name of cp method for prunes
-                    cpMethod =  cpMethod + "_Prune" + pruneMethod
 
                     params.maxQueries = nq
-                    params.name = "Cp" + cpMethod + "_Queries" + str(nq) + "_Eps" + str(eps)
-                    params.resultsFilename = "Results/Private/"+ dataset + "/" + mctsType + "/Cp" + cpMethod + "_Queries" + str(nq) + "_Eps" + str(eps)
+                    params.epsilon = eps
+                    params.name = "Cp" + cpMethodName + "_Queries" + str(nq) + "_Eps" + str(eps)
+                    params.resultsFilename = "Results/Private/"+ dataset + "/" + mctsType + "/Cp" + cpMethodName + "_Queries" + str(nq) + "_Eps" + str(eps)
 
+                    print("\n\n**************** CP: " + cpMethodName + "; QUERIES:", params.maxQueries, "; EPSILON: ", params.epsilon, "****************")
                     # #Run protocol
-                    runProt(params)
+                    # runProt(params)
 
                     ## COVERAGE EXPs
                     ldpRules, covDF, structDF = calcIndivCoverage(clientDF)
 
                     #Add results to list
-                    lst = [cpMethod, nq, eps, covDF['Total Client Rules'].item(), covDF['Found Rules'].item()/covDF['Total Client Rules'].item() ,covDF['Found Rules'].item(), covDF['Non Rules'].item(),
+                    lst = [cpMethodName, nq, eps, covDF['Total Client Rules'].item(), covDF['Found Rules'].item()/covDF['Total Client Rules'].item() ,covDF['Found Rules'].item(), covDF['Non Rules'].item(),
                            covDF['Precision'].item(),structDF['Total Client Structures'].item(), structDF['Found Structures'].item()/structDF['Total Client Structures'].item(),
                            structDF['Found Structures'].item(), structDF['Non Structures'].item(),
                            structDF['Precision'].item()]
@@ -86,7 +90,7 @@ def main():
                         ldpCM, ldpPtCM = calcIndivRuleQuality(ldpRules, clientData, clientLabels)
 
                         # Add results to list
-                        q = [cpMethod, nq, eps, ldpCM['Precision'].item(), ldpCM['Accuracy'].item(), ldpPtCM['Precision'].item(), ldpPtCM['Accuracy'].item()]
+                        q = [cpMethodName, nq, eps, ldpCM['Precision'].item(), ldpCM['Accuracy'].item(), ldpPtCM['Precision'].item(), ldpPtCM['Accuracy'].item()]
                         qualLst.append(q)
                         print("Current qual list", qualLst)
 
