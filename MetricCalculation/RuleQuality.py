@@ -428,7 +428,12 @@ def plotPrivateCM(df, clientCM, metric, save):
             met = miniDF[metric]
             plt.plot(eps, met, label="Method: " + method)
 
-        plt.axhline(y=clientCM[metric].item(), color='r', linestyle='--', label='Client ' + metric)
+        if metric == "Patient Accuracy":
+            plt.axhline(y=clientCM["Accuracy"].item(), color='r', linestyle='--', label='Client ' + metric)
+        elif metric == "Patient Precision":
+            plt.axhline(y=clientCM["Precision"].item(), color='r', linestyle='--', label='Client ' + metric)
+        else:
+            plt.axhline(y=clientCM[metric].item(), color='r', linestyle='--', label='Client ' + metric)
         plt.xlabel("Epsilon")
         plt.ylabel(metric)
         plt.xscale('log')

@@ -1,4 +1,0 @@
-,Rule,Percent Count
-0,"G[1,0]((ALT_GPT < 380.000 -> LOS = 122.000))",0.5
-1,"G[1,1]((CO2 = 50.000 -> LOS = 122.000))",1.0
-2,"G[0,1]((Glasgow_Coma_Scale_Total < 6.000 -> LOS = 122.000))",0.5

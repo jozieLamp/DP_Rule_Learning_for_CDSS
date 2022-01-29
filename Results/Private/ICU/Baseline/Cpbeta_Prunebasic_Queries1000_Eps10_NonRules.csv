@@ -1,8 +1,0 @@
-,Non Rules
-0,"G[0,0]((ICU_Pt_Days > 0.000 & n_evts = 0.000))"
-1,"G[0,0]((Glasgow_Coma_Scale_Total = 0.000 | MET > 0.000))"
-2,"G[0,0]((tte = 0.000 | ICU_Pt_Days < 0.000))"
-3,"G[0,0]((ICU_Pt_Days = 0.000 | LOS = 0.000))"
-4,"G[0,0]((tte = 0.000 | Mort = 0.000))"
-5,"G[0,0]((Glasgow_Coma_Scale_Total = 0.000 | ICU_Pt_Days > 0.000))"
-6,"G[0,0]((direct = 0.000 | ICU_Pt_Days > 0.000))"

@@ -1,6 +1,0 @@
-,Non Rules
-0,"G[0,0]((ALT_GPT = 0.000 & Temp = 0.000))"
-1,"G[0,0]((Pulse = 0.000 & Glasgow_Coma_Scale_Total = 0.000))"
-2,"G[0,0]((ICU_Pt_Days > 0.000 -> LOS < 0.000))"
-3,"G[0,0]((Resp = 0.000 & Temp = 0.000))"
-4,"G[0,0]((AST_GOT = 0.000 & Mort = 0.000))"

@@ -1,8 +1,0 @@
-,Non Rules
-0,"F[0,0]((ICU_Pt_Days > 0.000 & ICU_Pt_Days > 0.000))"
-1,"F[0,0]((CALCIUM = 0.000 -> LOS < 0.000))"
-2,"F[0,0]((n_evts > 0.000 & n_evts > 0.000))"
-3,"((Mort = 0.000) U[0,0] (LOS = 0.000))"
-4,"((O2_Flow = 0.000) U[0,0] (ICU_Pt_Days = 0.000))"
-5,"((death > 0.000) U[0,0] (ICU_Pt_Days = 0.000))"
-6,"((ICU_Pt_Days = 0.000) U[0,0] (ICU_Pt_Days = 0.000))"

@@ -1,8 +1,0 @@
-,Rule,Percent Count
-0,"G[1,1]((ICU_Pt_Days > 120.000 & n_evts = 5.000))",0.5
-1,"G[1,1]((Glasgow_Coma_Scale_Total = 15.000 | MET > 1.000))",0.5
-2,"G[1,1]((tte = 100.000 | ICU_Pt_Days < 120.000))",0.5
-3,"G[1,1]((ICU_Pt_Days = 120.000 | LOS = 48.800))",0.5
-4,"G[1,1]((tte = 100.000 | Mort = 1.000))",0.5
-5,"G[0,1]((Glasgow_Coma_Scale_Total = 6.000 | ICU_Pt_Days > 120.000))",0.5
-6,"G[1,1]((direct = 0.000 | ICU_Pt_Days > 120.000))",0.5
