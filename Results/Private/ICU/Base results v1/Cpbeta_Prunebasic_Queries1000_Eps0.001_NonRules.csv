@@ -1,0 +1,5 @@
+,Non Rules
+0,"F[0,0]((death = 0.000 & n_evts = 0.000))"
+1,"F[0,0]((PCO2 = 0.000 & y = 0.000))"
+2,"F[0,0]((tte = 0.000 & n_evts = 0.000))"
+3,"G[0,0]((n_evts > 0.000 -> BLOOD_UREA_NITROGEN > 0.000))"

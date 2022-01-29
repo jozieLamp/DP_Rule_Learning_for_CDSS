@@ -284,7 +284,7 @@ class MCTS:
             if matchCount > len(selectedBranch.activeClients):
                 matchCount = len(selectedBranch.activeClients)
 
-            percentCount = matchCount / len(selectedBranch.activeClients)
+            percentCount = matchCount / len(selectedBranch.activeClients) if len(selectedBranch.activeClients) else 0
 
             if self.verbose:
                 self.mcLogger.info("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount) + "\n")

@@ -1,0 +1,4 @@
+,Rule,Percent Count
+0,"G[1,1]((n_evts < 5.000 -> LOS > 122.000))",0.5
+1,"F[0,1]((direct = 1.000 & CHLORIDE < 108.000))",0.5
+2,"F[1,0]((ICU_Pt_Days > 48.000 & CHLORIDE < 150.000))",0.5

@@ -13,7 +13,7 @@ def main():
     #Main params
     dataset = 'ICU'
     mctsType = 'Baseline'
-    computeRQ = False
+    computeRQ = True
     params.popSize = 10
 
     #Load client rules
@@ -31,10 +31,10 @@ def main():
     budgets= [1000, 100, 10, 1, 0.1, 0.01, 0.001]
 
     cps = ['basic', 'beta', 'eps']
-    prunes = ['basic', 'zero', 'small', 'beta', 'activeClients']
+    # prunes = ['basic', 'zero', 'small', 'beta', 'activeClients']
+    prunes = ['basic', 'one', 'small']
 
-    cps = ['basic', 'beta']
-    prunes = ['basic', 'activeClients']
+
 
     for cpMethod in cps:
         for pruneMethod in prunes:
@@ -56,8 +56,10 @@ def main():
                         params.cutoffThresh = 0.01
                     elif pruneMethod == 'zero':
                         params.cutoffThresh = 0
+                    elif pruneMethod == 'one':
+                        params.cutoffThresh = 0.001
                     elif pruneMethod == 'small':
-                        params.cutoffThresh = 0.0000001
+                        params.cutoffThresh = 0.0001
                     elif pruneMethod == 'beta':
                         params.cutoffThresh = eps / nq
                     elif pruneMethod == 'activeClients': #only prune when active clients at 0
@@ -70,8 +72,8 @@ def main():
                     params.resultsFilename = "Results/Private/"+ dataset + "/" + mctsType + "/Cp" + cpMethodName + "_Queries" + str(nq) + "_Eps" + str(eps)
 
                     print("\n\n**************** CP: " + cpMethodName + "; QUERIES:", params.maxQueries, "; EPSILON: ", params.epsilon, "****************")
-                    # #Run protocol
-                    # runProt(params)
+                    #Run protocol
+                    runProt(params)
 
                     ## COVERAGE EXPs
                     ldpRules, covDF, structDF = calcIndivCoverage(clientDF)

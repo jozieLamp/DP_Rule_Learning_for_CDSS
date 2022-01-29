@@ -54,7 +54,7 @@ class Branch: #Set of nodes in tree
         counts = [item[0] for item in self.matchScores]
         numClients = [len(item[1]) for item in self.matchScores]
 
-        perCount = sum(counts) / sum(numClients)
+        perCount = sum(counts) / sum(numClients) if sum(numClients) else 0
 
         # print("\nGetting current score for", self.name)
         # print(self.ruleTree.show())

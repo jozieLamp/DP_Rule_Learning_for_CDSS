@@ -57,7 +57,10 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
                 foundRules += 1
                 # print(l.toString())
                 # print(ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'])
-                lCount = ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item()
+                try:
+                    lCount = ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item()
+                except:
+                    lCount = 0
                 # cCount = clientDF[clientDF["Rule"] == cRule]['Percent of Population'].item()
                 matchLst.append([l.toString(), cRule, lCount, cCount])
         else:
@@ -393,7 +396,7 @@ def plotQueryAnalysisPrivate(df, save):
             # subset = df.loc[idx[[concept], :],
             #                 ['Found Rules', 'Non Rules']]
             subset = qDF.loc[qDF['Method'] == concept][['Found Rules', 'Non Rules']]
-            print(subset.info())
+            # print(subset.info())
             # subset = subset.groupby(
             #     subset.index.get_level_values('datetime').year).sum()
 
@@ -412,7 +415,7 @@ def plotQueryAnalysisPrivate(df, save):
             # ax.set_ylabel("Total Rules", fontsize=30)
             # ax.set_xlabel("Concept \"" + concept + "\"", fontsize=30, alpha=0.0)
 
-            # ax.set_ylim(0, 9000)
+            ax.set_ylim(0, 8000)
             # ax.set_yticks(range(0, 9000, 1000))
             # ax.set_yticklabels(labels=range(0, 9000, 1000), rotation=0,
             #                    minor=False, fontsize=28)
