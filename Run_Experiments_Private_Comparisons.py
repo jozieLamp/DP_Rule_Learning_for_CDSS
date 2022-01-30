@@ -12,7 +12,7 @@ warnings.filterwarnings('ignore')
 def main():
     #Main params
     dataset = 'ICU'
-    mctsType = 'Baseline'
+    mctsType = 'Breadth'
     computeRQ = True
     params.popSize = 10
 

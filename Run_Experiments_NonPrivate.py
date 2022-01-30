@@ -43,7 +43,7 @@ def main():
 
     coverageLst = []
     qualLst = []
-    numQueries = list(range(10000,0,-100))
+    numQueries = list(range(10000,0,-1000))
 
     for nq in numQueries:
         print("\n\n**************** QUERIES:", nq, " ****************")

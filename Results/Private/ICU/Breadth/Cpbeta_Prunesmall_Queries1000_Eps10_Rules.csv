@@ -1,0 +1,24 @@
+,Rule,Percent Count
+0,"F[0,1]((CO2 = 50.000 & tte = 100.000))",0.5
+1,"F[1,1]((CO2 = 50.000 & BLOOD_UREA_NITROGEN = 120.000))",0.5
+2,"F[1,1]((y = 1.000 & direct = 1.000))",0.5
+3,"F[1,1]((direct = 1.000 & direct > 0.400))",0.5
+4,"F[1,1]((SBP = 260.000 & MAGNESIUM = 5.000))",0.5
+5,"F[1,1]((n_evts = 5.000 & POTASSIUM = 10.000))",1.0
+6,"F[1,1]((SBP = 260.000 & n_evts > 5.000))",1.0
+7,"F[1,1]((SpO2 = 88.000 & tte = 100.000))",0.5
+8,"F[1,1]((SBP = 104.000 & CO2 = 50.000))",0.5
+9,"F[1,1]((CALCIUM = 7.200 & PARTIAL_THROMBOPLASTIN_TIME = 140.000))",0.5
+10,"F[1,1]((tte = 100.000 & n_evts > 5.000))",0.5
+11,"F[1,1]((y = 0.400 & y = 1.000))",0.5
+12,"F[1,0]((n_evts = 5.000 & HEMOGLOBIN = 25.000))",0.5
+13,"F[1,0]((CO2 = 50.000 & PARTIAL_THROMBOPLASTIN_TIME = 140.000))",1.0
+14,"F[1,1]((ICU_Pt_Days = 48.000 & direct > 0.400))",0.5
+15,"F[1,0]((y = 1.000 & PHOSPHORUS = 10.000))",1.0
+16,"F[1,1]((tte = 100.000 & PLATELET_COUNT = 286.000))",0.5
+17,"F[0,1]((CO2 = 50.000 & Glasgow_Coma_Scale_Total = 0.000))",0.5
+18,"F[0,1]((ICU_Pt_Days = 120.000 & death = 1.000))",0.5
+19,"F[0,1]((CALCIUM = 15.000 & CREATININE = 10.000))",0.5
+20,"F[0,1]((n_evts = 5.000 & y > 0.400))",0.5
+21,"F[0,1]((ICU_Pt_Days = 48.000 & y = 1.000))",0.5
+22,"F[1,1]((HEMOGLOBIN = 25.000 & Glasgow_Coma_Scale_Total = 15.000))",0.5

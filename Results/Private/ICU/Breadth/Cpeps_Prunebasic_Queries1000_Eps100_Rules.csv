@@ -1,0 +1,2 @@
+,Rule,Percent Count
+0,"G[0,1]((ICU_Pt_Days < 120.000 | ICU_Pt_Days > 120.000))",0.5
