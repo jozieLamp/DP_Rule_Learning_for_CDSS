@@ -115,7 +115,6 @@ def main():
         print("RULE QUALITY DF")
         print(qualDF)
 
-        # TODO also fix overall rule quality metrics!!!
         # Make graphs of query analysis for rule quality
         RQ.plotPrivateCM(qualDF, clientCM, metric='Accuracy', save="Results/Private/"+ dataset + "/" + mctsType + "/Rule Quality/")
         RQ.plotPrivateCM(qualDF, clientCM, metric='Precision', save="Results/Private/"+ dataset + "/" + mctsType + "/Rule Quality/")
