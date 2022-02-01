@@ -15,9 +15,9 @@ def main():
     dataset = 'ICU'
     mctsType = 'Baseline'
     computeRQ = True
-    params.popSize = 10
+    params.popSize = 8000
     params.maxQueries = 1000
-    numTimes = 3 #10
+    numTimes = 10
 
     #Load client rules
     clientTrees, clientRules, clientDF = cov.loadClientRules(params.popSize, params.dataFilename)
@@ -33,14 +33,9 @@ def main():
     averagedCov = []
     averagedQual = []
 
-    # budgets= [1000, 100, 10, 1, 0.1, 0.01, 0.001]
-    budgets= [1000,  1]
-
-
-    # cps = ['basic', 'beta', 'eps', '1', '2']
-    # prunes = ['10', '1', '0-1', '0-001']
-    cps = ['basic', 'beta']
-    prunes = ['1', '0-1']
+    budgets = [1000, 100, 10, 1, 0.1, 0.01, 0.001]
+    cps = ['basic', 'beta', 'eps', '1', '2']
+    prunes = ['10', '1', '0-1', '0-001']
 
 
 
