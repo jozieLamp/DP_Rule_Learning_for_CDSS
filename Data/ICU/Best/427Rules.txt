@@ -1,0 +1,2 @@
+F[0,1](MAGNESIUM <= 2.251 | WHITE_BLOOD_CELL_COUNT >= 8.515)
+G[0,0](Temp <= 37.105 & y <= 0.923)

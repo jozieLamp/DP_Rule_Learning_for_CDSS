@@ -1,0 +1,6 @@
+G[0,1](BLOOD_UREA_NITROGEN <= 30.383 & y <= 0.724)
+((tte >= -3.645) U[0,1] (y >= 0.426))
+G[0,1](WHITE_BLOOD_CELL_COUNT <= 14.175 & y <= 0.702)
+((s8_hr <= 0.001) U[0,1] (tte >= -1.309))
+G[0,0](CREATININE <= 1.231 | GLUCOSE <= 146.317)
+((CHLORIDE <= 95.788) U[0,1] (CREATININE >= 1.139))

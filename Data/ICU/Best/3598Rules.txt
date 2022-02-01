@@ -1,0 +1,5 @@
+G[0,1](death >= 0.001 | tte <= -0.979)
+((SBP >= 66.335) U[0,0] (y >= 0.142))
+G[0,1](CHLORIDE >= 101.749 -> y <= 0.452)
+G[0,1](Glasgow_Coma_Scale_Total <= 14.980 | y <= 0.408)
+((AST_GOT >= 23.321) U[0,1] (Glasgow_Coma_Scale_Total >= 14.459))

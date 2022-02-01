@@ -1,0 +1,4 @@
+F[1,1](s24_hr >= -0.004 & s8_hr >= -0.001)
+((PLATELET_COUNT <= 256.294) U[0,1] (Pulse <= 99.688))
+F[0,0](n_edrk >= 0.343 -> PROTIME_INR >= 1.549)
+F[0,0](PHOSPHORUS >= 2.497 -> Pulse <= 105.504)

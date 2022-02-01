@@ -1,0 +1,5 @@
+((Pulse >= 90.938) U[0,0] (y >= 0.321))
+G[1,1](Glasgow_Coma_Scale_Total <= 14.218 | HEMOGLOBIN <= 12.204)
+F[0,0](O2_Flow >= 4.101 -> PHOSPHORUS <= 2.801)
+F[0,0](CREATININE >= 0.721 -> n_edrk <= 0.984)
+G[0,0](HEMOGLOBIN <= 13.273 & LOS >= 5.657)

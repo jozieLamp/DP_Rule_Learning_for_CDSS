@@ -1,0 +1,3 @@
+F[0,1](s8_hr >= -0.001 -> y >= 0.499)
+F[0,0](srr <= 0.208 -> y >= 0.245)
+((Glasgow_Coma_Scale_Total >= 14.579) U[0,1] (TROPONIN_I <= 0.242))

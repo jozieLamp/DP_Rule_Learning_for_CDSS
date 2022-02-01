@@ -1,0 +1,3 @@
+F[0,0](WHITE_BLOOD_CELL_COUNT >= 8.035 -> y >= 0.431)
+((PLATELET_COUNT <= 210.430) U[0,1] (Resp >= 14.092))
+G[0,1](CREATININE >= 0.832 & direct <= 0.730)

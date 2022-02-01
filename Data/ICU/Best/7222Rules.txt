@@ -1,0 +1,8 @@
+G[0,1](srr <= 0.199 -> tte <= -0.991)
+((direct >= 0.044) U[0,1] (y >= 0.257))
+((SODIUM >= 137.105) U[0,1] (y >= 0.351))
+F[1,1](CREATININE <= 1.530 & PROTIME_INR >= 1.116)
+((O2_Flow <= 5.686) U[0,1] (PROTIME_INR >= 1.127))
+G[0,0](CALCIUM <= 9.640 & PROTIME_INR <= 1.152)
+G[0,0](PROTIME_INR <= 1.170 & tte <= -0.661)
+G[0,1](CO2 <= 29.026 & SBP <= 171.196)

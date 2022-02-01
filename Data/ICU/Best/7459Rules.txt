@@ -1,0 +1,6 @@
+((WHITE_BLOOD_CELL_COUNT >= 4.352) U[0,1] (y >= 0.097))
+((Glasgow_Coma_Scale_Total <= 14.978) U[0,1] (y >= 0.370))
+((PROTIME_INR >= 1.073) U[0,0] (SODIUM <= 136.974))
+G[0,0](CO2 >= 22.015 & direct >= 0.822)
+((cosen <= -2.146) U[0,1] (CREATININE >= 1.125))
+F[0,1](BLOOD_UREA_NITROGEN >= 23.811 & PROTIME_INR >= 1.003)

@@ -1,0 +1,5 @@
+((Pulse <= 100.083) U[0,1] (y >= 0.039))
+((Temp >= 36.200) U[1,1] (y >= 0.046))
+G[0,1](WHITE_BLOOD_CELL_COUNT >= 10.188 -> y <= 0.438)
+((af >= 0.004) U[0,1] (BLOOD_UREA_NITROGEN >= 10.178))
+((BLOOD_UREA_NITROGEN >= 10.012) U[1,2] (Glasgow_Coma_Scale_Total >= 14.491))

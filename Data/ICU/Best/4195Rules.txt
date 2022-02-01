@@ -1,0 +1,2 @@
+G[0,1](CREATININE >= 1.982 -> n_evts >= 0.001)
+F[0,0](BLOOD_UREA_NITROGEN >= 57.150 & Mort >= 0.702)

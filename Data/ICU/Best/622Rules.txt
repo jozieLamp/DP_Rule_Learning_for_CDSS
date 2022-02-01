@@ -1,0 +1,6 @@
+F[1,1](ICU_Pt_Days >= 0.626 | n_edrk <= 0.870)
+G[0,1](cosen >= -1.957 & Glasgow_Coma_Scale_Total >= 14.514)
+F[1,1](O2_Flow <= 4.511 -> y >= 0.378)
+((n_evts >= 0.079) U[1,2] (s8_edrk >= -0.007))
+((lds >= 0.569) U[0,1] (n_edrk <= 0.774))
+((edrk >= 17.136) U[0,1] (n_edrk <= 0.620))

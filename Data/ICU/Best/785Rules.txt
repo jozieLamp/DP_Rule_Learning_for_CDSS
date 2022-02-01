@@ -1,0 +1,7 @@
+((POTASSIUM >= 3.946) U[1,1] (y >= 0.238))
+G[0,1](cosen <= -0.749 -> y <= 0.429)
+G[0,1](ALT_GPT <= 22.897 -> tte <= -0.779)
+((LOS >= 3.609) U[0,0] (TROPONIN_I <= 0.131))
+G[1,1](dfa >= 0.457 | GLUCOSE <= 109.427)
+((PROTIME_INR <= 1.281) U[0,1] (TROPONIN_I <= 0.136))
+((lds >= 0.932) U[1,1] (TROPONIN_I <= 0.136))

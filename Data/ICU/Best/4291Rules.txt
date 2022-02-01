@@ -1,0 +1,6 @@
+G[0,0](AST_GOT <= 43.346 | OXYGEN_SATURATION >= 92.122)
+((HEMOGLOBIN <= 11.880) U[0,1] (OXYGEN_SATURATION <= 93.738))
+F[0,1](O2_Flow >= 2.053 & PHOSPHORUS <= 4.426)
+F[1,1](CREATININE >= 1.014 & O2_Flow >= 2.586)
+F[0,0](direct >= 0.016 | s24_hr <= 0.000)
+G[0,1](O2_Flow <= 5.686 -> TROPONIN_I <= 1.392)

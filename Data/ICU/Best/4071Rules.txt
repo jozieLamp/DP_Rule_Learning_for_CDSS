@@ -1,0 +1,7 @@
+F[0,1](MET >= 0.203 -> PHOSPHORUS >= 3.602)
+F[1,1](SODIUM <= 136.049 -> y >= 0.527)
+G[1,1](lds >= 1.737 & PROTIME_INR >= 1.120)
+F[0,1](direct >= 0.053 | TOTAL_BILIRUBIN <= 0.557)
+F[1,1](ALKALINE_PHOSPHATASE <= 183.995 -> y >= 0.122)
+F[1,1](LOS <= 4.727 -> PHOSPHORUS >= 3.576)
+F[1,1](ICU_Pt_Days <= 4.848 -> SODIUM <= 136.610)

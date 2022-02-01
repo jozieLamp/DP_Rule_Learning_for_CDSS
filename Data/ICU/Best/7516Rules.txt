@@ -1,0 +1,7 @@
+F[0,1](CREATININE <= 4.685 -> LOS <= 60.657)
+F[0,1](s24_edrk >= -0.003 & y >= 0.310)
+((s8_hr <= 0.001) U[0,1] (y >= 0.341))
+G[0,1](PHOSPHORUS <= 4.626 & Pulse >= 80.118)
+((PLATELET_COUNT <= 187.720) U[0,0] (SpO2 <= 95.498))
+((death >= 0.020) U[0,0] (O2_Flow >= 4.033))
+F[1,1](tte <= -0.067 -> WHITE_BLOOD_CELL_COUNT <= 8.198)

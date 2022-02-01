@@ -1,0 +1,1 @@
+F[0,1](Glasgow_Coma_Scale_Total >= 14.087 | HEMOGLOBIN <= 9.980)

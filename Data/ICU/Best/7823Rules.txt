@@ -1,0 +1,1 @@
+((ALBUMIN >= 3.078) U[0,1] (PHOSPHORUS <= 3.614))

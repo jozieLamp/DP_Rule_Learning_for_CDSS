@@ -1,0 +1,7 @@
+((ALKALINE_PHOSPHATASE >= 79.804) U[0,1] (y >= 0.391))
+F[0,1](CREATININE >= 1.936 | Pulse >= 64.353)
+F[1,1](ICU_Pt_Days <= 8.331 | WHITE_BLOOD_CELL_COUNT >= 8.468)
+F[1,1](s24_hr >= -0.001 -> y >= 0.527)
+((hr >= 60.278) U[1,2] (ICU_Pt_Days >= 2.557))
+F[0,1](CALCIUM <= 8.620 | n_edrk <= 0.907)
+F[0,0](n_edrk >= 0.785 -> SODIUM >= 137.657)

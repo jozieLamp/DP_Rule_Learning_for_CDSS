@@ -1,0 +1,7 @@
+G[0,1](HEMOGLOBIN >= 9.187 & PROTIME_INR <= 1.192)
+G[0,1](CREATININE >= 1.136 & POTASSIUM <= 4.396)
+((CALCIUM <= 9.879) U[0,0] (POTASSIUM >= 4.378))
+((dfa <= 0.666) U[0,0] (POTASSIUM >= 4.221))
+G[1,1](CO2 >= 26.354 & SpO2 <= 95.405)
+F[0,1]((af <= 0.417 | AF <= 0.487) & cosen >= -2.289)
+F[0,1](POTASSIUM <= 4.781 -> Temp >= 36.561)

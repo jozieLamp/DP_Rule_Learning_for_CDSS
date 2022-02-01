@@ -1,0 +1,5 @@
+F[0,0](AF <= 0.446 -> y = 1.000)
+G[0,0](s24_edrk <= 0.003 & y <= 0.706)
+G[1,1](Pulse >= 84.101 -> y <= 0.800)
+F[0,0](LACTIC_ACID <= 1.995 | PARTIAL_THROMBOPLASTIN_TIME >= 24.621)
+((POTASSIUM >= 3.563) U[0,0] (Resp <= 26.105))

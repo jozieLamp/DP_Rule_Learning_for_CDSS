@@ -1,0 +1,2 @@
+G[0,1](cosen >= -1.876 & HEMOGLOBIN >= 8.527)
+F[1,1](CHLORIDE >= 94.864 & MAGNESIUM >= 1.408)

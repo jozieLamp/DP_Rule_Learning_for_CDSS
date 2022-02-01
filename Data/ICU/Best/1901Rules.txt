@@ -1,0 +1,5 @@
+G[0,1](SODIUM <= 144.158 -> y <= 0.883)
+((PROTIME_INR >= 1.423) U[0,1] (y >= 0.136))
+F[1,1](Mort >= 0.035 & y >= 0.302)
+G[0,1](MAGNESIUM >= 2.024 -> TROPONIN_I >= 0.024)
+G[0,1](direct >= 0.809 & MAGNESIUM <= 2.416)

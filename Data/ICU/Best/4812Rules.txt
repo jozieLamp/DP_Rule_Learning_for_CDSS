@@ -1,0 +1,4 @@
+G[0,1](CO2 >= 23.266 & Pulse >= 101.322)
+G[0,1](Mort >= 0.629 & PHOSPHORUS >= 2.225)
+G[0,1](GLUCOSE <= 202.378 & srr <= 0.044)
+F[0,1](srr >= 0.024 | WHITE_BLOOD_CELL_COUNT >= 8.593)
