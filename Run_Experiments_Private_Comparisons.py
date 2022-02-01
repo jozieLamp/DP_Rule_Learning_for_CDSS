@@ -6,15 +6,18 @@ from Client import Client
 from Server import Server
 import pandas as pd
 import math
+import numpy as np
 import warnings
 warnings.filterwarnings('ignore')
 
 def main():
     #Main params
     dataset = 'ICU'
-    mctsType = 'Breadth'
+    mctsType = 'Baseline'
     computeRQ = True
     params.popSize = 10
+    params.maxQueries = 1000
+    numTimes = 3 #10
 
     #Load client rules
     clientTrees, clientRules, clientDF = cov.loadClientRules(params.popSize, params.dataFilename)
@@ -26,91 +29,135 @@ def main():
 
     coverageLst = []
     qualLst = []
-    # numQueries = list(range(10000,0,-100))
-    numQueries = [1000]
-    budgets= [1000, 100, 10, 1, 0.1, 0.01, 0.001]
 
-    cps = ['basic', 'beta', 'eps']
-    # prunes = ['basic', 'zero', 'small', 'beta', 'activeClients']
-    prunes = ['basic', 'one', 'small']
+    averagedCov = []
+    averagedQual = []
+
+    # budgets= [1000, 100, 10, 1, 0.1, 0.01, 0.001]
+    budgets= [1000,  1]
+
+
+    # cps = ['basic', 'beta', 'eps', '1', '2']
+    # prunes = ['10', '1', '0-1', '0-001']
+    cps = ['basic', 'beta']
+    prunes = ['1', '0-1']
 
 
 
     for cpMethod in cps:
         for pruneMethod in prunes:
-            # adjust name of cp method for prunes
-            cpMethodName = cpMethod + "_Prune" + pruneMethod
+            for eps in budgets:
 
-            for nq in numQueries:
-                for eps in budgets:
-                    # Update params
-                    if cpMethod == 'basic':
-                        params.cp = 1 / math.sqrt(2)
-                    #Adapt Cp as a function of beta --> more noise should favor higher match scores over more breadth searching
-                    elif cpMethod == 'beta': #just set cp to beta (budget/query)
-                        params.cp = eps / nq
-                    elif cpMethod == 'eps': #set to epsilon
-                        params.cp = eps
+                # Update params
+                if cpMethod == 'basic':
+                    params.cp = 1 / math.sqrt(2)
+                #Adapt Cp as a function of beta --> more noise should favor higher match scores over more breadth searching
+                elif cpMethod == 'beta': #just set cp to beta (budget/query)
+                    params.cp = eps / params.maxQueries
+                elif cpMethod == 'eps': #set to epsilon
+                    params.cp = eps
+                elif cpMethod == '1': #set to epsilon
+                    params.cp = 1
+                elif cpMethod == '2': #set to epsilon
+                    params.cp = 2
 
-                    if pruneMethod == 'basic':
-                        params.cutoffThresh = 0.01
-                    elif pruneMethod == 'zero':
-                        params.cutoffThresh = 0
-                    elif pruneMethod == 'one':
-                        params.cutoffThresh = 0.001
-                    elif pruneMethod == 'small':
-                        params.cutoffThresh = 0.0001
-                    elif pruneMethod == 'beta':
-                        params.cutoffThresh = eps / nq
-                    elif pruneMethod == 'activeClients': #only prune when active clients at 0
-                        params.cutoffThresh = -10000
+                if pruneMethod == '10':
+                    params.cutoffThresh = 0.10
+                elif pruneMethod == '1':
+                    params.cutoffThresh = 0.01
+                elif pruneMethod == '0-1':
+                    params.cutoffThresh = 0.001
+                elif pruneMethod == '0-001':
+                    params.cutoffThresh = 0.0001
 
+                params.epsilon = eps
+                params.name = "Cp" + cpMethod + "_Lambda" + pruneMethod + "_Eps" + str(eps)
+                params.resultsFilename = "Results/Private/"+ dataset + "/" + mctsType + "/Cp" + cpMethod + "_Lambda" + pruneMethod + "_Eps" + str(eps)
 
-                    params.maxQueries = nq
-                    params.epsilon = eps
-                    params.name = "Cp" + cpMethodName + "_Queries" + str(nq) + "_Eps" + str(eps)
-                    params.resultsFilename = "Results/Private/"+ dataset + "/" + mctsType + "/Cp" + cpMethodName + "_Queries" + str(nq) + "_Eps" + str(eps)
+                print("\n\n**************** CP: " + cpMethod + "; Lambda:", pruneMethod, "; EPSILON: ", params.epsilon, "****************")
 
-                    print("\n\n**************** CP: " + cpMethodName + "; QUERIES:", params.maxQueries, "; EPSILON: ", params.epsilon, "****************")
+                aveCov = []
+                aveQual = []
+                for n in range(numTimes):
                     #Run protocol
                     runProt(params)
 
                     ## COVERAGE EXPs
                     ldpRules, covDF, structDF = calcIndivCoverage(clientDF)
 
-                    #Add results to list
-                    lst = [cpMethodName, nq, eps, covDF['Total Client Rules'].item(), covDF['Found Rules'].item()/covDF['Total Client Rules'].item() ,covDF['Found Rules'].item(), covDF['Non Rules'].item(),
-                           covDF['Precision'].item(),structDF['Total Client Structures'].item(), structDF['Found Structures'].item()/structDF['Total Client Structures'].item(),
-                           structDF['Found Structures'].item(), structDF['Non Structures'].item(),
-                           structDF['Precision'].item()]
+                    aveCov.append([covDF['Total Client Rules'].item(), covDF['Found Rules'].item()/covDF['Total Client Rules'].item() ,covDF['Found Rules'].item(), covDF['Non Rules'].item(),
+                       covDF['Precision'].item(),structDF['Total Client Structures'].item(), structDF['Found Structures'].item()/structDF['Total Client Structures'].item(),
+                       structDF['Found Structures'].item(), structDF['Non Structures'].item(),
+                       structDF['Precision'].item()])
 
-                    print("LST", lst)
-                    coverageLst.append(lst)
+                    coverageLst.append([cpMethod, pruneMethod, eps, covDF['Total Client Rules'].item(), covDF['Found Rules'].item()/covDF['Total Client Rules'].item() ,covDF['Found Rules'].item(), covDF['Non Rules'].item(),
+                       covDF['Precision'].item(),structDF['Total Client Structures'].item(), structDF['Found Structures'].item()/structDF['Total Client Structures'].item(),
+                       structDF['Found Structures'].item(), structDF['Non Structures'].item(),
+                       structDF['Precision'].item()])
 
                     ## RULE QUALITY EXPS
                     if computeRQ:
                         ldpCM, ldpPtCM = calcIndivRuleQuality(ldpRules, clientData, clientLabels)
 
                         # Add results to list
-                        q = [cpMethodName, nq, eps, ldpCM['Precision'].item(), ldpCM['Accuracy'].item(), ldpPtCM['Precision'].item(), ldpPtCM['Accuracy'].item()]
-                        qualLst.append(q)
-                        print("Current qual list", qualLst)
+                        aveQual.append([ldpCM['Precision'].item(), ldpCM['Accuracy'].item(),
+                             ldpPtCM['Precision'].item(), ldpPtCM['Accuracy'].item()])
+
+                        qualLst.append([cpMethod, pruneMethod, eps, ldpCM['Precision'].item(), ldpCM['Accuracy'].item(),
+                             ldpPtCM['Precision'].item(), ldpPtCM['Accuracy'].item()])
+
+
+                #Ave results
+                stdDevCov = np.std(aveCov, axis=0)
+                aveCov = np.average(aveCov, axis=0)
+
+                if computeRQ:
+                    stdDevQual = np.std(aveQual, axis=0)
+                    aveQual = np.average(aveQual, axis=0)
+
+                #Add averaged results to list
+                #Coverage
+                lst = [cpMethod, pruneMethod, eps]
+                lst.extend(aveCov)
+                lst.extend(stdDevCov)
+                averagedCov.append(lst)
+
+                #Rule quality
+                if computeRQ:
+                    q = [cpMethod, pruneMethod, eps]
+                    q.extend(aveQual)
+                    q.extend(stdDevQual)
+                    averagedQual.append(q)
 
 
     #Make final result DFs
     #Coverage DF
-    df = pd.DataFrame(coverageLst, columns=["Method", "Queries", "Epsilon", "Total Client Rules", "Percentage Found Rules", "Found Rules", "Non Rules", "Rule Precision",
+    df = pd.DataFrame(coverageLst, columns=["Cp", "Lambda", "Epsilon", "Total Client Rules", "Percentage Found Rules", "Found Rules", "Non Rules", "Rule Precision",
                     "Total Client Structures","Percentage Found Structures", "Found Structures", "Non Structures", "Structure Precision"])
     df.to_csv("Results/Private/"+ dataset + "/" + mctsType + "/Coverage/CoverageSummaryDF.csv")
     print("COVERAGE DF:")
     print(df)
 
     # Make graphs of query analysis for coverage
-    cov.plotQueryAnalysisPrivate(df, save="Results/Private/" + dataset + "/" + mctsType +"/Coverage/")
+    cov.plotQueryAnalysisPrivate(df, save="Results/Private/" + dataset + "/" + mctsType +"/Coverage/", value='Percentage Found Rules')
+    cov.plotQueryAnalysisPrivate(df, save="Results/Private/" + dataset + "/" + mctsType + "/Coverage/",value='Percentage Found Structures')
+    cov.plotQueryAnalysisPrivate(df, save="Results/Private/" + dataset + "/" + mctsType + "/Coverage/",value='Rule Precision')
+    cov.plotQueryAnalysisPrivate(df, save="Results/Private/" + dataset + "/" + mctsType + "/Coverage/",value='Structure Precision')
+    cov.plotQueryAnalysisPrivate(df, save="Results/Private/" + dataset + "/" + mctsType + "/Coverage/",value='Found Rules')
+    cov.plotQueryAnalysisPrivate(df, save="Results/Private/" + dataset + "/" + mctsType + "/Coverage/",value='Non Rules')
+
+    aveCovDf = pd.DataFrame(averagedCov,columns=["Cp", "Lambda", "Epsilon", "Total Client Rules", "Percentage Found Rules", "Found Rules","Non Rules", "Rule Precision",
+                               "Total Client Structures", "Percentage Found Structures", "Found Structures","Non Structures", "Structure Precision",
+                                "Total Client Rules Std", "Percentage Found Rules Std", "Found Rules Std","Non Rules Std", "Rule Precision Std","Total Client Structures Std",
+                                "Percentage Found Structures Std","Found Structures Std","Non Structures Std", "Structure Precision Std" ])
+    aveCovDf.to_csv("Results/Private/" + dataset + "/" + mctsType + "/Coverage/AveragedCoverageSummaryDF.csv")
+    cov.summaryPrivRules(aveCovDf, save="Results/Private/" + dataset + "/" + mctsType + "/Coverage/")
+
+
 
     # Quality DF
     if computeRQ:
-        qualDF = pd.DataFrame(qualLst, columns=["Method", 'Queries', "Epsilon", 'Precision', 'Accuracy', 'Patient Precision', 'Patient Accuracy'])
+        qualDF = pd.DataFrame(qualLst, columns=["Cp", 'Lambda', "Epsilon", 'Precision', 'Accuracy', 'Patient Precision', 'Patient Accuracy'])
         qualDF.to_csv("Results/Private/"+ dataset + "/" + mctsType + "/Rule Quality/RuleQualitySummaryDF.csv")
         print("RULE QUALITY DF")
         print(qualDF)
@@ -121,6 +168,10 @@ def main():
         #Do for patient
         RQ.plotPrivateCM(qualDF, clientPtCM, metric='Patient Accuracy', save="Results/Private/"+ dataset + "/" + mctsType + "/Rule Quality/")
         RQ.plotPrivateCM(qualDF, clientPtCM, metric='Patient Precision', save="Results/Private/"+ dataset + "/" + mctsType + "/Rule Quality/")
+
+        aveQualDF = pd.DataFrame(averagedQual, columns=["Cp", 'Lambda', "Epsilon", 'Precision', 'Accuracy', 'Patient Precision', 'Patient Accuracy',
+                                                        'Precision Std', 'Accuracy Std', 'Patient Precision Std', 'Patient Accuracy Std'])
+        aveQualDF.to_csv("Results/Private/"+ dataset + "/" + mctsType + "/Rule Quality/AveragedRuleQualitySummaryDF.csv")
 
 
 

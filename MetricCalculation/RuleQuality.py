@@ -414,33 +414,34 @@ def plotQueryAnalysisPatientCM(df, clientCM, save):
     plt.show()
 
 def plotPrivateCM(df, clientCM, metric, save):
-    queries = df["Queries"]
+    cps = sorted(list(set(df['Cp'])))
+    lambdas = sorted(list(set(df['Lambda'])))
 
-    for q in sorted(list(set(queries))):
-        qDF = df.loc[df['Queries'] == q]
+    plt.figure(figsize=(12, 7))
+    plt.title(metric)
+    for cp in cps:
+        for l in lambdas:
+            miniDF = df.loc[df['Cp'] == cp]
+            miniDF = miniDF.loc[df['Lambda'] == l]
+            # eps = miniDF['Epsilon']
+            # met = miniDF[metric]
+            # plt.plot(eps, met, label="Cp: " + cp + "; Lambda: " + l)
+            sns.lineplot(data=miniDF, x="Epsilon", y=metric, label="Cp: " + cp + "; Lambda: " + l)
 
-        plt.figure(figsize=(12, 7))
-        plt.title(metric + " for " + str(q) + " Queries")
 
-        for method in sorted(list(set(qDF['Method']))):
-            miniDF = qDF.loc[qDF['Method'] == method]
-            eps = miniDF['Epsilon']
-            met = miniDF[metric]
-            plt.plot(eps, met, label="Method: " + method)
-
-        if metric == "Patient Accuracy":
-            plt.axhline(y=clientCM["Accuracy"].item(), color='r', linestyle='--', label='Client ' + metric)
-        elif metric == "Patient Precision":
-            plt.axhline(y=clientCM["Precision"].item(), color='r', linestyle='--', label='Client ' + metric)
-        else:
-            plt.axhline(y=clientCM[metric].item(), color='r', linestyle='--', label='Client ' + metric)
-        plt.xlabel("Epsilon")
-        plt.ylabel(metric)
-        plt.xscale('log')
-        plt.legend()
-        save = save.replace(".", "-")
-        plt.savefig(save + str(q) + "Queries_" + metric)
-        plt.show()
+    if metric == "Patient Accuracy":
+        plt.axhline(y=clientCM["Accuracy"].item(), color='r', linestyle='--', label='Client ' + metric)
+    elif metric == "Patient Precision":
+        plt.axhline(y=clientCM["Precision"].item(), color='r', linestyle='--', label='Client ' + metric)
+    else:
+        plt.axhline(y=clientCM[metric].item(), color='r', linestyle='--', label='Client ' + metric)
+    plt.xlabel("Epsilon")
+    plt.ylabel(metric)
+    plt.xscale('log')
+    plt.legend()
+    save = save.replace(".", "-")
+    plt.savefig(save + metric)
+    plt.show()
 
 
 

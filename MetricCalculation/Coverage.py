@@ -246,197 +246,68 @@ def plotQueryAnalysis(df, save):
     plt.savefig(save + "Structure_Query_Analysis")
     plt.show()
 
-def plotQueryAnalysisPrivate(df, save):
+def plotQueryAnalysisPrivate(df, save, value):
+    cps = sorted(list(set(df['Cp'])))
+    lambdas = sorted(list(set(df['Lambda'])))
 
-    #Plot percentage found rules
-    for q in sorted(list(set(df['Queries']))):
-        qDF = df.loc[df['Queries'] == q]
+    plt.figure(figsize=(12, 7))
+    plt.title(value)
+    for cp in cps:
+        for l in lambdas:
+            miniDF = df.loc[df['Cp'] == cp]
+            miniDF = miniDF.loc[df['Lambda'] == l]
+            # eps = miniDF['Epsilon']
+            # rls = miniDF[value]
+            #             plt.plot(eps, rls, label="Cp: " + cp + "; Lambda: " + l)
+            sns.lineplot(data=miniDF, x="Epsilon", y=value, label="Cp: " + cp + "; Lambda: " + l)
 
-        # Plot Rules
-        plt.figure(figsize=(12, 7))
-        plt.title("Percentage Found Client Rules for " + str(q) + " Queries")
+    plt.xlabel("Epsilon")
+    plt.ylabel(value)
+    plt.xscale('log')
+    plt.legend()
 
-        for method in sorted(list(set(qDF['Method']))):
-            miniDF = qDF.loc[qDF['Method'] == method]
-            eps = miniDF['Epsilon']
-            rls = miniDF['Percentage Found Rules']
-            plt.plot(eps, rls, label="Method: " + method)
-
-        plt.xlabel("Epsilon")
-        plt.ylabel("Percentage Found Client Client Rules")
-        plt.xscale('log')
-        plt.legend()
-        save = save.replace(".", "-")
-        plt.savefig(save + str(q) + "Queries_Percent_Found_Client_Rules")
-        plt.show()
-
-    # Plot percentage found structures
-    for q in sorted(list(set(df['Queries']))):
-        qDF = df.loc[df['Queries'] == q]
-
-        # Plot Rules
-        plt.figure(figsize=(12, 7))
-        plt.title("Percentage Found Client Structures for " + str(q) + " Queries")
-
-        for method in sorted(list(set(qDF['Method']))):
-            miniDF = qDF.loc[qDF['Method'] == method]
-            eps = miniDF['Epsilon']
-            rls = miniDF['Percentage Found Structures']
-            plt.plot(eps, rls, label="Method: " + method)
-
-        plt.xlabel("Epsilon")
-        plt.ylabel("Percentage Found Client Structures")
-        plt.xscale('log')
-        plt.legend()
-        save = save.replace(".", "-")
-        plt.savefig(save + str(q) + "Queries_Percent_Found_Client_Structures")
-        plt.show()
-
-    # Plot Rule Precision
-    for q in sorted(list(set(df['Queries']))):
-        qDF = df.loc[df['Queries'] == q]
-
-        # Plot Rules
-        plt.figure(figsize=(12, 7))
-        plt.title("Rule Precision for " + str(q) + " Queries")
-
-        for method in sorted(list(set(qDF['Method']))):
-            miniDF = qDF.loc[qDF['Method'] == method]
-            eps = miniDF['Epsilon']
-            rls = miniDF['Rule Precision']
-            plt.plot(eps, rls, label="Method: " + method)
-
-        plt.xlabel("Epsilon")
-        plt.ylabel("Rule Precision")
-        plt.xscale('log')
-        plt.legend()
-        save = save.replace(".", "-")
-        plt.savefig(save + str(q) + "Queries_Rule_Precision")
-        plt.show()
-
-    # Plot Structure Precision
-    for q in sorted(list(set(df['Queries']))):
-        qDF = df.loc[df['Queries'] == q]
-
-        # Plot Rules
-        plt.figure(figsize=(12, 7))
-        plt.title("Structure Precision for " + str(q) + " Queries")
-
-        for method in sorted(list(set(qDF['Method']))):
-            miniDF = qDF.loc[qDF['Method'] == method]
-            eps = miniDF['Epsilon']
-            rls = miniDF['Structure Precision']
-            plt.plot(eps, rls, label="Method: " + method)
-
-        plt.xlabel("Epsilon")
-        plt.ylabel("Structure Precision")
-        plt.xscale('log')
-        plt.legend()
-        save = save.replace(".", "-")
-        plt.savefig(save + str(q) + "Queries_Structure_Precision")
-        plt.show()
-
-    #TODO - note, may not need these ones
-    # Plot Total Found Rules
-    for q in sorted(list(set(df['Queries']))):
-        qDF = df.loc[df['Queries'] == q]
-
-        # Plot Rules
-        plt.figure(figsize=(12, 7))
-        plt.title("Total Found Rules for " + str(q) + " Queries")
-
-        for method in sorted(list(set(qDF['Method']))):
-            miniDF = qDF.loc[qDF['Method'] == method]
-            eps = miniDF['Epsilon']
-            rls = miniDF['Found Rules']
-            plt.plot(eps, rls, label="Method: " + method)
-
-        plt.xlabel("Epsilon")
-        plt.ylabel("Total Found Rules")
-        plt.xscale('log')
-        plt.legend()
-        save = save.replace(".", "-")
-        plt.savefig(save + str(q) + "Queries_Found_Rules")
-        plt.show()
-
-    # Plot Total Non Rules
-    for q in sorted(list(set(df['Queries']))):
-        qDF = df.loc[df['Queries'] == q]
-
-        # Plot Rules
-        plt.figure(figsize=(12, 7))
-        plt.title("Total Non Rules for " + str(q) + " Queries")
-
-        for method in sorted(list(set(qDF['Method']))):
-            miniDF = qDF.loc[qDF['Method'] == method]
-            eps = miniDF['Epsilon']
-            rls = miniDF['Non Rules']
-            plt.plot(eps, rls, label="Method: " + method)
-
-        plt.xlabel("Epsilon")
-        plt.ylabel("Total Non Rules")
-        plt.xscale('log')
-        plt.legend()
-        save = save.replace(".", "-")
-        plt.savefig(save + str(q) + "Queries_Non_Rules")
-        plt.show()
-
-    # Plot summary of found rules, non rules for each eps
-    for q in sorted(list(set(df['Queries']))):
-        qDF = df.loc[df['Queries'] == q]
-        methods = sorted(list(set(qDF['Method'])))
-        epsilons = sorted(list(set(qDF['Epsilon'])))
-
-        # plt.figure(figsize=(12, 7))
-        fig, axes = plt.subplots(figsize=(20,7), nrows=1, ncols=len(methods))
-        # plt.title("Rule Summary for " + str(q) + " Queries")
-        ax_position = 0
-        for concept in methods:
-            # idx = pd.IndexSlice
-            # subset = df.loc[idx[[concept], :],
-            #                 ['Found Rules', 'Non Rules']]
-            subset = qDF.loc[qDF['Method'] == concept][['Found Rules', 'Non Rules']]
-            # print(subset.info())
-            # subset = subset.groupby(
-            #     subset.index.get_level_values('datetime').year).sum()
-
-            # ax = subset.plot(kind="bar", stacked=True, colormap="Blues",ax=axes[ax_position])
-            ax = subset.plot(kind="bar", stacked=True, ax=axes[ax_position])
+    save = save.replace(".", "-")
+    plt.savefig(save + value)
+    plt.show()
 
 
-            if concept == methods[0]:
-                ax.set_ylabel("Total Rules")
-            if concept == methods[-1]:
-                ax.legend(['Found Rules', 'Non Rules'], loc='upper right')
+def summaryPrivRules(df, save):
+    cps = sorted(list(set(df['Cp'])))
+    lambdas = sorted(list(set(df['Lambda'])))
+    epsilons = sorted(list(set(df['Epsilon'])))
 
-            ax.set_title(concept)
+    maxFR = max(df['Found Rules'])
+    maxNR = max(df['Non Rules'])
+    maxRules = maxFR + maxNR
+
+    fig, axes = plt.subplots(figsize=(20, 20), nrows=len(cps), ncols=len(lambdas))
+    row = 0
+    col = 0
+    for c in cps:
+        col = 0
+        for l in lambdas:
+            cpdf = df.loc[df['Cp'] == c]
+            subset = cpdf.loc[df['Lambda'] == l][['Found Rules', 'Non Rules']]
+            FRErr = cpdf.loc[df['Lambda'] == l]['Found Rules Std']
+            NRErr = cpdf.loc[df['Lambda'] == l]['Non Rules Std']
+
+            ax = subset.plot(kind="bar", stacked=True, yerr=[FRErr, NRErr], ax=axes[row, col])
+
+            ax.set_ylabel("Total Rules")
+            ax.legend(['Found Rules', 'Non Rules'], loc='upper right')
+
+            ax.set_title("Cp: " + c + "; Lambda: " + l)
             ax.set_xlabel("Epsilon")
-            # ax.set_title("Concept \"" + concept + "\"", fontsize=30, alpha=1.0)
-            # ax.set_ylabel("Total Rules", fontsize=30)
-            # ax.set_xlabel("Concept \"" + concept + "\"", fontsize=30, alpha=0.0)
+            ax.set_ylim(0, maxRules)
 
-            ax.set_ylim(0, 8000)
-            # ax.set_yticks(range(0, 9000, 1000))
-            # ax.set_yticklabels(labels=range(0, 9000, 1000), rotation=0,
-            #                    minor=False, fontsize=28)
-            ax.set_xticklabels(labels=epsilons, rotation=0,minor=False)
+            ax.set_xticklabels(labels=epsilons, rotation=0, minor=False)
             handles, labels = ax.get_legend_handles_labels()
-            ax_position += 1
-
-
-        # for method in sorted(list(set(qDF['Method']))):
-        #     miniDF = qDF.loc[qDF['Method'] == method]
-        #     eps = miniDF['Epsilon']
-        #     rls = miniDF['Percentage Found Rules']
-        #     plt.plot(eps, rls, label="Method: " + method)
-        #
-        # plt.xlabel("Epsilon")
-        # plt.ylabel("Percentage Found Client Client Rules")
-        # plt.xscale('log')
-        # plt.legend()
-        save = save.replace(".", "-")
-        fig.savefig(save + str(q) + "Queries_Summary_Rules_Nonrules")
-        fig.show()
+            col += 1
+        row += 1
+    fig.tight_layout()
+    save = save.replace(".", "-")
+    fig.savefig(save + "Summary_Rules_Nonrules")
+    fig.show()
 
 
 #Load LDP rules
