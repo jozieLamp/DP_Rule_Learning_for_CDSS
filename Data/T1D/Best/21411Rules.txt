@@ -1,0 +1,4 @@
+G[0,1](AlbCreatRat_mggNew <= 1.594 | WeightKg >= 94.921)
+((HbA1c >= 8.979) U[0,0] (AlbCreatRat_mggNew >= 0.205))
+G[0,1]((BldPrDia >= 64.865 -> BldPrSys <= 132.868) & HbA1c <= 151.304)
+F[0,0](bmiPerc <= 0.980 & TSH >= 0.405)

@@ -1,0 +1,5 @@
+G[0,0](((Pt_GrandparentT1D >= 0.000 -> Pt_A1cGoalLev <= 6.778) & HbA1c <= 7.334) | age >= 2.206)
+G[0,0]((Pt_CGMUseNumDays >= 0.000 -> bmiPerc >= 0.954) -> UnitsInsBasalOrLongAct <= 0.958)
+G[0,0]((bmi <= 18.880 | WeightKg >= 16.967) | age >= 17.540)
+F[0,0](BUN >= 2.604 | Pt_A1cGoalLev >= 0.009)
+G[0,0](((BldPrDia >= 64.081 | Pt_A1cGoalLev <= 6.448) | BGTestAvgNumMeter <= 6.474) & WeightKg >= 2.009)

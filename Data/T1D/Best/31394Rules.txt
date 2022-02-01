@@ -1,0 +1,8 @@
+G[0,0](BldPrSys >= 113.595 & diagAgeCombo <= 6.048)
+F[0,0]((LDL >= 19.245 & Pt_A1cGoalLev >= 1.751) | Pt_CGMUseNumDays >= 0.311)
+F[0,0](((bmi >= 24.952 & HDL <= 41.024) | Pt_A1cGoalLevelDsYr5 <= 41.126) & UnitsInsBasalOrLongAct >= 5.346)
+F[0,0]((bmiPerc <= 0.961 | HeightCm <= 162.207) | Pt_MotherT1D >= 159.230)
+F[0,0](bmi <= 26.995 & HbA1c <= 7.683)
+F[0,0]((SMBGperDayPtMeterCombo >= 1.649 -> bmiPerc <= 0.968) & BUN >= 0.959)
+G[0,0](bmi >= 24.944 & Pt_GrandparentT1D <= 0.000)
+F[0,0]((HbA1c <= 7.782 & TSH >= 1.985) & Pt_SHFlg <= 2.295)

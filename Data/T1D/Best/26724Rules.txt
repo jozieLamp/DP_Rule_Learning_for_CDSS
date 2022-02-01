@@ -1,0 +1,4 @@
+G[0,0]((Pt_ChildT1D <= 0.000 & HbA1c >= 7.931) & Pt_GrandchildT1D <= 8.581)
+((Pt_CGMUseNumDays <= 0.000) U[0,0] (AlbCreatRat_mggNew <= 8.611))
+F[0,0](UnitsInsBasalOrLongAct >= 8.843 -> Pt_SHFlg = 0.109)
+F[0,0](((BGTestAvgNumMeter >= 0.381 & Pt_A1cGoalLevelDsYr5 >= 0.000) -> TSH >= 0.000) & diabDur <= 0.000)

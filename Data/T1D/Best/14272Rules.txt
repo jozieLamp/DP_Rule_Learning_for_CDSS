@@ -1,0 +1,5 @@
+G[0,0](((bmi <= 17.354 & UnitsInsBasalOrLongAct >= 13.601) | LDL <= 31.738) -> NumPumpBolusOrShortAct >= 18.500)
+G[0,0]((BldPrSys <= 124.614 -> UnitsInsBasalOrLongAct <= 28.879) & bmiPerc <= 37.745)
+G[0,0](((diagAgeCombo >= 11.000 & UnitsInsBasalOrLongAct >= 7.433) -> TotChol <= 34.399) & BldPrSys >= 1.862)
+F[0,0](age >= 14.313 & TotalDailyInsPerKg >= 0.989)
+G[0,0]((BldPrSys <= 124.608 -> bmiPerc >= 0.084) | GFR >= 0.079)

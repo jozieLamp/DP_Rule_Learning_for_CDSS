@@ -1,0 +1,5 @@
+G[0,0](BldPrDia <= 75.831 & Pt_ChildT1D >= 0.000)
+F[0,0](LDL <= 80.462 -> diabDur <= 11.421)
+((Pt_A1cGoalLev <= 6.041) U[0,0] (bmiPerc >= 0.635))
+G[0,0]((Pt_InsGov >= 0.241 & HeightCm >= 170.869) & NumPumpBolusOrShortAct <= 173.551)
+((diabDur >= 10.461) U[0,0] (Triglyc <= 112.274))

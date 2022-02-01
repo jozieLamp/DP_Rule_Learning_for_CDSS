@@ -1,0 +1,7 @@
+G[0,0](bmiZscore >= 0.042 & BGTestAvgNumPtRep <= 0.000)
+F[0,0](bmi >= 19.819 -> NumPumpBolusOrShortAct >= 0.086)
+((Pt_A1cGoalLev >= 0.000) U[0,0] (diagAgeCombo >= 0.460))
+F[0,0]((Pt_ChildT1D >= 0.000 | bmi >= 19.774) -> HbA1cImputeDtMnC <= 20.755)
+G[0,0]((Pt_SHFlg >= 0.129 | age <= 15.883) -> Pt_ChildT1D >= 14.640)
+F[0,0](((Pt_SHFlg <= 0.856 & NumPumpBolusOrShortAct <= 2.329) -> Pt_ChildT1D >= 0.164) & HbA1cImputeDtMnC <= 2.338)
+G[0,0]((TotChol >= 182.694 | BGTestAvgNumMeter >= 1.478) -> BGTestAvgNumMeter <= 2.448)

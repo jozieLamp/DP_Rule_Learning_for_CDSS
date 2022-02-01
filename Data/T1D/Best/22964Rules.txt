@@ -1,0 +1,4 @@
+G[0,0](((Pt_InsGov >= 0.088 & Pt_CGMUseNumDays <= 0.000) & LDL >= 0.000) | HbA1cImputeDtMnC <= 0.000)
+G[0,0](age <= 16.502 -> BldPrSys >= 112.569)
+((Pt_SiblingT1D >= 0.000) U[0,0] (NumPumpBolusOrShortAct >= 0.476))
+G[0,0]((BGTestAvgNumMeter <= 3.089 | BGTestAvgNumPtRep >= 0.410) | TotChol <= 4.325)

@@ -1,0 +1,2 @@
+G[0,0]((TSH >= 12.846 | BGTestAvgNumPtRep <= 3.688) | BldPrDia <= 4.145)
+((BldPrDia >= 62.658) U[0,0] (LDL >= 8.973))

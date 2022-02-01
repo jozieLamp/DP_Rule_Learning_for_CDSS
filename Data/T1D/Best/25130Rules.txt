@@ -1,0 +1,2 @@
+G[0,0]((bmiPerc <= 0.571 & BldPrDia >= 74.270) | LDL <= 78.088)
+F[0,0](BUN >= 7.160 & TotalDailyInsPerKg <= 0.467)

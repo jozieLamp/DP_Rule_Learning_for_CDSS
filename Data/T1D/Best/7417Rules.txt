@@ -1,0 +1,5 @@
+G[1,1](SMBGperDayPtMeterCombo >= 0.060 & BGTestAvgNumPtRep >= 0.394)
+((HbA1cImputeDtMnC >= 5.915) U[1,1] (UnitsInsBasalOrLongAct <= 53.648))
+F[0,1](SMBGperDayPtMeterCombo > 0.501 -> Pt_SHFlg = 0.562)
+F[0,0]((AlbCreatRat_mggNew <= 63.469 & TSH >= 0.062) & BGTestAvgNumMeter <= 2.703)
+G[0,1](AlbCreatRat_mggNew <= 74.817 | BldPrDia <= 73.698)

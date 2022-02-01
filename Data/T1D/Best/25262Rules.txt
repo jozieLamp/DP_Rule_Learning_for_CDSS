@@ -1,0 +1,6 @@
+G[0,1](HDL >= 21.381 -> BGTestAvgNumPtRep >= 1.933)
+G[1,1](TSH >= 0.766 | SMBGperDayPtMeterCombo <= 6.173)
+((BGTestAvgNumMeter >= 4.254) U[1,1] (BGTestAvgNumPtRep <= 5.758))
+((BGTestAvgNumMeter >= 4.089) U[1,1] (BGTestAvgNumPtRep <= 4.189))
+((BGTestAvgNumMeter >= 3.495) U[1,1] (BGTestAvgNumPtRep <= 3.864))
+G[0,1](BldPrSys <= 109.785 | bmiZscore <= 1.134)

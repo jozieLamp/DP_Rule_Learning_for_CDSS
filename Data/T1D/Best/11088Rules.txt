@@ -1,0 +1,3 @@
+G[0,0]((HbA1c <= 9.932 -> HbA1cImputeDtMnC <= 34.758) | BldPrDia <= 37.284)
+G[0,0]((BGTestAvgNumPtRep >= 0.191 & TotalDailyInsPerKg <= 0.980) & Pt_SiblingT1D <= 0.984)
+G[0,0](bmiZscore <= 1.491 -> UnitsInsBasalOrLongAct <= 22.535)

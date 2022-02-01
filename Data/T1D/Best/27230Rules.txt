@@ -1,0 +1,6 @@
+G[0,0]((Pt_InsGov >= 0.000 & bmi >= 28.598) & LDL <= 29.071)
+F[0,0](BGTestAvgNumMeter >= 0.601 -> bmiZscore <= 2.083)
+F[0,0](Pt_SiblingT1D >= 0.000 -> bmiPerc <= 0.984)
+((HbA1c <= 7.916) U[0,0] (diabDur <= 11.726))
+G[0,0](bmi >= 27.671 & bmiZscore >= 2.053)
+F[0,0](((diagAgeCombo <= 0.470 -> HbA1c <= 6.681) -> HDL <= 9.181) -> Pt_SHFlg >= 4.623)

@@ -1,0 +1,8 @@
+G[0,0]((TSH >= 0.249 | Pt_SiblingT1D <= 0.000) -> NumPumpBolusOrShortAct <= 0.000)
+F[0,0]((HbA1cImputeDtMnC >= 12.334 & NumPumpBolusOrShortAct >= 0.577) & Pt_SHFlg <= 1.364)
+G[1,1](TotChol >= 26.074 -> LDL <= 56.480)
+G[0,0](NumPumpBolusOrShortAct <= 1.176 & Triglyc >= 8.878)
+G[0,0](HDL >= 7.218 -> Triglyc <= 72.370)
+G[0,1](LDL <= 69.159 | NumPumpBolusOrShortAct <= 1.652)
+F[1,1](((BldPrSys >= 117.137 & Pt_SiblingT1D >= 0.000) | bmiPerc <= 0.000) & BGTestAvgNumMeter <= 0.000)
+F[1,1](Pt_InsGov <= 0.000 -> TSH >= 0.021)

@@ -1,0 +1,7 @@
+G[1,1](((bmiZscore <= 2.119 | TSH >= 1.533) & Pt_SiblingT1D >= 1.340) | LDL >= 1.648)
+G[1,1]((Triglyc >= 24.265 | TSH >= 1.653) | BldPrSys <= 2.315)
+F[1,1](((HeightCm <= 158.835 | TotalDailyInsPerKg <= 1.153) | LDL <= 0.830) & TotalDailyInsPerKg >= 0.452)
+((HbA1c <= 12.781) U[1,1] (HDL <= 50.674))
+F[1,1]((bmiPerc <= 0.979 & Triglyc <= 130.839) | Pt_A1cGoalLevelDsYr5 >= 65.447)
+G[0,1]((BGTestAvgNumPtRep >= 0.599 & bmi >= 26.136) -> LDL >= 26.133)
+G[0,0](age <= 12.871 -> bmiPerc <= 0.978)

@@ -1,0 +1,3 @@
+G[0,0]((GFR <= 102.585 & UnitsInsBasalOrLongAct >= 28.323) | Pt_SHFlg >= 24.231)
+F[0,0]((BldPrDia <= 91.154 -> GFR >= 69.392) | HbA1c >= 45.024)
+((TSH >= 0.071) U[0,0] (WeightKg <= 89.942))

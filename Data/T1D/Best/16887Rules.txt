@@ -1,0 +1,2 @@
+G[0,0]((UnitsInsBasalOrLongAct >= 2.352 & HbA1c <= 6.881) | Pt_GrandchildT1D >= 6.705)
+((Pt_GrandparentT1D <= 0.000) U[0,0] (BldPrDia <= 75.954))

@@ -1,0 +1,6 @@
+G[0,0]((SMBGperDayPtMeterCombo <= 4.726 & BldPrSys >= 132.131) -> bmiPerc >= 134.322)
+((BldPrSys <= 144.936) U[0,1] (HbA1c <= 8.306))
+G[0,1](HbA1c >= 7.828 | SMBGperDayPtMeterCombo >= 0.639)
+F[0,0](HbA1cImputeDtMnC >= 3.634 & UnitsInsBasalOrLongAct >= 2.166)
+((TSH >= 0.238) U[1,2] (AutonomicNeuroCl <= 0.000))
+G[1,1](HbA1c >= 8.105 & TotalDailyInsPerKg <= 0.000)

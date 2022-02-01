@@ -1,0 +1,3 @@
+G[0,0](diabDur >= 2.456 | SMBGperDayPtMeterCombo >= 1.958)
+F[0,0]((BGTestAvgNumPtRep >= 0.764 | bmiZscore <= 0.903) & BGTestAvgNumPtRep <= 1.476)
+G[0,0](HbA1cImputeDtMnC >= 30.976 | SMBGperDayPtMeterCombo >= 1.378)

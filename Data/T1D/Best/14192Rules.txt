@@ -1,0 +1,5 @@
+G[0,0]((WeightKg >= 66.027 | bmi >= 26.532) -> UnitsInsBasalOrLongAct <= 14.354)
+G[0,0](GFR <= 0.000 -> BUN >= 9.851)
+G[1,1](((BGTestAvgNumMeter >= 0.221 -> BGTestAvgNumPtRep <= 5.504) -> BGTestAvgNumMeter <= 2.852) & diagAgeCombo >= 2.408)
+G[0,1](GFR <= 0.000 -> BUN >= 7.315)
+F[1,1]((HbA1c <= 11.051 & Pt_A1cGoalLev <= 5.894) & BGTestAvgNumMeter >= 0.430)

@@ -1,0 +1,3 @@
+((LDL >= 4.372) U[1,2] (Pt_GrandparentT1D <= 0.000))
+((diabDur >= 2.281) U[0,0] (LDL >= 28.182))
+F[0,0]((AlbCreatRat_mggNew <= 19.112 & TSH >= 0.705) | Pt_A1cGoalLevelDsYr5 >= 0.319)

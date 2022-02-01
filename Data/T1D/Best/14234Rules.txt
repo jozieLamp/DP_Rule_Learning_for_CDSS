@@ -1,0 +1,6 @@
+G[0,1](bmiZscore <= -0.735 | UnitsInsBasalOrLongAct <= 13.530)
+G[0,0](GFR <= 7.884 | TSH >= 0.216)
+G[0,0](((HDL <= 30.352 & TotalDailyInsPerKg >= 0.168) -> TotChol >= 0.000) -> TotChol <= 0.474)
+G[0,0]((WeightKg >= 37.094 | bmi >= 13.876) -> UnitsInsBasalOrLongAct <= 17.931)
+F[0,1]((TotChol >= 1.659 -> WeightKg <= 46.523) -> Pt_GrandchildT1D >= 2.247)
+G[1,1](BldPrSys <= 116.202 | bmi <= 21.430)

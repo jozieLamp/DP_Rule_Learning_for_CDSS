@@ -1,0 +1,6 @@
+G[0,0](((HbA1c >= 6.500 & TSH <= 1.971) -> Pt_A1cGoalLev <= 1.657) | AlbCreatRat_mggNew >= 1.188)
+F[0,0](Pt_SHFlg < 0.000 & Pt_SHFlg = 0.000)
+F[0,0](((SMBGperDayPtMeterCombo <= 5.143 | BGTestAvgNumPtRep >= 0.592) | bmi >= 3.029) & Pt_MotherT1D >= 1.075)
+G[0,0]((BGTestAvgNumMeter <= 3.965 -> HbA1c <= 10.418) | Pt_CGMUseNumDays <= 10.278)
+F[0,0]((Pt_A1cGoalLevelDsYr5 <= 0.000 | Pt_A1cGoalLev >= 0.383) & DirectLDL >= 0.048)
+G[0,0](((bmi >= 20.830 | HDL <= 78.445) & Pt_SHFlg <= 63.531) | BldPrDia <= 82.647)

@@ -1,0 +1,8 @@
+G[0,0](((Pt_DKAFlg <= 0.000 -> TSH <= 0.000) -> WeightKg <= 0.000) | SMBGperDayPtMeterCombo <= 0.000)
+F[0,0](((bmiPerc >= 0.000 | Pt_SHFlg <= 0.662) | Pt_SiblingT1D <= 0.533) -> AlbCreatRat_mggNew >= 0.217)
+((Pt_A1cGoalLev >= 0.311) U[0,0] (BldPrDia >= 57.764))
+F[0,0](HbA1cImputeDtMnC <= 22.398 & diagAgeCombo <= 11.000)
+F[0,0](bmiPerc <= 0.000 & BldPrSys >= 123.855)
+G[0,0](LDL <= 71.899 & WeightKg <= 64.110)
+((BGTestAvgNumPtRep <= 3.381) U[0,0] (bmiZscore >= 0.008))
+G[0,0]((BGTestAvgNumMeter >= 0.000 -> HbA1cImputeDtMnC <= 28.696) -> Triglyc >= 5.762)

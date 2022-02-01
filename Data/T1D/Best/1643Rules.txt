@@ -1,0 +1,4 @@
+G[1,1](HeightCm <= 159.502 & LDL <= 96.264)
+G[0,1]((NumPumpBolusOrShortAct <= 17.365 & AlbCreatRat_mggNew <= 3.678) -> HbA1c <= 4.751)
+F[0,1]((HbA1cImputeDtMnC <= 48.699 & TSH >= 1.636) & TotChol <= 2.581)
+G[1,1]((AlbCreatRat_mggNew <= 2.534 -> WeightKg <= 61.520) | age >= 54.945)

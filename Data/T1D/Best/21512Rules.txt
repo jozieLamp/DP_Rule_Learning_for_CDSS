@@ -1,0 +1,4 @@
+F[0,0](DirectLDL >= 0.087 & NumPumpBolusOrShortAct <= 0.862)
+F[0,1]((bmi <= 33.253 -> bmiZscore >= 1.987) -> WeightKg <= 2.547)
+F[0,0]((bmiZscore <= 2.291 -> DirectLDL <= 0.437) -> Pt_A1cGoalLevelDsYr5 >= 0.138)
+F[0,1]((Pt_SiblingT1D >= 0.000 & BUN >= 1.648) & Triglyc >= 4.173)

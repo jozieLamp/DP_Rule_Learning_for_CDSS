@@ -1,0 +1,3 @@
+G[0,0]((BldPrSys >= 56.306 | NumPumpBolusOrShortAct <= 4.545) -> TotalDailyInsPerKg >= 0.929)
+((BGTestAvgNumMeter >= 1.394) U[0,0] (BGTestAvgNumPtRep <= 8.815))
+F[0,0](((HbA1c <= 7.683 -> Pt_SHFlg <= 0.314) -> BldPrSys >= 0.084) & TotalDailyInsPerKg <= 0.760)

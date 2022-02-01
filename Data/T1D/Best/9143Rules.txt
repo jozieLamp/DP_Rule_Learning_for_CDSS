@@ -1,0 +1,6 @@
+G[0,0](Pt_CGMUseNumDays <= 0.000 -> bmiPerc <= 0.556)
+F[0,0](((HbA1cImputeDtMnC >= 28.726 | UnitsInsBasalOrLongAct >= 6.172) -> UnitsInsBasalOrLongAct <= 13.607) & HbA1cImputeDtMnC <= 16.756)
+F[0,0](HDL >= 81.047 & SMBGperDayPtMeterCombo >= 4.420)
+G[0,0](UnitsInsBasalOrLongAct >= 1.705 & diagAgeCombo <= 4.000)
+G[0,0](((Pt_GrandparentT1D >= 0.138 | Pt_MotherT1D >= 0.000) -> BldPrSys >= 0.000) & Pt_SHFlg <= 0.000)
+G[0,0]((diagAgeCombo <= 4.000 | Pt_A1cGoalLev <= 5.689) & TSH >= 0.435)

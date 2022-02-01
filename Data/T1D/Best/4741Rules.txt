@@ -1,0 +1,8 @@
+G[0,0](((SMBGperDayPtMeterCombo >= 0.137 -> Triglyc <= 171.878) -> Pt_GrandparentT1D >= 8.388) -> HDL >= 115.168)
+F[0,0]((age <= 19.746 & bmiZscore >= 0.102) & BldPrDia >= 0.090)
+((bmiZscore >= 0.155) U[0,0] (TotalDailyInsPerKg >= 0.013))
+((BldPrSys <= 128.861) U[0,0] (TotChol >= 69.958))
+G[0,0](HbA1c >= 10.146 & LDL <= 97.529)
+F[0,0](((HbA1cImputeDtMnC <= 9.737 & TotChol >= 53.526) | UnitsInsBasalOrLongAct <= 206.744) -> LDL >= 113.462)
+G[0,0](age >= 19.228 & TotalDailyInsPerKg <= 1.256)
+G[0,0](TotalDailyInsPerKg <= 0.848 & Pt_GrandparentT1D >= 0.000)

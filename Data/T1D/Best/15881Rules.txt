@@ -1,0 +1,8 @@
+G[0,1]((WeightKg >= 69.533 | bmi >= 29.066) -> UnitsInsBasalOrLongAct <= 21.888)
+G[1,1](((Pt_ChildT1D >= 0.000 -> BUN <= 15.111) & AlbCreatRat_mggNew >= 11.182) -> HbA1c >= 12.984)
+((BGTestAvgNumMeter >= 2.390) U[1,1] (BGTestAvgNumPtRep <= 6.334))
+G[0,1]((WeightKg >= 66.769 | bmi >= 27.946) -> UnitsInsBasalOrLongAct <= 20.456)
+G[1,1]((AlbCreatRat_mggNew <= 15.376 & AutonomicNeuroCl >= 0.000) & BUN >= 0.000)
+G[0,0]((WeightKg >= 69.238 | bmi >= 27.750) -> UnitsInsBasalOrLongAct <= 17.540)
+G[0,0](BldPrDia >= 69.169 -> AlbCreatRat_mggNew >= 1.786)
+G[1,1](((GFR >= 35.305 -> bmi >= 28.792) | Pt_A1cGoalLevelDsYr5 >= 28.089) & WeightKg >= 28.650)

@@ -1,0 +1,7 @@
+G[0,0](Pt_GrandparentT1D <= 0.000 & TSH <= 13.244)
+F[0,0]((TotalDailyInsPerKg >= 0.185 -> WeightKg >= 30.719) -> BUN >= 32.691)
+F[0,0]((age >= 8.362 -> NumPumpBolusOrShortAct <= 4.071) & Pt_A1cGoalLev >= 0.086)
+F[0,0]((HDL <= 48.504 -> Pt_SHFlg >= 0.151) | AlbCreatRat_mggNew <= 0.793)
+F[0,0]((DirectLDL <= 0.000 & bmiPerc >= 0.509) -> Pt_SHFlg >= 0.528)
+G[0,0](AutonomicNeuroCl >= 0.000 -> Pt_SHFlg <= 0.401)
+F[0,0](((NumPumpBolusOrShortAct <= 4.301 & UnitsInsBasalOrLongAct >= 2.660) -> diabDur >= 1.315) -> Pt_A1cGoalLev >= 0.985)

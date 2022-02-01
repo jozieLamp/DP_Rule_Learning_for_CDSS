@@ -1,0 +1,2 @@
+G[1,1]((bmi >= 3.741 -> age >= 57.981) -> TotChol <= 61.185)
+F[0,0](AlbCreatRat_mggNew >= 127.369 & diabDur >= 19.322)

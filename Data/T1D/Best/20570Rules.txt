@@ -1,0 +1,4 @@
+G[0,0]((WeightKg >= 29.691 | bmi >= 12.365) -> UnitsInsBasalOrLongAct <= 16.773)
+F[0,0](BldPrSys <= 125.288 & WeightKg >= 26.292)
+G[0,0]((WeightKg >= 34.408 | bmi >= 13.356) -> UnitsInsBasalOrLongAct <= 23.161)
+((bmiPerc >= 0.000) U[0,0] (bmiZscore <= -0.245))

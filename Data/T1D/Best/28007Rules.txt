@@ -1,0 +1,5 @@
+G[0,0](diagAgeCombo >= 1.352 -> bmi >= 11.056)
+F[0,0](HbA1c > 7.605 -> Pt_SHFlg = 0.301)
+((bmi <= 18.905) U[0,0] (LDL <= 61.013))
+G[0,0](SMBGperDayPtMeterCombo >= 3.531 & BGTestAvgNumPtRep >= 0.000)
+((HDL <= 34.273) U[0,0] (LDL <= 62.348))

@@ -1,0 +1,3 @@
+F[0,0]((Pt_InsGov <= 0.997 | Pt_SHFlg <= 0.632) -> HeightCm <= 0.528)
+F[0,0]((HbA1c <= 7.079 | BGTestAvgNumPtRep <= 6.544) & TotChol <= 3.850)
+F[0,0](((TotalDailyInsPerKg <= 0.406 & Pt_SHFlg >= 0.051) | BldPrDia >= 0.122) & Pt_SHFlg >= 0.065)

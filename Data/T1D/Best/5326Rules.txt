@@ -1,0 +1,8 @@
+G[0,0](SMBGperDayPtMeterCombo >= 1.168 & BGTestAvgNumPtRep >= 0.231)
+F[0,0]((bmi >= 38.138 | HDL >= 13.178) -> Pt_GrandparentT1D >= 10.081)
+F[0,0](TotalDailyInsPerKg <= 0.318 & WeightKg <= 114.623)
+((BGTestAvgNumMeter >= 0.123) U[0,0] (BGTestAvgNumPtRep <= 3.467))
+G[0,0](GFR <= 33.798 -> BUN >= 29.293)
+G[0,0](bmi >= 37.925 & Pt_CGMUseNumDays <= 0.000)
+G[0,0]((bmiZscore >= 0.907 | HeightCm >= 168.607) | AutonomicNeuroCl >= 168.304)
+G[0,0](SMBGperDayPtMeterCombo >= 1.455 & BGTestAvgNumPtRep >= 1.584)

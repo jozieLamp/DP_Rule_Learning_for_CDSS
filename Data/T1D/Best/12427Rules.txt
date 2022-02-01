@@ -1,0 +1,2 @@
+F[0,0]((bmiZscore >= -0.296 -> BGTestAvgNumMeter <= 1.689) -> Pt_CGMUseNumDays >= 1.424)
+F[0,0](bmiZscore >= -0.366 & TSH >= 0.938)

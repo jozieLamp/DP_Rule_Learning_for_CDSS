@@ -1,0 +1,5 @@
+G[0,1]((BGTestAvgNumPtRep <= 3.803 -> diabDur >= 11.898) -> NumPumpBolusOrShortAct <= 16.805)
+G[0,1](BGTestAvgNumPtRep <= 3.931 -> WeightKg >= 53.068)
+F[1,1]((bmiZscore <= 0.601 & HbA1cImputeDtMnC <= 44.467) | Pt_GrandparentT1D >= 0.101)
+((BldPrSys <= 110.930) U[0,0] (HbA1c <= 7.385))
+F[1,1]((BGTestAvgNumMeter >= 1.820 & BldPrDia <= 57.416) | TSH >= 57.114)

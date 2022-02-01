@@ -1,0 +1,5 @@
+G[0,0]((Pt_A1cGoalLev >= 0.000 & age <= 67.246) -> Pt_ChildT1D >= 66.448)
+G[0,0](((BGTestAvgNumPtRep <= 4.550 -> BldPrSys >= 140.404) -> Pt_SHFlg >= 129.548) & bmi <= 158.568)
+F[0,0](bmiZscore <= 1.746 & HbA1cImputeDtMnC <= 63.004)
+F[0,0](((AlbCreatRat_mggNew <= 15.742 -> LDL >= 6.896) & Pt_A1cGoalLev <= 101.279) & HeightCm <= 101.609)
+G[0,0]((LDL <= 83.159 | Pt_GrandchildT1D <= 0.329) & TSH >= 0.051)

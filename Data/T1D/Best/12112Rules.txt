@@ -1,0 +1,6 @@
+G[0,1](Pt_GrandchildT1D >= 0.000 -> TotalDailyInsPerKg <= 0.315)
+F[0,1](((HDL >= 3.859 -> TotChol <= 118.561) | AutonomicNeuroCl >= 109.856) & diabDur >= 8.163)
+((diabDur <= 52.766) U[0,0] (UnitsInsBasalOrLongAct <= 17.916))
+G[1,1](BldPrSys >= 121.366 & diabDur >= 51.409)
+((Pt_A1cGoalLevelDsYr5 >= 0.932) U[0,1] (TotalDailyInsPerKg >= 0.216))
+G[0,1](SMBGperDayPtMeterCombo <= 4.857 & Triglyc >= 27.435)

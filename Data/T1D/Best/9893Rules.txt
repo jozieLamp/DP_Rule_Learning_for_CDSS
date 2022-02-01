@@ -1,0 +1,3 @@
+G[0,0]((age >= 13.665 -> LDL >= 92.603) | Pt_SHFlg >= 96.875)
+G[0,0]((NumPumpBolusOrShortAct >= 5.514 | WeightKg <= 74.583) & NumPumpBolusOrShortAct <= 75.885)
+F[0,0](NumPumpBolusOrShortAct >= 5.006 -> Pt_SHFlg = 0.791)

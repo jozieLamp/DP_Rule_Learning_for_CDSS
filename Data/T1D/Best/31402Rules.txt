@@ -1,0 +1,7 @@
+G[0,0]((bmi >= 27.210 & Pt_A1cGoalLev <= 6.531) & Pt_DKAFlg <= 4.955)
+((UnitsInsBasalOrLongAct >= 26.707) U[0,0] (WeightKg <= 77.650))
+((Pt_SiblingT1D <= 0.000) U[0,0] (bmiPerc >= 0.913))
+F[0,0](((AlbCreatRat_mggNew <= 16.694 -> bmiPerc >= 0.909) & Pt_SHFlg >= 0.899) | diabDur <= 0.923)
+G[0,0]((BUN <= 3.348 -> Triglyc <= 111.399) -> BUN >= 93.045)
+((age >= 17.464) U[0,0] (HeightCm <= 168.025))
+G[0,0]((Pt_SiblingT1D >= 0.000 -> bmiPerc <= 0.927) & age >= 0.899)

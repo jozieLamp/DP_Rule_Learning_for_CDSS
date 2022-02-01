@@ -1,0 +1,2 @@
+G[0,0](((HbA1cImputeDtMnC <= 48.833 & TotChol <= 96.253) -> HbA1c >= 28.537) | HeightCm <= 83.677)
+F[0,0]((LDL >= 46.575 | LDL >= 41.969) -> Pt_FatherT1D >= 44.522)

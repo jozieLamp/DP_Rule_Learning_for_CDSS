@@ -1,0 +1,4 @@
+G[0,0](HeightCm <= 130.738 -> Pt_SHFlg = 0.302)
+G[0,0](BldPrSys >= 17.142 | LDL >= 35.771)
+F[0,0]((HeightCm <= 156.530 | Pt_GrandparentT1D >= 0.000) -> bmi <= 0.000)
+G[0,0]((BGTestAvgNumMeter <= 2.277 & BUN >= 5.255) -> diabDur <= 7.962)

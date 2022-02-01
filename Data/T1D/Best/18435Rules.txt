@@ -1,0 +1,2 @@
+G[0,0](((BGTestAvgNumMeter <= 13.925 | UnitsInsBasalOrLongAct >= 4.322) & BGTestAvgNumMeter <= 22.702) & bmi >= 19.707)
+F[0,0]((diagAgeCombo <= 13.000 -> TSH >= 0.111) -> BGTestAvgNumMeter <= 1.646)

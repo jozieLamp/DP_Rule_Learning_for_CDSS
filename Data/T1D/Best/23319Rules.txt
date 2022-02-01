@@ -1,0 +1,7 @@
+G[0,0](Pt_A1cGoalLevelDsYr5 >= 0.000 & TotChol <= 180.016)
+G[0,0]((Pt_InsGov <= 0.514 & Pt_SiblingT1D >= 0.000) & Pt_SiblingT1D >= 0.000)
+((BGTestAvgNumPtRep <= 4.590) U[0,0] (UnitsInsBasalOrLongAct <= 21.133))
+((HbA1cImputeDtMnC >= 5.015) U[0,0] (TotChol >= 4.527))
+((bmiZscore <= 0.670) U[0,0] (TotalDailyInsPerKg >= 0.376))
+((bmiZscore <= 0.706) U[0,0] (HbA1c >= 3.116))
+G[0,0](diagAgeCombo <= 5.000 -> TotalDailyInsPerKg <= 0.957)

@@ -1,0 +1,3 @@
+G[0,0](bmiPerc >= 0.705 -> HDL <= 54.465)
+F[0,0]((BldPrDia <= 63.359 | WeightKg >= 42.296) -> BGTestAvgNumMeter >= 38.409)
+((BUN <= 7.056) U[0,0] (diabDur <= 8.901))

@@ -1,0 +1,4 @@
+G[0,0]((BldPrDia >= 56.324 | bmi <= 16.993) -> LDL <= 16.673)
+((BGTestAvgNumMeter >= 1.847) U[0,0] (BGTestAvgNumPtRep <= 4.360))
+F[0,0](((HDL <= 48.503 | TSH <= 2.203) -> Triglyc >= 0.633) & Pt_CGMUseNumDays <= 1.980)
+G[0,0](SMBGperDayPtMeterCombo >= 4.795 & BGTestAvgNumPtRep >= 0.233)

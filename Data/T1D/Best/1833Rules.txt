@@ -1,0 +1,7 @@
+G[0,0](((bmi <= 26.014 & UnitsInsBasalOrLongAct >= 3.106) -> HeightCm <= 26.202) & Pt_GrandparentT1D <= 24.290)
+F[1,1](((WeightKg >= 72.605 | TotalDailyInsPerKg <= 0.857) | bmi >= 0.804) -> BGTestAvgNumMeter <= 0.905)
+G[0,1]((BGTestAvgNumMeter <= 4.451 | BldPrDia >= 62.458) | bmiZscore >= 64.287)
+G[0,1](((BUN >= 2.903 -> TotalDailyInsPerKg <= 0.998) & Pt_GrandchildT1D <= 0.839) | Pt_GrandparentT1D >= 0.788)
+G[0,1](((HDL >= 34.218 & AlbCreatRat_mggNew <= 4.849) -> Pt_DKAFlg >= 3.346) | GFR <= 4.216)
+((BGTestAvgNumMeter >= 4.028) U[1,1] (BGTestAvgNumPtRep <= 2.576))
+F[1,1]((bmiZscore >= 0.604 & HeightCm >= 172.258) | AlbCreatRat_mggNew >= 171.682)

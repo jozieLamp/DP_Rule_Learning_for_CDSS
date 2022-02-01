@@ -1,0 +1,4 @@
+G[0,0](AlbCreatRat_mggNew >= 3.069 -> HDL <= 51.950)
+G[0,0]((HbA1c <= 11.750 | UnitsInsBasalOrLongAct >= 26.471) -> HDL <= 65.676)
+((UnitsInsBasalOrLongAct >= 3.866) U[0,0] (AlbCreatRat_mggNew >= 3.085))
+F[0,0](HeightCm <= 161.496 & TotalDailyInsPerKg <= 1.231)

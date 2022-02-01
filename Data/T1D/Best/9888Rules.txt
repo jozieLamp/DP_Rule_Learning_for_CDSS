@@ -1,0 +1,8 @@
+G[0,0](Pt_A1cGoalLev <= 3.674 -> Pt_SHFlg <= 0.000)
+F[0,0]((Pt_FatherT1D >= 0.000 & Triglyc >= 23.376) & bmiPerc >= 9.698)
+G[0,0](AlbCreatRat_mggNew < 9.911 -> Pt_SHFlg = 0.000)
+G[0,0]((BldPrSys >= 128.979 -> TotalDailyInsPerKg >= 0.552) | TotChol <= 0.746)
+G[0,0](((bmi <= 27.700 -> TotalDailyInsPerKg >= 0.542) & Pt_FatherT1D <= 0.664) -> AlbCreatRat_mggNew >= 0.496)
+G[0,0](bmiZscore >= 0.023 & Pt_SHFlg >= 0.000)
+F[0,0](LDL <= 62.338 & LDL >= 35.536)
+G[0,0]((BGTestAvgNumMeter >= 0.000 & TSH <= 0.000) -> BGTestAvgNumPtRep >= 0.000)

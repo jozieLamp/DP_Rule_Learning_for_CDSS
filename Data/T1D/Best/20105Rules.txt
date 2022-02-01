@@ -1,0 +1,6 @@
+G[1,1]((WeightKg >= 2.011 | bmi >= 7.871) -> UnitsInsBasalOrLongAct <= 11.577)
+G[1,1](((HeightCm >= 1.589 & LDL >= 18.433) & Pt_SHFlg <= 86.566) -> Pt_GrandchildT1D >= 25.063)
+G[1,1]((WeightKg >= 4.785 | bmi >= 8.539) -> UnitsInsBasalOrLongAct <= 19.631)
+G[0,1](BldPrDia >= 59.828 | NumPumpBolusOrShortAct <= 0.890)
+G[0,1](SMBGperDayPtMeterCombo >= 0.502 | UnitsInsBasalOrLongAct <= 19.133)
+F[0,0]((BldPrSys >= 95.886 & age >= 40.901) | Pt_DKAFlg >= 39.713)

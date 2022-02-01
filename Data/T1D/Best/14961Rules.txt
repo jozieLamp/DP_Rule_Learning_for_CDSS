@@ -1,0 +1,2 @@
+F[0,0](HbA1c >= 10.574 & NumPumpBolusOrShortAct <= 3.716)
+((Pt_A1cGoalLev >= 0.418) U[0,0] (TotChol >= 50.165))

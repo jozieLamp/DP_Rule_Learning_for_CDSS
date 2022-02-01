@@ -1,0 +1,3 @@
+G[0,0]((diabDur >= 5.263 | HDL <= 106.451) & Pt_DKAFlg <= 86.228)
+G[0,0]((Pt_InsGov >= 0.000 | GFR >= 41.615) -> bmi >= 4.881)
+G[0,0]((bmi <= 21.170 -> TotalDailyInsPerKg >= 0.214) & AlbCreatRat_mggNew >= 0.285)

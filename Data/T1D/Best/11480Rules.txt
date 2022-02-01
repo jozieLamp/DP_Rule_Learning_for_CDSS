@@ -1,0 +1,2 @@
+((HbA1cImputeDtMnC <= 44.821) U[0,0] (TSH >= 0.462))
+((BGTestAvgNumPtRep >= 1.352) U[0,0] (TSH >= 0.056))

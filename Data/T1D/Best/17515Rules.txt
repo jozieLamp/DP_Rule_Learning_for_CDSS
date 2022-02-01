@@ -1,0 +1,8 @@
+G[0,1](BGTestAvgNumPtRep >= 0.988 | TotalDailyInsPerKg >= 0.700)
+((BGTestAvgNumMeter <= 9.559) U[0,0] (HbA1c <= 6.321))
+F[0,0]((HbA1c <= 6.493 & HbA1cImputeDtMnC >= 1.334) & DirectLDL <= 50.020)
+F[0,0](Pt_A1cGoalLevelDsYr5 >= 0.000 & HbA1c <= 6.307)
+((bmi >= 22.566) U[1,1] (Triglyc <= 93.252))
+F[0,1]((HeightCm <= 168.948 | Triglyc >= 9.492) -> BUN >= 5.215)
+G[1,1]((LDL >= 48.172 & BUN >= 0.000) & Pt_InsGov <= 0.000)
+G[1,1](BGTestAvgNumMeter <= 8.989 -> HDL >= 1.600)

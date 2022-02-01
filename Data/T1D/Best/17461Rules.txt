@@ -1,0 +1,3 @@
+G[0,0](((HbA1cImputeDtMnC >= 20.179 -> TSH >= 0.145) | Pt_SHFlg >= 0.235) | GFR >= 0.176)
+F[0,0](((HbA1c >= 10.576 -> UnitsInsBasalOrLongAct >= 16.650) & AlbCreatRat_mggNew <= 26.155) & HDL <= 24.197)
+F[0,0](Pt_A1cGoalLevelDsYr5 >= 0.000 -> BGTestAvgNumMeter <= 2.549)

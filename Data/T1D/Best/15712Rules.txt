@@ -1,0 +1,2 @@
+G[0,0](NumPumpBolusOrShortAct <= 4.337 -> Triglyc <= 140.816)
+F[0,0](BldPrSys >= 100.545 & LDL <= 133.742)

@@ -1,0 +1,5 @@
+G[0,1](Pt_DKAFlg >= 0.060 | TotalDailyInsPerKg <= 0.927)
+G[0,0]((BldPrDia <= 81.672 -> BUN <= 8.855) | Triglyc <= 8.992)
+G[0,0](SMBGperDayPtMeterCombo >= 1.646 & BGTestAvgNumPtRep >= 1.982)
+F[0,0](BldPrDia <= 82.604 & HbA1c >= 10.611)
+F[0,0]((UnitsInsBasalOrLongAct >= 1.119 & BldPrDia <= 78.452) & UnitsInsBasalOrLongAct <= 77.921)

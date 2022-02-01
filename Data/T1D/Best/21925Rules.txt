@@ -1,0 +1,1 @@
+G[0,0](SMBGperDayPtMeterCombo >= 4.062 & BGTestAvgNumPtRep >= 0.499)

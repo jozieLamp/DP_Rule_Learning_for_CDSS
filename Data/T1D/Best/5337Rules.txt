@@ -1,0 +1,5 @@
+G[0,0]((HbA1c >= 11.014 -> WeightKg >= 60.752) | bmiZscore >= 61.493)
+G[0,0](((BldPrDia <= 63.965 | Pt_SHFlg >= 0.013) & Pt_CGMUseNumDays <= 0.243) -> Pt_SHFlg <= 0.227)
+G[0,0]((AlbCreatRat_mggNew <= 3.890 & TotChol <= 152.764) | Pt_FatherT1D >= 64.126)
+F[0,0](((BGTestAvgNumPtRep <= 2.322 & Pt_A1cGoalLev <= 5.896) & WeightKg >= 1.281) -> Triglyc >= 0.498)
+G[0,0](age >= 15.086 | HbA1cImputeDtMnC >= 10.436)

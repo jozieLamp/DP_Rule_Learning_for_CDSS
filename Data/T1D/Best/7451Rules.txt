@@ -1,0 +1,6 @@
+G[0,0]((TotalDailyInsPerKg <= 0.563 | age >= 46.212) | SMBGperDayPtMeterCombo <= 49.152)
+F[0,0](((LDL <= 48.778 -> TSH <= 0.686) | diagAgeCombo >= 0.326) & age <= 0.971)
+F[0,0](((BGTestAvgNumPtRep >= 0.313 -> bmiZscore <= -0.205) -> DirectLDL <= -0.396) & Pt_ChildT1D <= -0.424)
+G[0,0](BldPrSys >= 15.092 -> TotChol <= 89.237)
+F[0,0]((HeightCm <= 134.994 -> SMBGperDayPtMeterCombo >= 6.446) -> Pt_CGMUseNumDays >= 5.580)
+G[0,0](NumPumpBolusOrShortAct >= 2.479 | TotChol >= 50.672)

@@ -1,0 +1,3 @@
+G[0,0](SMBGperDayPtMeterCombo >= 0.716 & BGTestAvgNumPtRep >= 3.796)
+F[0,0]((Pt_SiblingT1D >= 0.321 | Triglyc <= 97.488) & BldPrDia >= 78.371)
+G[0,0](BldPrDia <= 83.673 | GFR <= 68.756)

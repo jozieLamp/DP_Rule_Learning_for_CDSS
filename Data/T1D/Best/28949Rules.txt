@@ -1,0 +1,6 @@
+G[0,0]((BldPrSys <= 97.454 | HeightCm >= 114.814) | Pt_GrandparentT1D >= 118.812)
+F[0,0](bmiZscore <= 0.268 | UnitsInsBasalOrLongAct <= 5.970)
+((HbA1cImputeDtMnC <= 15.192) U[0,0] (BUN >= 2.900))
+((AlbCreatRat_mggNew >= 0.000) U[0,0] (BldPrDia <= 61.120))
+G[0,0](((HbA1cImputeDtMnC >= 5.411 & GFR <= 0.000) & Pt_A1cGoalLev <= 0.000) | bmi <= 0.000)
+F[0,0](diabDur <= 1.615 & LDL <= 0.000)

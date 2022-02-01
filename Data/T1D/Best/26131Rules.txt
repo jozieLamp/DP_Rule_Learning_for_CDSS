@@ -1,0 +1,8 @@
+G[0,0](bmi < 28.839 -> Pt_SHFlg = 0.206)
+F[0,0](HbA1c >= 11.332 -> Pt_A1cGoalLev >= 1.190)
+F[0,0](diagAgeCombo >= 0.966 & TSH >= 9.536)
+F[0,0]((TotChol <= 344.947 -> AlbCreatRat_mggNew <= 22.623) | DirectLDL >= 19.591)
+F[0,0]((BGTestAvgNumMeter >= 1.069 -> diagAgeCombo >= 0.703) | Pt_GrandchildT1D >= 0.221)
+F[0,0](HbA1c >= 11.326 -> HDL <= 50.252)
+F[0,0](((Pt_CGMUseNumDays <= 0.000 -> SMBGperDayPtMeterCombo <= 2.911) & Pt_DKAFlg <= 2.101) | BGTestAvgNumMeter <= 1.756)
+((TSH >= 11.382) U[0,0] (WeightKg <= 65.481))

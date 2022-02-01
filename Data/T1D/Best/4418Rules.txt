@@ -1,0 +1,4 @@
+F[0,0]((SMBGperDayPtMeterCombo <= 4.455 & UnitsInsBasalOrLongAct <= 36.701) -> Pt_A1cGoalLev >= 3.212)
+F[0,0](TotalDailyInsPerKg >= 0.762 & Triglyc <= 47.522)
+((TotChol <= 104.343) U[0,0] (bmiZscore >= -0.042))
+F[0,0](((bmiZscore <= 0.528 & NumPumpBolusOrShortAct <= 6.616) & Pt_SHFlg <= 6.812) -> HbA1cImputeDtMnC >= 0.024)

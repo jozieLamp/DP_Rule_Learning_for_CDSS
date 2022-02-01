@@ -1,0 +1,6 @@
+G[0,1](SMBGperDayPtMeterCombo >= 0.812 & BGTestAvgNumPtRep >= 2.255)
+F[0,1](SMBGperDayPtMeterCombo >= 1.397 -> Pt_SHFlg = 0.654)
+F[0,0]((LDL >= 57.052 | TSH <= 2.250) -> GFR >= 1.089)
+((LDL <= 64.874) U[0,1] (GFR >= 9.732))
+((Pt_CGMUseNumDays >= 0.000) U[0,1] (GFR >= 3.451))
+G[1,1]((Pt_GrandparentT1D >= 0.000 -> LDL <= 64.266) -> WeightKg <= 63.685)

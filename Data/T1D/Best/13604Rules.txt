@@ -1,0 +1,5 @@
+G[0,1](BldPrDia <= 61.121 | Triglyc >= 63.588)
+G[0,0](GFR <= 0.000 -> BUN >= 0.506)
+G[0,0](BGTestAvgNumPtRep >= 0.069 | HeightCm >= 141.595)
+F[1,1]((BGTestAvgNumMeter <= 6.314 | TotChol >= 36.501) & WeightKg >= 36.946)
+G[0,1]((WeightKg >= 34.758 | bmi >= 17.683) -> UnitsInsBasalOrLongAct <= 40.778)

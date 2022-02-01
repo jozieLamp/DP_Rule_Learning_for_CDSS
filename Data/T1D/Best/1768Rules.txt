@@ -1,0 +1,5 @@
+G[1,1](BGTestAvgNumMeter <= 7.748 & TSH <= 1.541)
+F[0,1]((GFR <= 0.000 -> AlbCreatRat_mggNew >= 34.660) -> NumPumpBolusOrShortAct >= 40.250)
+F[1,1](TSH >= 0.651 & AutonomicNeuroCl >= 1.000)
+F[0,1](BGTestAvgNumMeter >= 0.009 & Pt_DKAFlg >= 0.000)
+G[0,0]((HbA1c <= 10.001 & TSH <= 0.911) | SMBGperDayPtMeterCombo <= 1.395)

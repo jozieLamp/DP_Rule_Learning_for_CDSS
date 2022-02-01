@@ -1,0 +1,4 @@
+G[0,0](HeightCm <= 180.022 | Pt_CGMUseNumDays >= 0.881)
+((TotChol <= 77.092) U[0,0] (BldPrSys <= 146.675))
+F[0,0]((age <= 66.577 & Pt_InsGov <= 0.875) & HbA1cImputeDtMnC <= 0.779)
+F[0,0](HbA1c >= 9.523 -> UnitsInsBasalOrLongAct <= 28.438)

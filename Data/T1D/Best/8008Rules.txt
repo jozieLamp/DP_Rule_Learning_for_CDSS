@@ -1,0 +1,4 @@
+G[0,0](GFR >= 0.000 & AlbCreatRat_mggNew >= 5.879)
+((HDL >= 2.823) U[0,0] (Pt_GrandparentT1D >= 0.123))
+G[0,0]((Triglyc <= 37.795 | Pt_A1cGoalLevelDsYr5 >= 0.000) & Pt_GrandparentT1D <= 0.000)
+((BldPrDia <= 52.389) U[0,0] (HeightCm <= 149.439))

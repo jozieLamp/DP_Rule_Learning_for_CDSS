@@ -1,0 +1,6 @@
+G[0,0](SMBGperDayPtMeterCombo >= 5.010 & BGTestAvgNumPtRep >= 2.239)
+F[0,0](BldPrDia >= 72.358 & TotChol >= 236.879)
+F[0,0]((diabDur <= 15.764 & SMBGperDayPtMeterCombo <= 7.597) & DirectLDL <= 7.241)
+((BGTestAvgNumMeter >= 4.404) U[0,0] (BGTestAvgNumPtRep <= 4.467))
+F[0,0]((HbA1cImputeDtMnC >= 4.987 & HDL <= 105.779) & BGTestAvgNumPtRep <= 101.818)
+((BGTestAvgNumMeter >= 4.013) U[0,0] (BGTestAvgNumPtRep <= 4.668))

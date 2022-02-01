@@ -1,0 +1,2 @@
+F[0,0](BGTestAvgNumMeter <= 4.652 & bmiZscore >= 0.676)
+F[0,0]((bmi >= 23.720 & Pt_MotherT1D >= 0.000) & Pt_CGMUseNumDays >= 0.000)

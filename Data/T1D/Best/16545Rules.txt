@@ -1,0 +1,6 @@
+((TotalDailyInsPerKg <= 0.086) U[0,0] (diabDur <= 41.961))
+((HeightCm <= 148.703) U[0,0] (TotalDailyInsPerKg >= 0.006))
+((bmiZscore <= -0.678) U[0,0] (UnitsInsBasalOrLongAct <= 8.460))
+((HeightCm <= 145.429) U[0,0] (UnitsInsBasalOrLongAct <= 8.419))
+((Pt_A1cGoalLevelDsYr5 <= 0.000) U[0,0] (Pt_SHFlg >= 0.110))
+F[0,0]((Pt_SHFlg >= 0.198 | UnitsInsBasalOrLongAct <= 11.860) | Pt_DKAFlg >= 0.455)

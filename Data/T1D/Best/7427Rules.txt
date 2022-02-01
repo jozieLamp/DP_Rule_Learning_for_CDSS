@@ -1,0 +1,8 @@
+G[1,1](SMBGperDayPtMeterCombo <= 12.243 & BGTestAvgNumMeter <= 11.105)
+G[0,0](LDL <= 72.622 -> Pt_A1cGoalLev >= 0.832)
+F[0,0](((Pt_SHFlg <= 0.816 & SMBGperDayPtMeterCombo >= 10.440) | SMBGperDayPtMeterCombo >= 10.901) & HeightCm >= 9.334)
+G[0,1](BGTestAvgNumMeter <= 10.390 | NumPumpBolusOrShortAct <= 10.353)
+G[0,1](SMBGperDayPtMeterCombo <= 12.377 | NumPumpBolusOrShortAct <= 7.001)
+G[0,1](BGTestAvgNumMeter <= 10.168 | bmiPerc <= 0.394)
+G[0,1](TotChol >= 11.435 | NumPumpBolusOrShortAct <= 12.567)
+G[1,1](BldPrSys >= 30.230 -> bmiZscore >= -0.175)

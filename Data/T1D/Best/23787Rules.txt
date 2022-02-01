@@ -1,0 +1,8 @@
+G[0,0](AlbCreatRat_mggNew >= 0.622 | BldPrSys >= 110.681)
+F[0,0](BldPrDia <= 76.119 & TSH >= 0.098)
+F[0,1](SMBGperDayPtMeterCombo >= 3.925 & TSH >= 0.099)
+F[0,1](((Pt_GrandparentT1D >= 0.000 -> bmiZscore >= -0.021) | GFR >= 0.123) -> TSH >= 0.249)
+G[0,1]((HbA1c <= 8.092 & Pt_SHFlg <= 0.603) -> HDL >= 0.098)
+G[0,0](HbA1cImputeDtMnC <= 49.332 -> TotalDailyInsPerKg <= 0.634)
+G[0,0]((Pt_GrandparentT1D <= 0.000 & TSH >= 0.229) -> BldPrDia <= 1.423)
+G[0,1](TSH >= 0.328 -> WeightKg <= 47.652)

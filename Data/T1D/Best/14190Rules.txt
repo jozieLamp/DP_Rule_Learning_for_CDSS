@@ -1,0 +1,4 @@
+G[0,0]((HeightCm <= 139.925 & NumPumpBolusOrShortAct >= 2.530) -> TotalDailyInsPerKg >= 2.476)
+((TotalDailyInsPerKg >= 0.011) U[0,0] (bmi <= 18.568))
+G[0,0]((GFR >= 0.000 | NumPumpBolusOrShortAct >= 2.795) -> BldPrSys >= 3.022)
+((BldPrDia <= 72.527) U[0,0] (TotalDailyInsPerKg <= 0.909))

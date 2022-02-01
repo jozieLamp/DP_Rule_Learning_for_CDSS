@@ -1,0 +1,2 @@
+F[0,0](((age <= 19.802 & NumPumpBolusOrShortAct >= 1.287) & Pt_GrandparentT1D >= 0.821) | TotChol >= 1.246)
+F[0,0](BldPrSys <= 116.736 & HbA1cImputeDtMnC >= 6.560)

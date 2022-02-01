@@ -1,0 +1,5 @@
+G[0,1]((AlbCreatRat_mggNew >= 0.221 | bmi >= 26.903) & Pt_MotherT1D <= 27.124)
+((bmiPerc >= 0.880) U[1,1] (WeightKg <= 66.765))
+F[1,1](diabDur <= 5.202 & HbA1c >= 7.712)
+F[0,0]((AlbCreatRat_mggNew <= 19.023 & bmiPerc <= 0.946) & SMBGperDayPtMeterCombo <= 0.961)
+G[1,1](((LDL <= 116.507 | TotalDailyInsPerKg <= 0.406) | Pt_GrandparentT1D <= 0.727) -> TSH <= 0.406)

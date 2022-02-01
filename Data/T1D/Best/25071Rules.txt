@@ -1,0 +1,6 @@
+G[0,1](GFR <= 71.163 -> BUN >= 13.913)
+F[0,0](BUN >= 11.214 -> Pt_SHFlg = 0.334)
+G[1,1](((LDL <= 132.847 & TotChol >= 94.341) | TotChol <= 187.509) & SMBGperDayPtMeterCombo <= 140.398)
+F[0,1](((TotalDailyInsPerKg >= 0.103 | TotChol <= 192.616) | Pt_SiblingT1D >= 92.806) -> Pt_A1cGoalLevelDsYr5 >= 57.014)
+G[0,1](GFR <= 72.356 -> BUN >= 12.793)
+G[0,1](BUN >= 13.978 -> TotChol <= 237.368)

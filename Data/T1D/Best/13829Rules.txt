@@ -1,0 +1,5 @@
+G[0,0](((BldPrSys >= 120.062 & HbA1cImputeDtMnC >= 24.272) -> Pt_CGMUseNumDays >= 14.688) | Pt_MotherT1D >= 15.308)
+F[0,0]((SMBGperDayPtMeterCombo <= 4.244 -> TotChol >= 56.192) -> AutonomicNeuroCl >= 27.928)
+F[0,0]((UnitsInsBasalOrLongAct >= 11.489 -> NumPumpBolusOrShortAct >= 1.474) -> bmiZscore >= 1.448)
+F[0,0](((WeightKg >= 59.666 & TotalDailyInsPerKg <= 0.725) & TotChol <= 0.567) & Pt_SHFlg <= 0.675)
+((HeightCm >= 149.457) U[0,0] (Triglyc <= 97.912))

@@ -1,0 +1,5 @@
+G[0,0](Pt_GrandparentT1D <= 0.000 -> WeightKg >= 40.049)
+((TotChol <= 215.822) U[0,0] (GFR <= 90.655))
+F[0,0]((WeightKg >= 32.233 | TSH >= 1.295) -> Pt_SiblingT1D >= 1.412)
+G[0,0](BldPrSys <= 127.919 & UnitsInsBasalOrLongAct >= 0.332)
+F[0,0]((HbA1cImputeDtMnC >= 27.491 -> Triglyc >= 87.753) | diagAgeCombo >= 88.505)

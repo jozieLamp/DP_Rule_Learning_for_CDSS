@@ -1,0 +1,4 @@
+G[0,0](((TSH >= 0.182 -> BldPrSys <= 134.689) | TotChol >= 116.811) -> bmiZscore >= 123.495)
+F[0,0]((HeightCm >= 59.732 | BldPrDia <= 78.935) & BGTestAvgNumMeter <= 76.486)
+G[0,0]((LDL >= 16.371 | Triglyc <= 42.545) & HeightCm <= 60.361)
+F[0,0](bmiZscore <= 0.068 -> WeightKg >= 40.421)

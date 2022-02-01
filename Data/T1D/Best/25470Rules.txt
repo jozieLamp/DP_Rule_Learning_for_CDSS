@@ -1,0 +1,4 @@
+G[0,1](diabDur <= 57.361 -> UnitsInsBasalOrLongAct <= 27.136)
+G[0,1](Pt_MotherT1D >= 0.000 -> BldPrDia <= 74.501)
+G[0,1](BGTestAvgNumMeter >= 0.277 -> BldPrDia <= 64.308)
+G[0,1](((AlbCreatRat_mggNew >= 29.066 -> NumPumpBolusOrShortAct <= 4.964) -> bmiPerc <= 4.701) & NumPumpBolusOrShortAct <= 9.351)

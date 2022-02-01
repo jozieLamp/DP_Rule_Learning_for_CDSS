@@ -1,0 +1,8 @@
+G[0,0]((age <= 25.749 -> TSH <= 1.018) -> NumPumpBolusOrShortAct <= 0.977)
+F[0,0]((Pt_InsGov >= 0.000 -> TotChol <= 167.336) & Pt_SiblingT1D <= 171.063)
+F[0,0]((BGTestAvgNumPtRep >= 0.550 | BGTestAvgNumPtRep >= 0.465) & bmiZscore <= 2.523)
+F[0,0](((BGTestAvgNumMeter >= 2.112 & SMBGperDayPtMeterCombo >= 2.653) -> GFR >= 1.516) & Pt_A1cGoalLevelDsYr5 <= 7.775)
+F[0,0](BGTestAvgNumPtRep >= 1.266 | HDL <= 91.633)
+G[0,0]((HbA1c <= 4.932 -> WeightKg <= 51.941) -> HbA1c >= 25.875)
+F[0,0](HbA1cImputeDtMnC >= 8.182 | HbA1c >= 3.712)
+G[0,0](bmiZscore <= -0.066 & SMBGperDayPtMeterCombo >= 1.419)

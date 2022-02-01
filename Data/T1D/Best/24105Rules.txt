@@ -1,0 +1,2 @@
+G[0,0](diabDur <= 3.069 -> BldPrDia >= 64.463)
+F[0,0]((Pt_A1cGoalLevelDsYr5 >= 0.000 & diabDur >= 2.134) -> Pt_DKAFlg >= 1.351)

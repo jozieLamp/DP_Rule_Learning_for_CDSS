@@ -1,0 +1,6 @@
+G[0,0](TSH <= 1.490 & Pt_GrandchildT1D >= 0.000)
+G[0,0](BGTestAvgNumPtRep <= 3.343 -> TotChol <= 135.759)
+F[0,0]((BGTestAvgNumMeter >= 1.349 -> Pt_DKAFlg <= 0.982) & LDL >= 0.395)
+((Pt_FatherT1D <= 0.829) U[0,0] (TSH >= 0.509))
+F[0,0]((bmiPerc >= 0.690 | Triglyc <= 47.152) & LDL >= 8.743)
+G[0,0]((age <= 15.566 & diabDur >= 1.123) -> AutonomicNeuroCl >= 3.028)

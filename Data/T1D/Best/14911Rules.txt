@@ -1,0 +1,5 @@
+G[0,0]((BGTestAvgNumPtRep <= 3.353 -> TotalDailyInsPerKg >= 0.358) | LDL >= 0.052)
+G[0,0](BldPrSys >= 116.688 -> bmiPerc <= 0.917)
+G[0,0](AlbCreatRat_mggNew >= 0.319 -> Pt_SiblingT1D >= 0.044)
+((TotalDailyInsPerKg <= 0.467) U[0,0] (LDL <= 76.798))
+G[0,0]((bmi <= 36.431 -> HDL >= 21.274) | Pt_MotherT1D >= 23.262)

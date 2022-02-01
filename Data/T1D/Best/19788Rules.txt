@@ -1,0 +1,3 @@
+F[0,1](((bmi <= 20.271 -> SMBGperDayPtMeterCombo >= 1.525) -> diabDur <= 5.547) & HDL <= 6.459)
+F[0,0](((BldPrDia >= 64.504 & bmi <= 20.179) | Pt_SHFlg >= 18.477) & SMBGperDayPtMeterCombo <= 21.564)
+F[1,1](HbA1cImputeDtMnC <= 49.085 & UnitsInsBasalOrLongAct >= 4.631)

@@ -1,0 +1,5 @@
+G[1,1](SMBGperDayPtMeterCombo >= 4.555 & BGTestAvgNumPtRep >= 0.337)
+G[0,1](NumPumpBolusOrShortAct <= 4.220 -> Triglyc <= 114.452)
+F[0,1]((BGTestAvgNumMeter <= 7.887 & TotalDailyInsPerKg >= 0.132) & bmiZscore >= 0.258)
+((Pt_SHFlg <= 0.842) U[1,1] (TotalDailyInsPerKg <= 0.699))
+G[0,0]((AlbCreatRat_mggNew >= 0.930 -> GFR <= 33.535) & AutonomicNeuroCl <= 36.912)

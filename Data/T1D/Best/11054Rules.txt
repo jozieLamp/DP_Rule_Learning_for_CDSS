@@ -1,0 +1,2 @@
+G[0,0](((HeightCm <= 162.839 -> Pt_SHFlg <= 0.760) -> AlbCreatRat_mggNew <= 0.557) -> AlbCreatRat_mggNew <= 0.952)
+G[0,0](HbA1cImputeDtMnC >= 27.980 & Pt_FatherT1D >= 0.000)

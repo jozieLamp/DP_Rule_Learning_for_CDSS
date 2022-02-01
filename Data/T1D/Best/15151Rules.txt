@@ -1,0 +1,3 @@
+G[0,0](Pt_CGMUseNumDays > 0.857 -> Pt_SHFlg = 0.927)
+F[0,0](((SMBGperDayPtMeterCombo >= 4.610 & BGTestAvgNumPtRep >= 4.822) & BldPrSys >= 3.378) & HbA1c <= 10.737)
+G[0,0](((Pt_CGMUseNumDays <= 12.287 | SMBGperDayPtMeterCombo <= 7.761) & SMBGperDayPtMeterCombo >= 5.393) | Pt_CGMUseNumDays <= 6.652)

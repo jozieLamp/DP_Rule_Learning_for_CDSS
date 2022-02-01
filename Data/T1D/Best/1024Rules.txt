@@ -1,0 +1,6 @@
+G[0,0](BldPrSys >= 108.140 & LDL <= 43.799)
+((GFR <= 0.000) U[0,0] (bmi <= 20.930))
+((age <= 15.673) U[0,0] (Pt_SHFlg >= 0.084))
+F[0,0](NumPumpBolusOrShortAct <= 1.524 -> bmiPerc <= 0.612)
+F[0,0](BldPrSys <= 115.638 & SMBGperDayPtMeterCombo >= 3.197)
+G[0,0]((UnitsInsBasalOrLongAct <= 19.230 & Pt_SiblingT1D >= 0.000) -> HDL <= 0.000)

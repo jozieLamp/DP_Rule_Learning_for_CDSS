@@ -1,0 +1,7 @@
+G[0,0](GFR >= 0.000 & bmi >= 22.397)
+F[0,0]((TSH >= 0.935 & HeightCm >= 170.489) | HbA1c >= 170.301)
+((BldPrDia <= 78.018) U[0,0] (BUN >= 8.346))
+F[0,0](((Pt_A1cGoalLevelDsYr5 >= 0.000 | bmiZscore >= 0.906) | Triglyc >= 0.897) & BUN >= 0.814)
+G[0,0](((Pt_InsGov <= 0.000 & UnitsInsBasalOrLongAct >= 28.755) & bmiPerc <= 29.733) & Pt_GrandparentT1D <= 29.823)
+F[0,0](bmiPerc <= 0.830 & BGTestAvgNumMeter >= 2.052)
+G[0,0]((age >= 14.511 | HbA1cImputeDtMnC >= 9.214) | NumPumpBolusOrShortAct >= 9.461)

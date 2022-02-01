@@ -1,0 +1,2 @@
+G[0,0]((HeightCm >= 181.771 | NumPumpBolusOrShortAct <= 30.313) | BGTestAvgNumMeter >= 20.551)
+((bmiPerc >= 0.000) U[0,0] (UnitsInsBasalOrLongAct >= 9.860))

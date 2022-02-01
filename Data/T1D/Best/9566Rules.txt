@@ -1,0 +1,8 @@
+G[0,1]((SMBGperDayPtMeterCombo <= 6.314 & TotChol >= 108.109) | TotChol <= 134.321)
+G[0,1](((Pt_GrandparentT1D <= 0.615 & Pt_ChildT1D >= 0.000) -> SMBGperDayPtMeterCombo <= 0.000) | TSH <= 0.000)
+G[0,1](Pt_A1cGoalLevelDsYr5 <= 0.000 -> TSH <= 1.146)
+((age <= 68.656) U[1,1] (TSH >= 0.102))
+F[0,0](NumPumpBolusOrShortAct >= 4.767 & TSH >= 0.135)
+G[0,1](Triglyc <= 85.383 -> BGTestAvgNumMeter <= 6.650)
+G[0,0](bmiZscore >= 0.014 | HbA1c <= 7.727)
+G[1,1](((HeightCm >= 0.436 | Pt_DKAFlg >= 0.000) & TotChol >= 0.000) & TSH <= 0.000)

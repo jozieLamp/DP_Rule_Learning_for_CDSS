@@ -1,0 +1,2 @@
+G[0,0](age >= 62.063 | BldPrDia >= 72.977)
+G[0,0](((Pt_GrandparentT1D <= 0.000 & TotalDailyInsPerKg >= 0.401) & Pt_A1cGoalLevelDsYr5 <= 0.951) | diagAgeCombo <= 0.784)

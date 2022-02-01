@@ -1,0 +1,8 @@
+G[0,0](BGTestAvgNumMeter <= 3.559 & HDL >= 21.794)
+((bmiPerc >= 0.353) U[0,0] (TSH <= 1.353))
+F[0,0](((HDL >= 17.061 -> Pt_SHFlg >= 0.067) | Pt_A1cGoalLevelDsYr5 >= 0.189) | Pt_GrandparentT1D >= 0.047)
+F[0,0](((HbA1c <= 12.056 & Pt_SHFlg <= 0.895) -> Pt_FatherT1D >= 0.059) | Triglyc <= 0.959)
+((AlbCreatRat_mggNew <= 41.649) U[0,0] (LDL <= 61.183))
+F[0,0](bmi > 17.611 -> Pt_SHFlg = 0.420)
+F[0,0](bmiPerc <= 0.494 & NumPumpBolusOrShortAct <= 2.694)
+G[0,0](Pt_A1cGoalLevelDsYr5 >= 0.000 -> WeightKg >= 36.988)

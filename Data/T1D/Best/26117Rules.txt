@@ -1,0 +1,8 @@
+G[0,0]((HDL >= 4.202 & TSH >= 0.371) -> diabDur <= 0.963)
+F[0,0](Pt_SHFlg >= 0.274 | HbA1cImputeDtMnC <= 20.506)
+F[0,0](((HeightCm >= 175.487 -> Pt_A1cGoalLev >= 1.424) | GFR >= 0.990) | AutonomicNeuroCl >= 1.795)
+F[0,0]((Pt_CGMUseNumDays >= 0.000 -> HbA1cImputeDtMnC <= 16.529) & Pt_A1cGoalLevelDsYr5 <= 12.307)
+G[0,0](Pt_SHFlg >= 0.205 -> diagAgeCombo <= 7.435)
+F[0,0](((Pt_SHFlg >= 0.006 | HbA1c >= 7.721) | NumPumpBolusOrShortAct >= 7.582) & TotChol >= 7.643)
+G[0,0](HbA1c <= 7.908 & LDL <= 49.661)
+G[0,0](((BGTestAvgNumPtRep >= 0.000 & BldPrDia >= 61.900) -> bmiPerc >= 62.282) & Pt_InsGov <= 65.914)

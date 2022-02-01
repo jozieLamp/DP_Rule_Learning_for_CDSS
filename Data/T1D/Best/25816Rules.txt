@@ -1,0 +1,5 @@
+G[0,1](AlbCreatRat_mggNew >= 2.275 -> bmiPerc <= 0.791)
+G[0,1](bmiZscore >= 0.366 -> SMBGperDayPtMeterCombo <= 3.980)
+G[1,1]((bmiPerc <= 0.728 | Pt_A1cGoalLev >= 0.668) | diabDur <= 3.234)
+G[0,0](bmi <= 22.576 & HbA1c >= 7.710)
+F[1,1]((diabDur <= 14.270 & HbA1cImputeDtMnC >= 25.198) | UnitsInsBasalOrLongAct >= 32.827)

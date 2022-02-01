@@ -1,0 +1,8 @@
+G[0,0](((BGTestAvgNumMeter <= 4.279 -> UnitsInsBasalOrLongAct >= 3.488) | Triglyc >= 5.158) & Pt_FatherT1D <= 32.108)
+F[0,0](age >= 9.121 -> Pt_SHFlg = 0.769)
+F[0,0](((bmiZscore >= 0.678 | HeightCm >= 137.509) & WeightKg <= 146.490) -> Pt_GrandparentT1D >= 134.701)
+((LDL <= 94.959) U[0,0] (TSH <= 1.742))
+G[0,0](((AlbCreatRat_mggNew <= 4.667 & Pt_GrandparentT1D >= 0.103) | HbA1c <= 0.426) -> Pt_A1cGoalLevelDsYr5 >= 0.360)
+((Pt_GrandchildT1D >= 0.000) U[0,0] (TSH <= 2.114))
+G[0,0](AlbCreatRat_mggNew >= 3.365 | bmiZscore >= 0.830)
+G[0,0]((BGTestAvgNumMeter <= 4.983 & BldPrDia <= 72.303) -> Pt_SiblingT1D >= 70.613)

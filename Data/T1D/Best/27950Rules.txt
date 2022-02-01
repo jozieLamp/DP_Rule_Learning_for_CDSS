@@ -1,0 +1,6 @@
+G[0,0](BGTestAvgNumMeter <= 5.909 | Triglyc >= 3.541)
+F[0,0](Pt_A1cGoalLevelDsYr5 <= 0.000 -> TotalDailyInsPerKg >= 0.393)
+F[0,0]((BldPrDia >= 71.505 & BUN >= 0.106) | HbA1cImputeDtMnC <= 8.864)
+G[0,0](BUN <= 6.960 & TSH <= 1.088)
+F[0,0](((Pt_FatherT1D <= 0.000 -> HbA1cImputeDtMnC <= 17.916) & diagAgeCombo <= 17.925) | bmiZscore >= 3.450)
+G[0,0](diagAgeCombo <= 2.454 | HbA1cImputeDtMnC >= 8.048)

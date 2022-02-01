@@ -1,0 +1,7 @@
+G[0,0](UnitsInsBasalOrLongAct >= 5.367 | TSH >= 1.396)
+F[0,0]((LDL <= 0.000 | TotalDailyInsPerKg <= 0.863) & UnitsInsBasalOrLongAct <= 0.626)
+G[1,1](SMBGperDayPtMeterCombo >= 6.135 & BGTestAvgNumPtRep >= 2.377)
+F[0,0](HbA1c >= 8.346 & WeightKg <= 24.677)
+((BGTestAvgNumMeter >= 3.227) U[1,1] (BGTestAvgNumPtRep <= 6.885))
+((BGTestAvgNumPtRep >= 0.770) U[1,1] (Pt_DKAFlg <= 0.000))
+G[0,0](diabDur <= 4.894 -> HbA1cImputeDtMnC >= 17.016)

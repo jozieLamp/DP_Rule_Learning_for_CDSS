@@ -1,0 +1,1 @@
+G[0,0]((HDL <= 40.761 | Pt_InsGov <= 0.962) & Pt_GrandparentT1D <= 0.792)

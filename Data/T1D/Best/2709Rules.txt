@@ -1,0 +1,3 @@
+G[0,0]((diabDur >= 26.305 | HDL >= 50.428) & bmiPerc <= 59.537)
+F[0,0](AlbCreatRat_mggNew >= 6.366 -> LDL <= 97.805)
+F[0,0](((BGTestAvgNumPtRep >= 1.735 | SMBGperDayPtMeterCombo >= 5.114) & Pt_DKAFlg <= 8.531) & BGTestAvgNumPtRep >= 5.221)

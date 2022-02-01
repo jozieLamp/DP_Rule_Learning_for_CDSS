@@ -1,0 +1,8 @@
+G[0,0]((HbA1c >= 7.286 & NumPumpBolusOrShortAct <= 5.937) | HbA1cImputeDtMnC >= 0.845)
+F[0,0](((HeightCm <= 180.216 | TotalDailyInsPerKg <= 0.657) -> diagAgeCombo >= 0.598) | Pt_CGMUseNumDays >= 0.607)
+F[0,0]((Pt_MotherT1D >= 0.000 -> age <= 47.893) | Pt_ChildT1D >= 46.693)
+((BldPrDia <= 68.769) U[0,0] (Triglyc <= 62.925))
+G[0,0]((AlbCreatRat_mggNew <= 9.532 -> BldPrDia >= 60.935) -> bmiPerc >= 58.648)
+((TotalDailyInsPerKg >= 0.574) U[0,0] (UnitsInsBasalOrLongAct <= 17.262))
+G[0,0]((WeightKg >= 68.111 | bmi >= 21.186) -> UnitsInsBasalOrLongAct <= 14.635)
+G[0,0](HbA1c >= 7.272 & Pt_SHFlg <= 0.388)

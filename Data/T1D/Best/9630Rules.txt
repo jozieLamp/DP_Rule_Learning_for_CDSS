@@ -1,0 +1,5 @@
+G[0,0]((NumPumpBolusOrShortAct <= 7.079 -> Pt_SHFlg <= 0.621) & Pt_A1cGoalLev <= 0.644)
+G[0,0](SMBGperDayPtMeterCombo >= 1.740 & Pt_SiblingT1D <= 0.000)
+G[0,0]((HbA1c >= 5.231 | UnitsInsBasalOrLongAct >= 1.150) | LDL >= 1.843)
+F[0,0]((LDL <= 58.833 & TSH <= 2.496) | Pt_GrandparentT1D >= 0.911)
+G[0,0]((BGTestAvgNumMeter >= 1.106 & Pt_InsGov >= 0.000) & Pt_InsGov >= 0.000)

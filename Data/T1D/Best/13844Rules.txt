@@ -1,0 +1,3 @@
+G[0,0](NumPumpBolusOrShortAct >= 0.225 | Pt_A1cGoalLev >= 0.954)
+((AutonomicNeuroCl >= 0.000) U[0,0] (NumPumpBolusOrShortAct <= 2.101))
+F[0,0]((SMBGperDayPtMeterCombo <= 6.496 & TotChol >= 94.521) | BUN >= 93.431)

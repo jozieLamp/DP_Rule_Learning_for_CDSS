@@ -1,0 +1,6 @@
+G[0,0](BldPrSys <= 123.948 & bmiZscore >= 1.041)
+G[0,0](TSH >= 0.462 & WeightKg >= 61.234)
+G[0,0]((Pt_ChildT1D <= 0.000 -> BldPrSys <= 118.084) | Pt_A1cGoalLevelDsYr5 >= 108.229)
+G[0,0]((Triglyc <= 0.000 -> diabDur >= 5.784) | DirectLDL >= 4.871)
+F[0,0](TSH > 0.130 -> Pt_SHFlg = 0.172)
+((TotChol <= 0.000) U[0,0] (HeightCm <= 166.437))

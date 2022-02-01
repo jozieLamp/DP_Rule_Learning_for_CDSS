@@ -1,0 +1,7 @@
+G[0,0](BGTestAvgNumMeter >= 4.135 -> BldPrDia <= 73.046)
+G[0,0](HbA1cImputeDtMnC >= 13.994 & Triglyc <= 66.855)
+G[0,0]((bmi <= 22.022 -> Pt_SHFlg <= 0.355) | bmiPerc <= 0.625)
+F[0,0](((BldPrSys <= 127.213 & Pt_A1cGoalLev <= 5.954) | WeightKg <= 6.520) | Pt_InsGov >= 0.601)
+F[0,0](((bmiPerc <= 0.724 | Pt_InsGov >= 0.246) & Pt_CGMUseNumDays >= 0.360) | WeightKg <= 0.465)
+G[0,0](((DirectLDL <= 0.000 -> NumPumpBolusOrShortAct <= 3.862) | BGTestAvgNumMeter <= 3.828) | WeightKg <= 2.814)
+G[0,0](bmiZscore >= 0.464 | HDL <= 43.669)

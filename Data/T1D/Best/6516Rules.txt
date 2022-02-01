@@ -1,0 +1,8 @@
+G[0,0](((Pt_SHFlg <= 0.342 & bmiPerc <= 0.000) & Triglyc <= 0.000) | BGTestAvgNumPtRep <= 0.000)
+((BldPrSys >= 123.599) U[0,0] (bmi <= 32.362))
+F[0,0](BldPrSys <= 139.891 & HDL <= 43.505)
+G[0,0](LDL >= 79.840 | Pt_SHFlg <= 0.355)
+((BGTestAvgNumMeter >= 0.508) U[0,0] (bmi <= 32.383))
+G[0,0](((AlbCreatRat_mggNew >= 585.288 & BldPrDia >= 72.801) & HDL <= 78.336) & BGTestAvgNumPtRep <= 78.916)
+G[0,0](((bmiPerc <= 0.000 -> AlbCreatRat_mggNew >= 736.863) | TotalDailyInsPerKg >= 748.849) & Pt_MotherT1D <= 1036.441)
+G[0,0]((AlbCreatRat_mggNew >= 427.330 -> bmiZscore <= 0.733) -> AlbCreatRat_mggNew <= 0.762)

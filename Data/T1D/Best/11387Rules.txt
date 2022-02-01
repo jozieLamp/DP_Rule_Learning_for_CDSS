@@ -1,0 +1,3 @@
+G[0,0]((UnitsInsBasalOrLongAct >= 5.768 -> GFR <= 80.853) | Pt_FatherT1D >= 5.102)
+F[0,0]((BGTestAvgNumMeter <= 3.455 -> NumPumpBolusOrShortAct >= 1.160) & GFR >= 0.089)
+F[0,0](Pt_SHFlg <= 0.988 -> TotChol >= 62.290)

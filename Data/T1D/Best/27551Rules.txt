@@ -1,0 +1,4 @@
+G[0,0](Pt_InsGov >= 0.287 -> TSH <= 0.406)
+F[0,0](bmiZscore >= 0.966 & HeightCm <= 131.514)
+G[0,0]((bmi >= 17.696 & TSH >= 0.158) -> Pt_FatherT1D >= 0.034)
+((DirectLDL >= 0.000) U[0,0] (BUN >= 0.597))

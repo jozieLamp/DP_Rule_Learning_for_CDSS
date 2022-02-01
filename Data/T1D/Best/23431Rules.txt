@@ -1,0 +1,7 @@
+G[0,1](BUN <= 17.188 | Triglyc >= 58.620)
+((bmi >= 21.214) U[0,0] (BUN >= 11.110))
+((BldPrSys >= 122.798) U[1,1] (Triglyc <= 100.700))
+F[0,1](((Triglyc <= 154.743 -> TSH <= 1.150) -> AutonomicNeuroCl >= 0.483) & HbA1c >= 0.555)
+G[1,1]((age >= 39.556 | TotalDailyInsPerKg <= 0.643) & Triglyc >= 0.004)
+G[0,1]((WeightKg >= 58.092 | bmi >= 0.013) -> UnitsInsBasalOrLongAct <= 121.687)
+G[0,0](((AlbCreatRat_mggNew <= 930.886 -> bmiZscore <= 1.588) -> Pt_ChildT1D <= 1.773) & SMBGperDayPtMeterCombo >= 0.195)

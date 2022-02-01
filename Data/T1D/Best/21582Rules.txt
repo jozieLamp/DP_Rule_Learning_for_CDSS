@@ -1,0 +1,2 @@
+G[1,1]((BGTestAvgNumPtRep <= 4.936 -> BUN >= 3.186) | Pt_CGMUseNumDays >= 2.957)
+F[0,1](HbA1c > 5.907 -> Pt_SHFlg = 0.376)

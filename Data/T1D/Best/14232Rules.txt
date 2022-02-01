@@ -1,0 +1,7 @@
+G[0,0](((Pt_GrandparentT1D >= 0.000 | Pt_CGMUseNumDays >= 0.000) & TotalDailyInsPerKg >= 0.000) -> BGTestAvgNumPtRep <= 0.000)
+((HbA1cImputeDtMnC >= 2.008) U[0,0] (Triglyc >= 10.270))
+((Pt_InsGov >= 0.000) U[0,0] (UnitsInsBasalOrLongAct <= 10.629))
+G[0,0](bmiPerc <= 0.707 -> HbA1c >= 6.802)
+((diabDur >= 3.238) U[0,0] (HDL >= 31.544))
+G[0,0]((WeightKg <= 79.543 & AlbCreatRat_mggNew <= 0.795) -> Pt_DKAFlg >= 0.412)
+G[0,0](GFR <= 0.000 & Pt_A1cGoalLev <= 3.341)

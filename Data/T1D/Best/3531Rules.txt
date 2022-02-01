@@ -1,0 +1,6 @@
+G[0,0]((WeightKg >= 29.487 | bmi >= 15.349) -> UnitsInsBasalOrLongAct <= 13.052)
+G[0,0](SMBGperDayPtMeterCombo >= 6.390 & BGTestAvgNumPtRep >= 0.630)
+((diabDur >= 42.887) U[1,1] (HDL >= 29.407))
+((BldPrSys >= 133.422) U[1,1] (Triglyc >= 4.287))
+F[1,1](((BldPrDia <= 69.370 -> TotalDailyInsPerKg >= 0.142) & Pt_ChildT1D <= 0.347) & bmiZscore <= 0.272)
+F[0,0]((Pt_DKAFlg <= 0.326 & Pt_InsGov <= 0.618) & WeightKg >= 0.131)

@@ -1,0 +1,2 @@
+G[1,1](NumPumpBolusOrShortAct <= 1.029 | SMBGperDayPtMeterCombo >= 3.308)
+((HeightCm >= 95.564) U[1,1] (NumPumpBolusOrShortAct >= 0.426))

@@ -1,0 +1,8 @@
+G[0,0](BldPrDia <= 68.203 & HeightCm >= 140.245)
+((Pt_DKAFlg >= 0.000) U[0,0] (BGTestAvgNumMeter >= 0.627))
+((WeightKg <= 44.729) U[0,0] (BGTestAvgNumMeter >= 0.245))
+F[0,0]((bmi >= 20.981 | HbA1cImputeDtMnC >= 9.973) -> diabDur >= 19.164)
+F[0,0](BGTestAvgNumPtRep < 3.005 -> Pt_SHFlg = 0.229)
+G[0,0]((Pt_DKAFlg >= 0.000 -> diabDur >= 1.107) | WeightKg <= 3.257)
+F[0,0](((Pt_GrandparentT1D <= 0.000 -> HeightCm >= 142.293) -> Pt_FatherT1D >= 136.261) & BGTestAvgNumMeter <= 156.145)
+G[0,0]((Pt_A1cGoalLev <= 0.000 & bmi >= 20.359) & Pt_SiblingT1D <= 22.376)

@@ -1,0 +1,4 @@
+G[0,0](Pt_GrandparentT1D >= 0.000 -> Pt_CGMUseNumDays <= 11.897)
+F[0,0]((Pt_A1cGoalLev <= 0.000 -> age <= 53.039) | bmiPerc >= 51.268)
+F[0,0](Pt_A1cGoalLev >= 0.000 & diabDur <= 51.658)
+((Pt_SHFlg <= 0.514) U[0,0] (AlbCreatRat_mggNew >= 9.402))

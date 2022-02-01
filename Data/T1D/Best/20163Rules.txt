@@ -1,0 +1,7 @@
+G[1,1]((BGTestAvgNumPtRep >= 1.961 | AlbCreatRat_mggNew <= 9.613) & Pt_SiblingT1D <= 6.938)
+F[1,1](BGTestAvgNumPtRep >= 5.856 -> BldPrDia <= 61.902)
+F[0,0]((BldPrDia <= 60.662 & HbA1cImputeDtMnC >= 12.635) & Pt_A1cGoalLev <= 52.553)
+F[0,0]((BldPrSys <= 91.423 -> WeightKg >= 31.813) -> Triglyc >= 34.243)
+((BUN <= 16.659) U[0,0] (HbA1c <= 7.168))
+G[0,1]((bmiZscore <= 1.583 | Pt_GrandparentT1D >= 0.108) | BGTestAvgNumPtRep >= 0.088)
+G[0,1]((Pt_FatherT1D <= 0.000 -> BldPrSys >= 26.144) | BGTestAvgNumPtRep >= 14.478)

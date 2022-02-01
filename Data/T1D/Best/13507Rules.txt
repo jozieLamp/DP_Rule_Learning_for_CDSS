@@ -1,0 +1,3 @@
+G[0,0](SMBGperDayPtMeterCombo >= 4.856 & BGTestAvgNumPtRep >= 4.101)
+F[0,0]((BUN <= 4.906 -> NumPumpBolusOrShortAct >= 1.162) -> TSH >= 0.807)
+G[0,0](bmiZscore >= -0.974 -> Pt_DKAFlg >= 0.031)

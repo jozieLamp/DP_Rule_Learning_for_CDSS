@@ -1,0 +1,7 @@
+G[0,0](Pt_InsGov >= 0.000 & BGTestAvgNumPtRep <= 3.026)
+((diabDur >= 1.600) U[0,0] (Triglyc >= 9.818))
+F[0,0](((Triglyc >= 8.925 | UnitsInsBasalOrLongAct <= 11.058) | Pt_CGMUseNumDays >= 5.473) | bmiZscore >= 4.736)
+F[0,0]((Pt_InsGov >= 0.000 -> GFR >= 0.000) & UnitsInsBasalOrLongAct <= 0.000)
+G[0,0](((bmi >= 22.630 & bmiPerc >= 0.747) -> Pt_ChildT1D <= 0.844) & UnitsInsBasalOrLongAct >= 0.743)
+F[0,0](Pt_ChildT1D <= 0.000 -> BldPrSys <= 109.562)
+G[0,0]((SMBGperDayPtMeterCombo >= 7.000 | Pt_MotherT1D >= 0.000) & AlbCreatRat_mggNew <= 0.000)

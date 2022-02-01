@@ -1,0 +1,5 @@
+G[0,0](SMBGperDayPtMeterCombo >= 2.121 & BGTestAvgNumPtRep >= 0.236)
+G[0,0](TSH > 0.581 -> Pt_SHFlg = 0.141)
+((BGTestAvgNumMeter >= 1.331) U[0,0] (BGTestAvgNumPtRep <= 1.946))
+((BGTestAvgNumMeter >= 1.092) U[0,0] (BGTestAvgNumPtRep <= 1.832))
+G[0,0](Pt_FatherT1D >= 0.000 & LDL <= 95.926)

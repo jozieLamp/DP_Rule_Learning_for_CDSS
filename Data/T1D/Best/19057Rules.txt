@@ -1,0 +1,4 @@
+G[0,0](((HbA1c <= 8.509 -> HbA1cImputeDtMnC <= 47.565) & TSH <= 59.521) -> Pt_InsGov >= 15.895)
+((NumPumpBolusOrShortAct >= 0.451) U[0,0] (age <= 23.106))
+((AlbCreatRat_mggNew <= 18.260) U[0,0] (HbA1cImputeDtMnC <= 59.849))
+F[0,0](AlbCreatRat_mggNew >= 2.082 | BUN <= 16.509)

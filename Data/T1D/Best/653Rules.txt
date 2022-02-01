@@ -1,0 +1,2 @@
+G[1,1](HeightCm <= 162.825 -> TotalDailyInsPerKg >= 0.119)
+F[0,0](AlbCreatRat_mggNew >= 0.133 & SMBGperDayPtMeterCombo <= 5.063)

@@ -1,0 +1,7 @@
+G[0,0]((Pt_CGMUseNumDays >= 5.508 -> TSH <= 1.058) -> NumPumpBolusOrShortAct <= 1.027)
+((bmi <= 14.187) U[0,0] (Pt_DKAFlg >= 0.033))
+F[0,0]((AlbCreatRat_mggNew >= 3.270 -> Pt_CGMUseNumDays >= 10.314) & NumPumpBolusOrShortAct <= 19.128)
+F[0,0](Triglyc > 5.561 -> Pt_SHFlg = 0.599)
+F[0,0](((BldPrDia >= 63.099 & Pt_InsGov <= 0.600) -> age >= 0.376) & Pt_CGMUseNumDays >= 0.060)
+G[0,0]((HDL >= 33.656 -> SMBGperDayPtMeterCombo <= 5.625) -> GFR >= 3.535)
+((Pt_DKAFlg >= 0.198) U[0,0] (Pt_SHFlg >= 0.108))

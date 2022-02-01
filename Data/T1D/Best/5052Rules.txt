@@ -1,0 +1,6 @@
+G[0,1](AlbCreatRat_mggNew <= 23.691 | bmiPerc >= 0.049)
+F[1,1]((bmiZscore >= -0.606 -> HbA1c >= 9.992) & bmi <= 11.285)
+G[0,1](((BldPrSys >= 113.613 -> LDL >= 62.157) & HDL <= 80.112) & SMBGperDayPtMeterCombo <= 94.233)
+((age <= 18.548) U[1,1] (Pt_SHFlg <= 0.562))
+F[0,1]((bmiZscore >= -0.537 & TSH >= 0.560) & AlbCreatRat_mggNew >= 0.073)
+G[0,0]((HbA1cImputeDtMnC >= 37.367 -> LDL <= 77.552) & HeightCm >= 12.110)

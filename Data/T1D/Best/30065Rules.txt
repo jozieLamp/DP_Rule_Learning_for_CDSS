@@ -1,0 +1,5 @@
+G[0,0](((Triglyc >= 52.025 -> TSH >= 0.813) | BUN >= 0.837) -> Triglyc <= 1.083)
+F[0,0](Pt_GrandchildT1D <= 0.000 & BGTestAvgNumMeter >= 4.525)
+F[0,0]((Pt_FatherT1D <= 0.000 | bmiZscore <= 2.191) & HDL >= 1.897)
+((bmi <= 22.803) U[0,0] (HeightCm <= 144.137))
+F[0,0](age <= 8.618 & Pt_A1cGoalLevelDsYr5 >= 0.000)

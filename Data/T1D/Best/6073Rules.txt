@@ -1,0 +1,5 @@
+G[0,0](((BGTestAvgNumMeter >= 0.080 & TSH >= 0.783) | TotalDailyInsPerKg <= 3.080) & TSH >= 1.749)
+((Pt_SHFlg >= 0.055) U[0,0] (UnitsInsBasalOrLongAct <= 34.623))
+F[0,0]((NumPumpBolusOrShortAct <= 1.327 & TotChol >= 37.569) & HDL <= 91.264)
+G[0,0]((AlbCreatRat_mggNew >= 4.463 | GFR <= 106.724) -> diabDur >= 18.696)
+F[0,0]((GFR <= 102.721 | HbA1c <= 7.114) | Pt_DKAFlg >= 2.702)

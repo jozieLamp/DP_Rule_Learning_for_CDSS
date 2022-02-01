@@ -1,0 +1,6 @@
+G[0,0](GFR <= 27.910 -> BUN >= 9.271)
+G[0,0]((Pt_A1cGoalLev >= 0.570 | Pt_A1cGoalLev <= 5.498) & LDL >= 0.973)
+G[0,0](BldPrDia >= 64.116 | UnitsInsBasalOrLongAct <= 7.264)
+G[0,0](Pt_A1cGoalLevelDsYr5 <= 0.000 & bmiZscore >= -0.907)
+F[0,0](Pt_InsGov <= 0.914 & Triglyc <= 58.015)
+F[0,0]((BGTestAvgNumMeter >= 3.779 -> HeightCm <= 151.786) -> AutonomicNeuroCl >= 124.166)

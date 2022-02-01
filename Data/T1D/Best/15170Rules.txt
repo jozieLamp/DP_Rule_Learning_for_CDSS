@@ -1,0 +1,4 @@
+F[0,0]((LDL <= 92.880 & SMBGperDayPtMeterCombo >= 1.289) & AlbCreatRat_mggNew >= 0.095)
+F[0,0](BldPrSys >= 94.707 & NumPumpBolusOrShortAct <= 2.525)
+((Pt_SiblingT1D <= 0.330) U[0,0] (Pt_SHFlg >= 0.003))
+F[0,0]((Pt_MotherT1D >= 0.000 -> TotalDailyInsPerKg <= 0.831) & UnitsInsBasalOrLongAct <= 0.260)

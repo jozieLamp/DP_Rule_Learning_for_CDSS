@@ -1,0 +1,2 @@
+G[0,0](Pt_GrandparentT1D >= 0.000 -> diabDur >= 62.544)
+F[0,0](diabDur >= 63.008 -> Pt_SHFlg = 0.950)

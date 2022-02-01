@@ -1,0 +1,8 @@
+G[0,0]((UnitsInsBasalOrLongAct >= 11.667 & WeightKg >= 90.442) | Pt_A1cGoalLevelDsYr5 >= 92.956)
+F[0,0]((BUN >= 2.979 -> HbA1c >= 7.688) -> DirectLDL >= 6.830)
+((bmi <= 32.864) U[0,0] (UnitsInsBasalOrLongAct <= 23.019))
+G[0,0](((TotalDailyInsPerKg <= 0.593 -> TSH >= 0.217) | HeightCm <= 0.541) | Pt_InsGov <= 0.688)
+F[0,0](((Pt_SHFlg <= 0.797 | bmiPerc <= 0.000) -> Pt_SiblingT1D >= 0.000) -> AlbCreatRat_mggNew <= 0.000)
+G[0,0](BGTestAvgNumMeter >= 1.123 | Pt_InsGov <= 0.900)
+G[0,0](((diabDur >= 12.490 -> bmiPerc <= 0.000) & LDL <= 0.000) -> BUN <= 0.000)
+G[0,0](((BGTestAvgNumPtRep <= 1.467 & WeightKg >= 93.009) & DirectLDL <= 94.204) | TSH >= 92.326)

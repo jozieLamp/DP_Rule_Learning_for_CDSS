@@ -1,0 +1,2 @@
+G[0,0]((BldPrSys <= 139.571 & TSH <= 27.506) -> HbA1cImputeDtMnC >= 1.089)
+F[0,0]((HbA1c <= 2.730 | TSH >= 1.200) -> HbA1cImputeDtMnC >= 7.237)

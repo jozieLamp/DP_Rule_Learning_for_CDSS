@@ -1,0 +1,2 @@
+G[0,0]((bmiZscore <= -0.092 -> Pt_SHFlg <= 0.866) | Pt_MotherT1D >= 0.020)
+F[0,0]((BldPrSys >= 142.629 -> TotalDailyInsPerKg >= 0.033) & AlbCreatRat_mggNew <= 0.072)

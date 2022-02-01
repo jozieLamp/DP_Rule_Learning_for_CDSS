@@ -1,0 +1,4 @@
+G[0,1]((Triglyc >= 28.260 -> TSH >= 0.987) | BGTestAvgNumPtRep >= 0.789)
+G[1,1](((NumPumpBolusOrShortAct <= 8.101 -> UnitsInsBasalOrLongAct >= 9.177) -> LDL <= 26.718) | BUN >= 3.505)
+F[0,0](BldPrSys >= 106.324 & BldPrSys <= 111.413)
+G[0,1]((WeightKg >= 43.659 | bmi >= 18.208) -> UnitsInsBasalOrLongAct <= 26.664)

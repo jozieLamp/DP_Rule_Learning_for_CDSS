@@ -1,0 +1,4 @@
+G[0,0]((WeightKg >= 46.987 | bmi >= 21.084) -> UnitsInsBasalOrLongAct <= 18.032)
+G[0,0](Pt_SiblingT1D >= 0.000 & BGTestAvgNumPtRep >= 0.530)
+F[0,0]((bmi >= 19.395 & UnitsInsBasalOrLongAct >= 1.288) | AutonomicNeuroCl >= 3.099)
+F[0,0](NumPumpBolusOrShortAct >= 0.093 & diabDur <= 13.651)

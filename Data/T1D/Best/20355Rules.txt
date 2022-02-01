@@ -1,0 +1,6 @@
+G[0,0](GFR <= 45.449 -> BUN >= 17.234)
+G[0,0](HbA1c <= 12.721 -> Pt_SHFlg <= 0.277)
+G[0,0](GFR <= 29.435 -> BUN >= 20.045)
+G[0,0](GFR <= 31.947 -> BUN >= 16.397)
+G[0,0]((AlbCreatRat_mggNew >= 957.320 | Pt_SHFlg <= 0.481) & Pt_GrandparentT1D <= 0.436)
+F[0,0]((bmiZscore >= 0.436 | diabDur >= 16.530) -> BGTestAvgNumMeter >= 16.959)

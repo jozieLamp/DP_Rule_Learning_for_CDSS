@@ -1,0 +1,7 @@
+G[0,1]((SMBGperDayPtMeterCombo <= 4.414 | NumPumpBolusOrShortAct <= 1.545) | SMBGperDayPtMeterCombo <= 1.676)
+G[1,1]((HbA1cImputeDtMnC >= 5.632 & BGTestAvgNumPtRep <= 4.917) & Pt_DKAFlg <= 4.512)
+((HDL >= 1.942) U[0,0] (Triglyc >= 14.571))
+F[1,1](((age <= 36.462 & UnitsInsBasalOrLongAct >= 19.639) & HDL <= 50.158) & UnitsInsBasalOrLongAct >= 21.557)
+((BUN >= 3.606) U[0,0] (TSH >= 0.429))
+((LDL >= 31.864) U[0,0] (Triglyc >= 10.314))
+G[0,0](((Pt_A1cGoalLev >= 0.272 | Pt_A1cGoalLev <= 2.861) | Pt_GrandparentT1D <= 3.584) -> LDL <= 1.272)

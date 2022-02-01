@@ -1,0 +1,8 @@
+G[1,1](((BGTestAvgNumMeter >= 0.734 | HbA1cImputeDtMnC >= 7.816) & Pt_SHFlg <= 24.555) -> Pt_A1cGoalLev >= 0.827)
+F[1,1]((BGTestAvgNumMeter >= 1.113 | HDL <= 54.402) & Pt_SiblingT1D <= 59.627)
+G[0,1](SMBGperDayPtMeterCombo <= 4.279 -> Triglyc >= 46.117)
+G[0,0](BGTestAvgNumMeter >= 0.212 -> bmiPerc <= 0.384)
+G[1,1]((BldPrDia <= 66.917 | GFR <= 0.000) & BGTestAvgNumMeter <= 0.000)
+G[1,1](((BGTestAvgNumPtRep <= 4.543 -> BldPrSys <= 118.909) -> Pt_FatherT1D >= 114.927) -> Pt_FatherT1D >= 115.095)
+F[0,1]((BldPrSys >= 116.803 -> LDL >= 24.872) -> Pt_SiblingT1D >= 11.754)
+F[1,1]((AlbCreatRat_mggNew >= 5.561 & UnitsInsBasalOrLongAct >= 1.237) | Pt_DKAFlg >= 10.794)

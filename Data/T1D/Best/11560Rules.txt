@@ -1,0 +1,7 @@
+G[0,0](AlbCreatRat_mggNew <= 6.782 -> TSH >= 1.892)
+G[0,0](BGTestAvgNumPtRep >= 0.107 -> Pt_SHFlg = 0.980)
+F[0,0](HeightCm <= 152.509 & Triglyc <= 247.185)
+((HbA1c <= 10.636) U[0,0] (TotalDailyInsPerKg >= 0.014))
+((SMBGperDayPtMeterCombo >= 1.553) U[0,0] (TotalDailyInsPerKg >= 0.171))
+G[0,0]((AlbCreatRat_mggNew <= 10.438 -> BGTestAvgNumPtRep <= 4.850) | bmiPerc >= 1.131)
+G[0,0](((HbA1cImputeDtMnC <= 31.268 -> BGTestAvgNumPtRep <= 3.608) | UnitsInsBasalOrLongAct >= 1.902) & SMBGperDayPtMeterCombo <= 5.602)

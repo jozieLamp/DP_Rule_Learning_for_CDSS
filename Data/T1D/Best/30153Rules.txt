@@ -1,0 +1,8 @@
+G[0,0]((BldPrDia <= 58.097 & bmi <= 17.344) -> Pt_CGMUseNumDays <= 17.726)
+F[0,0](((HDL >= 0.000 & bmiZscore <= 0.578) | UnitsInsBasalOrLongAct <= 0.589) & BldPrSys >= 0.481)
+((HbA1c <= 7.314) U[0,0] (TotalDailyInsPerKg <= 0.923))
+G[0,0](TotalDailyInsPerKg >= 0.734 & AutonomicNeuroCl >= 0.000)
+((Pt_SHFlg <= 0.985) U[0,0] (BldPrSys <= 115.711))
+G[0,0](Pt_A1cGoalLevelDsYr5 <= 0.000 -> bmiPerc >= 0.690)
+G[0,0](((BGTestAvgNumMeter >= 6.438 & SMBGperDayPtMeterCombo <= 9.254) & HbA1cImputeDtMnC >= 5.530) | HbA1cImputeDtMnC >= 5.963)
+G[0,0](BldPrDia <= 58.959 -> TSH >= 0.817)

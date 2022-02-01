@@ -1,0 +1,1 @@
+G[0,0](((AlbCreatRat_mggNew <= 20.380 & bmiZscore >= -0.618) -> TotChol <= 0.335) & HeightCm >= -0.516)

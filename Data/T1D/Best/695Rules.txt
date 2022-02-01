@@ -1,0 +1,7 @@
+G[0,1](GFR <= 46.770 -> BUN >= 12.668)
+((LDL <= 106.587) U[0,1] (NumPumpBolusOrShortAct >= 0.115))
+G[0,0](((age <= 75.516 & SMBGperDayPtMeterCombo <= 3.588) & BGTestAvgNumPtRep >= 0.148) -> diabDur <= 3.914)
+F[0,1]((NumPumpBolusOrShortAct >= 0.186 & SMBGperDayPtMeterCombo <= 3.875) & Pt_ChildT1D <= 3.321)
+F[1,1](HDL < 114.274 -> Pt_SHFlg = 0.603)
+G[0,1]((bmi >= 6.649 -> TSH <= 2.016) & BldPrSys >= 0.715)
+G[0,0]((WeightKg >= 31.316 | bmi >= 16.380) -> UnitsInsBasalOrLongAct <= 8.139)

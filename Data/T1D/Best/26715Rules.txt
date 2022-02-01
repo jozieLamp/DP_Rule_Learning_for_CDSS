@@ -1,0 +1,2 @@
+G[0,0](((BUN <= 12.043 -> TotalDailyInsPerKg <= 0.271) | Pt_SHFlg <= 0.185) | AlbCreatRat_mggNew <= 0.227)
+F[0,0](AlbCreatRat_mggNew >= 7.572 -> Pt_SHFlg >= 0.149)

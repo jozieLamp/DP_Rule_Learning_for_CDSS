@@ -1,0 +1,4 @@
+G[0,0]((BldPrDia >= 71.939 -> BUN >= 6.346) | diabDur <= 16.736)
+G[0,0](BldPrSys >= 115.443 & bmiZscore <= 0.759)
+F[0,0]((TotalDailyInsPerKg <= 0.516 -> WeightKg >= 92.008) -> DirectLDL >= 93.444)
+F[0,0](((HbA1c <= 5.914 & TotalDailyInsPerKg <= 0.379) & UnitsInsBasalOrLongAct >= 0.089) & GFR <= 0.610)

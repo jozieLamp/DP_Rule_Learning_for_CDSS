@@ -1,0 +1,7 @@
+G[0,1](bmiZscore >= 1.025 -> TSH <= 2.541)
+G[1,1](DirectLDL > 0.078 -> Pt_SHFlg = 0.279)
+G[1,1](BGTestAvgNumPtRep <= 7.293 -> bmiPerc >= 0.870)
+((HDL <= 65.215) U[1,1] (TotChol >= 77.512))
+((HDL <= 42.298) U[1,1] (WeightKg >= 62.613))
+G[1,1](DirectLDL <= 0.933 | UnitsInsBasalOrLongAct >= 2.682)
+G[1,1](Triglyc <= 150.544 -> UnitsInsBasalOrLongAct >= 13.106)

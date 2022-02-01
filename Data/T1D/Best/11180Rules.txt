@@ -1,0 +1,4 @@
+G[1,1](bmiPerc <= 0.631 & bmiZscore >= 0.086)
+((diabDur <= 18.487) U[0,1] (UnitsInsBasalOrLongAct >= 4.508))
+((bmi >= 27.336) U[0,0] (UnitsInsBasalOrLongAct >= 4.947))
+F[0,0](((BldPrSys >= 101.495 -> TotChol >= 6.288) -> TotChol <= 74.090) & UnitsInsBasalOrLongAct >= 28.567)

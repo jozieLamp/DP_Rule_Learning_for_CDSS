@@ -1,0 +1,8 @@
+G[0,0](SMBGperDayPtMeterCombo >= 1.153 & BGTestAvgNumPtRep >= 1.327)
+G[0,0](((BldPrDia >= 80.012 -> TotalDailyInsPerKg <= 0.514) | Pt_CGMUseNumDays <= 0.639) -> Pt_DKAFlg <= 0.828)
+((BGTestAvgNumMeter >= 0.549) U[0,0] (BGTestAvgNumPtRep <= 2.174))
+G[0,0](BGTestAvgNumMeter >= 0.630 & bmiZscore >= -0.012)
+F[0,0](BGTestAvgNumPtRep > 0.759 -> Pt_SHFlg = 0.010)
+G[0,0](SMBGperDayPtMeterCombo >= 1.038 & BGTestAvgNumPtRep >= 0.759)
+G[0,0](((NumPumpBolusOrShortAct <= 2.969 & bmi >= 2.120) -> Triglyc <= 24.675) | diabDur >= 11.550)
+G[0,0](GFR <= 0.000 -> BUN >= 5.359)

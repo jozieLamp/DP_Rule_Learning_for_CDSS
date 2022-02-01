@@ -1,0 +1,1 @@
+G[0,0](((bmiZscore <= -0.245 & Pt_InsGov >= 0.319) | Pt_DKAFlg >= 0.378) | BGTestAvgNumMeter <= 0.878)

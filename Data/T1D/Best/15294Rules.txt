@@ -1,0 +1,2 @@
+G[1,1](((SMBGperDayPtMeterCombo <= 4.716 & Pt_InsGov >= 0.000) & NumPumpBolusOrShortAct <= 0.000) | bmiZscore <= 0.000)
+F[0,0](diabDur <= 16.677 & TotalDailyInsPerKg <= 0.918)

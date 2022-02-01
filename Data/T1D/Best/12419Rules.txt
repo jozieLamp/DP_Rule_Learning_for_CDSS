@@ -1,0 +1,7 @@
+G[1,1](((age >= 49.463 & HbA1c >= 5.114) & WeightKg >= 5.081) -> TotChol >= 5.125)
+G[0,1](BGTestAvgNumPtRep >= 2.084 | HDL <= 92.576)
+G[0,1](BUN <= 12.550 & Triglyc >= 88.581)
+G[1,1](SMBGperDayPtMeterCombo >= 0.072 & BGTestAvgNumPtRep >= 2.502)
+G[1,1](SMBGperDayPtMeterCombo >= 3.082 & BGTestAvgNumPtRep >= 0.958)
+G[0,1]((BldPrDia <= 71.924 | TSH <= 1.953) | Pt_GrandparentT1D >= 0.060)
+G[0,1](Pt_SHFlg >= 0.053 | Triglyc >= 89.742)

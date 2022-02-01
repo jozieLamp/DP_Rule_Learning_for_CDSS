@@ -1,0 +1,3 @@
+G[0,0]((AlbCreatRat_mggNew <= 13.907 -> BldPrDia <= 74.853) | UnitsInsBasalOrLongAct >= 63.750)
+G[0,0]((BldPrSys >= 107.487 -> bmiZscore <= 1.517) -> HDL >= 0.651)
+F[0,0](((BldPrDia <= 79.437 -> HbA1cImputeDtMnC <= 74.103) & GFR >= 2.747) | LDL <= 80.204)

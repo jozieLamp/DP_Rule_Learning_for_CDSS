@@ -1,0 +1,2 @@
+((HeightCm <= 161.825) U[0,0] (NumPumpBolusOrShortAct >= 0.751))
+F[0,0]((BGTestAvgNumPtRep <= 2.457 & HbA1cImputeDtMnC <= 38.789) & Triglyc <= 28.679)

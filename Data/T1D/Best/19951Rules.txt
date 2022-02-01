@@ -1,0 +1,6 @@
+G[0,0]((AlbCreatRat_mggNew <= 1.544 | TSH <= 0.600) & Pt_InsGov <= 0.597)
+F[0,0](((NumPumpBolusOrShortAct <= 0.000 & bmiPerc <= 0.911) -> Pt_GrandchildT1D >= 0.872) -> bmi <= 0.903)
+((HbA1c >= 9.254) U[0,0] (bmiPerc <= 0.921))
+G[0,0]((HbA1c <= 12.001 & HDL <= 42.554) & Pt_A1cGoalLevelDsYr5 <= 39.163)
+((Pt_SiblingT1D <= 0.000) U[0,0] (bmiPerc <= 0.901))
+G[0,0]((AutonomicNeuroCl >= 0.000 -> bmiZscore <= 1.095) & Pt_InsGov <= 0.929)

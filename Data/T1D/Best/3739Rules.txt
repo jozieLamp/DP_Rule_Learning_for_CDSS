@@ -1,0 +1,6 @@
+G[0,0](SMBGperDayPtMeterCombo >= 5.214 & BGTestAvgNumPtRep >= 6.322)
+((LDL >= 0.553) U[0,0] (SMBGperDayPtMeterCombo <= 5.848))
+((HDL >= 18.786) U[0,0] (UnitsInsBasalOrLongAct <= 23.703))
+G[0,0]((BGTestAvgNumPtRep <= 7.582 & UnitsInsBasalOrLongAct >= 7.535) & Pt_MotherT1D <= 28.440)
+F[0,0]((Pt_ChildT1D <= 0.000 & TotalDailyInsPerKg >= 0.015) & Pt_ChildT1D <= 0.465)
+G[0,0](((BldPrDia <= 83.340 -> TotChol >= 39.729) | Pt_SiblingT1D >= 46.808) & Pt_A1cGoalLevelDsYr5 <= 128.999)

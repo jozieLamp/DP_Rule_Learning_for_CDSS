@@ -1,0 +1,8 @@
+G[0,0]((bmi <= 24.789 -> TotalDailyInsPerKg >= 0.149) | AlbCreatRat_mggNew >= 0.273)
+G[0,0](((SMBGperDayPtMeterCombo >= 7.005 & TotalDailyInsPerKg <= 0.617) | AlbCreatRat_mggNew <= 0.554) -> Triglyc <= 0.506)
+F[0,0](HeightCm <= 130.479 | Triglyc >= 9.095)
+F[0,0]((BldPrSys >= 139.316 & bmiZscore <= -0.209) -> HbA1c <= -0.004)
+((Pt_SHFlg <= 0.256) U[0,0] (WeightKg <= 66.519))
+F[0,0](((GFR >= 0.000 -> UnitsInsBasalOrLongAct <= 13.869) | bmi <= 12.899) & TotChol >= 12.141)
+F[0,0](((BldPrDia <= 82.648 | NumPumpBolusOrShortAct >= 0.996) -> Pt_InsGov <= 4.565) -> UnitsInsBasalOrLongAct <= 4.328)
+G[0,0](((HbA1cImputeDtMnC >= 26.930 | Pt_SiblingT1D <= 0.801) | BldPrDia <= 0.942) & diagAgeCombo >= 0.173)

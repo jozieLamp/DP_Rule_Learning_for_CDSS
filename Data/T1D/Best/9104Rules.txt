@@ -1,0 +1,2 @@
+G[0,0]((bmi >= 19.360 -> UnitsInsBasalOrLongAct <= 24.640) | Pt_CGMUseNumDays >= 0.272)
+G[0,0]((HbA1cImputeDtMnC <= 44.292 | NumPumpBolusOrShortAct >= 0.955) -> AlbCreatRat_mggNew <= 2.916)

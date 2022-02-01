@@ -1,0 +1,7 @@
+G[0,0](bmi >= 16.116 | HeightCm >= 139.571)
+F[0,0](((age >= 9.106 | bmiZscore <= -0.124) | HbA1c <= -0.086) -> diabDur <= -0.179)
+F[0,0]((BldPrDia >= 64.392 & bmiZscore >= -0.253) & diabDur >= -0.276)
+G[0,0](((Pt_InsGov >= 0.000 -> BGTestAvgNumMeter >= 0.318) | BldPrDia <= 2.835) | TotalDailyInsPerKg >= 0.658)
+((bmi <= 17.188) U[0,0] (HbA1cImputeDtMnC <= 33.554))
+G[0,0](GFR >= 0.000 & AlbCreatRat_mggNew <= 24.684)
+G[0,0]((diagAgeCombo <= 1.000 -> BGTestAvgNumMeter >= 0.161) & diabDur >= 0.202)

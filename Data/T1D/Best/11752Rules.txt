@@ -1,0 +1,7 @@
+G[0,0]((Pt_SiblingT1D >= 0.000 & Triglyc <= 45.735) & GFR <= 61.452)
+F[0,0](HDL <= 43.976 -> TotalDailyInsPerKg <= 0.497)
+F[0,0]((TSH <= 1.871 & TotalDailyInsPerKg >= 0.278) & BldPrDia >= 0.271)
+((age >= 20.805) U[0,0] (Pt_SHFlg >= 0.037))
+G[0,0](TotalDailyInsPerKg <= 0.466 | Triglyc <= 43.597)
+((HDL <= 42.583) U[0,0] (AlbCreatRat_mggNew >= 2.281))
+G[0,0](AlbCreatRat_mggNew >= 1.949 -> HbA1c <= 8.246)

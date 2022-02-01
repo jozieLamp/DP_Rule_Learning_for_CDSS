@@ -1,0 +1,1 @@
+F[0,0](AutonomicNeuroCl >= 0.000 -> SMBGperDayPtMeterCombo <= 3.827)

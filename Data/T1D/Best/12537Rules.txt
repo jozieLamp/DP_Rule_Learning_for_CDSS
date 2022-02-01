@@ -1,0 +1,6 @@
+G[0,1](NumPumpBolusOrShortAct <= 2.718 | Triglyc >= 8.423)
+((SMBGperDayPtMeterCombo <= 7.381) U[1,1] (WeightKg >= 78.107))
+G[0,1](((HbA1cImputeDtMnC <= 73.057 -> TotalDailyInsPerKg >= 0.051) | BUN >= 0.058) | Pt_MotherT1D >= 0.110)
+((SMBGperDayPtMeterCombo <= 7.381) U[1,1] (WeightKg >= 78.152))
+G[0,1](((BldPrDia <= 77.554 -> SMBGperDayPtMeterCombo >= 5.500) | Pt_A1cGoalLev >= 6.288) | Triglyc >= 6.359)
+G[1,1]((Triglyc <= 38.240 -> bmiZscore <= -0.270) | Pt_GrandchildT1D <= -0.267)

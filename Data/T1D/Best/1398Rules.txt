@@ -1,0 +1,7 @@
+G[0,0](((BldPrSys <= 141.830 -> TSH >= 0.572) | WeightKg <= 0.953) | TotChol <= 0.730)
+F[0,0]((BldPrSys >= 131.181 & Pt_SHFlg >= 0.021) & BGTestAvgNumMeter <= 0.755)
+F[0,0]((BldPrSys <= 134.574 -> Pt_A1cGoalLev >= 0.575) & Pt_ChildT1D <= 2.439)
+((BldPrSys >= 124.276) U[0,0] (AlbCreatRat_mggNew >= 10.897))
+((Pt_DKAFlg >= 0.000) U[0,0] (UnitsInsBasalOrLongAct <= 21.986))
+G[0,0](BUN <= 12.352 -> Pt_SHFlg <= 0.327)
+F[0,0](bmiZscore <= 0.043 -> Pt_A1cGoalLev >= 0.953)

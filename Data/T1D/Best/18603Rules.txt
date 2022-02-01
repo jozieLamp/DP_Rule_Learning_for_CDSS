@@ -1,0 +1,2 @@
+G[0,0](((Triglyc <= 119.057 | UnitsInsBasalOrLongAct <= 33.516) & DirectLDL <= 30.812) & AlbCreatRat_mggNew <= 31.056)
+((AlbCreatRat_mggNew <= 2.294) U[0,0] (BldPrSys >= 120.088))

@@ -1,0 +1,2 @@
+G[0,0]((AlbCreatRat_mggNew <= 117.816 | TotChol <= 122.657) & Pt_CGMUseNumDays <= 125.331)
+G[0,0]((WeightKg >= 81.004 | bmi >= 27.007) -> UnitsInsBasalOrLongAct <= 37.830)

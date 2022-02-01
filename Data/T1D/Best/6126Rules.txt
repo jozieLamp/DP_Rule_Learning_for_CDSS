@@ -1,0 +1,4 @@
+G[0,0](SMBGperDayPtMeterCombo >= 2.358 -> HbA1cImputeDtMnC >= 14.655)
+((diabDur >= 13.873) U[0,0] (LDL <= 111.576))
+((bmi >= 25.384) U[0,0] (DirectLDL <= 0.601))
+F[0,0]((DirectLDL <= 0.411 | NumPumpBolusOrShortAct >= 0.235) | diabDur <= 2.300)

@@ -1,0 +1,6 @@
+G[0,1]((BldPrDia <= 74.487 & diabDur <= 6.438) -> diabDur >= 2.400)
+G[1,1](((bmiZscore <= 0.844 | Pt_A1cGoalLev <= 5.581) -> Pt_CGMUseNumDays <= 4.740) -> TotChol >= 0.333)
+F[0,0]((TotalDailyInsPerKg >= 0.889 -> LDL >= 8.859) & Pt_GrandchildT1D <= 42.452)
+F[1,1](((BldPrDia <= 77.889 -> bmiZscore <= 0.231) & HbA1cImputeDtMnC >= -1.008) & BldPrDia >= -1.117)
+((BGTestAvgNumMeter <= 6.142) U[1,2] (bmiPerc >= 0.410))
+G[0,1](AlbCreatRat_mggNew >= 10.432 & diabDur >= 2.595)

@@ -1,0 +1,2 @@
+G[0,0](SMBGperDayPtMeterCombo >= 5.111 | Pt_SHFlg >= 0.091)
+((age >= 18.022) U[0,0] (AlbCreatRat_mggNew <= 26.003))

@@ -1,0 +1,5 @@
+G[0,0](Pt_GrandparentT1D >= 0.000 -> Pt_DKAFlg <= 0.789)
+F[0,0](diagAgeCombo >= 7.000 -> AlbCreatRat_mggNew <= 0.207)
+F[0,0]((diabDur <= 8.035 -> Pt_SHFlg <= 0.338) -> Pt_MotherT1D >= 0.032)
+G[0,0](((LDL >= 18.845 & TotalDailyInsPerKg <= 0.729) & BGTestAvgNumPtRep >= 0.576) -> Pt_InsGov <= 0.623)
+F[0,0](BGTestAvgNumMeter <= 3.882 -> HbA1cImputeDtMnC <= 19.413)

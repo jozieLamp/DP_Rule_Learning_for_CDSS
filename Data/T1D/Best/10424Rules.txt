@@ -1,0 +1,3 @@
+G[0,0]((bmiZscore >= -0.107 & Pt_A1cGoalLev <= 2.999) | Pt_InsGov >= 0.297)
+F[0,0]((HbA1c >= 7.140 | Pt_SHFlg >= 0.005) | Pt_DKAFlg >= 0.027)
+((bmi >= 27.256) U[0,0] (HDL <= 56.206))

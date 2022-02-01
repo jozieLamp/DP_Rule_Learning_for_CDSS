@@ -1,0 +1,6 @@
+G[0,0](HbA1c <= 6.474 | UnitsInsBasalOrLongAct >= 8.239)
+G[0,0](HbA1c <= 6.550 & Pt_CGMUseNumDays >= 0.000)
+((HeightCm >= 166.017) U[0,0] (TotChol >= 46.739))
+((BldPrSys <= 115.978) U[0,0] (HeightCm >= 166.010))
+((BGTestAvgNumPtRep >= 1.182) U[0,0] (TotChol >= 42.094))
+G[0,0](((TotChol >= 2.825 -> Triglyc >= 31.595) | TotChol >= 12.841) -> HbA1cImputeDtMnC >= 1.165)

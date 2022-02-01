@@ -1,0 +1,6 @@
+G[0,0](((Pt_SiblingT1D >= 0.000 | UnitsInsBasalOrLongAct >= 3.998) & Pt_MotherT1D <= 7.435) -> HbA1c >= 6.755)
+((Triglyc <= 61.475) U[0,0] (WeightKg <= 61.270))
+G[0,0](bmiZscore >= 0.445 & TSH >= 1.323)
+F[0,0]((Pt_A1cGoalLev <= 0.000 -> Pt_DKAFlg >= 0.111) & BldPrSys >= 0.104)
+G[0,0]((Pt_A1cGoalLev >= 0.000 -> BldPrDia >= 59.110) | Pt_ChildT1D >= 59.017)
+G[0,0](HeightCm >= 165.770 & NumPumpBolusOrShortAct <= 3.244)

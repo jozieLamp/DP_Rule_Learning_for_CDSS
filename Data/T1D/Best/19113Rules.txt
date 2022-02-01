@@ -1,0 +1,7 @@
+G[0,1]((diagAgeCombo <= 4.000 -> BldPrDia <= 74.859) | SMBGperDayPtMeterCombo >= 66.749)
+G[0,1](Triglyc >= 102.473 -> bmiZscore <= 1.988)
+((BldPrDia >= 66.907) U[1,1] (TotChol >= 143.951))
+F[1,1](((BGTestAvgNumMeter >= 2.399 -> Triglyc <= 115.209) & BGTestAvgNumPtRep <= 179.939) -> Pt_InsGov >= 79.303)
+F[1,1](((HeightCm >= 161.763 -> Triglyc <= 119.904) -> Pt_A1cGoalLev >= 99.221) | bmiPerc >= 89.611)
+G[0,0]((AlbCreatRat_mggNew >= 3.490 | TotChol <= 151.136) & AutonomicNeuroCl <= 149.915)
+G[1,1](BldPrDia <= 68.162 | BUN >= 0.358)

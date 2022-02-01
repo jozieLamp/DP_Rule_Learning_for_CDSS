@@ -1,0 +1,2 @@
+G[0,0]((Pt_SHFlg <= 0.803 -> UnitsInsBasalOrLongAct <= 24.962) -> HbA1cImputeDtMnC >= 4.929)
+G[0,0]((BGTestAvgNumMeter <= 5.035 & UnitsInsBasalOrLongAct <= 14.668) -> Pt_CGMUseNumDays >= 4.300)

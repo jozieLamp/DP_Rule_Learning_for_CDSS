@@ -1,0 +1,4 @@
+G[0,0]((BGTestAvgNumMeter <= 3.161 -> HDL <= 25.084) & TotChol <= 25.078)
+F[0,0](((TSH >= 0.756 & UnitsInsBasalOrLongAct <= 32.964) & Pt_DKAFlg >= 11.072) | HbA1cImputeDtMnC >= 13.550)
+((age <= 17.152) U[0,0] (Pt_InsGov <= 0.702))
+F[0,0]((diabDur >= 4.907 -> Pt_InsGov >= 0.238) -> diagAgeCombo <= 0.632)

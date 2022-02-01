@@ -1,0 +1,2 @@
+G[0,0]((AlbCreatRat_mggNew <= 7.474 -> TSH >= 0.112) & TSH <= 1.860)
+F[0,0]((BUN >= 2.845 & HDL <= 26.665) | Pt_ChildT1D >= 1.914)

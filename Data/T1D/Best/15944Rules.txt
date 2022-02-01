@@ -1,0 +1,3 @@
+G[1,1](((Pt_A1cGoalLevelDsYr5 <= 0.000 & age <= 26.130) -> BldPrSys <= 25.875) | SMBGperDayPtMeterCombo >= 24.192)
+F[0,0](TotalDailyInsPerKg >= 0.396 & AlbCreatRat_mggNew <= 4.399)
+F[0,1](((AlbCreatRat_mggNew <= 4.609 -> BldPrSys >= 104.944) -> Pt_A1cGoalLevelDsYr5 >= 102.919) & TSH <= 114.529)

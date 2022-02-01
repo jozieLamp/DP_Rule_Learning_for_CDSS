@@ -1,0 +1,4 @@
+((age >= 28.031) U[0,0] (bmiZscore <= -0.297))
+((BGTestAvgNumMeter >= 0.380) U[0,0] (BGTestAvgNumPtRep <= 5.252))
+F[0,0](Pt_DKAFlg <= 0.965 | TotalDailyInsPerKg >= 0.016)
+F[0,0]((age <= 29.823 | Pt_SHFlg <= 0.909) & Pt_GrandchildT1D <= 0.775)

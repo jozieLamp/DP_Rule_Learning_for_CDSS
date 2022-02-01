@@ -1,0 +1,6 @@
+G[0,0](((TotChol >= 42.629 | Pt_InsGov <= 0.000) & BGTestAvgNumPtRep <= 0.000) | NumPumpBolusOrShortAct <= 0.000)
+((bmiZscore >= 0.395) U[0,0] (HbA1c <= 13.842))
+F[0,0]((HbA1cImputeDtMnC <= 59.190 -> Pt_A1cGoalLev >= 0.000) & GFR <= 0.000)
+F[0,0]((BldPrDia <= 85.583 & SMBGperDayPtMeterCombo >= 2.070) | TotalDailyInsPerKg >= 1.684)
+G[0,0](AlbCreatRat_mggNew >= 55.079 & UnitsInsBasalOrLongAct <= 45.383)
+F[0,0](bmiPerc >= 0.597 & UnitsInsBasalOrLongAct <= 26.994)

@@ -1,0 +1,6 @@
+G[0,1](((BGTestAvgNumPtRep >= 1.208 -> TotalDailyInsPerKg <= 0.527) -> LDL >= 0.021) & Pt_GrandparentT1D <= 0.362)
+F[1,1](HeightCm >= 180.364 & Pt_SHFlg <= 0.677)
+((BGTestAvgNumMeter >= 2.197) U[1,1] (BGTestAvgNumPtRep <= 2.358))
+F[1,1]((UnitsInsBasalOrLongAct <= 18.014 -> bmiPerc >= 0.694) & Pt_SHFlg <= 0.703)
+F[0,1](((HbA1c <= 7.609 & SMBGperDayPtMeterCombo <= 2.865) | bmiZscore >= 2.593) & GFR <= 2.998)
+G[1,1](((Pt_A1cGoalLevelDsYr5 <= 0.000 & BldPrSys <= 136.828) | TSH >= 115.126) | HeightCm <= 133.761)

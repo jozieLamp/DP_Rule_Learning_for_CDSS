@@ -1,0 +1,3 @@
+G[0,0]((Pt_InsGov >= 0.000 | Pt_A1cGoalLev <= 3.706) -> AlbCreatRat_mggNew <= 5.014)
+F[0,0]((AlbCreatRat_mggNew <= 31.748 | Pt_A1cGoalLev >= 1.055) -> BUN >= 0.502)
+G[0,0]((BGTestAvgNumPtRep >= 0.575 | NumPumpBolusOrShortAct >= 0.267) & bmiPerc <= 2.829)

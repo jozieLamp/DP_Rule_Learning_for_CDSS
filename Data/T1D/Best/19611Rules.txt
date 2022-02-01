@@ -1,0 +1,2 @@
+G[0,0](((Pt_DKAFlg <= 0.000 | Pt_DKAFlg >= 0.000) & TotChol >= 0.000) & Pt_SHFlg <= 0.000)
+G[0,0]((SMBGperDayPtMeterCombo <= 2.621 & bmiPerc >= 0.000) -> HDL <= 0.000)

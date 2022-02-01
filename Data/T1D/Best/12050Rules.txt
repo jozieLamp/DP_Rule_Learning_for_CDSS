@@ -1,0 +1,7 @@
+G[0,1](bmiPerc >= 0.614 | HDL <= 39.946)
+((HbA1c <= 13.661) U[0,1] (NumPumpBolusOrShortAct >= 1.339))
+F[1,1](((HDL >= 21.212 -> Pt_SHFlg <= 0.341) & Triglyc >= 0.105) & NumPumpBolusOrShortAct >= 0.089)
+G[1,1](HDL >= 18.850 & NumPumpBolusOrShortAct <= 12.891)
+F[0,1]((HeightCm <= 149.595 & NumPumpBolusOrShortAct >= 2.992) & HeightCm >= 0.263)
+G[0,1](TotChol <= 98.900 -> Triglyc <= 28.616)
+G[0,1](BGTestAvgNumPtRep <= 2.649 -> HbA1c >= 10.622)

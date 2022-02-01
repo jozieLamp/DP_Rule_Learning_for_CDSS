@@ -1,0 +1,6 @@
+G[0,0](((Pt_A1cGoalLev >= 0.578 -> HDL <= 54.977) & WeightKg <= 59.687) -> AutonomicNeuroCl >= 20.127)
+F[0,0](diabDur <= 45.803 & diagAgeCombo <= 5.000)
+G[0,0]((BUN <= 26.614 | age <= 50.693) -> bmiPerc >= 47.839)
+((HbA1cImputeDtMnC <= 57.499) U[0,0] (bmi <= 27.783))
+G[0,0](GFR >= 10.076 & diagAgeCombo <= 5.000)
+G[0,0](((BGTestAvgNumPtRep >= 0.906 -> HDL <= 60.226) & diagAgeCombo <= 55.364) & age >= 3.961)

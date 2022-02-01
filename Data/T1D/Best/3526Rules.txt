@@ -1,0 +1,6 @@
+G[1,1](((DirectLDL <= 0.972 -> HDL <= 82.730) -> Pt_InsGov <= 79.704) -> TotChol >= 60.962)
+G[0,1](HbA1c <= 8.426 | TotalDailyInsPerKg <= 0.688)
+F[0,0](DirectLDL <= 0.673 & NumPumpBolusOrShortAct >= 2.619)
+G[0,1](((LDL >= 96.227 | SMBGperDayPtMeterCombo >= 3.777) | BGTestAvgNumMeter <= 4.593) & AlbCreatRat_mggNew <= 4.186)
+G[1,1]((WeightKg >= 69.358 | bmi >= 29.135) -> UnitsInsBasalOrLongAct <= 25.891)
+G[0,1](DirectLDL >= 0.373 | LDL >= 22.330)

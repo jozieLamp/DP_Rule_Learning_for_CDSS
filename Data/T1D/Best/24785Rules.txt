@@ -1,0 +1,8 @@
+G[0,0]((bmi <= 29.603 -> HDL >= 18.567) -> BldPrDia <= 70.193)
+G[1,1]((WeightKg >= 60.053 | bmi >= 26.947) -> UnitsInsBasalOrLongAct <= 47.166)
+F[0,1]((HDL >= 30.678 -> Pt_FatherT1D <= 0.676) & NumPumpBolusOrShortAct <= 0.607)
+((BGTestAvgNumMeter >= 5.301) U[0,0] (BGTestAvgNumPtRep <= 4.864))
+F[0,0](BGTestAvgNumPtRep >= 2.886 -> Pt_SHFlg = 0.929)
+G[1,1](bmiZscore >= 2.056 -> HDL >= 39.148)
+((BGTestAvgNumMeter >= 5.803) U[0,0] (BGTestAvgNumPtRep <= 3.510))
+((SMBGperDayPtMeterCombo >= 4.261) U[1,1] (NumPumpBolusOrShortAct >= 4.819))

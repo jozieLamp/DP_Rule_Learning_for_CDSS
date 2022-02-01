@@ -1,0 +1,4 @@
+G[0,0]((Pt_SiblingT1D <= 0.000 | Pt_GrandparentT1D >= 0.000) & bmiZscore <= 0.000)
+G[0,0](bmi <= 20.040 -> TotChol >= 19.753)
+F[0,0](BldPrDia >= 55.234 -> WeightKg <= 70.026)
+G[0,0](((HbA1c >= 6.157 & HbA1cImputeDtMnC >= 3.924) & Pt_GrandparentT1D <= 14.105) & bmiPerc <= 14.273)

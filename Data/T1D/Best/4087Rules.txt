@@ -1,0 +1,4 @@
+G[0,1](bmi >= 24.704 & Pt_ChildT1D <= 0.000)
+((TSH <= 4.186) U[1,1] (BUN <= 11.337))
+G[0,1]((bmiZscore >= 0.751 & WeightKg >= 73.074) | AlbCreatRat_mggNew >= 78.426)
+G[1,1](TSH >= 0.316 & WeightKg >= 79.149)

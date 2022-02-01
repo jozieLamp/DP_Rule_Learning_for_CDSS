@@ -1,0 +1,8 @@
+G[0,0](DirectLDL <= 0.000 & diabDur >= 3.972)
+F[0,0](((Pt_A1cGoalLevelDsYr5 >= 0.000 -> bmiZscore <= 2.071) -> Pt_SHFlg >= 2.063) & TSH <= 2.067)
+F[0,0]((BldPrDia <= 73.550 & GFR >= 0.000) & Pt_MotherT1D <= 0.000)
+F[0,0](bmiPerc <= 0.981 -> TotalDailyInsPerKg <= 1.007)
+F[0,0](bmiPerc >= 0.980 -> diabDur <= 4.927)
+G[0,0](Pt_A1cGoalLev >= 0.783 -> LDL >= 9.301)
+((BGTestAvgNumPtRep >= 0.000) U[0,0] (TotalDailyInsPerKg <= 1.134))
+G[0,0](bmiPerc <= 0.981 -> UnitsInsBasalOrLongAct >= 19.495)

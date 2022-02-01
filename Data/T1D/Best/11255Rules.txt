@@ -1,0 +1,3 @@
+G[0,0]((SMBGperDayPtMeterCombo <= 4.097 -> BGTestAvgNumPtRep <= 4.381) | GFR >= 2.722)
+G[0,0]((HDL >= 49.696 -> Pt_SHFlg <= 0.506) | Pt_DKAFlg >= 0.155)
+G[0,0]((TotalDailyInsPerKg <= 0.396 & Pt_CGMUseNumDays <= 0.000) & UnitsInsBasalOrLongAct >= 0.000)

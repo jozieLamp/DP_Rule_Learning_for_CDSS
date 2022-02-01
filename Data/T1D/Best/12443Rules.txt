@@ -1,0 +1,2 @@
+G[0,0](Pt_A1cGoalLev <= 2.332 -> Triglyc <= 104.479)
+F[0,0](TotalDailyInsPerKg <= 0.644 -> TSH <= 0.870)

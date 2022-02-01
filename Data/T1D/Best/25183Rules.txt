@@ -1,0 +1,3 @@
+G[0,1](((diabDur >= 6.435 -> Pt_SHFlg >= 0.087) & Pt_InsGov <= 0.868) -> HDL >= 0.032)
+((LDL >= 28.552) U[1,1] (TSH >= 0.218))
+G[1,1](LDL >= 28.601 -> UnitsInsBasalOrLongAct >= 20.092)

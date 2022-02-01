@@ -1,0 +1,2 @@
+G[0,0]((bmi >= 30.846 & TotalDailyInsPerKg >= 0.723) -> bmiZscore <= 1.000)
+F[0,0]((GFR >= 12.646 & Triglyc <= 114.565) & HDL >= 14.032)

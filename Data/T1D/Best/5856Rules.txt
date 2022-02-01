@@ -1,0 +1,3 @@
+G[0,0]((BldPrDia >= 69.922 & NumPumpBolusOrShortAct <= 1.409) | NumPumpBolusOrShortAct <= 2.295)
+((BGTestAvgNumMeter >= 1.231) U[0,0] (BGTestAvgNumPtRep <= 3.460))
+((BGTestAvgNumMeter >= 2.028) U[0,0] (BGTestAvgNumPtRep <= 3.584))

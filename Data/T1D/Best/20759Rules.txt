@@ -1,0 +1,2 @@
+G[0,0](bmiZscore <= 0.888 | age >= 40.099)
+G[0,0](WeightKg <= 110.171 & diagAgeCombo <= 16.000)

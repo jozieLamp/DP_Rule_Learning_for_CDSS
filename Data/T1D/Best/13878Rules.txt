@@ -1,0 +1,4 @@
+G[0,0](((bmiZscore >= -1.343 & bmiPerc >= 0.101) & TotChol <= 0.247) | Pt_MotherT1D >= 0.073)
+G[0,0](((BUN <= 11.125 & TotalDailyInsPerKg <= 1.005) & diabDur >= 0.595) | UnitsInsBasalOrLongAct >= 0.635)
+F[0,0](BUN >= 1.562 & HeightCm <= 153.105)
+G[0,0]((TotChol >= 20.828 -> UnitsInsBasalOrLongAct >= 1.286) | TSH >= 3.946)

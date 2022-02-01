@@ -1,0 +1,2 @@
+G[0,0](GFR >= 19.872 & Triglyc >= 59.600)
+F[0,0]((TotChol >= 35.767 -> BGTestAvgNumMeter >= 0.124) | AutonomicNeuroCl >= 0.696)

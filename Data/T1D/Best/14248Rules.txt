@@ -1,0 +1,2 @@
+G[0,0](((bmi <= 23.569 -> Pt_SHFlg >= 0.213) | Triglyc <= 0.751) -> Pt_InsGov >= 0.166)
+F[0,0](((diabDur >= 34.298 -> HbA1cImputeDtMnC <= 25.990) | NumPumpBolusOrShortAct >= 16.840) | UnitsInsBasalOrLongAct >= 18.891)

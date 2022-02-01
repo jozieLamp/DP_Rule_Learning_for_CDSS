@@ -1,0 +1,4 @@
+((UnitsInsBasalOrLongAct <= 27.801) U[0,0] (BGTestAvgNumPtRep >= 0.141))
+F[0,0]((age <= 18.254 | HbA1cImputeDtMnC <= 13.477) & HbA1cImputeDtMnC <= 9.198)
+((BGTestAvgNumPtRep >= 0.439) U[0,0] (HDL >= 25.784))
+((bmiPerc >= 0.059) U[0,0] (diabDur <= 7.943))

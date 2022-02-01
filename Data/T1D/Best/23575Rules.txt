@@ -1,0 +1,4 @@
+G[0,0](bmi >= 25.290 | Triglyc <= 45.377)
+G[0,0]((HDL <= 45.863 & BGTestAvgNumMeter <= 1.431) | Pt_GrandchildT1D >= 0.402)
+((AlbCreatRat_mggNew >= 1.622) U[0,0] (GFR >= 5.357))
+((AutonomicNeuroCl <= 0.000) U[0,0] (GFR >= 9.506))

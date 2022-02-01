@@ -1,0 +1,6 @@
+G[0,0]((bmi >= 1.613 -> SMBGperDayPtMeterCombo <= 3.972) | TotalDailyInsPerKg >= 0.362)
+G[1,1](SMBGperDayPtMeterCombo >= 0.654 & BGTestAvgNumPtRep >= 3.009)
+G[1,1](WeightKg >= 59.603 -> BldPrDia >= 67.766)
+F[0,1]((HbA1cImputeDtMnC >= 31.096 -> TSH >= 2.052) -> TotalDailyInsPerKg >= 2.036)
+((BldPrSys <= 121.048) U[1,1] (bmiZscore <= 0.004))
+F[0,0](WeightKg >= 65.632 & BUN <= 13.174)

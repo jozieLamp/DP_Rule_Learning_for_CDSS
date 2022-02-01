@@ -1,0 +1,2 @@
+G[0,0]((HeightCm <= 150.845 -> TotalDailyInsPerKg >= 0.309) | TotChol >= 0.283)
+((UnitsInsBasalOrLongAct >= 6.019) U[0,0] (WeightKg <= 68.237))

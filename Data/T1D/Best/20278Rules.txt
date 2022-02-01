@@ -1,0 +1,4 @@
+G[0,1]((BldPrDia >= 71.588 | GFR <= 89.598) | TSH >= 15.029)
+G[0,1](BldPrSys >= 115.296 | HeightCm <= 158.116)
+((BGTestAvgNumMeter >= 0.135) U[0,0] (BGTestAvgNumPtRep <= 5.342))
+F[0,1](bmi <= 42.692 & TSH >= 0.046)

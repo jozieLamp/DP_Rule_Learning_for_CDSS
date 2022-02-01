@@ -1,0 +1,7 @@
+G[0,1](SMBGperDayPtMeterCombo >= 0.514 & BGTestAvgNumPtRep >= 0.301)
+G[0,1](SMBGperDayPtMeterCombo >= 0.175 & BGTestAvgNumPtRep >= 3.034)
+F[0,0](BGTestAvgNumPtRep >= 5.214 -> Pt_A1cGoalLev >= 0.399)
+F[0,1](BGTestAvgNumPtRep >= 6.865 -> Pt_SHFlg = 0.967)
+F[0,1](((BldPrSys >= 122.380 & LDL <= 77.927) & Triglyc <= 72.016) & diabDur >= 32.146)
+F[0,1](TotalDailyInsPerKg < 0.789 -> Pt_SHFlg = 0.450)
+G[0,1]((WeightKg >= 68.094 | bmi >= 27.886) -> UnitsInsBasalOrLongAct <= 20.214)

@@ -1,0 +1,6 @@
+G[0,1]((HbA1cImputeDtMnC <= 26.772 & UnitsInsBasalOrLongAct <= 27.862) & TotChol <= 35.403)
+F[0,1](Pt_DKAFlg >= 0.000 -> UnitsInsBasalOrLongAct >= 4.024)
+F[0,0]((HbA1cImputeDtMnC <= 29.785 | Pt_A1cGoalLevelDsYr5 >= 0.000) -> TotalDailyInsPerKg <= 0.000)
+((age <= 16.174) U[0,0] (BldPrSys >= 101.616))
+((UnitsInsBasalOrLongAct >= 0.504) U[0,0] (WeightKg <= 46.529))
+((HbA1c >= 13.687) U[0,0] (HbA1cImputeDtMnC >= 13.466))

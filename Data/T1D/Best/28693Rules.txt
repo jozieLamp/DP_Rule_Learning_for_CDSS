@@ -1,0 +1,8 @@
+G[0,0]((BUN >= 0.278 | Pt_ChildT1D <= 0.000) & Pt_A1cGoalLev <= 0.000)
+F[0,0](BldPrSys <= 95.400 & bmiZscore >= -0.301)
+((bmi <= 15.504) U[0,0] (diagAgeCombo >= 0.660))
+F[0,0](BGTestAvgNumPtRep <= 2.690 -> HeightCm <= 102.516)
+G[0,0](bmiPerc <= 0.517 & Triglyc >= 0.000)
+F[0,0](BUN >= 0.495 & Pt_A1cGoalLevelDsYr5 >= 0.000)
+G[0,0]((HbA1c <= 7.748 | Pt_InsGov <= 0.413) | Pt_DKAFlg >= 0.155)
+G[0,0]((BUN <= 2.373 -> Pt_CGMUseNumDays >= 0.000) & Pt_A1cGoalLev <= 0.000)

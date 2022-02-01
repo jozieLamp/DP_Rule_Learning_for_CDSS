@@ -1,0 +1,6 @@
+G[0,0](((BUN >= 7.000 | HDL <= 43.657) & AlbCreatRat_mggNew <= 61.161) -> TotChol <= 73.798)
+G[1,1](age >= 22.045 -> UnitsInsBasalOrLongAct >= 14.389)
+F[0,1]((BGTestAvgNumMeter <= 2.070 | BUN >= 0.476) -> TotChol >= 7.215)
+G[0,1]((BldPrDia <= 81.885 & HbA1cImputeDtMnC >= 36.601) -> GFR <= 58.391)
+G[0,1]((bmi >= 35.594 | HDL <= 64.908) | TSH >= 7.035)
+G[0,1](BldPrDia >= 72.951 -> TotChol <= 71.351)

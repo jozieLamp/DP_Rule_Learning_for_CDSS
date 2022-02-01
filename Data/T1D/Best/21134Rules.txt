@@ -1,0 +1,7 @@
+G[0,0](Pt_A1cGoalLevelDsYr5 >= 0.000 & Pt_SHFlg = 0.000)
+G[0,0](BGTestAvgNumMeter <= 5.907 -> Pt_SiblingT1D >= 0.000)
+G[0,0]((bmiZscore <= 1.823 -> Pt_CGMUseNumDays <= 20.447) -> Pt_SHFlg <= 8.677)
+F[0,0]((Pt_MotherT1D >= 0.000 -> TotalDailyInsPerKg <= 0.732) & age <= 0.725)
+((UnitsInsBasalOrLongAct <= 50.536) U[0,0] (TotChol >= 3.259))
+G[0,0](((AlbCreatRat_mggNew >= 8.235 -> bmiPerc >= 0.000) | Pt_A1cGoalLev >= 0.000) -> Pt_DKAFlg >= 0.000)
+G[0,0](((BldPrDia <= 85.225 & Pt_CGMUseNumDays >= 5.515) | SMBGperDayPtMeterCombo <= 24.519) | TotalDailyInsPerKg <= 29.409)

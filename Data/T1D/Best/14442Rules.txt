@@ -1,0 +1,8 @@
+G[0,0](GFR <= 0.000 -> BUN >= 0.000)
+F[0,0]((BGTestAvgNumMeter <= 2.358 & Triglyc <= 79.125) & age >= 55.091)
+F[0,0]((HDL <= 39.212 & GFR <= 0.000) & HbA1c <= 0.000)
+F[0,0](BldPrDia <= 73.219 & TSH >= 2.029)
+F[0,0](((BGTestAvgNumPtRep >= 0.974 & SMBGperDayPtMeterCombo <= 5.463) -> LDL <= 6.130) -> bmiPerc >= 2.204)
+F[0,0]((Triglyc >= 20.953 & TSH >= 0.985) & Pt_GrandchildT1D >= 0.393)
+G[0,0](((UnitsInsBasalOrLongAct >= 2.772 -> Pt_GrandchildT1D <= 0.000) & Pt_SiblingT1D >= 0.000) & GFR >= 0.000)
+G[0,0](((BGTestAvgNumPtRep <= 7.130 & bmi >= 18.801) -> BGTestAvgNumMeter >= 18.369) -> HbA1c <= 19.333)

@@ -1,0 +1,3 @@
+G[0,0](((BGTestAvgNumPtRep >= 2.663 -> BldPrDia >= 58.891) & diabDur <= 66.834) & AlbCreatRat_mggNew <= 68.020)
+G[0,0](BGTestAvgNumPtRep >= 2.990 -> BUN <= 12.896)
+G[0,0]((HeightCm <= 162.488 | TotalDailyInsPerKg <= 0.794) | Pt_MotherT1D >= 0.591)

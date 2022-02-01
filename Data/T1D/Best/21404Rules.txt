@@ -1,0 +1,4 @@
+G[0,0]((bmi <= 29.783 | diabDur <= 5.412) -> diabDur >= 2.509)
+F[0,0](((TotChol >= 4.739 -> Triglyc >= 48.550) & BUN <= 84.244) -> TotChol >= 7.357)
+G[0,0]((bmiPerc <= 0.976 -> bmiZscore >= 1.290) & Pt_GrandparentT1D <= 1.803)
+G[0,0](((bmiZscore >= 1.132 -> NumPumpBolusOrShortAct <= 2.405) & TSH <= 2.415) -> BldPrSys <= 2.908)

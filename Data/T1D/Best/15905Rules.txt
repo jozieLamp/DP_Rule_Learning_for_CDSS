@@ -1,0 +1,8 @@
+G[1,1](bmiPerc <= 0.912 -> Triglyc >= 15.435)
+G[0,0](AlbCreatRat_mggNew <= 21.174 -> BGTestAvgNumMeter >= 0.607)
+G[0,0]((WeightKg >= 57.664 | bmi >= 24.959) -> UnitsInsBasalOrLongAct <= 29.950)
+F[0,0](diabDur >= 10.757 & HDL >= 6.166)
+F[0,0](LDL >= 14.079 & UnitsInsBasalOrLongAct >= 0.380)
+G[0,0](age >= 13.904 -> bmiZscore <= 1.249)
+G[0,0]((bmiZscore <= 1.299 | HDL <= 25.389) & AlbCreatRat_mggNew <= 47.951)
+G[0,0]((WeightKg >= 58.275 | bmi >= 23.981) -> UnitsInsBasalOrLongAct <= 32.036)

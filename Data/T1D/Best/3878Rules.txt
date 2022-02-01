@@ -1,0 +1,2 @@
+G[0,0]((SMBGperDayPtMeterCombo >= 1.242 & diagAgeCombo <= 6.000) | SMBGperDayPtMeterCombo >= 6.000)
+F[0,0](((BGTestAvgNumPtRep >= 0.052 | HbA1c >= 8.318) -> diabDur <= 11.747) -> Pt_FatherT1D >= 9.609)

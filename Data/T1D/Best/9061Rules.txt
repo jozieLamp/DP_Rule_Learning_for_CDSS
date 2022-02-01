@@ -1,0 +1,2 @@
+F[0,0](age <= 19.391 & BldPrDia <= 77.537)
+F[0,0](((BGTestAvgNumMeter >= 0.717 & DirectLDL <= 0.804) -> BGTestAvgNumPtRep <= 0.898) & DirectLDL <= 0.649)

@@ -1,0 +1,8 @@
+G[0,0](SMBGperDayPtMeterCombo >= 6.882 & BGTestAvgNumPtRep >= 0.000)
+F[0,0](age <= 7.189 & bmiZscore <= 1.403)
+((BldPrSys >= 100.996) U[0,0] (WeightKg <= 25.709))
+F[0,0](TotalDailyInsPerKg <= 0.714 | TSH >= 0.123)
+F[0,0]((HbA1cImputeDtMnC <= 15.920 | BldPrDia <= 56.125) | bmiZscore >= 53.358)
+G[0,0](diagAgeCombo >= 0.631 -> Pt_SHFlg = 0.544)
+F[0,0]((diabDur <= 4.218 & HeightCm <= 119.471) & LDL <= 121.312)
+G[0,0](BldPrSys >= 98.365 & TotChol <= 0.000)

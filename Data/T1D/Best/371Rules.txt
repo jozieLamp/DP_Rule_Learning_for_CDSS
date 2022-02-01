@@ -1,0 +1,6 @@
+G[0,1](bmiZscore >= -0.051 -> Pt_A1cGoalLev <= 4.984)
+G[0,1](age >= 50.658 & Pt_CGMUseNumDays <= 25.593)
+F[1,1](((diabDur <= 29.713 | HeightCm >= 81.426) -> GFR <= 159.365) & Pt_A1cGoalLev >= 3.851)
+F[1,1](((Triglyc <= 40.067 | TSH >= 0.805) | TotChol <= 1.495) -> BldPrSys <= 2.746)
+G[0,1](LDL >= 39.103 -> TSH >= 0.852)
+((AlbCreatRat_mggNew <= 10.881) U[1,1] (BldPrDia >= 63.170))

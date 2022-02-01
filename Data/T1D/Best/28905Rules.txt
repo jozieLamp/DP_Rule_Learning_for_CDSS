@@ -1,0 +1,7 @@
+G[0,0](BldPrSys >= 117.211 | HeightCm >= 182.992)
+((Pt_ChildT1D >= 0.000) U[0,0] (bmiZscore >= -1.826))
+((GFR <= 80.253) U[0,0] (HeightCm <= 186.802))
+((BGTestAvgNumMeter >= 1.639) U[0,0] (BGTestAvgNumPtRep <= 6.005))
+G[0,0](Pt_A1cGoalLev <= 2.264 | Pt_A1cGoalLev <= 5.654)
+((LDL <= 53.976) U[0,0] (UnitsInsBasalOrLongAct <= 15.028))
+G[0,0](BldPrSys <= 135.554 -> BUN <= 12.065)

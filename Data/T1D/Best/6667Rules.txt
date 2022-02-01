@@ -1,0 +1,2 @@
+G[0,0]((BGTestAvgNumMeter >= 0.544 & BUN >= 0.532) -> Pt_A1cGoalLev >= 1.464)
+F[0,0]((Triglyc <= 102.804 & BUN >= 0.085) | BGTestAvgNumPtRep >= 0.201)

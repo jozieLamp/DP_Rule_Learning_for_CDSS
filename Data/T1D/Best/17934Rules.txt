@@ -1,0 +1,3 @@
+G[0,0]((BUN <= 6.392 & Triglyc <= 208.132) | BGTestAvgNumPtRep >= 100.706)
+F[0,0](bmiZscore > -0.254 -> Pt_SHFlg = 0.056)
+G[0,0](HbA1cImputeDtMnC >= 3.040 & LDL <= 114.629)

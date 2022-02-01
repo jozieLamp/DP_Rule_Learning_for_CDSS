@@ -1,0 +1,6 @@
+G[0,0]((age >= 8.468 | TSH >= 0.309) -> BGTestAvgNumMeter <= 2.354)
+F[0,0](AlbCreatRat_mggNew > 2.063 -> Pt_SHFlg = 0.047)
+G[0,0](TSH >= 1.372 -> HeightCm >= 142.191)
+F[0,0](((Triglyc <= 85.541 & AlbCreatRat_mggNew >= 4.984) -> BGTestAvgNumMeter >= 3.914) -> LDL <= 6.454)
+G[0,0](((Triglyc <= 89.149 & diagAgeCombo <= 4.424) | diagAgeCombo <= 4.573) | Triglyc >= 0.861)
+G[0,0]((BldPrDia >= 71.194 | bmiZscore <= 2.261) -> TotChol >= 2.224)

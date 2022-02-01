@@ -1,0 +1,5 @@
+G[0,0](((AlbCreatRat_mggNew <= 14.965 -> TotalDailyInsPerKg >= 0.001) & diabDur >= 0.212) & bmiZscore <= 0.992)
+G[0,0](((BldPrDia <= 78.289 -> TSH <= 2.733) & HbA1c >= 1.533) | NumPumpBolusOrShortAct >= 0.984)
+((UnitsInsBasalOrLongAct >= 3.977) U[0,0] (WeightKg <= 106.069))
+F[0,0]((HbA1c <= 8.570 & HeightCm >= 101.131) -> bmiPerc >= 48.955)
+F[0,0](diabDur <= 14.191 & HbA1c >= 7.932)

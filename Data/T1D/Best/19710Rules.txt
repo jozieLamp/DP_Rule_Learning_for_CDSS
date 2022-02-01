@@ -1,0 +1,7 @@
+G[0,1]((HeightCm >= 176.860 -> UnitsInsBasalOrLongAct >= 7.903) | TotChol >= 6.565)
+((Pt_A1cGoalLev >= 0.071) U[0,0] (TotChol <= 133.243))
+F[0,1](((SMBGperDayPtMeterCombo >= 6.403 | TotChol <= 122.987) & bmiZscore >= 11.016) | TotChol <= 124.280)
+((BGTestAvgNumPtRep >= 6.302) U[1,2] (LDL >= 28.661))
+G[0,0](HbA1c < 8.902 -> Pt_SHFlg = 0.818)
+((NumPumpBolusOrShortAct <= 3.554) U[1,2] (Triglyc >= 12.366))
+F[0,1](AlbCreatRat_mggNew >= 7.060 & HbA1c <= 9.994)

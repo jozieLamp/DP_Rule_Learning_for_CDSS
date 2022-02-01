@@ -1,0 +1,6 @@
+G[1,1](SMBGperDayPtMeterCombo >= 5.260 & BGTestAvgNumPtRep >= 1.186)
+F[0,1](GFR <= 144.484 -> Pt_SHFlg = 0.589)
+G[1,1](SMBGperDayPtMeterCombo >= 5.258 & BGTestAvgNumPtRep >= 1.314)
+F[1,1](bmi <= 17.515 & Pt_A1cGoalLev <= 1.783)
+F[0,1](HbA1c >= 8.536 -> Pt_SHFlg = 0.516)
+F[1,1]((bmiPerc <= 0.676 & GFR >= 26.107) & TotChol <= 84.975)

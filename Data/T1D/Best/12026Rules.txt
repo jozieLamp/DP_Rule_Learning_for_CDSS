@@ -1,0 +1,4 @@
+G[0,0]((WeightKg >= 25.539 | bmi >= 17.706) -> UnitsInsBasalOrLongAct <= 2.732)
+G[0,0]((HeightCm <= 121.005 -> BGTestAvgNumPtRep >= 2.942) | AlbCreatRat_mggNew >= 1.977)
+((BUN >= 3.845) U[0,0] (NumPumpBolusOrShortAct >= 0.437))
+F[0,0](Pt_ChildT1D <= 0.000 & NumPumpBolusOrShortAct >= 0.431)

@@ -1,0 +1,1 @@
+G[0,0](HbA1cImputeDtMnC <= 26.081 -> TSH <= 1.425)

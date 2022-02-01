@@ -1,0 +1,3 @@
+G[0,0]((Pt_SHFlg <= 0.586 & Triglyc <= 84.296) | bmiPerc >= 35.038)
+G[0,0]((TSH <= 1.578 | SMBGperDayPtMeterCombo >= 0.011) & HeightCm >= 0.011)
+((Triglyc <= 54.593) U[0,0] (Pt_SHFlg >= 0.017))

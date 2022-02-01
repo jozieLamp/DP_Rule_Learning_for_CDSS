@@ -1,0 +1,5 @@
+G[0,0](bmi <= 23.288 -> HbA1cImputeDtMnC >= 17.045)
+((BUN >= 1.017) U[0,0] (UnitsInsBasalOrLongAct <= 25.306))
+F[0,0](BldPrDia <= 68.481 & WeightKg <= 71.730)
+G[0,0](((Pt_MotherT1D <= 0.000 & bmiPerc <= 0.508) -> BGTestAvgNumMeter >= 0.027) -> age <= 0.444)
+((age >= 21.492) U[0,0] (Pt_GrandparentT1D >= 0.144))

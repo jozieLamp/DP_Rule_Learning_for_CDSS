@@ -1,0 +1,2 @@
+G[0,0](bmi >= 10.672 -> UnitsInsBasalOrLongAct >= 7.011)
+F[0,0](((AlbCreatRat_mggNew <= 10.561 & AutonomicNeuroCl >= 0.277) | HDL <= 0.957) -> SMBGperDayPtMeterCombo <= 0.752)

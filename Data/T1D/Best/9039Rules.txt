@@ -1,0 +1,1 @@
+F[0,0](BGTestAvgNumMeter >= 3.380 & diabDur <= 10.138)

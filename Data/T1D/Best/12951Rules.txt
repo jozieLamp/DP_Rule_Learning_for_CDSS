@@ -1,0 +1,4 @@
+G[0,0]((bmiZscore >= -0.785 & UnitsInsBasalOrLongAct >= 23.071) -> HeightCm <= 36.196)
+G[0,0]((SMBGperDayPtMeterCombo <= 3.483 | LDL >= 11.864) & UnitsInsBasalOrLongAct <= 44.432)
+G[0,0]((BGTestAvgNumMeter >= 2.090 & Triglyc <= 81.792) | LDL <= 86.545)
+G[0,0](((age >= 17.967 & Pt_SHFlg <= 0.695) -> AutonomicNeuroCl >= 0.138) & SMBGperDayPtMeterCombo >= 0.160)

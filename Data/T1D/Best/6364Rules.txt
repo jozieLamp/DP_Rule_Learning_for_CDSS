@@ -1,0 +1,3 @@
+G[0,0](((Pt_ChildT1D <= 0.000 | NumPumpBolusOrShortAct <= 2.803) | BGTestAvgNumPtRep <= 0.888) & SMBGperDayPtMeterCombo <= 1.039)
+F[0,0](age >= 38.484 -> Pt_SHFlg = 0.606)
+F[0,0]((BUN >= 3.599 & Pt_SHFlg >= 0.106) | Pt_GrandparentT1D >= 0.108)

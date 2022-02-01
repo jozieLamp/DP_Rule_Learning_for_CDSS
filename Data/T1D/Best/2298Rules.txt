@@ -1,0 +1,1 @@
+G[1,1]((SMBGperDayPtMeterCombo >= 0.671 & TSH <= 5.347) | Pt_GrandparentT1D >= 0.684)

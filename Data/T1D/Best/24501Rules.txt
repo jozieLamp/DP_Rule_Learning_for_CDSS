@@ -1,0 +1,5 @@
+G[0,0](SMBGperDayPtMeterCombo <= 4.007 & SMBGperDayPtMeterCombo <= 2.944)
+F[0,0](((age <= 43.639 -> HbA1c >= 6.861) -> AutonomicNeuroCl <= 7.270) & HbA1cImputeDtMnC <= 7.242)
+F[0,0]((TotalDailyInsPerKg <= 0.422 -> TSH <= 2.599) | Pt_CGMUseNumDays >= 1.459)
+G[0,0](Pt_InsGov >= 0.000 -> UnitsInsBasalOrLongAct >= 4.360)
+((Pt_CGMUseNumDays <= 0.000) U[0,0] (bmiZscore <= 0.596))

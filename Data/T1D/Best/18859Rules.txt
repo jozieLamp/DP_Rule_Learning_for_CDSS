@@ -1,0 +1,6 @@
+G[0,1](GFR <= 0.000 & TotalDailyInsPerKg <= 0.891)
+F[0,1](((Pt_MotherT1D >= 0.000 & bmi <= 24.132) & LDL >= 19.987) & age <= 24.106)
+F[0,1](((BGTestAvgNumPtRep <= 3.591 & Pt_GrandparentT1D <= 0.256) | Pt_InsGov <= 0.760) & HbA1c <= 0.818)
+F[1,1](((diagAgeCombo >= 5.000 & HbA1c >= 2.318) -> GFR >= 6.805) | Pt_MotherT1D >= 1.935)
+G[1,1]((HDL >= 27.000 & UnitsInsBasalOrLongAct <= 23.248) -> Pt_SHFlg >= 0.125)
+F[1,1]((TotChol >= 43.609 & UnitsInsBasalOrLongAct <= 20.209) & TSH <= 22.160)

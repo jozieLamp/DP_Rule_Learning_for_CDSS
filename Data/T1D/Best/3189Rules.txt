@@ -1,0 +1,6 @@
+G[0,0](((HeightCm <= 125.882 -> Triglyc <= 112.906) | Triglyc <= 103.620) -> Triglyc <= 85.680)
+F[0,0](((BldPrDia <= 96.749 | HeightCm >= 14.581) & AlbCreatRat_mggNew >= 102.882) | HeightCm <= 163.860)
+F[0,0](BGTestAvgNumMeter >= 0.999 -> Triglyc >= 81.352)
+F[0,0]((BUN >= 18.797 -> HbA1c >= 8.431) -> bmiPerc >= 8.855)
+((HbA1cImputeDtMnC >= 19.367) U[0,0] (WeightKg <= 70.433))
+G[0,0](bmi >= 13.510 | HeightCm >= 107.396)

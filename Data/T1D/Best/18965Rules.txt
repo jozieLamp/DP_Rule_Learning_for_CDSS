@@ -1,0 +1,7 @@
+G[1,1](Pt_MotherT1D >= 0.000 -> bmi >= 15.501)
+F[0,0](diabDur <= 3.266 & WeightKg >= 18.225)
+((BGTestAvgNumMeter >= 0.959) U[1,1] (BGTestAvgNumPtRep <= 10.420))
+((BldPrDia >= 8.065) U[0,1] (bmi <= 15.728))
+G[1,1](SMBGperDayPtMeterCombo >= 8.013 & BGTestAvgNumPtRep >= 7.241)
+((BUN >= 6.875) U[1,1] (LDL >= 17.916))
+G[1,1](SMBGperDayPtMeterCombo >= 7.570 & BGTestAvgNumPtRep >= 5.501)

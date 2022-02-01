@@ -1,0 +1,6 @@
+G[0,0](BldPrDia >= 58.744 & UnitsInsBasalOrLongAct >= 24.972)
+F[0,0]((bmi <= 32.493 | TSH >= 0.523) & HbA1c >= 0.222)
+F[0,0](bmiZscore <= 2.313 & TotalDailyInsPerKg <= 0.691)
+((HeightCm <= 170.088) U[0,0] (age <= 13.414))
+G[0,0](((bmiPerc <= 0.989 -> diabDur >= 0.803) | diabDur >= 0.280) | Pt_FatherT1D >= 0.941)
+((BldPrDia >= 58.080) U[0,0] (Pt_SHFlg >= 0.080))

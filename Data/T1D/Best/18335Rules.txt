@@ -1,0 +1,8 @@
+G[0,0](SMBGperDayPtMeterCombo <= 3.848 -> Pt_SHFlg = 0.621)
+F[0,0](HbA1cImputeDtMnC <= 20.559 & WeightKg >= 66.381)
+F[0,0]((bmi >= 24.482 | BGTestAvgNumMeter <= 3.370) | Pt_GrandchildT1D >= 2.365)
+F[0,0](Pt_ChildT1D <= 0.000 & HbA1cImputeDtMnC <= 17.206)
+F[0,0](BGTestAvgNumPtRep <= 1.046 -> WeightKg >= 64.121)
+G[0,0](bmiPerc > 0.780 -> Pt_SHFlg = 0.868)
+F[0,0](TSH <= 1.155 & Pt_SiblingT1D <= 0.000)
+G[0,0]((BGTestAvgNumPtRep <= 1.329 -> BldPrDia >= 65.783) | Pt_ChildT1D >= 66.797)

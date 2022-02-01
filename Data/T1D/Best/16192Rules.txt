@@ -1,0 +1,3 @@
+G[0,0](LDL <= 92.667 & UnitsInsBasalOrLongAct >= 1.989)
+G[0,0](Pt_InsGov > 0.156 -> Pt_SHFlg = 0.618)
+F[0,0](BldPrDia >= 39.610 | Pt_SHFlg >= 0.022)

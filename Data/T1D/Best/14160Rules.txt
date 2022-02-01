@@ -1,0 +1,2 @@
+G[0,0](SMBGperDayPtMeterCombo >= 7.878 & BGTestAvgNumPtRep >= 0.708)
+F[0,0](BldPrDia <= 70.173 & Pt_GrandparentT1D <= 0.721)

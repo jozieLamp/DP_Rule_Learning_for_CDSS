@@ -1,0 +1,2 @@
+G[0,0]((diabDur >= 51.905 & GFR >= 6.188) & Pt_A1cGoalLevelDsYr5 <= 27.655)
+F[0,0](((HbA1c >= 1.900 -> NumPumpBolusOrShortAct >= 0.247) & TSH <= 2.935) -> BldPrSys <= 1.366)

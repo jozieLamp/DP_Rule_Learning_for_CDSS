@@ -1,0 +1,3 @@
+G[0,0](HbA1c >= 7.776 | NumPumpBolusOrShortAct <= 5.239)
+((bmiZscore <= 1.465) U[0,0] (Pt_SHFlg >= 0.171))
+F[0,0](((BldPrDia <= 76.914 -> HDL <= 65.057) -> BGTestAvgNumMeter >= 21.928) & BGTestAvgNumMeter <= 55.006)

@@ -1,0 +1,6 @@
+G[0,1](BGTestAvgNumPtRep >= 2.946 | HbA1c <= 8.652)
+G[0,0](((BldPrDia >= 62.654 | NumPumpBolusOrShortAct >= 0.557) | NumPumpBolusOrShortAct >= 0.282) & diagAgeCombo <= 6.038)
+G[1,1](Pt_A1cGoalLev <= 1.392 -> TotalDailyInsPerKg <= 1.170)
+F[0,0](bmi <= 19.341 & HbA1c >= 8.471)
+F[1,1](SMBGperDayPtMeterCombo <= 7.457 & TSH <= 1.071)
+((HeightCm >= 125.514) U[1,1] (HbA1cImputeDtMnC <= 75.398))

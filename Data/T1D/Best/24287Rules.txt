@@ -1,0 +1,8 @@
+G[0,0]((HeightCm >= 168.730 | Triglyc >= 52.513) & HbA1c <= 143.964)
+((BUN <= 15.512) U[1,1] (Pt_CGMUseNumDays <= 16.163))
+((HeightCm <= 182.904) U[0,1] (TSH >= 0.343))
+((Triglyc <= 140.895) U[1,1] (TSH >= 0.453))
+F[0,0](AlbCreatRat_mggNew >= 6.300 & TSH >= 0.627)
+F[0,1](TotalDailyInsPerKg >= 0.832 & TSH >= 0.358)
+G[0,0](((TSH >= 0.059 & bmi <= 20.863) -> TotalDailyInsPerKg >= 18.935) & TotalDailyInsPerKg <= 22.845)
+G[0,1](Pt_CGMUseNumDays <= 27.953 -> TSH <= 0.937)

@@ -1,0 +1,4 @@
+G[0,0](Pt_MotherT1D >= 0.000 & diabDur >= 19.555)
+F[0,0](HbA1cImputeDtMnC > 3.203 -> Pt_SHFlg = 0.988)
+F[0,0]((Pt_ChildT1D <= 0.000 & Triglyc <= 119.561) & Triglyc >= 49.322)
+F[0,0]((TSH >= 0.993 & Pt_FatherT1D <= 0.000) -> HbA1c <= 0.000)

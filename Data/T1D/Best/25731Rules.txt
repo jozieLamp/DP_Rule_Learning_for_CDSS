@@ -1,0 +1,8 @@
+G[0,0](GFR <= 0.000 -> BUN >= 7.195)
+F[0,0](NumPumpBolusOrShortAct > 0.847 -> Pt_SHFlg = 0.498)
+F[0,0]((BUN <= 13.838 & Pt_DKAFlg <= 0.000) & BGTestAvgNumMeter <= 0.000)
+G[0,0](((BldPrSys <= 115.995 & Pt_SHFlg <= 0.522) | HbA1c <= 0.561) & SMBGperDayPtMeterCombo >= 0.154)
+((bmi <= 20.997) U[0,0] (HeightCm <= 166.335))
+G[0,0](SMBGperDayPtMeterCombo >= 0.871 -> WeightKg >= 56.656)
+G[0,0](GFR <= 0.000 -> BUN >= 1.766)
+G[0,0](BldPrSys >= 115.352 & Pt_ChildT1D <= 0.000)

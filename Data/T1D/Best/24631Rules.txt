@@ -1,0 +1,2 @@
+F[0,0](diagAgeCombo >= 4.000 -> BGTestAvgNumMeter >= 5.751)
+F[0,0](((diabDur >= 4.103 -> BGTestAvgNumPtRep >= 0.518) & HbA1c >= 1.138) | WeightKg <= 5.918)

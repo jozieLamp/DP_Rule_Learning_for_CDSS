@@ -1,0 +1,4 @@
+G[0,0](LDL <= 108.619 & TotalDailyInsPerKg <= 0.484)
+G[0,0](Triglyc <= 34.020 | WeightKg >= 78.667)
+F[0,0](((BUN <= 13.578 | Pt_SHFlg >= 0.250) & Pt_A1cGoalLevelDsYr5 <= 0.485) & Pt_SHFlg >= 0.033)
+G[0,0]((BGTestAvgNumPtRep >= 1.433 & bmiZscore <= 0.722) -> bmiPerc >= 0.517)

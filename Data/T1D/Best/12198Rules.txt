@@ -1,0 +1,5 @@
+G[0,0](BGTestAvgNumPtRep <= 1.638 & TSH <= 1.326)
+((DirectLDL >= 0.000) U[0,0] (BUN >= 16.895))
+G[0,0](Pt_A1cGoalLev <= 5.115 & TotChol >= 40.851)
+F[0,0]((Pt_ChildT1D <= 0.000 | BUN >= 14.931) -> TotChol <= 19.286)
+G[0,0]((HbA1cImputeDtMnC <= 69.726 | TotChol <= 119.048) -> Pt_MotherT1D >= 45.577)

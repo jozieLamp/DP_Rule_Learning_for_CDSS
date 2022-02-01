@@ -1,0 +1,6 @@
+G[0,0]((WeightKg >= 11.880 | bmi >= 1.464) -> UnitsInsBasalOrLongAct <= 12.489)
+F[0,0](GFR >= 0.000 & Pt_SHFlg >= 0.304)
+((GFR <= 0.000) U[0,0] (Pt_SHFlg = 1.000))
+G[0,0](LDL >= 64.110 -> age >= 33.644)
+((DirectLDL <= 0.000) U[0,0] (HDL >= 68.450))
+G[0,0](SMBGperDayPtMeterCombo >= 5.831 & BGTestAvgNumPtRep >= 0.000)

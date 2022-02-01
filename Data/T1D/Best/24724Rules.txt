@@ -1,0 +1,2 @@
+G[0,0]((BldPrDia <= 65.224 -> TotalDailyInsPerKg <= 0.896) | bmiPerc >= 0.834)
+((BldPrDia <= 69.981) U[0,0] (Pt_SHFlg >= 0.033))

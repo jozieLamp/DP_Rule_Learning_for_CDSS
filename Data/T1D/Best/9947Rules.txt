@@ -1,0 +1,3 @@
+G[0,0](((BUN >= 3.476 | Pt_A1cGoalLev >= 0.025) & HeightCm >= 0.438) & UnitsInsBasalOrLongAct >= 1.040)
+G[0,0](GFR >= 4.822 & Pt_SiblingT1D >= 0.000)
+F[0,0]((Pt_A1cGoalLev >= 0.758 | WeightKg <= 59.101) -> TotalDailyInsPerKg >= 1.130)

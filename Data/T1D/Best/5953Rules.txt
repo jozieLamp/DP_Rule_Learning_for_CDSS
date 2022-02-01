@@ -1,0 +1,4 @@
+F[0,0]((bmi >= 21.312 & SMBGperDayPtMeterCombo <= 2.665) | bmiPerc >= 1.143)
+F[0,0](bmiZscore >= 0.366 & BUN >= 10.118)
+((BGTestAvgNumMeter >= 1.396) U[0,0] (BGTestAvgNumPtRep <= 2.862))
+((BGTestAvgNumMeter >= 1.908) U[0,0] (BGTestAvgNumPtRep <= 2.236))

@@ -1,0 +1,2 @@
+G[1,1](age >= 46.612 & BldPrDia <= 64.778)
+G[0,0]((BldPrDia >= 61.663 & UnitsInsBasalOrLongAct <= 13.611) -> diabDur <= 12.473)

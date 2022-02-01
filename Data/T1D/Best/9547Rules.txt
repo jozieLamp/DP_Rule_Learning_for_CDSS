@@ -1,0 +1,2 @@
+G[0,0](((BGTestAvgNumMeter <= 1.582 & bmiPerc <= 0.786) | Pt_DKAFlg <= 0.816) -> LDL <= 0.780)
+F[0,0]((BGTestAvgNumMeter <= 2.571 | Triglyc >= 30.549) & LDL >= 16.404)

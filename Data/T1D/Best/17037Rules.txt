@@ -1,0 +1,2 @@
+G[0,0]((WeightKg >= 47.995 | bmi >= 4.305) -> UnitsInsBasalOrLongAct <= 24.443)
+F[0,1](LDL <= 57.425 & TotChol >= 35.096)

@@ -1,0 +1,6 @@
+G[0,0](((Pt_A1cGoalLevelDsYr5 <= 0.000 | WeightKg <= 24.547) -> BldPrSys >= 22.513) -> HbA1cImputeDtMnC >= 21.193)
+F[0,0]((BldPrDia <= 78.324 -> HDL <= 55.260) & UnitsInsBasalOrLongAct <= 56.045)
+F[0,0](HDL <= 35.663 | age <= 7.276)
+G[0,0](WeightKg >= 21.410 & diabDur >= 3.276)
+((bmi <= 15.913) U[0,0] (bmiZscore >= 0.059))
+G[0,0](LDL >= 23.945 & WeightKg >= 21.974)

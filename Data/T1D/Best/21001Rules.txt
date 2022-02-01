@@ -1,0 +1,2 @@
+F[0,0]((BldPrSys >= 32.040 & TotChol >= 27.453) | NumPumpBolusOrShortAct >= 25.562)
+F[0,0](((age <= 34.816 -> SMBGperDayPtMeterCombo >= 5.017) & HDL >= 5.018) & Pt_DKAFlg <= 5.475)

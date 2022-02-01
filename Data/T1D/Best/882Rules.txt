@@ -1,0 +1,6 @@
+G[0,1]((WeightKg >= 73.156 | bmi >= 25.620) -> UnitsInsBasalOrLongAct <= 35.198)
+G[0,1]((WeightKg >= 67.570 | bmi >= 26.900) -> UnitsInsBasalOrLongAct <= 35.836)
+G[0,0](NumPumpBolusOrShortAct >= 1.121 | TSH >= 0.423)
+G[0,0](Pt_GrandparentT1D >= 0.145 | bmiZscore >= 0.307)
+F[1,1](((Triglyc <= 132.269 & bmiZscore >= 0.287) | Pt_ChildT1D >= 0.583) -> HbA1cImputeDtMnC <= 0.688)
+F[1,1]((DirectLDL >= 0.472 & HDL >= 4.126) | BGTestAvgNumMeter >= 38.872)

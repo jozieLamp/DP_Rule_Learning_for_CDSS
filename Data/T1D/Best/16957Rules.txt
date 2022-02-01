@@ -1,0 +1,2 @@
+F[1,1]((bmiZscore >= 1.589 & SMBGperDayPtMeterCombo >= 0.169) -> Pt_InsGov >= 1.916)
+((bmiPerc >= 0.907) U[1,1] (WeightKg >= 80.813))

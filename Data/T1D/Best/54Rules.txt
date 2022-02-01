@@ -1,0 +1,5 @@
+G[0,0]((WeightKg >= 27.850 | bmi >= 16.358) -> UnitsInsBasalOrLongAct <= 9.637)
+((BldPrSys <= 121.521) U[0,0] (SMBGperDayPtMeterCombo <= 5.662))
+((BGTestAvgNumMeter >= 0.991) U[0,0] (BGTestAvgNumPtRep <= 5.657))
+((BGTestAvgNumMeter >= 0.128) U[0,0] (BGTestAvgNumPtRep <= 5.958))
+((diabDur >= 4.133) U[0,0] (SMBGperDayPtMeterCombo <= 5.977))

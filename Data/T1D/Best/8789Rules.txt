@@ -1,0 +1,5 @@
+G[0,0](age <= 20.647 -> UnitsInsBasalOrLongAct >= 4.823)
+F[0,0](TotChol <= 85.392 -> Pt_SHFlg = 0.076)
+F[0,0](((bmiZscore >= -0.005 | Pt_SHFlg >= 0.274) | TotalDailyInsPerKg >= 0.163) | Pt_GrandchildT1D >= 0.274)
+((Pt_A1cGoalLev >= 0.757) U[0,0] (TotalDailyInsPerKg >= 0.056))
+((Triglyc <= 99.314) U[0,0] (diabDur <= 14.817))

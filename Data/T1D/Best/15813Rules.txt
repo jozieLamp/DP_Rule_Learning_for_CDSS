@@ -1,0 +1,8 @@
+G[0,0](bmiPerc <= 0.929 -> NumPumpBolusOrShortAct >= 1.185)
+F[0,0]((bmi <= 28.334 & HbA1cImputeDtMnC >= 7.617) & WeightKg <= 66.011)
+((AutonomicNeuroCl <= 0.000) U[0,0] (HDL <= 33.735))
+((SMBGperDayPtMeterCombo <= 1.278) U[0,0] (TotChol <= 113.382))
+((SMBGperDayPtMeterCombo <= 1.773) U[0,0] (bmiZscore >= 1.090))
+((bmiPerc >= 0.913) U[0,0] (HbA1c >= 8.992))
+G[0,0]((WeightKg >= 52.377 | bmi >= 26.468) -> UnitsInsBasalOrLongAct <= 19.306)
+G[0,0](((Pt_SHFlg >= 0.045 | UnitsInsBasalOrLongAct <= 33.571) | HbA1cImputeDtMnC <= 24.559) & bmiZscore <= 34.814)

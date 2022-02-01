@@ -1,0 +1,5 @@
+G[0,0]((BGTestAvgNumMeter <= 2.133 -> TSH <= 0.062) & SMBGperDayPtMeterCombo >= 0.029)
+G[0,1]((BldPrDia >= 67.188 -> bmiZscore >= 0.564) | BGTestAvgNumMeter >= 0.555)
+((diabDur <= 7.791) U[1,1] (HbA1c <= 8.385))
+F[0,0](((NumPumpBolusOrShortAct <= 0.898 -> Pt_DKAFlg <= 0.000) & Pt_SHFlg <= 0.000) -> TotalDailyInsPerKg <= 0.000)
+G[0,1](bmiZscore >= 0.689 | HbA1c >= 3.048)

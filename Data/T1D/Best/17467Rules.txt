@@ -1,0 +1,3 @@
+G[0,1]((Pt_DKAFlg >= 0.182 | TSH <= 2.231) | Pt_SiblingT1D >= 0.599)
+F[1,1]((HbA1cImputeDtMnC <= 57.819 & Pt_SHFlg <= 0.345) & Pt_A1cGoalLevelDsYr5 <= 0.831)
+F[0,1](TSH <= 2.402 -> Pt_SHFlg = 0.584)

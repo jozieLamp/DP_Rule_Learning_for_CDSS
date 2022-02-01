@@ -1,0 +1,7 @@
+G[0,0](((Pt_InsGov >= 0.461 -> AutonomicNeuroCl <= 0.000) & HeightCm <= 0.000) -> Pt_SHFlg <= 0.000)
+F[0,0]((Pt_SHFlg <= 0.740 & BldPrSys <= 120.644) -> TotChol <= 116.609)
+F[0,0](AutonomicNeuroCl <= 0.000 & BldPrDia >= 19.674)
+F[0,0](NumPumpBolusOrShortAct <= 3.263 & Triglyc <= 79.077)
+F[0,0](AutonomicNeuroCl >= 0.000 -> Pt_InsGov >= 0.535)
+F[0,0](HbA1cImputeDtMnC <= -0.066 & NumPumpBolusOrShortAct <= 4.784)
+F[0,0]((Pt_DKAFlg >= 0.000 -> HbA1c >= 2.266) | Pt_SiblingT1D >= 0.084)

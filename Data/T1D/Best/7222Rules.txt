@@ -1,0 +1,8 @@
+G[0,0]((SMBGperDayPtMeterCombo <= 5.097 & Pt_ChildT1D <= 0.000) & LDL <= 0.000)
+((AlbCreatRat_mggNew <= 1.338) U[0,0] (bmiZscore <= 0.652))
+F[0,0](((WeightKg >= 68.722 & Pt_A1cGoalLev <= 3.919) -> BldPrSys <= 3.698) & TotalDailyInsPerKg >= 0.985)
+((age >= 15.304) U[0,0] (TotalDailyInsPerKg >= 0.414))
+G[0,0](SMBGperDayPtMeterCombo >= 0.894 -> WeightKg >= 71.678)
+F[0,0](((HDL <= 42.145 -> SMBGperDayPtMeterCombo <= 4.939) -> BldPrSys >= 0.804) -> UnitsInsBasalOrLongAct <= 6.941)
+G[0,0](HbA1cImputeDtMnC >= 23.733 | Triglyc <= 43.692)
+G[0,0](((bmiZscore >= 0.260 -> HbA1cImputeDtMnC <= 41.098) | DirectLDL <= 30.028) & UnitsInsBasalOrLongAct >= 12.424)

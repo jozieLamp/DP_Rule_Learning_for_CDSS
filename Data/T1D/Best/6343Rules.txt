@@ -1,0 +1,6 @@
+G[0,0](SMBGperDayPtMeterCombo >= 2.024 & BGTestAvgNumPtRep >= 1.623)
+G[0,0](HbA1c <= 7.840 -> BldPrSys <= 124.381)
+((BGTestAvgNumMeter >= 0.709) U[0,0] (BGTestAvgNumPtRep <= 3.713))
+((BGTestAvgNumMeter <= 2.438) U[0,0] (TSH >= 6.223))
+F[0,0](BGTestAvgNumPtRep >= 0.398 -> HDL >= 49.410)
+G[0,0]((WeightKg >= 82.766 | bmi >= 27.864) -> UnitsInsBasalOrLongAct <= 13.252)

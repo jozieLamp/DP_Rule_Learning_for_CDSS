@@ -1,0 +1,8 @@
+G[0,0](SMBGperDayPtMeterCombo >= 5.599 & BGTestAvgNumPtRep >= 0.000)
+G[0,0]((bmiZscore >= 0.080 | TotalDailyInsPerKg <= 0.583) -> HbA1cImputeDtMnC >= 0.077)
+G[0,0](SMBGperDayPtMeterCombo >= 5.298 & BGTestAvgNumPtRep >= 0.000)
+F[0,0](Pt_CGMUseNumDays <= 0.000 -> Pt_A1cGoalLev >= 1.160)
+((BldPrSys <= 101.631) U[0,0] (NumPumpBolusOrShortAct >= 0.344))
+G[0,0](SMBGperDayPtMeterCombo >= 5.894 & BGTestAvgNumPtRep >= 0.000)
+G[0,0](SMBGperDayPtMeterCombo >= 5.337 & BGTestAvgNumPtRep >= 0.000)
+G[0,0](HbA1c <= 9.312 | UnitsInsBasalOrLongAct >= 5.279)

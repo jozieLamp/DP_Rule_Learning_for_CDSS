@@ -1,0 +1,5 @@
+G[0,1]((AlbCreatRat_mggNew <= 45.375 -> SMBGperDayPtMeterCombo >= 3.121) | BUN <= 5.012)
+G[0,0]((HbA1c >= 9.685 -> TotalDailyInsPerKg >= 0.964) & SMBGperDayPtMeterCombo >= 0.939)
+G[0,1](LDL >= 18.286 -> Pt_InsGov >= 0.114)
+((bmiPerc <= 0.771) U[1,1] (LDL <= 74.157))
+G[0,0](bmi <= 24.011 -> TSH <= 1.048)

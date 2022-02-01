@@ -1,0 +1,8 @@
+G[0,0](HDL >= 61.669 & HeightCm >= 97.266)
+G[0,0]((bmi >= 10.637 | HDL >= 60.506) & UnitsInsBasalOrLongAct <= 70.476)
+F[0,0]((Pt_FatherT1D >= 0.000 -> WeightKg <= 109.840) | Pt_FatherT1D >= 41.513)
+F[0,0](NumPumpBolusOrShortAct >= 6.492 & AutonomicNeuroCl <= 0.000)
+F[0,0](bmi <= 24.777 & Pt_SiblingT1D <= 0.000)
+F[0,0]((Pt_DKAFlg <= 0.000 & HbA1cImputeDtMnC >= 28.977) -> TSH >= 11.616)
+G[0,0]((AutonomicNeuroCl >= 0.000 -> HeightCm <= 163.282) -> Pt_SiblingT1D >= 61.601)
+G[0,0](GFR <= 54.906 -> BUN >= 13.881)

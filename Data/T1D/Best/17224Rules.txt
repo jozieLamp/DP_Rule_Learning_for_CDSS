@@ -1,0 +1,3 @@
+G[0,0](BGTestAvgNumMeter >= 0.022 & WeightKg >= 20.256)
+G[0,0]((BldPrDia <= 72.664 & bmi >= 12.272) | BldPrDia <= 19.785)
+F[0,0]((Pt_InsGov <= 0.000 | Pt_DKAFlg >= 0.000) & BGTestAvgNumMeter <= 0.000)

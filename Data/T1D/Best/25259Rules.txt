@@ -1,0 +1,7 @@
+G[0,0](((age >= 43.624 | Pt_CGMUseNumDays <= 0.000) | Pt_GrandparentT1D <= 0.000) -> BGTestAvgNumPtRep <= 0.000)
+G[0,0](((HDL >= 34.126 & AlbCreatRat_mggNew >= 0.000) | BldPrDia <= 0.000) | diabDur <= 0.000)
+G[0,0](GFR <= 7.910 -> BUN >= 26.340)
+G[0,0]((GFR >= 1.890 | Pt_DKAFlg <= 0.595) & Pt_DKAFlg <= 0.499)
+G[0,0](GFR <= 7.523 -> BUN >= 19.783)
+G[0,0](GFR <= 5.491 -> BUN >= 36.009)
+F[0,0](((Pt_GrandparentT1D <= 0.000 -> Pt_DKAFlg <= 0.473) & Pt_A1cGoalLevelDsYr5 <= 0.789) -> Pt_MotherT1D >= 0.051)

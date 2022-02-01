@@ -1,0 +1,5 @@
+G[0,0]((BUN >= 11.373 -> TotChol >= 108.634) -> TotChol >= 66.680)
+((Pt_CGMUseNumDays <= 16.241) U[0,0] (Pt_SHFlg >= 0.089))
+G[0,0](age >= 32.676 & bmiZscore <= 0.429)
+F[0,0]((Pt_GrandparentT1D >= 0.000 -> NumPumpBolusOrShortAct >= 0.359) -> BldPrSys <= 3.155)
+F[0,0](((BGTestAvgNumMeter <= 2.650 -> BGTestAvgNumPtRep >= 0.875) | Pt_FatherT1D >= 0.600) | Pt_GrandchildT1D >= 1.075)

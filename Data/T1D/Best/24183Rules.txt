@@ -1,0 +1,8 @@
+G[0,1]((GFR <= 54.585 -> NumPumpBolusOrShortAct >= 3.356) & Pt_SiblingT1D <= 5.291)
+G[0,1](GFR <= 36.674 -> BUN >= 12.248)
+G[0,0](GFR <= 10.763 -> BUN >= 4.117)
+F[0,0](BldPrDia <= 71.308 & age <= 53.382)
+((HDL <= 34.660) U[1,1] (Triglyc <= 82.307))
+G[0,1](((Pt_GrandchildT1D <= 0.000 -> bmiZscore <= 1.748) & HbA1cImputeDtMnC >= 0.124) -> SMBGperDayPtMeterCombo <= 1.917)
+G[0,1]((BGTestAvgNumPtRep <= 2.287 -> HbA1c >= 7.294) | Triglyc >= 7.501)
+G[0,1](GFR <= 25.538 -> BUN >= 8.253)

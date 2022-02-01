@@ -1,0 +1,6 @@
+G[0,0](TSH <= 2.965 -> WeightKg >= 83.288)
+((BGTestAvgNumMeter >= 0.106) U[1,1] (BGTestAvgNumPtRep <= 3.663))
+G[0,1]((SMBGperDayPtMeterCombo <= 3.131 -> Triglyc <= 39.078) | age <= 37.801)
+((BGTestAvgNumMeter >= 0.286) U[1,1] (BGTestAvgNumPtRep <= 3.847))
+((BGTestAvgNumMeter >= 0.307) U[1,1] (BGTestAvgNumPtRep <= 3.558))
+F[0,0](WeightKg >= 82.719 -> Pt_SHFlg = 0.916)

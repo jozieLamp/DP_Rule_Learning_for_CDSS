@@ -1,0 +1,3 @@
+G[0,1]((SMBGperDayPtMeterCombo >= 4.067 & WeightKg >= 31.881) -> bmiZscore >= 31.856)
+((BGTestAvgNumMeter >= 1.807) U[1,1] (BGTestAvgNumPtRep <= 6.055))
+((BGTestAvgNumMeter >= 2.048) U[1,1] (BGTestAvgNumPtRep <= 7.375))

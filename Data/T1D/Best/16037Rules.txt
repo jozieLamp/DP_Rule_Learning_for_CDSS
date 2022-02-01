@@ -1,0 +1,6 @@
+G[0,0](((AlbCreatRat_mggNew <= 0.276 & BldPrSys >= 116.085) & Pt_CGMUseNumDays <= 124.404) | AutonomicNeuroCl >= 115.303)
+((NumPumpBolusOrShortAct >= 1.107) U[0,0] (TSH <= 3.078))
+((diabDur <= 20.795) U[0,0] (UnitsInsBasalOrLongAct <= 16.228))
+F[0,0]((BGTestAvgNumMeter <= 0.000 & NumPumpBolusOrShortAct <= 2.720) | GFR >= 0.975)
+G[0,0](((NumPumpBolusOrShortAct >= 0.791 & HDL <= 57.045) & DirectLDL <= 45.359) & age >= 15.836)
+F[0,0](((Pt_A1cGoalLev >= 0.000 -> UnitsInsBasalOrLongAct >= 3.541) -> Pt_SiblingT1D >= 3.562) & HbA1c >= 0.749)

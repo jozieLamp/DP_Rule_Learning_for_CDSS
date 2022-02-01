@@ -1,0 +1,7 @@
+G[0,0](TotalDailyInsPerKg <= 0.721 & Pt_A1cGoalLevelDsYr5 >= 0.000)
+((BGTestAvgNumMeter <= 4.396) U[0,0] (Pt_InsGov >= 0.262))
+F[0,0](AlbCreatRat_mggNew >= 0.000 -> TotChol >= 59.770)
+F[0,0](diagAgeCombo >= 0.038 & Pt_ChildT1D <= 0.000)
+F[0,0](TotalDailyInsPerKg < 0.608 -> Pt_SHFlg = 0.494)
+G[0,0]((Pt_A1cGoalLevelDsYr5 >= 0.000 -> TSH <= 0.672) & Pt_InsGov <= 1.044)
+F[0,0](BldPrSys <= 127.561 -> TotChol >= 23.742)

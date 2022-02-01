@@ -1,0 +1,3 @@
+G[0,0]((BUN >= 9.461 & UnitsInsBasalOrLongAct >= 8.533) | BUN <= 12.535)
+F[0,0](Pt_A1cGoalLev <= 0.000 & TotalDailyInsPerKg <= 0.648)
+F[0,0](((GFR >= 0.000 & Triglyc >= 15.631) -> bmi <= 114.008) & Pt_DKAFlg >= 0.412)

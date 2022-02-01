@@ -1,0 +1,4 @@
+G[0,1]((TSH >= 0.172 -> WeightKg >= 60.746) | AlbCreatRat_mggNew >= 57.988)
+G[0,0](NumPumpBolusOrShortAct <= 0.000 & bmiPerc >= 0.707)
+F[1,1](BGTestAvgNumMeter <= 3.459 -> Pt_SHFlg = 0.907)
+G[0,1]((WeightKg >= 57.732 | bmi >= 22.831) -> UnitsInsBasalOrLongAct <= 35.228)

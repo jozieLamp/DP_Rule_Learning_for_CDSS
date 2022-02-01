@@ -1,0 +1,7 @@
+G[0,0](BldPrSys >= 77.413 | Triglyc >= 39.964)
+F[0,0](diabDur <= 2.633 & diagAgeCombo <= 6.000)
+F[0,0]((BldPrSys >= 38.985 | Pt_A1cGoalLev >= 0.939) -> diabDur <= 2.589)
+G[0,0]((Pt_GrandparentT1D >= 0.000 -> diabDur >= 1.096) | Pt_GrandparentT1D >= 1.019)
+((diabDur >= 2.024) U[0,0] (Pt_InsGov >= 0.186))
+G[0,0](SMBGperDayPtMeterCombo >= 3.774 & BGTestAvgNumPtRep >= 3.586)
+G[0,0](SMBGperDayPtMeterCombo >= 3.322 & BGTestAvgNumPtRep >= 3.600)

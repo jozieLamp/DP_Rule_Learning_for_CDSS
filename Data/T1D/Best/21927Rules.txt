@@ -1,0 +1,8 @@
+G[0,0]((age >= 14.933 -> bmi <= 20.360) | Pt_DKAFlg >= 20.055)
+F[0,0](BGTestAvgNumPtRep <= 4.251 & bmi >= 19.144)
+F[0,0](((AutonomicNeuroCl <= 0.000 & Pt_A1cGoalLev <= 6.638) & BGTestAvgNumPtRep >= 0.790) -> Triglyc <= 1.489)
+((Triglyc >= 39.464) U[0,0] (TSH >= 0.494))
+G[0,0](GFR <= 0.000 -> BUN >= 1.546)
+F[0,0](BldPrSys >= 116.827 & HbA1cImputeDtMnC >= 9.964)
+G[0,0](Pt_ChildT1D <= 0.000 & BUN >= 2.294)
+G[0,0]((HeightCm >= 149.300 -> NumPumpBolusOrShortAct <= 12.574) | Pt_A1cGoalLevelDsYr5 >= 5.579)

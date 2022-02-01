@@ -1,0 +1,3 @@
+G[0,0]((BGTestAvgNumPtRep >= 1.514 & bmiZscore >= -2.027) & bmiZscore <= -0.167)
+G[0,0](TotChol <= 139.268 & BldPrSys >= 112.985)
+F[0,0]((bmi >= 0.640 -> bmiPerc <= 0.005) -> BGTestAvgNumPtRep <= 0.006)

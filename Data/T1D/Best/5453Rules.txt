@@ -1,0 +1,4 @@
+G[0,1](BldPrSys <= 133.618 -> TotalDailyInsPerKg <= 0.690)
+((AlbCreatRat_mggNew >= 0.577) U[1,1] (DirectLDL <= 0.000))
+G[0,1](TotalDailyInsPerKg <= 0.669 & DirectLDL <= 0.000)
+((BGTestAvgNumMeter >= 7.611) U[1,1] (BGTestAvgNumPtRep <= 7.110))

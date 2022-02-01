@@ -1,0 +1,5 @@
+G[0,0](((Triglyc >= 24.661 & BUN >= 3.772) & HbA1c <= 9.765) -> Pt_CGMUseNumDays >= 4.355)
+((TotChol >= 0.000) U[0,0] (LDL >= 5.466))
+((DirectLDL <= 0.000) U[0,0] (LDL >= 12.091))
+F[0,0](((HbA1c <= 9.005 | TotalDailyInsPerKg <= 1.008) -> WeightKg <= 0.941) -> AlbCreatRat_mggNew <= 0.855)
+F[0,0](BldPrDia <= 69.557 & NumPumpBolusOrShortAct <= 6.507)

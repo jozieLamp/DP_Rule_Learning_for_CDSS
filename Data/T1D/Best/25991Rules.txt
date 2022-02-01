@@ -1,0 +1,6 @@
+G[0,0]((BGTestAvgNumPtRep <= 8.509 -> BldPrDia <= 76.629) | Pt_DKAFlg >= 71.307)
+F[0,0](bmiZscore <= 2.089 & UnitsInsBasalOrLongAct >= 3.608)
+F[0,0]((HbA1c <= 8.701 -> UnitsInsBasalOrLongAct >= 8.200) | Pt_CGMUseNumDays >= 4.142)
+G[0,0](((age >= 14.431 -> HbA1c <= 8.549) -> TSH >= 8.533) -> diabDur >= 8.531)
+G[0,0]((WeightKg >= 67.373 | bmi >= 26.212) -> UnitsInsBasalOrLongAct <= 29.149)
+G[0,0](GFR >= 0.000 -> BldPrSys <= 123.641)

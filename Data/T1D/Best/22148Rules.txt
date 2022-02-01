@@ -1,0 +1,4 @@
+G[0,0]((BGTestAvgNumPtRep <= 3.724 & bmi <= 23.082) -> GFR >= 21.074)
+F[1,1](((TotalDailyInsPerKg <= 0.605 & diabDur <= 18.308) | NumPumpBolusOrShortAct >= 14.889) & LDL <= 18.576)
+F[1,1](((BGTestAvgNumMeter <= 4.095 & bmiZscore >= -0.805) & age >= -0.270) & HeightCm >= -0.310)
+F[0,1]((bmiZscore >= -0.796 | BGTestAvgNumPtRep >= 0.247) & Triglyc <= 7.506)

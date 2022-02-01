@@ -1,0 +1,7 @@
+G[0,1](BldPrDia <= 70.336 -> DirectLDL <= 0.161)
+F[1,1]((BGTestAvgNumMeter >= 0.118 & SMBGperDayPtMeterCombo >= 0.267) | NumPumpBolusOrShortAct >= 1.041)
+F[0,0](((BldPrSys >= 121.476 & WeightKg <= 76.862) | WeightKg <= 79.192) -> BGTestAvgNumMeter >= 68.283)
+F[0,0]((BldPrDia >= 65.555 & HeightCm <= 176.453) | AutonomicNeuroCl >= 174.873)
+G[0,1]((DirectLDL >= 0.114 -> Pt_GrandparentT1D <= 0.977) -> BGTestAvgNumMeter <= 0.941)
+F[1,1]((age >= 14.404 -> BGTestAvgNumMeter >= 0.108) & Pt_GrandparentT1D <= 0.980)
+G[0,1](bmiPerc <= 0.678 | Triglyc <= 184.059)

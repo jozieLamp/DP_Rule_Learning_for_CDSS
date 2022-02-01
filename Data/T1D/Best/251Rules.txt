@@ -1,0 +1,6 @@
+G[0,0](HbA1cImputeDtMnC >= 24.088 & HeightCm >= 163.918)
+F[0,0]((AutonomicNeuroCl >= 0.000 -> HbA1cImputeDtMnC <= 38.254) | BldPrSys <= 44.362)
+((diagAgeCombo >= 11.000) U[0,0] (GFR <= 64.720))
+((bmiPerc >= 0.000) U[0,0] (HeightCm <= 163.982))
+G[0,0](((HbA1c >= 6.776 & TotalDailyInsPerKg >= 0.344) & TotChol >= 0.199) | Pt_InsGov >= 0.284)
+F[0,0](HeightCm > 163.836 -> Pt_SHFlg = 0.139)

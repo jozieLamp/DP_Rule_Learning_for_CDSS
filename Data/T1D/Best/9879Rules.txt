@@ -1,0 +1,5 @@
+G[0,0](AlbCreatRat_mggNew <= 200.054 | Pt_CGMUseNumDays >= 0.275)
+G[0,0]((WeightKg >= 70.416 | bmi >= 23.181) -> UnitsInsBasalOrLongAct <= 15.157)
+F[0,0]((NumPumpBolusOrShortAct >= 0.016 & Pt_GrandchildT1D <= 0.000) & bmiPerc <= 0.000)
+F[0,0]((bmiZscore >= -0.795 -> TSH >= 0.335) & TSH >= 0.530)
+F[0,0](BGTestAvgNumMeter >= 0.448 & WeightKg >= 68.810)

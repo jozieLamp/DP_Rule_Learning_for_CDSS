@@ -1,0 +1,8 @@
+G[0,0](SMBGperDayPtMeterCombo >= 0.246 & BGTestAvgNumPtRep >= 0.882)
+G[0,0](Pt_SHFlg <= 0.771 -> HbA1c <= 7.687)
+((BGTestAvgNumMeter >= 0.173) U[0,0] (BGTestAvgNumPtRep <= 2.942))
+F[0,0](((bmiZscore <= -0.293 & Pt_A1cGoalLevelDsYr5 >= 0.000) & HbA1cImputeDtMnC >= 0.000) & HDL <= 0.000)
+((BGTestAvgNumMeter >= 0.845) U[0,0] (BGTestAvgNumPtRep <= 3.557))
+F[0,0]((Pt_CGMUseNumDays <= 0.000 & BGTestAvgNumPtRep <= 3.469) & AutonomicNeuroCl <= 3.213)
+F[0,0](((bmiZscore >= -1.439 & HbA1cImputeDtMnC <= 63.176) & Pt_InsGov <= 36.059) | BGTestAvgNumMeter >= 10.077)
+G[0,0](SMBGperDayPtMeterCombo >= 0.360 & BGTestAvgNumPtRep >= 1.157)

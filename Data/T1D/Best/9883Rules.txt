@@ -1,0 +1,7 @@
+G[0,0](BGTestAvgNumPtRep <= 1.448 -> BldPrDia <= 95.992)
+((BUN >= 8.664) U[0,0] (UnitsInsBasalOrLongAct >= 8.741))
+((age >= 53.129) U[0,0] (TSH >= 0.120))
+G[0,0]((WeightKg >= 100.431 | bmi >= 29.651) -> UnitsInsBasalOrLongAct <= 52.097)
+F[0,0](((Pt_MotherT1D >= 0.240 | bmiZscore >= 0.127) & Pt_GrandparentT1D >= 0.109) | UnitsInsBasalOrLongAct >= 0.099)
+G[0,0](AlbCreatRat_mggNew <= 3.035 & NumPumpBolusOrShortAct <= 0.929)
+G[0,0](UnitsInsBasalOrLongAct <= 67.743 & BGTestAvgNumMeter <= 1.018)

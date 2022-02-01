@@ -1,0 +1,2 @@
+G[0,0]((BGTestAvgNumPtRep <= 6.359 | Pt_SHFlg <= 0.454) & HDL <= 0.972)
+F[0,0](TotChol <= 64.744 -> TotChol >= 8.747)

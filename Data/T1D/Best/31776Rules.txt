@@ -1,0 +1,4 @@
+G[0,0](age >= 5.965 | Triglyc <= 119.134)
+F[0,0]((UnitsInsBasalOrLongAct <= 8.864 & bmiZscore >= 0.632) & HbA1c >= 0.649)
+F[0,0](diagAgeCombo >= 0.183 & Pt_CGMUseNumDays <= 0.000)
+F[0,0]((Pt_GrandparentT1D >= 0.000 -> WeightKg <= 24.286) | Pt_ChildT1D >= 20.934)

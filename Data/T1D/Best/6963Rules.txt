@@ -1,0 +1,5 @@
+G[0,0](LDL <= 44.979 -> Pt_InsGov <= 0.874)
+G[0,0](Pt_GrandchildT1D >= 0.000 & age >= 54.499)
+((BGTestAvgNumMeter <= 2.342) U[0,0] (Pt_SHFlg >= 0.193))
+((BGTestAvgNumPtRep <= 3.191) U[0,0] (TotChol >= 1.115))
+G[0,0]((HbA1c >= 8.318 -> TotalDailyInsPerKg <= 0.392) & Pt_FatherT1D <= 0.417)

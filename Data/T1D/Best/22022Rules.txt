@@ -1,0 +1,4 @@
+((BldPrSys >= 104.247) U[0,0] (bmi <= 32.236))
+F[0,0]((HDL <= 29.668 & SMBGperDayPtMeterCombo >= 0.315) | Pt_GrandparentT1D >= 2.940)
+((Triglyc >= 4.071) U[0,0] (HbA1c >= 2.309))
+F[0,0](TotalDailyInsPerKg >= 0.096 & SMBGperDayPtMeterCombo <= 6.564)

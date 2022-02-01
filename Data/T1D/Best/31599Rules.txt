@@ -1,0 +1,6 @@
+G[0,0](age >= 15.283 & bmiZscore >= 1.905)
+((bmiPerc >= 0.972) U[0,0] (Pt_SHFlg >= 0.264))
+F[0,0](Triglyc < 21.524 -> Pt_SHFlg = 0.148)
+F[0,0](diabDur <= 11.396 & NumPumpBolusOrShortAct >= 1.137)
+F[0,0]((BGTestAvgNumMeter <= 2.649 -> NumPumpBolusOrShortAct >= 1.490) | Pt_ChildT1D >= 1.153)
+F[0,0](((AlbCreatRat_mggNew <= 31.768 & Pt_FatherT1D <= 0.000) & Pt_A1cGoalLev <= 0.000) -> SMBGperDayPtMeterCombo <= 0.000)

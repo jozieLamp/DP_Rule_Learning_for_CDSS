@@ -1,0 +1,6 @@
+G[0,0](((DirectLDL >= 0.000 | Pt_InsGov <= 0.000) -> LDL >= 0.000) | Pt_A1cGoalLev >= 0.000)
+G[0,0](((AutonomicNeuroCl <= 0.000 -> TotalDailyInsPerKg <= 0.356) -> DirectLDL >= 0.247) -> Pt_GrandparentT1D <= 0.286)
+G[0,0]((bmi <= 32.854 -> Pt_DKAFlg <= 0.000) & bmi >= 0.000)
+G[0,0](((Triglyc <= 138.917 -> Triglyc <= 140.449) & BldPrSys >= 112.972) & Pt_A1cGoalLevelDsYr5 <= 140.908)
+G[0,0](((Pt_DKAFlg >= 0.000 & BUN >= 26.843) | Pt_MotherT1D <= 33.005) | Pt_MotherT1D <= 35.671)
+G[0,0](diabDur >= 35.556 -> Pt_SiblingT1D <= 0.000)

@@ -1,0 +1,4 @@
+((Pt_SiblingT1D >= 0.000) U[0,0] (Pt_SHFlg >= 0.090))
+F[0,0]((NumPumpBolusOrShortAct <= 6.494 | TotChol <= 111.793) | DirectLDL >= 75.779)
+((diabDur >= 21.331) U[0,0] (NumPumpBolusOrShortAct <= 6.594))
+((TotChol >= 12.821) U[0,0] (Triglyc <= 86.857))

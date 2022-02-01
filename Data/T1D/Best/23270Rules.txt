@@ -1,0 +1,8 @@
+G[0,1]((Triglyc <= 128.553 -> WeightKg >= 34.460) | Pt_MotherT1D >= 42.386)
+F[0,1](((BldPrSys <= 111.715 & TotalDailyInsPerKg >= 0.721) -> Pt_CGMUseNumDays >= 0.757) -> Pt_MotherT1D >= 0.680)
+F[0,1](TotalDailyInsPerKg > 0.614 -> Pt_SHFlg = 0.830)
+F[0,0](((age <= 13.738 & HbA1c >= 7.259) & BldPrSys <= 7.799) | UnitsInsBasalOrLongAct <= 8.079)
+G[0,0](Pt_CGMUseNumDays <= 11.950 -> WeightKg >= 33.371)
+F[0,0](((LDL >= 35.626 | TSH <= 1.127) & BGTestAvgNumMeter <= 3.469) & HbA1cImputeDtMnC <= 1.276)
+((Pt_GrandparentT1D >= 0.000) U[0,1] (NumPumpBolusOrShortAct >= 0.097))
+G[0,1](BldPrDia >= 67.675 & NumPumpBolusOrShortAct <= 2.984)

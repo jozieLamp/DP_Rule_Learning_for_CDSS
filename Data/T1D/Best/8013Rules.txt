@@ -1,0 +1,5 @@
+G[0,0](GFR <= 0.000 -> BUN >= 2.309)
+F[0,0](BUN <= 10.588 & HbA1c <= 9.705)
+F[0,0](((BGTestAvgNumPtRep <= 5.624 | bmiPerc >= 0.038) | diabDur <= 0.875) & Pt_SHFlg >= 0.123)
+G[0,0]((HbA1c <= 10.571 & TotalDailyInsPerKg >= 0.301) -> Pt_A1cGoalLev >= 0.001)
+((SMBGperDayPtMeterCombo <= 6.118) U[0,0] (Pt_SHFlg >= 0.078))

@@ -1,0 +1,4 @@
+G[0,0](BldPrSys >= 88.398 | Pt_CGMUseNumDays >= 8.807)
+((HbA1cImputeDtMnC >= 13.318) U[1,1] (HeightCm <= 151.171))
+G[1,1](((bmiPerc >= 0.298 -> TSH <= 0.430) & BldPrSys >= 0.053) | TotalDailyInsPerKg >= 0.040)
+((AlbCreatRat_mggNew <= 47.229) U[0,0] (bmiZscore >= -0.207))

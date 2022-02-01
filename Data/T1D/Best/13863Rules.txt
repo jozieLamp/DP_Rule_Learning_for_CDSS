@@ -1,0 +1,7 @@
+G[0,1]((diabDur <= 4.226 | Triglyc <= 37.162) -> HDL <= 17.040)
+F[0,1](bmiPerc >= 0.909 & HbA1c >= 9.712)
+G[1,1](Pt_SiblingT1D >= 0.000 & bmiPerc <= 0.930)
+G[0,0](BGTestAvgNumPtRep >= 5.164 -> WeightKg >= 36.944)
+G[0,1]((HDL <= 64.998 & Pt_GrandparentT1D >= 0.000) | HbA1c <= 0.000)
+F[0,1](BldPrSys <= 113.790 & UnitsInsBasalOrLongAct >= 9.568)
+F[1,1]((TSH <= 1.140 -> bmiPerc >= 0.917) & WeightKg >= 0.901)

@@ -1,0 +1,4 @@
+G[0,1]((BGTestAvgNumMeter >= 2.277 | BGTestAvgNumMeter >= 0.539) | Triglyc <= 5.397)
+G[0,1](AlbCreatRat_mggNew <= 3.336 -> WeightKg >= 47.597)
+F[0,1](BUN >= 13.758 & UnitsInsBasalOrLongAct <= 9.842)
+G[0,1]((bmi >= 19.532 | Pt_SiblingT1D >= 0.194) & Pt_A1cGoalLevelDsYr5 <= 0.818)

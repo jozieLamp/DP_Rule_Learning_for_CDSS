@@ -1,0 +1,7 @@
+G[0,0](TSH <= 3.645 -> Pt_SHFlg >= 0.000)
+G[0,0](BGTestAvgNumPtRep >= 9.042 | bmiPerc <= 0.974)
+F[0,0](((BGTestAvgNumPtRep >= 9.196 & TotalDailyInsPerKg >= 0.290) & HbA1cImputeDtMnC <= 0.470) | Pt_CGMUseNumDays >= 0.300)
+F[0,0](((HbA1cImputeDtMnC >= 5.271 -> Triglyc <= 17.018) | Pt_ChildT1D >= 13.791) & TotalDailyInsPerKg >= 7.744)
+G[0,0](((HDL <= 40.177 -> bmiZscore <= 1.831) -> Pt_FatherT1D <= 1.848) | BGTestAvgNumMeter >= 1.712)
+G[0,0](AutonomicNeuroCl >= 0.000 | BldPrSys >= 95.476)
+G[0,0](bmiZscore < 1.902 -> Pt_SHFlg = 0.000)

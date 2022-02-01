@@ -1,0 +1,3 @@
+F[0,0]((HeightCm >= 171.577 & Pt_A1cGoalLev <= 5.160) | BUN <= 4.348)
+F[0,0](BldPrDia <= 91.240 -> HbA1cImputeDtMnC >= 15.927)
+F[0,0](UnitsInsBasalOrLongAct <= 31.915 | Pt_SHFlg <= 0.824)

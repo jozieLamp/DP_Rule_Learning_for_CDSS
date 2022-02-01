@@ -1,0 +1,7 @@
+G[0,0]((age <= 33.905 -> NumPumpBolusOrShortAct >= 1.227) & Pt_GrandparentT1D <= 6.957)
+F[0,0]((HbA1c <= 7.521 & Pt_FatherT1D >= 0.000) & UnitsInsBasalOrLongAct <= 0.000)
+((AlbCreatRat_mggNew >= 4.653) U[0,0] (UnitsInsBasalOrLongAct <= 20.689))
+((BGTestAvgNumMeter >= 0.764) U[0,0] (BGTestAvgNumPtRep <= 4.890))
+F[0,0](((bmiZscore >= -0.537 | Pt_SHFlg <= 0.508) | BUN >= 0.172) -> Pt_InsGov >= 0.080)
+((BGTestAvgNumMeter >= 1.937) U[0,0] (UnitsInsBasalOrLongAct <= 21.682))
+G[0,0](SMBGperDayPtMeterCombo >= 4.029 & BGTestAvgNumPtRep >= 0.494)

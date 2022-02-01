@@ -1,0 +1,6 @@
+G[0,1]((diabDur >= 6.733 & WeightKg <= 58.716) -> Pt_SHFlg >= 45.076)
+((NumPumpBolusOrShortAct <= 3.283) U[1,1] (LDL <= 39.343))
+((BGTestAvgNumMeter >= 1.389) U[1,1] (BGTestAvgNumPtRep <= 4.762))
+F[0,0]((TotalDailyInsPerKg <= 0.828 -> UnitsInsBasalOrLongAct <= 21.410) & TotChol <= 31.810)
+((HDL <= 52.090) U[1,2] (Pt_A1cGoalLevelDsYr5 <= 0.000))
+((BGTestAvgNumMeter >= 0.516) U[1,1] (BGTestAvgNumPtRep <= 3.182))

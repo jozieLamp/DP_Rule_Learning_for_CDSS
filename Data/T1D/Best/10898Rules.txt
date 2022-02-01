@@ -1,0 +1,8 @@
+G[0,0](HbA1cImputeDtMnC >= 4.378 -> TSH <= 1.417)
+G[0,1](NumPumpBolusOrShortAct >= 0.399 -> Triglyc <= 21.936)
+((BGTestAvgNumPtRep <= 7.528) U[1,1] (NumPumpBolusOrShortAct >= 0.223))
+F[0,1](((HDL >= 19.187 -> NumPumpBolusOrShortAct >= 0.650) | age <= 2.014) -> Triglyc >= 1.220)
+F[0,1](((HbA1cImputeDtMnC <= 58.540 & LDL >= 10.262) & WeightKg >= 1.815) | HeightCm <= 35.410)
+F[1,1](((bmiPerc <= 0.249 -> TSH <= 1.427) -> WeightKg <= 2.132) | Pt_ChildT1D >= 0.967)
+F[1,1](Triglyc >= 2.535 & HeightCm >= 142.370)
+G[0,1](((BGTestAvgNumPtRep <= 7.442 -> HeightCm >= 138.323) | Pt_FatherT1D >= 141.355) | BldPrSys >= 139.559)

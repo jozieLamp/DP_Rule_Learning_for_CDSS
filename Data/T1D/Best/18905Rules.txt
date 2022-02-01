@@ -1,0 +1,3 @@
+G[0,0]((Pt_SHFlg <= 0.390 -> diabDur >= 7.288) & HbA1cImputeDtMnC >= 8.092)
+((diagAgeCombo >= 42.000) U[0,0] (Pt_SHFlg >= 0.040))
+F[0,0](((LDL <= 112.414 & Pt_DKAFlg >= 0.128) | BldPrSys <= 0.329) | HbA1cImputeDtMnC <= 0.742)

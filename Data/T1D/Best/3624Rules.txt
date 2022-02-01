@@ -1,0 +1,4 @@
+G[0,0](((Pt_InsGov >= 0.000 & WeightKg >= 72.995) | LDL >= 73.731) & HDL <= 82.777)
+G[0,0](((AutonomicNeuroCl >= 0.000 -> diagAgeCombo >= 9.000) -> UnitsInsBasalOrLongAct >= 9.000) & diagAgeCombo >= 9.000)
+F[0,0](((bmiZscore <= 1.736 & diabDur <= 7.016) -> GFR >= 5.660) -> BldPrSys <= 8.657)
+F[0,0](((HDL <= 28.739 & bmiZscore >= 1.652) | BldPrSys >= 1.655) -> UnitsInsBasalOrLongAct <= 1.734)

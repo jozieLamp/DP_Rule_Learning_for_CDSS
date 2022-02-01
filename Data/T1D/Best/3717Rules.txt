@@ -1,0 +1,5 @@
+G[0,0](SMBGperDayPtMeterCombo >= 6.622 & BGTestAvgNumPtRep >= 2.580)
+G[0,0](SMBGperDayPtMeterCombo >= 6.108 & BGTestAvgNumPtRep >= 2.180)
+G[0,0](SMBGperDayPtMeterCombo >= 6.599 & BGTestAvgNumPtRep >= 2.995)
+G[0,0](GFR <= 0.000 -> BUN >= 4.760)
+F[0,0](bmiZscore <= 1.127 -> Pt_A1cGoalLev >= 0.991)

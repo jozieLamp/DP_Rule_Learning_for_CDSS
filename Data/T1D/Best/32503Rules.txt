@@ -1,0 +1,7 @@
+G[0,0](Pt_GrandparentT1D <= 0.000 -> HbA1cImputeDtMnC >= 0.115)
+((BGTestAvgNumMeter <= 5.931) U[0,0] (HbA1cImputeDtMnC <= 18.130))
+F[0,0](bmiZscore >= 0.457 -> TSH >= 0.143)
+F[0,0](((HbA1cImputeDtMnC <= 27.117 | SMBGperDayPtMeterCombo >= 5.144) & bmi >= 5.518) & diagAgeCombo <= 5.793)
+((BUN <= 23.798) U[0,0] (TotalDailyInsPerKg <= 0.759))
+G[0,0](diagAgeCombo <= 3.677 & AutonomicNeuroCl <= 0.000)
+((Pt_SHFlg >= 0.305) U[0,0] (WeightKg <= 29.274))

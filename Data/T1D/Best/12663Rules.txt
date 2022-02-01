@@ -1,0 +1,2 @@
+G[0,0]((bmi <= 23.207 & bmiZscore <= -0.696) & Pt_InsGov >= -0.835)
+F[0,0]((bmi <= 23.273 & LDL <= 96.182) -> Pt_A1cGoalLev >= 73.259)

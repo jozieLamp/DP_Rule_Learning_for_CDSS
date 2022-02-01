@@ -1,0 +1,2 @@
+F[0,0](NumPumpBolusOrShortAct >= 0.092 | Pt_SHFlg >= 0.185)
+F[0,0](((LDL >= 27.198 -> TotChol <= 145.852) & HbA1cImputeDtMnC <= 138.106) | UnitsInsBasalOrLongAct >= 41.282)

@@ -1,0 +1,5 @@
+G[0,0]((Pt_A1cGoalLev >= 0.000 -> diagAgeCombo >= 9.000) -> LDL >= 9.000)
+F[0,1]((UnitsInsBasalOrLongAct >= 38.051 -> TotalDailyInsPerKg >= 1.233) -> BGTestAvgNumMeter >= 1.192)
+((TotChol <= 155.845) U[1,1] (UnitsInsBasalOrLongAct >= 45.968))
+F[0,0](Pt_SiblingT1D <= 0.784 & UnitsInsBasalOrLongAct <= 74.515)
+((HbA1cImputeDtMnC <= 54.096) U[1,1] (NumPumpBolusOrShortAct >= 1.315))

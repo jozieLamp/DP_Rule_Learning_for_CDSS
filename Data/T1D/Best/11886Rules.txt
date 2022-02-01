@@ -1,0 +1,5 @@
+G[0,0](((Triglyc <= 46.796 & Pt_A1cGoalLev <= 0.000) -> diagAgeCombo >= 0.000) -> Triglyc <= 0.000)
+G[0,0]((bmiPerc <= 0.536 | TotalDailyInsPerKg >= 0.352) & HDL <= 1.038)
+F[0,0](BGTestAvgNumMeter >= 1.599 & diabDur <= 12.398)
+F[0,0](((BldPrDia <= 60.566 & bmi >= 1.293) -> Pt_GrandparentT1D >= 9.540) -> Pt_GrandparentT1D >= 10.538)
+G[0,0](NumPumpBolusOrShortAct <= 2.749 -> age >= 13.136)

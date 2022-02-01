@@ -1,0 +1,3 @@
+((DirectLDL >= 0.000) U[1,1] (bmi <= 29.080))
+((BGTestAvgNumMeter >= 0.000) U[0,0] (BGTestAvgNumPtRep <= 7.213))
+((AlbCreatRat_mggNew <= 7.678) U[1,1] (WeightKg <= 71.343))

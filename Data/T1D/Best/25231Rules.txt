@@ -1,0 +1,6 @@
+G[0,1](BGTestAvgNumMeter <= 2.756 | WeightKg >= 64.724)
+G[0,1]((BUN <= 13.084 -> TSH <= 1.827) & DirectLDL <= 1.269)
+G[0,1]((Pt_ChildT1D >= 0.000 & BGTestAvgNumMeter <= 3.569) & WeightKg >= 2.259)
+F[0,0]((LDL <= 79.210 -> AlbCreatRat_mggNew >= 5.667) | diabDur <= 7.448)
+F[0,0](diabDur >= 12.402 & LDL <= 74.907)
+G[0,1]((Pt_SHFlg <= 0.321 -> Pt_SHFlg <= 0.993) -> Triglyc >= 0.121)

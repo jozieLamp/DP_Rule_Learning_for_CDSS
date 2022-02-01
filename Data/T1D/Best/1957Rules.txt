@@ -1,0 +1,2 @@
+G[0,0](BldPrDia <= 73.062 & Pt_CGMUseNumDays >= 12.781)
+F[0,1](BUN >= 4.888 & Pt_CGMUseNumDays <= 21.998)

@@ -1,0 +1,3 @@
+G[0,0](AlbCreatRat_mggNew <= 8.499 | UnitsInsBasalOrLongAct >= 10.658)
+F[0,0](age <= 22.382 & HbA1c >= 6.308)
+G[0,0]((HbA1c <= 6.672 | Triglyc >= 11.722) & TotChol <= 53.998)

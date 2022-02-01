@@ -1,0 +1,6 @@
+G[0,0]((age <= 18.860 & BldPrSys >= 121.602) & AutonomicNeuroCl <= 127.624)
+G[0,1](diabDur <= 9.552 -> Pt_SiblingT1D >= 0.088)
+G[0,0]((BldPrSys <= 129.351 & age >= 13.112) -> Pt_A1cGoalLevelDsYr5 >= 12.697)
+G[0,1](((diabDur >= 7.612 -> AlbCreatRat_mggNew <= 20.542) & bmiPerc >= 9.418) | NumPumpBolusOrShortAct <= 16.597)
+G[0,1](bmiZscore <= 0.073 -> BGTestAvgNumMeter <= 3.951)
+G[0,0](((GFR <= 0.000 & TSH >= 0.247) & Pt_GrandparentT1D <= 0.791) | BGTestAvgNumPtRep >= 0.119)

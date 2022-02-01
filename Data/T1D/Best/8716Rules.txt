@@ -1,0 +1,5 @@
+G[0,1](((HDL <= 36.567 | Pt_A1cGoalLev >= 0.438) | BGTestAvgNumMeter >= 0.014) & DirectLDL <= 6.377)
+((LDL >= 29.487) U[1,1] (UnitsInsBasalOrLongAct >= 0.069))
+G[1,1](SMBGperDayPtMeterCombo >= 1.622 & BGTestAvgNumPtRep >= 2.114)
+G[0,0](HDL >= 6.601 -> NumPumpBolusOrShortAct >= 0.918)
+F[1,1](bmiZscore >= -0.433 & HDL >= 11.883)

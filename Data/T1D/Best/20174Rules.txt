@@ -1,0 +1,6 @@
+G[0,0](BldPrSys >= 31.981 | HbA1cImputeDtMnC >= 32.171)
+G[0,0](((age >= 15.123 | AlbCreatRat_mggNew <= 26.122) -> HbA1c <= 18.698) -> HbA1cImputeDtMnC >= 3.373)
+F[0,0](((Pt_FatherT1D <= 0.000 -> HbA1cImputeDtMnC >= 32.496) & bmiZscore <= 67.887) -> WeightKg <= 40.936)
+F[0,0](((AlbCreatRat_mggNew >= 9.303 | HbA1c <= 7.552) & HbA1cImputeDtMnC >= 7.176) -> TotalDailyInsPerKg >= 6.538)
+G[0,0](Pt_A1cGoalLevelDsYr5 >= 0.000 & TotalDailyInsPerKg <= 1.005)
+G[0,0](((BUN <= 8.409 -> TSH >= 0.550) & BGTestAvgNumPtRep <= 1.022) & DirectLDL <= 1.103)

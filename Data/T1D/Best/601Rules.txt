@@ -1,0 +1,7 @@
+G[0,0](GFR <= 44.949 -> BUN >= 1.121)
+G[0,0](((BGTestAvgNumMeter <= 0.829 | SMBGperDayPtMeterCombo <= 1.324) | NumPumpBolusOrShortAct <= 3.140) -> BUN >= 0.653)
+G[0,0]((bmiZscore <= 1.418 -> SMBGperDayPtMeterCombo >= 0.211) -> Triglyc >= 0.686)
+G[0,0](((HbA1c <= 13.134 | WeightKg >= 6.317) & UnitsInsBasalOrLongAct >= 28.038) | GFR >= 13.081)
+F[0,0]((bmiPerc <= 0.878 & bmiZscore <= 1.305) & BldPrDia <= 0.691)
+G[0,0](((Pt_GrandparentT1D >= 0.000 -> BldPrDia >= 9.595) | AlbCreatRat_mggNew >= 2.232) | DirectLDL >= 9.807)
+G[0,0](GFR <= 116.206 -> BUN >= 3.560)

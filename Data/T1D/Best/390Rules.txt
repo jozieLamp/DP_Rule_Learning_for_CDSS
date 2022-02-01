@@ -1,0 +1,5 @@
+G[0,0]((BldPrDia >= 8.626 | TotChol <= 74.750) -> HeightCm <= 130.043)
+G[0,0]((HbA1cImputeDtMnC >= 22.347 & Pt_InsGov <= 0.416) -> BldPrDia <= 0.631)
+G[0,0](SMBGperDayPtMeterCombo <= 7.464 -> WeightKg <= 30.463)
+F[0,0]((HbA1c >= 8.362 & Pt_InsGov <= 0.690) & HeightCm >= 0.163)
+G[0,0]((WeightKg >= 16.773 | bmi >= 2.486) -> UnitsInsBasalOrLongAct <= 8.809)

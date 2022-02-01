@@ -1,0 +1,6 @@
+G[0,0](BldPrSys <= 115.384 & BldPrDia <= 72.632)
+F[0,0](((BldPrSys >= 112.653 -> HbA1cImputeDtMnC <= 16.373) | LDL >= 0.229) -> HbA1cImputeDtMnC <= 21.293)
+((UnitsInsBasalOrLongAct >= 7.198) U[0,0] (WeightKg <= 65.594))
+F[0,0](BGTestAvgNumMeter <= 5.374 & TotalDailyInsPerKg <= 1.343)
+((BGTestAvgNumPtRep <= 4.486) U[0,0] (UnitsInsBasalOrLongAct <= 23.584))
+((bmiPerc <= 0.702) U[0,0] (HbA1c >= 9.317))

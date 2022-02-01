@@ -1,0 +1,5 @@
+G[0,0](TotalDailyInsPerKg <= 0.788 & AlbCreatRat_mggNew <= 5.560)
+F[0,0](((UnitsInsBasalOrLongAct >= 15.981 & WeightKg <= 104.722) | Triglyc >= 101.276) -> BUN >= 100.879)
+((bmi <= 32.770) U[0,0] (Triglyc >= 59.433))
+G[0,0](GFR <= 0.000 -> BUN >= 14.185)
+F[0,0](((diabDur >= 10.050 | TotChol >= 27.232) | Pt_A1cGoalLevelDsYr5 >= 94.890) -> Pt_GrandchildT1D >= 112.470)

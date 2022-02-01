@@ -1,0 +1,6 @@
+G[1,1](AlbCreatRat_mggNew <= 3.366 -> TotalDailyInsPerKg <= 0.648)
+G[1,1]((WeightKg >= 38.938 | bmi >= 1.772) -> UnitsInsBasalOrLongAct <= 34.050)
+F[1,1]((AlbCreatRat_mggNew <= 6.240 -> HbA1cImputeDtMnC >= 0.023) & UnitsInsBasalOrLongAct >= 11.572)
+((TSH >= 0.380) U[1,1] (HDL >= 60.841))
+F[0,1](((TotalDailyInsPerKg >= 0.087 -> TotChol >= 155.789) | BUN >= 157.180) -> AlbCreatRat_mggNew >= 152.153)
+G[0,0](age >= 22.623 | AlbCreatRat_mggNew >= 1.756)

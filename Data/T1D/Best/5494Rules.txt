@@ -1,0 +1,5 @@
+G[0,0](SMBGperDayPtMeterCombo >= 0.883 & BGTestAvgNumPtRep >= 0.541)
+G[0,0](Pt_A1cGoalLevelDsYr5 <= 0.000 & SMBGperDayPtMeterCombo >= 0.012)
+F[0,0]((HDL <= 51.971 & Pt_A1cGoalLev <= 3.754) & SMBGperDayPtMeterCombo <= 5.646)
+G[0,0](SMBGperDayPtMeterCombo >= 1.185 & BGTestAvgNumPtRep >= 0.352)
+G[0,0](((HbA1c <= 6.183 & Pt_A1cGoalLev <= 1.339) -> BldPrDia <= 5.796) & age >= 0.387)

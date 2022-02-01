@@ -1,0 +1,5 @@
+G[0,0]((AutonomicNeuroCl >= 0.000 -> BGTestAvgNumPtRep <= 5.190) & TSH <= 8.361)
+G[0,0](UnitsInsBasalOrLongAct >= 8.043 & Pt_InsGov >= 0.000)
+F[0,0](SMBGperDayPtMeterCombo <= 7.567 -> Pt_SHFlg >= 0.006)
+((HDL >= 18.398) U[0,0] (Triglyc >= 22.901))
+F[0,0](Pt_GrandparentT1D <= 0.000 -> SMBGperDayPtMeterCombo >= 5.428)

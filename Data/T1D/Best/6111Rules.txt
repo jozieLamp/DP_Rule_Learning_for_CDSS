@@ -1,0 +1,2 @@
+G[0,0](HbA1c >= 6.897 | Pt_A1cGoalLev >= 0.895)
+G[0,0]((bmiZscore <= -0.131 -> HbA1cImputeDtMnC >= 2.006) & bmi >= 19.517)

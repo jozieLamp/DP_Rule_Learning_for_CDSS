@@ -1,0 +1,2 @@
+G[0,0]((AutonomicNeuroCl <= 0.000 -> BldPrSys <= 123.063) & age <= 124.556)
+F[0,0](BGTestAvgNumMeter >= 0.208 & LDL <= 48.881)

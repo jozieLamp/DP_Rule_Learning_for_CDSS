@@ -1,0 +1,5 @@
+G[1,1](bmiZscore <= 0.774 -> Pt_SHFlg >= 0.065)
+((BGTestAvgNumMeter <= 4.441) U[0,1] (HbA1c <= 6.457))
+((NumPumpBolusOrShortAct >= 1.260) U[1,1] (TotChol <= 166.890))
+F[1,1](NumPumpBolusOrShortAct >= 1.943 & TotalDailyInsPerKg >= 0.168)
+G[0,1](HbA1c <= 5.593 -> TotChol <= 207.895)

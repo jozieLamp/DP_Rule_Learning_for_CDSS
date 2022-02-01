@@ -1,0 +1,1 @@
+F[0,0](((Pt_SiblingT1D <= 0.000 & Triglyc <= 73.316) & Pt_InsGov <= 71.878) | NumPumpBolusOrShortAct >= 38.232)

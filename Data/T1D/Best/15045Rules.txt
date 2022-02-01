@@ -1,0 +1,3 @@
+G[0,1](((Pt_GrandparentT1D >= 0.000 -> BGTestAvgNumMeter >= 3.666) & BGTestAvgNumMeter <= 8.281) -> Triglyc >= 3.036)
+((BGTestAvgNumMeter >= 1.285) U[1,1] (BGTestAvgNumPtRep <= 10.334))
+((BGTestAvgNumMeter >= 1.221) U[1,1] (BGTestAvgNumPtRep <= 10.822))

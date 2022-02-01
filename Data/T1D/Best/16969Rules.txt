@@ -1,0 +1,5 @@
+G[0,0]((HbA1cImputeDtMnC <= 34.212 -> Triglyc <= 30.138) & BGTestAvgNumPtRep <= 60.731)
+((GFR >= 17.925) U[0,0] (Triglyc >= 16.411))
+F[0,0](((TotChol <= 69.983 -> Triglyc >= 12.447) & diagAgeCombo <= 44.498) & diagAgeCombo >= 0.555)
+G[0,0](AlbCreatRat_mggNew >= 0.505 & HeightCm <= 178.158)
+((GFR <= 58.495) U[0,0] (HeightCm >= 178.010))

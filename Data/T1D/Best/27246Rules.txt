@@ -1,0 +1,6 @@
+G[0,0](SMBGperDayPtMeterCombo >= 3.178 & BGTestAvgNumPtRep >= 0.000)
+F[0,0](((BGTestAvgNumMeter <= 5.034 -> TotalDailyInsPerKg <= 0.291) | AutonomicNeuroCl >= 0.086) | SMBGperDayPtMeterCombo <= 0.385)
+F[0,0]((BldPrSys >= 133.183 & Pt_FatherT1D <= 0.000) -> TotalDailyInsPerKg <= 0.000)
+F[0,0](HbA1cImputeDtMnC <= 18.634 & HbA1c >= 6.484)
+G[0,0](BUN >= 1.813 -> age >= 15.349)
+F[0,0]((bmiPerc >= 0.969 & WeightKg <= 100.488) | diagAgeCombo >= 91.032)

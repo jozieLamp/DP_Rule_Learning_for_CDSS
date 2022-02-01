@@ -1,0 +1,8 @@
+G[0,1](((bmi >= 2.533 -> HbA1cImputeDtMnC >= 25.665) & DirectLDL <= 52.704) | BldPrSys <= 38.028)
+G[0,1](GFR <= 5.607 -> BUN >= 54.956)
+G[0,1]((HDL <= 95.604 -> UnitsInsBasalOrLongAct >= 8.806) | Pt_A1cGoalLevelDsYr5 >= 1.586)
+((BGTestAvgNumPtRep >= 2.407) U[1,2] (UnitsInsBasalOrLongAct >= 7.950))
+F[0,0](((TotalDailyInsPerKg <= 0.344 & TSH >= 0.092) | TotalDailyInsPerKg >= 0.496) -> GFR <= 0.672)
+G[0,1](BGTestAvgNumPtRep >= 3.426 -> NumPumpBolusOrShortAct >= 2.422)
+G[0,1](GFR <= 7.930 -> BUN >= 51.391)
+G[0,1](BGTestAvgNumMeter >= 0.176 | SMBGperDayPtMeterCombo <= 9.101)

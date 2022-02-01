@@ -1,0 +1,6 @@
+G[0,0](GFR <= 38.453 -> BUN >= 15.155)
+G[0,0]((bmiPerc >= 0.000 -> BUN >= 15.281) | Pt_DKAFlg >= 15.428)
+((TSH <= 1.600) U[1,1] (WeightKg >= 1.984))
+G[1,1](diabDur <= 27.513 -> TotalDailyInsPerKg <= 0.594)
+G[0,0]((WeightKg >= 33.608 | bmi >= 15.004) -> UnitsInsBasalOrLongAct <= 12.559)
+G[0,0](GFR <= 80.787 -> BUN >= 15.944)

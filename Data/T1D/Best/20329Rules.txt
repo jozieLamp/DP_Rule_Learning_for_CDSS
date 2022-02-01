@@ -1,0 +1,3 @@
+G[0,0](((GFR >= 4.195 | TotalDailyInsPerKg <= 0.419) & Triglyc <= 0.513) & BUN >= 0.078)
+F[0,0](LDL <= 59.098 -> Pt_SHFlg = 0.741)
+F[0,0](((SMBGperDayPtMeterCombo >= 1.971 | TotalDailyInsPerKg >= 0.114) & Pt_InsGov >= 0.045) & Pt_MotherT1D <= 0.390)

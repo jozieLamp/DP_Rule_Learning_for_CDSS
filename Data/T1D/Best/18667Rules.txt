@@ -1,0 +1,4 @@
+G[0,0](bmi >= 19.668 | Pt_SHFlg <= 0.240)
+G[0,0](BGTestAvgNumPtRep <= 2.470 & Pt_InsGov <= 0.527)
+F[0,0](((Pt_SiblingT1D >= 0.000 -> UnitsInsBasalOrLongAct >= 8.062) -> Pt_DKAFlg <= 36.755) & bmi <= 20.693)
+G[0,0](TotalDailyInsPerKg <= 0.743 | WeightKg >= 59.863)

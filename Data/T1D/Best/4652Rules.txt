@@ -1,0 +1,8 @@
+G[0,0](((Pt_CGMUseNumDays >= 0.000 | Pt_A1cGoalLevelDsYr5 <= 0.000) | GFR <= 0.000) -> bmiZscore <= 0.000)
+((bmiZscore >= -0.254) U[0,0] (bmiPerc >= 0.198))
+((LDL <= 60.765) U[0,0] (HeightCm <= 166.530))
+G[0,0]((Pt_A1cGoalLev >= 0.000 & bmi <= 24.837) | GFR >= 24.750)
+F[0,0](BldPrSys >= 113.851 -> TotChol >= 5.439)
+G[0,0](diabDur <= 12.605 -> Pt_DKAFlg <= 0.417)
+G[0,0](((Pt_InsGov <= 0.854 | BUN <= 0.000) -> Pt_SiblingT1D >= 0.000) -> LDL <= 0.000)
+G[0,0](Pt_MotherT1D <= 0.000 & bmi <= 24.864)

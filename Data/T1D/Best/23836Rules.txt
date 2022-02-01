@@ -1,0 +1,2 @@
+F[0,0]((BUN <= 9.769 & UnitsInsBasalOrLongAct >= 6.911) & Pt_CGMUseNumDays <= 45.245)
+F[0,0](HbA1cImputeDtMnC >= 22.428 & NumPumpBolusOrShortAct >= 0.260)

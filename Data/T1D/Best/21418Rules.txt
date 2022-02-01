@@ -1,0 +1,5 @@
+G[0,1](age >= 62.756 -> TSH <= 0.878)
+((HeightCm <= 119.366) U[1,1] (TSH >= 0.169))
+F[0,0]((BldPrSys <= 138.673 & WeightKg <= 51.150) & AlbCreatRat_mggNew <= 57.543)
+F[1,1](BldPrSys >= 115.081 & bmi <= 9.641)
+G[0,1]((HDL >= 27.660 -> TSH <= 1.133) | WeightKg >= 0.057)

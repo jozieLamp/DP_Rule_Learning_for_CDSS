@@ -1,0 +1,5 @@
+G[0,0](((BldPrDia >= 62.641 | bmiZscore <= 0.595) & diabDur >= 0.313) & diagAgeCombo <= 0.532)
+F[0,0]((HbA1cImputeDtMnC <= 23.459 & Pt_CGMUseNumDays >= 0.000) & Pt_SHFlg >= 0.000)
+G[0,0]((LDL >= 63.887 & bmiZscore >= 0.339) & BGTestAvgNumMeter >= 0.199)
+F[0,0](BGTestAvgNumMeter >= 2.434 | UnitsInsBasalOrLongAct <= 16.688)
+G[0,0](HDL >= 66.219 -> LDL >= 61.053)

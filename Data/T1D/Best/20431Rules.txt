@@ -1,0 +1,5 @@
+G[0,1]((bmi <= 19.266 -> SMBGperDayPtMeterCombo <= 7.723) -> HbA1cImputeDtMnC >= 4.362)
+((Pt_A1cGoalLevelDsYr5 <= 0.000) U[0,1] (Pt_CGMUseNumDays >= 1.116))
+F[0,1](((diagAgeCombo <= 4.000 & Pt_GrandparentT1D >= 0.000) -> Pt_GrandparentT1D <= 0.000) & HbA1cImputeDtMnC <= 0.000)
+G[1,1](bmi <= 21.186 -> BGTestAvgNumMeter >= 1.642)
+F[0,1](((AlbCreatRat_mggNew >= 1.270 | TotalDailyInsPerKg >= 0.265) -> HDL >= 0.346) & Pt_CGMUseNumDays >= 0.103)

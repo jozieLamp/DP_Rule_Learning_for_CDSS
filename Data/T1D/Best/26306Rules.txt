@@ -1,0 +1,6 @@
+G[0,0]((age <= 17.901 -> Pt_GrandchildT1D <= 0.000) & Pt_A1cGoalLev <= 0.000)
+((AutonomicNeuroCl <= 0.000) U[0,0] (bmiZscore >= 2.542))
+G[0,0]((Pt_DKAFlg <= 0.000 & LDL >= 116.560) -> BldPrSys >= 167.581)
+((BldPrDia >= 62.090) U[0,0] (TSH <= 1.869))
+G[0,0]((Pt_A1cGoalLev <= 5.578 | Pt_GrandchildT1D >= 0.000) -> BUN <= 0.000)
+G[0,0]((NumPumpBolusOrShortAct >= 0.000 & Triglyc <= 149.113) & BldPrSys >= 110.655)

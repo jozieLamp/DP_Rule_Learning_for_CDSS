@@ -1,0 +1,2 @@
+G[0,0]((Pt_MotherT1D >= 0.000 & HbA1c <= 5.868) -> diabDur <= 6.125)
+G[0,0](NumPumpBolusOrShortAct <= 5.771 -> Pt_A1cGoalLev >= 0.794)

@@ -1,0 +1,6 @@
+G[0,0]((AlbCreatRat_mggNew >= 3.142 -> BUN >= 0.528) & Pt_MotherT1D <= 15.125)
+G[0,0](((Pt_GrandparentT1D <= 0.000 & TotalDailyInsPerKg >= 0.213) & WeightKg >= 0.142) & AutonomicNeuroCl <= 0.474)
+G[0,0](SMBGperDayPtMeterCombo >= 0.932 & BGTestAvgNumPtRep >= 0.942)
+G[0,0](GFR <= 0.000 -> BUN >= 9.937)
+G[0,0]((Pt_FatherT1D >= 0.000 -> HeightCm >= 16.065) | HDL >= 71.784)
+((HbA1cImputeDtMnC <= 36.749) U[0,0] (TotalDailyInsPerKg <= 0.418))

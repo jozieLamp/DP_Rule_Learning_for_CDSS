@@ -1,0 +1,8 @@
+G[0,0]((Pt_SHFlg >= 0.051 & BGTestAvgNumMeter >= 5.833) -> HeightCm <= 8.704)
+((HeightCm >= 184.890) U[0,0] (LDL >= 21.651))
+((bmiZscore <= -0.266) U[0,0] (TotChol >= 3.714))
+G[0,0](BGTestAvgNumPtRep <= 8.374 & BldPrDia <= 78.014)
+((Pt_GrandparentT1D >= 0.000) U[0,0] (Triglyc >= 41.045))
+G[0,0]((HDL >= 13.524 -> Pt_SHFlg <= 0.497) & Pt_A1cGoalLev <= 0.983)
+G[0,0]((age >= 55.181 & WeightKg <= 93.327) | bmi >= 89.088)
+G[0,0](((HDL >= 19.528 -> Triglyc <= 51.045) & BUN <= 84.299) | Pt_SiblingT1D >= 35.124)

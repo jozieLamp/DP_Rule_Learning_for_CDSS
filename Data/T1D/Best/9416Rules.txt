@@ -1,0 +1,5 @@
+G[0,0]((LDL >= 46.578 & Pt_DKAFlg <= 0.206) & TotalDailyInsPerKg >= 0.082)
+F[0,0]((HbA1cImputeDtMnC <= 70.859 | TSH <= 1.052) & Pt_CGMUseNumDays <= 1.846)
+F[0,0](bmi <= 22.390 & TSH <= 1.604)
+G[0,0](BldPrDia >= 59.107 -> Pt_SHFlg = 0.338)
+F[0,0](age <= 12.428 | bmi <= 22.872)

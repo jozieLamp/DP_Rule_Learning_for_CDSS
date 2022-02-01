@@ -1,0 +1,8 @@
+G[0,0](((Pt_MotherT1D <= 0.000 & Pt_GrandparentT1D <= 0.000) | WeightKg >= 0.000) -> Pt_ChildT1D <= 0.000)
+F[0,0](BldPrDia < 83.663 -> Pt_SHFlg = 0.284)
+((Pt_SHFlg <= 0.447) U[0,0] (Pt_ChildT1D >= 0.308))
+F[0,0](((HeightCm >= 177.800 & Pt_ChildT1D <= 0.726) -> NumPumpBolusOrShortAct >= 0.247) -> BUN >= 0.328)
+F[0,0](AlbCreatRat_mggNew >= 3.141 | LDL >= 16.154)
+F[0,0](((HDL <= 37.237 | Pt_FatherT1D >= 0.074) -> Pt_FatherT1D >= 0.318) & bmi >= 0.124)
+G[0,0](((HbA1c >= 6.581 -> HbA1c >= 6.501) & LDL >= 6.523) -> HbA1cImputeDtMnC >= 6.590)
+F[0,0](((Pt_A1cGoalLev >= 0.000 & Pt_CGMUseNumDays <= 19.887) -> Pt_GrandparentT1D >= 8.116) & bmiPerc <= 25.765)

@@ -1,0 +1,5 @@
+G[0,1]((AlbCreatRat_mggNew >= 5.919 | TotalDailyInsPerKg >= 0.098) | AlbCreatRat_mggNew >= 0.130)
+F[0,1]((BUN <= 16.992 & diagAgeCombo >= 11.000) -> bmiZscore >= 11.000)
+F[1,1](((bmiZscore >= -0.118 -> HDL <= 51.157) | diagAgeCombo >= 38.577) -> AutonomicNeuroCl >= 21.849)
+F[1,1](((diabDur <= 5.495 & TSH >= 0.233) -> diagAgeCombo <= 0.518) -> LDL <= 0.462)
+G[0,0](SMBGperDayPtMeterCombo >= 0.998 & BGTestAvgNumPtRep >= 0.092)

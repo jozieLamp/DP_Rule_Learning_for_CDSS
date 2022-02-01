@@ -1,0 +1,8 @@
+G[0,0](BldPrSys <= 126.464 | NumPumpBolusOrShortAct >= 0.408)
+G[0,0](BUN >= 6.304 & TSH <= 1.097)
+G[0,0]((BGTestAvgNumPtRep <= 5.428 & Pt_DKAFlg >= 0.000) | SMBGperDayPtMeterCombo <= 0.000)
+G[0,1](((TSH <= 1.534 & AlbCreatRat_mggNew <= 7.466) | NumPumpBolusOrShortAct <= 8.278) & SMBGperDayPtMeterCombo <= 7.651)
+G[1,1](((BGTestAvgNumMeter <= 2.647 & HbA1c <= 8.204) -> TotalDailyInsPerKg >= 6.902) -> HeightCm >= 7.035)
+F[1,1]((Triglyc >= 12.417 & Pt_GrandparentT1D <= 0.000) & TotalDailyInsPerKg <= 0.000)
+G[0,0](TSH <= 1.242 & BldPrDia <= 81.233)
+F[0,0](Pt_SiblingT1D <= 0.000 & LDL <= 114.671)

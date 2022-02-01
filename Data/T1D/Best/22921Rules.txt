@@ -1,0 +1,2 @@
+G[0,0](diabDur <= 2.432 -> HbA1cImputeDtMnC >= 0.680)
+F[0,0](WeightKg <= 57.944 & BldPrDia >= 67.982)

@@ -1,0 +1,6 @@
+G[0,1](((Pt_SiblingT1D <= 0.000 & HbA1cImputeDtMnC >= 20.529) -> HbA1cImputeDtMnC <= 72.416) -> HbA1cImputeDtMnC >= 37.106)
+F[0,0](DirectLDL <= 0.416 | HDL <= 60.797)
+((HbA1cImputeDtMnC <= 60.993) U[0,1] (UnitsInsBasalOrLongAct <= 17.195))
+F[0,1](((WeightKg >= 59.060 & diabDur <= 45.472) | Pt_A1cGoalLev >= 41.650) & BUN <= 45.395)
+G[0,1](((HbA1cImputeDtMnC <= 50.730 -> Pt_A1cGoalLev >= 0.742) -> BldPrSys <= 3.671) -> BGTestAvgNumMeter >= 1.031)
+F[1,1]((bmiZscore >= -0.798 & DirectLDL <= 0.807) -> BUN >= 0.116)

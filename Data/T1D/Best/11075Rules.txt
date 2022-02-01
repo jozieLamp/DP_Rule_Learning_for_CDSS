@@ -1,0 +1,3 @@
+F[0,0](((Pt_GrandparentT1D <= 0.000 | BGTestAvgNumMeter >= 2.099) & HDL <= 2.950) -> Pt_MotherT1D >= 1.007)
+F[0,0](((Pt_FatherT1D >= 0.087 & GFR <= 64.388) | bmiPerc <= 56.045) & LDL >= 13.233)
+F[0,0]((LDL <= 96.705 -> TSH >= 0.032) & Triglyc >= 0.065)

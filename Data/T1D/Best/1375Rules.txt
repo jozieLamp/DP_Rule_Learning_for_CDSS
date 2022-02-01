@@ -1,0 +1,3 @@
+F[0,0]((bmi <= 18.429 | BUN <= 8.060) & HbA1c >= 3.247)
+((bmiZscore <= -0.259) U[0,0] (HbA1c <= 6.138))
+F[0,0](((Pt_FatherT1D <= 0.000 & BldPrSys >= 106.313) & BGTestAvgNumMeter <= 112.127) -> bmiZscore >= 100.238)

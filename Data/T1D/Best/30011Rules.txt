@@ -1,0 +1,7 @@
+G[0,0](((bmiPerc >= 0.316 & HDL <= 0.000) | bmiZscore <= 0.000) & LDL <= 0.000)
+F[0,0](Pt_MotherT1D >= 0.000 & HbA1cImputeDtMnC <= 17.052)
+F[0,0](BGTestAvgNumMeter >= 3.147 -> diagAgeCombo >= 0.266)
+G[0,0](((BUN >= 0.525 -> Triglyc >= 0.000) & Pt_MotherT1D >= 0.000) & LDL <= 0.000)
+F[0,0]((diagAgeCombo >= 0.332 | HbA1c >= 8.814) | GFR >= 8.442)
+G[0,0]((BldPrDia >= 66.163 & UnitsInsBasalOrLongAct <= 28.338) -> BldPrSys <= 30.457)
+G[0,0](((BldPrSys >= 110.313 -> Pt_A1cGoalLev <= 4.547) -> HbA1cImputeDtMnC >= 0.242) | BldPrDia <= 5.379)

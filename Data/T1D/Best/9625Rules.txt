@@ -1,0 +1,1 @@
+((BGTestAvgNumPtRep <= 5.715) U[0,0] (HbA1c >= 7.943))

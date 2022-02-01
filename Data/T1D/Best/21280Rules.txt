@@ -1,0 +1,4 @@
+G[0,0]((TotChol >= 5.719 | WeightKg >= 54.219) & WeightKg >= 64.049)
+G[0,0](BldPrDia >= 66.716 & NumPumpBolusOrShortAct <= 3.729)
+F[0,0](NumPumpBolusOrShortAct >= 1.310 -> Pt_SHFlg = 0.492)
+G[0,0](BldPrDia <= 70.142 & WeightKg >= 56.012)

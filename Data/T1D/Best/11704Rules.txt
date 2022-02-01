@@ -1,0 +1,7 @@
+G[0,0]((diabDur <= 5.054 -> TSH <= 1.254) | TSH <= 1.103)
+F[0,0](BldPrDia <= 76.954 & diabDur >= 3.586)
+F[0,0](BUN >= 1.294 & BldPrSys >= 115.171)
+F[0,0](((NumPumpBolusOrShortAct >= 0.921 & SMBGperDayPtMeterCombo <= 5.360) -> TotChol >= 1.092) & HbA1cImputeDtMnC >= 2.213)
+F[0,0](((Pt_GrandparentT1D <= 0.000 | Pt_InsGov >= 0.287) -> bmiZscore <= 0.530) & HbA1cImputeDtMnC >= 0.143)
+G[0,0](BGTestAvgNumMeter >= 1.821 -> LDL <= 79.185)
+G[0,0](((BUN <= 11.764 & HbA1c >= 1.463) -> AlbCreatRat_mggNew <= 7.351) & DirectLDL <= 8.335)

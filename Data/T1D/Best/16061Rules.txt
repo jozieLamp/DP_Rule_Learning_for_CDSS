@@ -1,0 +1,5 @@
+G[1,1]((Pt_CGMUseNumDays <= 21.191 | HbA1cImputeDtMnC >= 24.397) & BGTestAvgNumPtRep <= 72.186)
+G[0,1]((BGTestAvgNumPtRep <= 7.747 & UnitsInsBasalOrLongAct <= 12.445) -> BldPrDia <= 16.834)
+F[1,1](((Pt_A1cGoalLev >= 0.019 | AlbCreatRat_mggNew >= 0.180) | WeightKg <= 6.103) & GFR <= 10.849)
+F[0,0](((age >= 34.909 & BldPrDia >= 79.121) & Pt_A1cGoalLev <= 83.117) -> DirectLDL >= 75.906)
+G[0,0](AutonomicNeuroCl <= 0.000 -> diabDur >= 26.913)

@@ -1,0 +1,5 @@
+G[0,0](HbA1c >= 8.226 | TSH >= 0.766)
+F[0,0]((HbA1c <= 11.744 | TotChol >= 45.403) & TotChol >= 118.444)
+((bmiPerc >= 0.851) U[0,0] (Pt_SHFlg >= 0.080))
+((SMBGperDayPtMeterCombo <= 6.126) U[0,0] (WeightKg <= 42.741))
+F[0,0](Pt_SHFlg >= 0.076 & TotChol <= 245.340)

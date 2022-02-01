@@ -1,0 +1,8 @@
+G[0,0]((Pt_GrandparentT1D <= 0.000 -> NumPumpBolusOrShortAct <= 0.000) & Pt_A1cGoalLev <= 0.000)
+F[0,0](diabDur <= 4.488 & Pt_CGMUseNumDays <= 0.000)
+((HDL <= 44.396) U[0,0] (Triglyc >= 58.030))
+F[0,0](((HDL >= 13.567 & HeightCm <= 168.223) | Pt_DKAFlg >= 167.237) & age <= 168.315)
+F[0,0](AlbCreatRat_mggNew >= 3.161 -> HbA1c <= 12.269)
+G[0,0](Pt_ChildT1D <= 0.432 & TotChol <= 0.000)
+((BldPrSys >= 110.195) U[0,0] (Pt_SHFlg >= 0.004))
+G[0,0](SMBGperDayPtMeterCombo >= 0.421 & BGTestAvgNumPtRep >= 0.000)

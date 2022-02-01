@@ -1,0 +1,3 @@
+G[0,0](NumPumpBolusOrShortAct <= 5.959 -> TotChol >= 66.376)
+G[0,0]((BldPrDia <= 73.594 -> HbA1c <= 8.056) | WeightKg <= 8.827)
+F[0,0](NumPumpBolusOrShortAct <= 5.694 & age <= 63.257)

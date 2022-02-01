@@ -1,0 +1,8 @@
+G[0,0]((age <= 8.750 -> NumPumpBolusOrShortAct <= 3.622) | diagAgeCombo <= 2.672)
+F[0,0](UnitsInsBasalOrLongAct <= 1.912 -> LDL >= 6.991)
+((BldPrSys <= 101.792) U[0,0] (Pt_A1cGoalLev >= 0.440))
+G[0,0]((NumPumpBolusOrShortAct <= 2.819 & HbA1cImputeDtMnC >= 2.547) & TotChol <= 13.426)
+F[0,0](HbA1cImputeDtMnC <= 12.735 & BldPrSys >= 99.287)
+G[0,0]((bmi <= 17.836 & bmiPerc >= 0.683) -> Triglyc >= 0.691)
+G[0,0]((HDL <= 32.014 -> SMBGperDayPtMeterCombo <= 3.423) & GFR <= 5.209)
+G[0,0](Pt_FatherT1D >= 0.000 -> diagAgeCombo <= 2.773)

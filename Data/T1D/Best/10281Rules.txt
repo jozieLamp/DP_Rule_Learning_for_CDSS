@@ -1,0 +1,7 @@
+G[0,1](BGTestAvgNumPtRep >= 2.454 -> SMBGperDayPtMeterCombo >= 3.934)
+F[1,1]((LDL >= 46.848 | Triglyc <= 84.583) -> HbA1cImputeDtMnC >= 18.729)
+G[1,1]((Pt_DKAFlg >= 0.020 -> GFR <= 32.669) -> GFR <= 48.249)
+G[0,1](NumPumpBolusOrShortAct >= 0.249 | Pt_InsGov >= 0.053)
+G[0,0](Pt_SHFlg >= 0.135 | TSH <= 5.240)
+F[1,1](BUN >= 6.852 & TSH >= 0.099)
+F[1,1]((BldPrDia >= 60.546 -> HbA1c <= 7.337) -> TotalDailyInsPerKg >= 0.760)

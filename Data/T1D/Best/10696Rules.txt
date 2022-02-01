@@ -1,0 +1,3 @@
+G[0,0](((bmi >= 28.199 & bmiZscore <= 1.784) -> diabDur <= 1.760) & AutonomicNeuroCl <= 1.784)
+((Pt_InsGov >= 0.000) U[0,0] (TotChol <= 153.235))
+F[0,0]((Pt_GrandparentT1D <= 0.000 -> TotChol <= 198.499) | Pt_GrandparentT1D >= 5.776)

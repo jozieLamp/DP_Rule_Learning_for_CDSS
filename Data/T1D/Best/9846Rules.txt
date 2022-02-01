@@ -1,0 +1,2 @@
+G[0,0](BldPrSys <= 136.510 -> HbA1c >= 6.648)
+G[0,0]((WeightKg >= 73.673 | bmi >= 23.555) -> UnitsInsBasalOrLongAct <= 26.190)

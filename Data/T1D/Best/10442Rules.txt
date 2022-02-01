@@ -1,0 +1,8 @@
+G[0,1](HbA1c <= 12.237 & AutonomicNeuroCl <= 0.000)
+G[0,1](HbA1c <= 11.917 & Pt_MotherT1D <= 0.000)
+F[0,1]((HDL >= 17.823 | Pt_SHFlg <= 0.456) & BUN <= 0.957)
+F[0,0](HDL < 72.846 -> Pt_SHFlg = 0.040)
+((NumPumpBolusOrShortAct >= 1.209) U[1,1] (BUN <= 13.259))
+G[1,1](SMBGperDayPtMeterCombo >= 0.600 & BGTestAvgNumPtRep >= 0.791)
+G[0,0](AlbCreatRat_mggNew <= 407.719 -> BldPrDia <= 68.433)
+G[1,1](SMBGperDayPtMeterCombo >= 1.360 & BGTestAvgNumPtRep >= 2.583)

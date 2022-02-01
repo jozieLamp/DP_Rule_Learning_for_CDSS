@@ -1,0 +1,4 @@
+G[0,0](GFR <= 57.912 -> BUN >= 17.681)
+G[0,0](GFR <= 56.664 -> BUN >= 18.614)
+F[0,0](BGTestAvgNumMeter >= 0.000 -> HeightCm <= 179.838)
+G[0,0](GFR >= 32.879 | WeightKg >= 56.293)

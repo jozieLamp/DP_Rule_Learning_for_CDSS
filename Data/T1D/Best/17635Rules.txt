@@ -1,0 +1,8 @@
+G[0,0](((BldPrDia >= 76.988 | Pt_GrandparentT1D >= 0.000) -> bmi >= 0.000) -> Pt_SHFlg >= 0.000)
+F[0,0](((AlbCreatRat_mggNew <= 42.548 & BUN >= 5.971) | Pt_MotherT1D >= 1.628) & Pt_GrandchildT1D >= 0.841)
+F[0,0]((Pt_DKAFlg >= 0.000 | BldPrDia <= 82.904) & bmi >= 74.068)
+F[0,0](((AlbCreatRat_mggNew >= 37.574 | bmiZscore >= 1.953) | diagAgeCombo <= 2.055) -> Pt_CGMUseNumDays >= 1.929)
+G[0,0](NumPumpBolusOrShortAct >= 0.000 & Pt_SHFlg = 0.000)
+F[0,0](((bmiZscore <= 2.122 | diabDur <= 12.912) -> GFR >= 11.258) & bmi <= 12.563)
+G[0,0](diagAgeCombo >= 3.000 | Pt_MotherT1D >= 0.001)
+G[0,0](((TotalDailyInsPerKg <= 2.063 & TSH >= 0.048) -> BGTestAvgNumMeter <= 1.142) | Pt_FatherT1D >= 0.138)

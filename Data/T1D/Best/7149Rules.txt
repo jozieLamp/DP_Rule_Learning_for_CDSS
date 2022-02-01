@@ -1,0 +1,1 @@
+G[0,0](TotalDailyInsPerKg <= 0.737 & BGTestAvgNumMeter >= 3.106)

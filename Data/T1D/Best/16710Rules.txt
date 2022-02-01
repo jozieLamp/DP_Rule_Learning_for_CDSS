@@ -1,0 +1,6 @@
+G[0,0](((BGTestAvgNumPtRep >= 0.685 & LDL <= 69.753) & UnitsInsBasalOrLongAct <= 76.979) & AutonomicNeuroCl <= 72.640)
+F[0,0]((BldPrDia >= 65.883 -> Triglyc >= 11.686) & BGTestAvgNumPtRep <= 112.597)
+F[0,0](AlbCreatRat_mggNew >= 13.945 & HDL <= 40.305)
+F[0,0]((BGTestAvgNumMeter >= 0.690 -> HeightCm <= 131.124) -> HbA1cImputeDtMnC >= 99.022)
+((Pt_DKAFlg >= 0.000) U[0,0] (bmiZscore <= 0.874))
+F[0,0]((AlbCreatRat_mggNew >= 10.005 & HDL <= 39.370) & Pt_A1cGoalLevelDsYr5 <= 40.820)

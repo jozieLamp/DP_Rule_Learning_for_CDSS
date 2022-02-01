@@ -1,0 +1,6 @@
+G[1,1](((TSH >= 0.259 & BUN <= 0.000) & bmi >= 0.000) -> UnitsInsBasalOrLongAct <= 0.000)
+((BGTestAvgNumPtRep <= 7.480) U[1,1] (TSH >= 0.091))
+G[0,1](BldPrDia >= 67.634 | HbA1c >= 3.871)
+((AlbCreatRat_mggNew >= 126.090) U[1,2] (bmiZscore >= 0.472))
+F[0,0](((LDL >= 0.000 -> BGTestAvgNumMeter >= 3.232) -> TotalDailyInsPerKg >= 2.427) | bmiZscore >= 1.615)
+G[0,1](BGTestAvgNumPtRep <= 7.585 -> WeightKg >= 50.045)

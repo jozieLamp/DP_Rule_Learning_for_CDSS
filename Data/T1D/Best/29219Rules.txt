@@ -1,0 +1,7 @@
+G[0,0]((Pt_GrandchildT1D <= 0.000 & TSH >= 0.151) & diagAgeCombo <= 1.227)
+F[0,0](BGTestAvgNumMeter <= 2.489 & Pt_A1cGoalLevelDsYr5 <= 0.000)
+F[0,0](Pt_CGMUseNumDays < 3.523 -> Pt_SHFlg = 0.635)
+F[0,0]((LDL >= 5.477 & WeightKg <= 58.134) & Pt_GrandparentT1D <= 55.740)
+((diagAgeCombo >= 0.351) U[0,0] (bmi <= 24.065))
+F[0,0](WeightKg <= 57.492 & Triglyc >= 62.802)
+((LDL >= 7.014) U[0,0] (NumPumpBolusOrShortAct >= 1.267))

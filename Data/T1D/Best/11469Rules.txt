@@ -1,0 +1,5 @@
+G[0,0](((BGTestAvgNumMeter <= 1.985 -> HbA1cImputeDtMnC <= 52.524) & HDL >= 25.480) & Pt_GrandparentT1D <= 58.306)
+F[0,0](BGTestAvgNumPtRep <= 3.279 & UnitsInsBasalOrLongAct >= 6.487)
+((BGTestAvgNumMeter >= 1.143) U[0,0] (BGTestAvgNumPtRep <= 2.688))
+G[0,0]((AutonomicNeuroCl <= 0.000 -> diabDur <= 26.501) -> bmi <= 26.419)
+((BGTestAvgNumMeter >= 0.249) U[0,0] (BGTestAvgNumPtRep <= 3.456))

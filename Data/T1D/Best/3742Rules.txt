@@ -1,0 +1,5 @@
+G[0,1](TSH <= 0.976 | TSH <= 0.863)
+((bmiZscore >= -0.913) U[1,1] (TotalDailyInsPerKg >= 0.026))
+F[1,1]((HbA1cImputeDtMnC <= 43.540 & AlbCreatRat_mggNew <= 3.349) | Pt_A1cGoalLev >= 0.151)
+((bmiPerc <= 0.213) U[1,1] (UnitsInsBasalOrLongAct >= 1.428))
+F[0,0]((WeightKg >= 21.570 & HeightCm <= 142.025) | Pt_GrandchildT1D >= 132.508)

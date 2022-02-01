@@ -1,0 +1,8 @@
+G[0,0](WeightKg <= 33.309 -> age >= 6.226)
+F[0,0](Triglyc >= 16.866 & BldPrSys >= 124.689)
+((HbA1c >= 8.667) U[0,0] (SMBGperDayPtMeterCombo <= 5.125))
+((bmiZscore <= 2.055) U[0,0] (BGTestAvgNumPtRep >= 0.807))
+((BldPrDia >= 74.275) U[0,0] (Pt_A1cGoalLev >= 0.048))
+G[0,0]((Pt_ChildT1D >= 0.000 -> HDL <= 64.651) & TotChol <= 65.880)
+((HbA1cImputeDtMnC >= 5.450) U[0,0] (UnitsInsBasalOrLongAct <= 13.575))
+G[0,0](bmiZscore >= 1.216 -> LDL <= 39.988)

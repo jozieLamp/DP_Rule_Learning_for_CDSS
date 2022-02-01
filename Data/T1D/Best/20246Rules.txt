@@ -1,0 +1,8 @@
+G[0,1](AlbCreatRat_mggNew >= 2.905 | LDL <= 86.506)
+((HDL >= 81.196) U[1,2] (LDL >= 61.979))
+F[0,0](Pt_DKAFlg >= 0.000 & BGTestAvgNumMeter <= 3.103)
+((BldPrSys <= 141.487) U[1,1] (TotChol >= 156.882))
+F[0,1](Pt_GrandchildT1D >= 0.000 -> BldPrSys <= 130.113)
+((bmi <= 23.222) U[0,0] (HbA1cImputeDtMnC <= 34.079))
+((Pt_CGMUseNumDays <= 19.564) U[0,1] (TotChol >= 163.838))
+F[0,1]((age <= 54.570 | HDL >= 86.443) & UnitsInsBasalOrLongAct <= 104.049)

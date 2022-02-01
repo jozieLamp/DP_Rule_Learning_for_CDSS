@@ -1,0 +1,2 @@
+F[0,0]((LDL <= 0.000 -> HbA1c >= 7.538) & Pt_SiblingT1D <= 8.807)
+F[0,0](HeightCm <= 174.163 & Pt_GrandparentT1D <= 0.469)

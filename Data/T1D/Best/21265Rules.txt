@@ -1,0 +1,7 @@
+G[0,0](((diabDur <= 11.717 | NumPumpBolusOrShortAct <= 2.560) | BGTestAvgNumPtRep >= 0.140) | Pt_DKAFlg <= 2.371)
+G[0,0]((HDL <= 55.008 -> Pt_CGMUseNumDays >= 0.000) | TotalDailyInsPerKg >= 0.000)
+G[0,0]((TotalDailyInsPerKg <= 1.403 | SMBGperDayPtMeterCombo >= 0.202) | bmiPerc <= 2.403)
+G[0,0](TotChol <= 148.189 -> Pt_GrandchildT1D >= 0.000)
+G[0,0](NumPumpBolusOrShortAct > 1.405 -> Pt_SHFlg = 0.000)
+G[0,0]((Pt_SHFlg >= 0.000 -> BGTestAvgNumMeter <= 1.495) | Pt_ChildT1D <= 2.432)
+G[0,0](((Pt_ChildT1D <= 0.000 | TotChol >= 60.897) -> Pt_DKAFlg <= 100.653) | Pt_A1cGoalLevelDsYr5 >= 59.152)

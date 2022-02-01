@@ -1,0 +1,4 @@
+G[0,0]((age <= 15.643 | TotalDailyInsPerKg <= 1.219) -> HbA1cImputeDtMnC >= 0.946)
+F[0,0](LDL >= 15.329 & SMBGperDayPtMeterCombo <= 3.739)
+((age <= 16.817) U[0,0] (Pt_InsGov >= 0.137))
+F[0,0](LDL >= 28.501 & Pt_CGMUseNumDays >= 0.000)

@@ -1,0 +1,6 @@
+G[0,0]((WeightKg >= 106.741 | bmi >= 35.595) -> UnitsInsBasalOrLongAct <= 33.446)
+((NumPumpBolusOrShortAct <= 2.783) U[0,0] (TotChol >= 20.391))
+F[0,0]((AlbCreatRat_mggNew >= 3.364 & GFR >= 10.507) & HDL >= 8.607)
+((BGTestAvgNumMeter >= 0.747) U[0,0] (BGTestAvgNumPtRep <= 6.875))
+((BGTestAvgNumMeter >= 1.485) U[0,0] (BGTestAvgNumPtRep <= 6.614))
+G[0,0](HbA1c >= 6.870 & SMBGperDayPtMeterCombo >= 4.389)

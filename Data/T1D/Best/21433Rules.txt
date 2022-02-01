@@ -1,0 +1,4 @@
+F[0,0](bmi <= 22.913 | HbA1cImputeDtMnC <= 65.350)
+((diabDur >= 8.665) U[0,0] (NumPumpBolusOrShortAct >= 4.946))
+((AlbCreatRat_mggNew >= 13.175) U[0,0] (HDL <= 67.879))
+F[0,0]((BldPrSys >= 110.080 & TSH <= 39.204) | GFR <= 11.019)

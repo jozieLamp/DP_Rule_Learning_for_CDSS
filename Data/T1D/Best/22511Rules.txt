@@ -1,0 +1,8 @@
+G[1,1](age <= 39.177 -> TSH <= 1.045)
+F[0,0](bmiZscore >= -0.710 & Pt_GrandchildT1D <= 0.000)
+F[0,1](HbA1cImputeDtMnC <= 36.351 & TSH >= 0.487)
+F[1,1]((BGTestAvgNumPtRep >= 0.450 & HbA1c >= 3.406) & WeightKg >= 7.212)
+F[1,1]((age >= 38.755 | UnitsInsBasalOrLongAct <= 20.015) -> Pt_GrandchildT1D >= 6.046)
+((BGTestAvgNumMeter >= 0.083) U[0,0] (bmi <= 19.624))
+G[0,0](((age <= 41.852 -> Pt_FatherT1D <= 0.426) | Pt_MotherT1D >= 0.070) -> bmi >= 0.120)
+G[1,1](AlbCreatRat_mggNew >= 0.979 | BldPrDia >= 63.588)

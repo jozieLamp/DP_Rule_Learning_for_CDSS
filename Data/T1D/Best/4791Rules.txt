@@ -1,0 +1,6 @@
+G[1,1](((BGTestAvgNumMeter <= 2.708 | Pt_CGMUseNumDays >= 4.958) | Pt_GrandparentT1D >= 0.709) | NumPumpBolusOrShortAct >= 1.442)
+F[1,1]((BldPrDia <= 66.720 -> Pt_CGMUseNumDays >= 2.072) & diabDur >= 0.090)
+G[0,0]((UnitsInsBasalOrLongAct <= 25.050 | SMBGperDayPtMeterCombo <= 2.942) | LDL <= 2.913)
+((age <= 18.956) U[1,1] (TSH >= 0.100))
+G[1,1](bmiPerc <= 0.952 -> NumPumpBolusOrShortAct >= 1.198)
+G[0,1](((HDL <= 47.758 | Triglyc <= 101.639) & diabDur <= 102.660) & Pt_A1cGoalLev <= 85.899)

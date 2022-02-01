@@ -1,0 +1,5 @@
+G[0,0](diabDur >= 11.108 & Pt_CGMUseNumDays >= 0.000)
+G[0,0]((Pt_FatherT1D <= 0.000 | TSH >= 0.798) & Triglyc <= 1.875)
+G[0,0](bmiZscore >= -0.742 -> HbA1cImputeDtMnC >= 0.487)
+((bmiPerc <= 0.409) U[0,0] (SMBGperDayPtMeterCombo >= 2.442))
+G[0,0](Pt_SHFlg >= 0.240 -> Triglyc <= 77.561)

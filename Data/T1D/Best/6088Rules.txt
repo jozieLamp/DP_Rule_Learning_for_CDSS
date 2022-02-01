@@ -1,0 +1,4 @@
+G[0,0]((Triglyc <= 165.938 | UnitsInsBasalOrLongAct >= 10.868) -> LDL <= 30.997)
+F[0,0](((Pt_CGMUseNumDays <= 0.000 & BGTestAvgNumPtRep <= 3.934) & Triglyc >= 0.028) & Pt_A1cGoalLevelDsYr5 <= 2.822)
+G[0,0]((Pt_SHFlg >= 0.030 & TotalDailyInsPerKg >= 0.013) | Triglyc <= 0.389)
+F[0,0](BGTestAvgNumMeter <= 2.050 & age <= 13.465)

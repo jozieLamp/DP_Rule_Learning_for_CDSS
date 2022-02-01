@@ -1,0 +1,4 @@
+G[1,1]((TSH <= 0.204 -> AlbCreatRat_mggNew <= 33.621) & diagAgeCombo >= 1.320)
+G[1,1]((WeightKg >= 72.371 | bmi >= 27.629) -> UnitsInsBasalOrLongAct <= 31.297)
+((bmiZscore >= -0.265) U[1,1] (BldPrDia <= 83.949))
+F[1,1](Triglyc <= 77.658 & age >= 57.299)

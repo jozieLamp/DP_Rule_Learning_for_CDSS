@@ -1,0 +1,7 @@
+G[0,0]((BGTestAvgNumPtRep <= 5.522 -> SMBGperDayPtMeterCombo >= 0.917) | UnitsInsBasalOrLongAct <= 3.613)
+G[0,1]((WeightKg >= 51.289 | bmi >= 21.454) -> UnitsInsBasalOrLongAct <= 7.624)
+F[0,1]((Pt_A1cGoalLevelDsYr5 >= 0.000 & UnitsInsBasalOrLongAct <= 9.454) -> Pt_CGMUseNumDays >= 2.290)
+((UnitsInsBasalOrLongAct >= 0.564) U[1,2] (Pt_CGMUseNumDays <= 0.000))
+G[1,1](((TotChol <= 47.127 | TSH >= 0.223) & BGTestAvgNumPtRep >= 0.263) & BldPrDia >= 0.091)
+G[0,1]((WeightKg >= 48.050 | bmi >= 21.231) -> UnitsInsBasalOrLongAct <= 13.098)
+G[0,0]((WeightKg >= 45.055 | bmi >= 18.979) -> UnitsInsBasalOrLongAct <= 12.868)

@@ -1,0 +1,6 @@
+G[0,1](GFR <= 41.082 -> BUN >= 9.237)
+F[0,1](BGTestAvgNumMeter <= 0.729 & UnitsInsBasalOrLongAct >= 4.071)
+G[0,1](GFR <= 38.023 -> BUN >= 7.869)
+G[0,1](Pt_MotherT1D >= 0.000 -> AlbCreatRat_mggNew >= 7.515)
+G[0,1](Triglyc >= 33.563 -> AlbCreatRat_mggNew >= 51.233)
+F[0,0](((BldPrSys >= 112.499 & HbA1c <= 8.253) -> HeightCm <= 8.738) & TotChol <= 8.460)

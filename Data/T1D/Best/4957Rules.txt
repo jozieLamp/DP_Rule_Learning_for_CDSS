@@ -1,0 +1,2 @@
+F[1,1]((bmiPerc <= 0.837 & HbA1c <= 9.219) & SMBGperDayPtMeterCombo <= 8.861)
+F[1,1](((SMBGperDayPtMeterCombo <= 12.290 & bmiZscore <= 0.994) & Pt_SHFlg >= 0.910) | AlbCreatRat_mggNew <= 0.987)

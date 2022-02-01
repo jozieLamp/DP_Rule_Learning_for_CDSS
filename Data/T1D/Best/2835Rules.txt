@@ -1,0 +1,4 @@
+G[0,0](bmiZscore <= 0.497 | TotChol <= 177.727)
+((HDL <= 56.306) U[0,0] (TSH <= 2.516))
+F[0,0]((AlbCreatRat_mggNew >= 0.466 -> SMBGperDayPtMeterCombo <= 8.874) -> GFR >= 5.221)
+((Pt_CGMUseNumDays <= 15.388) U[0,0] (UnitsInsBasalOrLongAct <= 17.283))

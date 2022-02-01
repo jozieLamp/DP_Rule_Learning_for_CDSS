@@ -1,0 +1,2 @@
+((NumPumpBolusOrShortAct >= 0.165) U[0,1] (Triglyc >= 3.694))
+F[1,1](BUN <= 4.457 & Triglyc >= 2.228)

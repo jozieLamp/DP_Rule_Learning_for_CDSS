@@ -1,0 +1,5 @@
+G[0,0](HbA1c >= 8.765 -> LDL <= 45.872)
+F[0,0](HbA1c >= 8.420 & HDL >= 14.474)
+F[0,0]((HDL <= 52.070 -> BGTestAvgNumPtRep >= 4.547) & SMBGperDayPtMeterCombo <= 5.810)
+G[0,0](GFR <= 0.000 -> BUN >= 13.620)
+G[0,0](GFR <= 0.000 -> BUN >= 13.704)

@@ -1,0 +1,3 @@
+F[0,0]((BldPrDia <= 72.609 & Pt_SHFlg >= 0.171) | GFR >= 0.192)
+((AutonomicNeuroCl <= 0.000) U[0,0] (BGTestAvgNumPtRep >= 0.012))
+F[0,0](((BGTestAvgNumPtRep >= 1.024 -> UnitsInsBasalOrLongAct >= 8.048) | AutonomicNeuroCl <= 14.135) -> BGTestAvgNumPtRep >= 3.715)

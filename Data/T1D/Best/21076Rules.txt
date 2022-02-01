@@ -1,0 +1,6 @@
+G[0,1](((HeightCm >= 178.975 -> Pt_SHFlg >= 0.160) | Triglyc >= 0.036) -> HDL <= 0.893)
+G[0,1]((TotalDailyInsPerKg <= 0.472 & bmiZscore <= 1.456) | TSH <= 1.394)
+F[0,0](((bmi >= 25.045 | bmiZscore <= 1.720) -> Pt_SHFlg <= 1.697) -> AlbCreatRat_mggNew >= 0.452)
+((TotalDailyInsPerKg <= 0.584) U[0,1] (AlbCreatRat_mggNew >= 1.216))
+((diabDur >= 0.396) U[0,1] (Triglyc >= 7.978))
+G[0,0]((bmiPerc >= 0.916 & Triglyc >= 3.925) -> BUN >= 5.501)

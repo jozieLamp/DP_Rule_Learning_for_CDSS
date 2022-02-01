@@ -1,0 +1,7 @@
+G[0,0](((Pt_MotherT1D >= 0.000 -> bmiPerc >= 0.083) -> Pt_A1cGoalLevelDsYr5 <= 0.297) -> HbA1cImputeDtMnC >= 0.084)
+G[0,0](BUN >= 0.974 | TSH >= 0.475)
+F[0,0](BUN <= 6.004 & LDL >= 41.870)
+G[0,0](bmiPerc <= 0.203 | Triglyc >= 228.237)
+G[0,0](GFR <= 40.831 -> BUN >= 4.978)
+G[0,0](GFR <= 88.713 -> BUN >= 3.714)
+G[0,0](GFR <= 31.332 -> BUN >= 3.815)

@@ -1,0 +1,6 @@
+G[0,0](((LDL <= 103.073 -> UnitsInsBasalOrLongAct <= 9.438) & TotalDailyInsPerKg <= 10.853) -> Pt_GrandparentT1D >= 5.772)
+F[0,0](AlbCreatRat_mggNew <= 11.205 -> BldPrDia <= 79.803)
+((BldPrSys <= 112.060) U[0,0] (HbA1c >= 0.484))
+G[0,0](BUN <= 14.589 -> Pt_SHFlg = 0.414)
+F[0,0](bmi <= 24.751 | LDL >= 43.665)
+G[0,0](UnitsInsBasalOrLongAct >= 7.976 & Pt_CGMUseNumDays >= 0.000)

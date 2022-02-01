@@ -1,0 +1,2 @@
+G[0,1](TSH >= 0.291 | bmiZscore <= 1.961)
+G[0,0](BldPrSys <= 107.428 -> bmiPerc <= 0.967)

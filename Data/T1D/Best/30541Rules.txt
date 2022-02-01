@@ -1,0 +1,4 @@
+G[0,0](LDL <= 71.586 -> TotalDailyInsPerKg <= 1.088)
+F[0,0](BGTestAvgNumMeter >= 1.916 & BGTestAvgNumPtRep >= 0.961)
+G[0,0](((diabDur >= 9.210 -> Pt_A1cGoalLev <= 3.857) | HeightCm <= 5.327) & BUN <= 5.288)
+((UnitsInsBasalOrLongAct >= 26.000) U[0,0] (HeightCm <= 160.160))

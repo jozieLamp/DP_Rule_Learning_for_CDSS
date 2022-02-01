@@ -1,0 +1,6 @@
+G[0,1]((bmiZscore >= 0.174 & HeightCm <= 172.388) -> bmi >= 171.227)
+F[0,0]((bmiPerc <= 0.777 & bmiPerc >= 0.054) | BGTestAvgNumMeter <= 0.676)
+F[1,1](AlbCreatRat_mggNew >= 5.650 | Pt_SHFlg >= 0.246)
+((BldPrDia <= 74.969) U[0,0] (bmiZscore >= 0.300))
+G[0,1]((bmiPerc >= 0.117 -> HbA1cImputeDtMnC <= 36.341) -> HbA1cImputeDtMnC >= 20.733)
+((UnitsInsBasalOrLongAct <= 52.167) U[0,1] (bmiZscore >= 0.129))

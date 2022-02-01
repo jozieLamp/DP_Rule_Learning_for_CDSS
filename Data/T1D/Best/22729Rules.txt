@@ -1,0 +1,2 @@
+G[0,0]((BldPrDia >= 63.713 & BldPrSys >= 102.219) | HeightCm <= 108.213)
+F[0,0](bmiPerc >= 0.374 & diabDur >= 0.752)

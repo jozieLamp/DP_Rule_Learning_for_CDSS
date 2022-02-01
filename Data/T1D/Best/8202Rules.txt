@@ -1,0 +1,7 @@
+G[0,0]((HDL >= 50.814 | TSH >= 0.337) -> Pt_A1cGoalLevelDsYr5 >= 0.196)
+((BGTestAvgNumMeter >= 1.832) U[0,0] (BGTestAvgNumPtRep <= 4.313))
+((AutonomicNeuroCl <= 0.000) U[0,0] (UnitsInsBasalOrLongAct <= 52.202))
+F[0,0](UnitsInsBasalOrLongAct > 13.851 -> Pt_SHFlg = 0.438)
+((BGTestAvgNumMeter >= 2.129) U[0,0] (BGTestAvgNumPtRep <= 4.184))
+G[0,0](((BUN <= 10.390 & diabDur <= 10.580) -> BldPrDia <= 10.452) & Pt_A1cGoalLev <= 10.580)
+((BGTestAvgNumMeter >= 1.720) U[0,0] (BGTestAvgNumPtRep <= 4.790))

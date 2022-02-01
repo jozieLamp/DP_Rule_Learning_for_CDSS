@@ -1,0 +1,7 @@
+G[0,0]((Pt_InsGov <= 0.000 -> TSH >= 1.134) & HeightCm >= 0.886)
+((bmi >= 15.196) U[0,0] (UnitsInsBasalOrLongAct <= 9.742))
+((HbA1cImputeDtMnC >= 12.394) U[0,0] (HDL >= 0.856))
+F[0,0]((GFR >= 0.000 -> bmi >= 15.462) -> Pt_MotherT1D >= 15.227)
+F[0,0]((WeightKg >= 34.075 -> Pt_DKAFlg >= 0.000) & TSH <= 0.000)
+((Pt_InsGov >= 0.000) U[0,0] (TotChol >= 42.962))
+F[0,0]((HDL <= 59.378 | TotalDailyInsPerKg <= 0.703) -> Pt_SHFlg >= 0.336)

@@ -1,0 +1,6 @@
+G[0,0](AutonomicNeuroCl >= 0.000 -> TotalDailyInsPerKg >= 2.374)
+F[0,0](((BGTestAvgNumPtRep >= 0.647 & bmiPerc <= 0.000) | NumPumpBolusOrShortAct <= 0.000) | WeightKg <= 0.000)
+F[0,0](Pt_GrandparentT1D >= 0.000 -> Pt_CGMUseNumDays >= 0.124)
+F[0,0](bmiZscore <= 0.928 -> Pt_SHFlg >= 0.066)
+G[0,0](BGTestAvgNumPtRep <= 5.357 | NumPumpBolusOrShortAct >= 0.867)
+G[0,0]((AutonomicNeuroCl >= 0.000 -> Pt_FatherT1D >= 0.000) & BGTestAvgNumPtRep <= 0.000)

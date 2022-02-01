@@ -1,0 +1,5 @@
+G[0,0](SMBGperDayPtMeterCombo >= 2.833 & BGTestAvgNumPtRep >= 0.221)
+F[0,0](((diabDur <= 7.783 & SMBGperDayPtMeterCombo <= 3.300) | Pt_GrandchildT1D >= 2.204) & Pt_SHFlg <= 3.873)
+F[0,0](((NumPumpBolusOrShortAct >= 0.495 & diabDur <= 6.987) | DirectLDL >= 4.139) | AutonomicNeuroCl >= 3.059)
+G[0,0]((HbA1c <= 10.099 & HbA1cImputeDtMnC >= 16.601) -> Pt_DKAFlg >= 15.632)
+F[0,0](age <= 13.642 & SMBGperDayPtMeterCombo <= 3.779)

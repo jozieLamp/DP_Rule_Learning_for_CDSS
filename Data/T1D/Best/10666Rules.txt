@@ -1,0 +1,2 @@
+G[0,0](TotChol <= 80.442 -> Pt_SHFlg = 0.822)
+((BGTestAvgNumMeter >= 2.079) U[0,0] (BGTestAvgNumPtRep <= 7.377))

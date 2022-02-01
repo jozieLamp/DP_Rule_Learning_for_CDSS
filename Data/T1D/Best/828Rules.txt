@@ -1,0 +1,6 @@
+G[0,0](HbA1c >= 7.748 -> Triglyc >= 10.629)
+G[0,0](BldPrDia <= 64.559 -> HbA1cImputeDtMnC >= 42.423)
+((BGTestAvgNumPtRep >= 0.863) U[0,0] (Pt_SHFlg >= 0.016))
+F[0,0](BldPrDia >= 56.127 & Triglyc <= 78.501)
+F[0,0](((HeightCm <= 146.096 | BGTestAvgNumMeter >= 4.030) & Triglyc <= 7.077) & SMBGperDayPtMeterCombo <= 10.541)
+G[0,0](AlbCreatRat_mggNew <= 2.139 -> UnitsInsBasalOrLongAct >= 1.667)

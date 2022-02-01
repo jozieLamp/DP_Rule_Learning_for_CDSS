@@ -1,0 +1,6 @@
+G[0,0](TSH <= 2.386 -> BldPrDia <= 69.204)
+((age >= 14.446) U[0,0] (bmi <= 18.172))
+F[0,0](((bmiZscore <= -1.023 & TotalDailyInsPerKg >= 0.540) -> BGTestAvgNumPtRep >= 0.598) & Pt_GrandchildT1D <= 0.769)
+G[0,0](HbA1cImputeDtMnC >= 19.170 & BUN <= 14.560)
+F[0,0]((bmi <= 17.917 & HDL >= 41.780) | Pt_ChildT1D >= 38.337)
+G[0,0](diabDur <= 6.807 -> Triglyc >= 55.262)

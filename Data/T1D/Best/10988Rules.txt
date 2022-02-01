@@ -1,0 +1,1 @@
+G[0,0]((TSH >= 0.002 & TotalDailyInsPerKg <= 0.200) | Pt_ChildT1D <= 0.209)

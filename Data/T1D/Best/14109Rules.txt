@@ -1,0 +1,4 @@
+G[0,0](((Pt_InsGov <= 0.917 & Pt_SHFlg <= 0.352) | bmiZscore >= 0.124) | bmiZscore >= 0.002)
+F[0,0](Pt_SHFlg >= 0.140 & TotChol <= 160.489)
+((age <= 10.762) U[0,0] (Pt_SHFlg >= 0.188))
+((Pt_A1cGoalLev >= 0.477) U[0,0] (TotalDailyInsPerKg >= 0.111))

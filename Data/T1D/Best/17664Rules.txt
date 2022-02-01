@@ -1,0 +1,5 @@
+G[0,0](((BUN <= 9.270 | diabDur <= 17.619) -> Pt_A1cGoalLevelDsYr5 <= 18.577) & HbA1cImputeDtMnC >= 14.054)
+G[0,0](diabDur <= 18.539 -> TSH >= 0.640)
+((DirectLDL >= 0.066) U[0,0] (Pt_SHFlg >= 0.109))
+((age <= 24.313) U[0,0] (Triglyc >= 5.736))
+G[0,0](Triglyc >= 3.838 -> TSH >= 1.026)

@@ -1,0 +1,5 @@
+G[0,0](((HbA1cImputeDtMnC >= 19.866 | Pt_GrandchildT1D >= 0.000) | UnitsInsBasalOrLongAct >= 0.000) & TotChol <= 0.000)
+F[0,0](BGTestAvgNumMeter <= 2.487 & HeightCm <= 176.337)
+F[0,0](Pt_GrandchildT1D >= 0.000 -> HbA1c <= 8.999)
+((Pt_A1cGoalLev >= 1.263) U[0,0] (TotalDailyInsPerKg <= 0.999))
+F[0,0](((SMBGperDayPtMeterCombo >= 2.199 -> WeightKg <= 66.890) | UnitsInsBasalOrLongAct >= 46.301) & bmi <= 59.971)

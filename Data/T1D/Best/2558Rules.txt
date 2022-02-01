@@ -1,0 +1,8 @@
+G[0,0](((BGTestAvgNumPtRep <= 5.424 & BUN <= 5.254) & Pt_CGMUseNumDays <= 5.184) | Pt_ChildT1D <= 10.451)
+G[0,0](((bmiPerc >= 0.894 | TotalDailyInsPerKg >= 0.072) -> Pt_ChildT1D >= 0.138) -> BUN >= 0.325)
+G[0,0](((HDL >= 20.371 | Pt_InsGov <= 0.625) & LDL <= 0.818) | HeightCm >= 0.009)
+G[0,0]((BldPrSys <= 122.547 -> Triglyc <= 50.434) -> bmiZscore <= 27.090)
+G[0,0]((BldPrSys <= 114.497 | HDL <= 23.427) -> DirectLDL <= 38.592)
+G[0,0](((AlbCreatRat_mggNew >= 3.154 | HbA1c >= 7.500) & BGTestAvgNumPtRep >= 7.246) -> Pt_SHFlg >= 7.366)
+G[0,0](BldPrSys <= 121.353 | HbA1c <= 8.035)
+G[0,0]((HDL <= 46.689 | Pt_GrandchildT1D <= 0.000) & DirectLDL >= 0.000)

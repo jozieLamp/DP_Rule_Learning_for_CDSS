@@ -1,0 +1,6 @@
+G[0,0](SMBGperDayPtMeterCombo <= 4.620 & TotalDailyInsPerKg >= 0.107)
+F[0,0]((NumPumpBolusOrShortAct <= 2.529 & TSH <= 3.660) & Pt_FatherT1D <= 3.124)
+F[0,0](BGTestAvgNumMeter <= 3.952 & TotalDailyInsPerKg <= 0.372)
+F[0,0]((Pt_MotherT1D <= 0.749 | BGTestAvgNumMeter >= 0.622) -> Pt_SiblingT1D >= 1.638)
+F[0,0](((SMBGperDayPtMeterCombo >= 2.886 | TSH >= 0.898) & BGTestAvgNumMeter <= 4.433) -> UnitsInsBasalOrLongAct <= 4.526)
+F[0,0]((NumPumpBolusOrShortAct >= 0.513 -> Pt_ChildT1D >= 0.042) | Pt_SiblingT1D >= 0.104)

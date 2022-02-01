@@ -1,0 +1,6 @@
+G[0,1](((BUN <= 5.407 -> TotalDailyInsPerKg <= 0.813) -> TSH >= 0.210) | bmiPerc <= 0.829)
+F[0,1]((HbA1c >= 8.410 | Triglyc >= 29.427) -> Pt_SHFlg >= 33.322)
+F[0,0](Pt_GrandparentT1D <= 0.000 & Triglyc >= 15.596)
+F[0,0](BUN <= 9.223 -> LDL >= 2.355)
+F[1,1](HbA1cImputeDtMnC >= 27.486 -> UnitsInsBasalOrLongAct <= 24.260)
+F[0,0](((Pt_GrandparentT1D <= 0.000 & HeightCm >= 146.100) | Pt_SiblingT1D >= 146.105) -> bmiZscore >= 146.427)

@@ -1,0 +1,8 @@
+G[0,0](Pt_A1cGoalLev <= 6.604 -> TotalDailyInsPerKg <= 0.778)
+G[0,0]((diabDur <= 7.281 -> TotalDailyInsPerKg <= 0.658) | HbA1cImputeDtMnC <= 1.107)
+((BGTestAvgNumMeter >= 3.383) U[0,0] (BGTestAvgNumPtRep <= 2.511))
+F[0,1]((bmiPerc >= 0.831 & HbA1cImputeDtMnC <= 52.747) | HeightCm <= 45.652)
+((BldPrDia <= 60.237) U[1,1] (HbA1cImputeDtMnC >= 20.092))
+F[0,0](BldPrSys >= 29.412 & bmiPerc <= 0.880)
+((LDL >= 34.050) U[0,0] (NumPumpBolusOrShortAct <= 1.482))
+F[0,0]((HbA1c >= 8.370 & WeightKg <= 65.241) & SMBGperDayPtMeterCombo <= 65.206)

@@ -1,0 +1,6 @@
+G[0,0]((HDL >= 41.796 -> TSH <= 1.588) -> TSH >= 0.076)
+G[0,0](((AlbCreatRat_mggNew >= 131.789 -> HbA1cImputeDtMnC >= 21.135) & HbA1c <= 32.879) & DirectLDL <= 55.032)
+G[0,0](HbA1cImputeDtMnC >= 6.637 & Pt_SHFlg <= 0.458)
+G[0,0]((WeightKg >= 112.483 -> Pt_CGMUseNumDays <= 0.000) -> Pt_SHFlg <= 0.000)
+G[0,0](BGTestAvgNumPtRep <= 4.389 & Pt_ChildT1D >= 0.000)
+G[0,0]((BGTestAvgNumMeter <= 1.289 & BldPrSys <= 147.514) -> AutonomicNeuroCl >= 131.170)

@@ -1,0 +1,7 @@
+G[0,0]((BUN >= 39.808 -> BldPrDia <= 70.791) & Triglyc >= 54.514)
+F[0,0]((TSH >= 0.001 -> UnitsInsBasalOrLongAct <= 17.866) & BGTestAvgNumPtRep >= 5.952)
+((LDL <= 87.840) U[0,0] (AlbCreatRat_mggNew >= 69.414))
+F[0,0](Triglyc >= 128.346 -> LDL <= 84.816)
+G[0,0](HbA1cImputeDtMnC >= 11.082 | TSH >= 0.022)
+((HeightCm <= 155.667) U[0,0] (Pt_SHFlg >= 0.217))
+G[0,0](BldPrDia <= 73.790 & Triglyc >= 120.698)

@@ -1,0 +1,5 @@
+G[0,0]((age <= 17.846 & LDL >= 43.999) -> Pt_GrandparentT1D >= 48.661)
+G[0,0](AlbCreatRat_mggNew >= 17.630 -> TotalDailyInsPerKg <= 0.714)
+G[0,0](((bmiPerc >= 0.860 -> Pt_DKAFlg >= 0.000) | Pt_A1cGoalLevelDsYr5 <= 0.000) -> Triglyc <= 0.000)
+F[0,0](GFR >= 0.000 & BldPrDia >= 72.949)
+G[0,0]((bmiZscore >= 1.159 | TSH <= 1.741) & UnitsInsBasalOrLongAct <= 0.914)

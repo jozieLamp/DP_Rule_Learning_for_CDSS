@@ -1,0 +1,6 @@
+G[1,1](SMBGperDayPtMeterCombo >= 0.312 & BGTestAvgNumPtRep >= 0.351)
+G[0,1](((HbA1c <= 8.289 | TotalDailyInsPerKg >= 0.245) & age >= 0.210) -> TSH <= 0.334)
+((BUN >= 7.335) U[1,2] (TSH <= 1.393))
+F[0,1](HbA1cImputeDtMnC <= 49.271 & Pt_GrandparentT1D <= 0.775)
+G[1,1](SMBGperDayPtMeterCombo >= 0.189 & BGTestAvgNumPtRep >= 0.578)
+G[0,1](BGTestAvgNumPtRep >= 0.203 | SMBGperDayPtMeterCombo >= 0.198)

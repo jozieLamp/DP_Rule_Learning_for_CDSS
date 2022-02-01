@@ -1,0 +1,6 @@
+G[0,0]((BldPrSys <= 129.972 & LDL <= 104.889) & NumPumpBolusOrShortAct <= 97.388)
+((AlbCreatRat_mggNew >= 0.000) U[0,0] (diabDur <= 2.994))
+F[0,0](((LDL >= 88.904 -> UnitsInsBasalOrLongAct <= 18.525) -> diabDur >= 17.687) & AutonomicNeuroCl <= 18.478)
+F[0,0]((Pt_InsGov >= 0.113 -> Triglyc <= 123.346) -> Pt_FatherT1D >= 37.929)
+((DirectLDL >= 0.000) U[0,0] (diagAgeCombo >= 3.494))
+F[0,0](diagAgeCombo >= 3.065 & TSH >= 1.170)

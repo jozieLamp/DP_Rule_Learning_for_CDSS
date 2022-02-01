@@ -1,0 +1,1 @@
+G[0,0](BGTestAvgNumPtRep <= 2.444 | BldPrSys >= 0.061)

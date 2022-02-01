@@ -1,0 +1,8 @@
+G[0,0](BldPrSys >= 112.361 -> TotChol <= 90.340)
+F[0,1](((bmiPerc <= 0.826 -> HbA1cImputeDtMnC >= 2.787) & LDL <= 27.098) & HDL <= 37.934)
+F[0,1](((GFR <= 131.494 | age >= 19.052) & diabDur <= 22.451) -> Pt_SHFlg >= 17.988)
+((HeightCm >= 172.771) U[1,1] (diabDur <= 13.562))
+F[1,1]((HeightCm <= 173.525 & Pt_SHFlg <= 0.471) & Pt_MotherT1D <= 0.251)
+G[0,1]((HbA1c >= 0.428 -> Triglyc >= 3.740) | BGTestAvgNumMeter >= 9.884)
+F[0,1](TotChol < 80.161 -> Pt_SHFlg = 0.289)
+G[1,1](HbA1c <= 8.632 | TSH <= 4.566)

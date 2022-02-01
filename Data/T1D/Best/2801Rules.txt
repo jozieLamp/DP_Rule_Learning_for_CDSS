@@ -1,0 +1,4 @@
+G[1,1](BGTestAvgNumPtRep >= 2.220 | UnitsInsBasalOrLongAct >= 18.926)
+G[0,0](WeightKg <= 62.915 -> BGTestAvgNumPtRep >= 0.850)
+F[0,0](HeightCm >= 160.660 & WeightKg <= 64.785)
+G[0,0]((BGTestAvgNumMeter >= 2.104 & WeightKg <= 61.734) -> Pt_A1cGoalLevelDsYr5 >= 56.163)

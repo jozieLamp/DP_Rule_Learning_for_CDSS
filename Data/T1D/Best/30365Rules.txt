@@ -1,0 +1,8 @@
+G[0,0](bmiPerc <= 0.347 -> TSH >= 0.400)
+F[0,0](TotalDailyInsPerKg >= 0.494 -> UnitsInsBasalOrLongAct <= 15.167)
+F[0,0](((Triglyc <= 33.410 | Pt_InsGov <= 0.548) -> Pt_ChildT1D >= 0.281) | LDL >= 0.172)
+((BGTestAvgNumMeter >= 1.312) U[0,0] (Pt_InsGov >= 0.112))
+F[0,0]((bmi <= 17.545 & BUN <= 3.935) | HbA1cImputeDtMnC <= 8.405)
+G[0,0](SMBGperDayPtMeterCombo >= 0.519 & BGTestAvgNumPtRep >= 0.000)
+((age <= 13.219) U[0,0] (HeightCm <= 159.490))
+G[0,0](TotalDailyInsPerKg >= 0.402 & TotalDailyInsPerKg >= 0.453)

@@ -1,0 +1,5 @@
+G[0,0](UnitsInsBasalOrLongAct > 11.155 -> Pt_SHFlg = 0.279)
+F[0,0](Pt_MotherT1D <= 0.000 & Pt_CGMUseNumDays >= 0.463)
+F[0,0](((age <= 10.216 & UnitsInsBasalOrLongAct >= 10.449) & GFR <= 12.575) & Pt_MotherT1D <= 13.307)
+G[0,0](GFR <= 0.000 -> BUN >= 7.539)
+F[0,0](BUN <= 9.681 & BGTestAvgNumMeter >= 4.185)

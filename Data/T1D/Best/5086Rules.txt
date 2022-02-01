@@ -1,0 +1,8 @@
+G[0,1](((NumPumpBolusOrShortAct <= 2.724 & TSH <= 0.885) | HeightCm <= 0.937) -> Pt_InsGov >= 0.360)
+F[0,0]((bmiPerc <= 0.573 & TSH <= 1.046) | LDL >= 0.224)
+((BGTestAvgNumMeter >= 0.843) U[1,1] (BGTestAvgNumPtRep <= 1.839))
+F[1,1](BGTestAvgNumMeter <= 3.578 & BGTestAvgNumPtRep <= 3.007)
+F[1,1](diabDur <= 6.175 & HbA1c >= 6.559)
+F[1,1]((Pt_SHFlg <= 0.599 & diabDur <= 6.238) | Pt_GrandparentT1D >= 2.467)
+((HbA1c >= 7.132) U[1,1] (HbA1cImputeDtMnC <= 36.505))
+F[1,1]((BUN <= 7.555 & Pt_InsGov <= 0.749) & bmi >= 0.025)

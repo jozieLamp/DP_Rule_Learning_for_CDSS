@@ -1,0 +1,6 @@
+G[0,0](GFR <= 82.854 -> BUN >= 11.136)
+G[0,0]((bmi >= 10.087 -> HbA1cImputeDtMnC >= 3.480) -> WeightKg <= 38.389)
+F[0,0](BUN >= 9.320 -> HbA1cImputeDtMnC >= 3.461)
+F[0,0]((BGTestAvgNumPtRep >= 2.281 | bmi <= 24.786) -> NumPumpBolusOrShortAct >= 10.976)
+F[0,0]((bmi >= 12.504 -> TotChol >= 49.527) -> TotalDailyInsPerKg >= 52.541)
+((BGTestAvgNumMeter >= 1.852) U[0,0] (BGTestAvgNumPtRep <= 4.926))

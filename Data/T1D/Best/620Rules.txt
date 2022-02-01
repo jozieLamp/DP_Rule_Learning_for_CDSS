@@ -1,0 +1,4 @@
+G[0,0]((diabDur <= 15.519 -> SMBGperDayPtMeterCombo >= 1.418) | diabDur <= 3.822)
+F[0,0](((BUN >= 1.815 -> Pt_SHFlg <= 0.980) -> TSH <= 0.895) -> GFR >= 0.049)
+G[0,0]((WeightKg >= 26.632 | bmi >= 17.137) -> UnitsInsBasalOrLongAct <= 41.240)
+G[0,0](BUN <= 16.757 | WeightKg <= 59.895)

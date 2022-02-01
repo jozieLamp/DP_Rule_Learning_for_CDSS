@@ -1,0 +1,7 @@
+G[0,0](((DirectLDL <= 0.727 -> TSH <= 0.687) & Pt_SiblingT1D <= 1.529) & TotalDailyInsPerKg >= 0.047)
+G[0,0]((WeightKg >= 88.725 | bmi >= 32.718) -> UnitsInsBasalOrLongAct <= 35.835)
+F[0,0](BldPrSys <= 101.330 & Triglyc <= 116.689)
+((Pt_CGMUseNumDays <= 0.000) U[0,0] (TotalDailyInsPerKg >= 0.502))
+G[0,0](bmiZscore <= 1.895 -> SMBGperDayPtMeterCombo <= 5.171)
+G[0,0]((WeightKg >= 88.651 | bmi >= 32.871) -> UnitsInsBasalOrLongAct <= 45.486)
+G[0,0]((TotChol <= 202.252 & Triglyc <= 160.519) | Pt_GrandparentT1D >= 44.497)

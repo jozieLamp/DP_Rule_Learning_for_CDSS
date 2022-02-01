@@ -1,0 +1,3 @@
+G[0,0]((LDL >= 66.223 | Pt_SHFlg <= 0.827) & Pt_InsGov <= 0.713)
+F[0,0]((HeightCm >= 169.656 | Pt_InsGov <= 0.816) -> Pt_GrandparentT1D >= 0.087)
+F[0,0](((Pt_SiblingT1D <= 0.000 -> BGTestAvgNumPtRep <= 8.851) -> Pt_FatherT1D >= 1.384) & diabDur >= 4.321)

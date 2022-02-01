@@ -1,0 +1,8 @@
+G[0,0](((bmiZscore >= -0.855 & HbA1cImputeDtMnC >= 10.373) & Pt_FatherT1D <= 25.810) & Pt_SiblingT1D <= 27.067)
+G[0,0](SMBGperDayPtMeterCombo >= 6.515 & BGTestAvgNumPtRep >= 0.000)
+G[0,0](((Pt_A1cGoalLev <= 4.541 -> TotalDailyInsPerKg <= 0.910) & bmiZscore <= 0.825) -> bmi <= 0.908)
+F[0,0](((Pt_MotherT1D <= 0.000 | TotalDailyInsPerKg <= 0.679) | Pt_FatherT1D >= 0.516) -> BUN >= 0.138)
+F[0,0](BGTestAvgNumMeter > 6.534 -> Pt_SHFlg = 0.625)
+G[0,0]((Pt_SHFlg <= 0.762 -> TSH >= 2.648) -> LDL >= 2.317)
+G[0,0](TotalDailyInsPerKg <= 0.758 -> WeightKg >= 16.456)
+G[0,0](SMBGperDayPtMeterCombo >= 6.124 & BGTestAvgNumPtRep >= 0.000)

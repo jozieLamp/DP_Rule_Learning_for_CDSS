@@ -1,0 +1,7 @@
+G[1,1]((bmiZscore >= 0.320 | DirectLDL <= 0.353) | BldPrDia <= 0.457)
+F[0,1](age <= 16.192 & TotChol <= 77.992)
+F[0,0](HbA1c <= 10.780 & WeightKg <= 64.844)
+F[0,1](((BUN >= 0.135 & Triglyc >= 18.443) & BGTestAvgNumPtRep <= 70.667) & TotChol >= 22.193)
+G[0,0]((WeightKg >= 48.831 | bmi >= 20.082) -> UnitsInsBasalOrLongAct <= 48.543)
+F[1,1]((diagAgeCombo >= 1.000 & bmiZscore >= 0.332) -> Pt_MotherT1D >= 0.368)
+G[0,1]((WeightKg >= 51.371 | bmi >= 20.688) -> UnitsInsBasalOrLongAct <= 47.197)

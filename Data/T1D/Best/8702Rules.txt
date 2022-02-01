@@ -1,0 +1,8 @@
+G[1,1](((BldPrSys <= 108.335 | Pt_SHFlg >= 0.002) & DirectLDL <= 0.239) | HDL <= 0.660)
+((DirectLDL >= 0.000) U[0,0] (bmiZscore >= -1.045))
+G[1,1](age <= 18.873 -> BldPrSys <= 114.697)
+F[1,1]((diabDur <= 4.491 & UnitsInsBasalOrLongAct >= 9.704) & AutonomicNeuroCl <= 19.351)
+F[0,1]((BGTestAvgNumMeter <= 3.615 & bmiPerc <= 0.169) | diabDur <= 0.185)
+((HbA1cImputeDtMnC >= 7.044) U[1,1] (Pt_CGMUseNumDays <= 5.759))
+G[0,0]((Pt_DKAFlg <= 0.000 -> Pt_GrandparentT1D >= 0.157) | NumPumpBolusOrShortAct <= 0.821)
+G[0,1](diabDur >= 2.678 -> NumPumpBolusOrShortAct <= 2.091)

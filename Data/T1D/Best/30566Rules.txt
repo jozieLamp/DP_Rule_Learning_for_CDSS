@@ -1,0 +1,5 @@
+G[0,0](bmiZscore >= 0.889 -> bmiPerc <= 0.869)
+F[0,0](((TSH >= 0.323 -> age <= 9.713) | Pt_A1cGoalLevelDsYr5 >= 8.231) & UnitsInsBasalOrLongAct <= 9.198)
+G[0,0](HbA1c >= 7.489 & bmi <= 19.007)
+F[0,0](BUN >= 4.264 & BUN >= 0.904)
+G[0,0](bmiZscore <= 1.277 & AlbCreatRat_mggNew <= 0.000)

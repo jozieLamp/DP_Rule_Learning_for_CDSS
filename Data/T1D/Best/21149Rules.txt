@@ -1,0 +1,6 @@
+G[0,0](((AutonomicNeuroCl >= 0.000 & Pt_DKAFlg >= 0.145) & NumPumpBolusOrShortAct <= 0.460) | BGTestAvgNumPtRep >= 0.157)
+((BGTestAvgNumMeter >= 2.658) U[0,0] (BGTestAvgNumPtRep <= 5.856))
+F[0,0](((BldPrDia <= 83.650 & SMBGperDayPtMeterCombo <= 5.771) -> BldPrSys >= 3.400) -> GFR >= 3.439)
+((BGTestAvgNumMeter >= 1.800) U[0,0] (BGTestAvgNumPtRep <= 4.211))
+((BGTestAvgNumMeter >= 1.791) U[0,0] (BGTestAvgNumPtRep <= 5.458))
+((BGTestAvgNumMeter >= 2.621) U[0,0] (BGTestAvgNumPtRep <= 4.393))

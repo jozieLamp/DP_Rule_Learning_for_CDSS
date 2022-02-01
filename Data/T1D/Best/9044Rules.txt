@@ -1,0 +1,7 @@
+G[1,1]((TotalDailyInsPerKg >= 0.355 & Pt_A1cGoalLev >= 0.648) | BGTestAvgNumMeter <= 5.970)
+G[0,0](((BUN >= 3.593 -> HbA1c >= 8.142) -> HDL >= 8.091) | HbA1cImputeDtMnC <= 8.628)
+G[0,1]((AlbCreatRat_mggNew >= 4.459 & TSH <= 1.404) -> Pt_FatherT1D >= 0.169)
+F[0,0](BUN > 1.557 -> Pt_SHFlg = 0.549)
+F[0,0](age >= 8.581 & HbA1c >= 7.879)
+F[1,1](((HDL <= 86.454 -> Pt_A1cGoalLev >= 0.113) -> BGTestAvgNumPtRep <= 4.783) | Pt_GrandparentT1D >= 1.028)
+G[0,0](GFR <= 0.000 -> BUN >= 0.564)

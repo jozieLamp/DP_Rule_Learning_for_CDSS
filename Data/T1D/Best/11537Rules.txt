@@ -1,0 +1,7 @@
+G[0,1](UnitsInsBasalOrLongAct >= 24.350 -> LDL >= 21.772)
+G[0,1](HDL <= 79.035 -> Triglyc >= 64.953)
+F[0,1](BldPrDia <= 67.368 -> Pt_SHFlg = 0.955)
+F[0,1]((bmi <= 29.704 & HbA1c <= 7.629) & WeightKg <= 7.516)
+F[0,1]((Pt_DKAFlg >= 0.114 | Triglyc >= 62.677) -> NumPumpBolusOrShortAct >= 60.843)
+F[1,1]((HbA1cImputeDtMnC <= 50.827 & NumPumpBolusOrShortAct <= 5.400) & GFR >= 0.614)
+G[0,1]((HDL <= 69.366 & SMBGperDayPtMeterCombo <= 4.947) -> WeightKg <= 4.362)

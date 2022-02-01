@@ -1,0 +1,8 @@
+G[0,1](SMBGperDayPtMeterCombo >= 1.857 & BGTestAvgNumPtRep >= 1.962)
+((NumPumpBolusOrShortAct >= 0.313) U[1,1] (BGTestAvgNumMeter >= 0.861))
+F[0,0](BldPrDia > 69.862 -> Pt_SHFlg = 0.240)
+((BGTestAvgNumMeter >= 0.385) U[1,1] (BGTestAvgNumPtRep <= 3.109))
+G[1,1](GFR <= 49.613 -> BUN >= 2.049)
+((TSH >= 0.260) U[1,1] (WeightKg >= 4.965))
+G[0,0](TSH <= 2.152 | Pt_DKAFlg >= 0.103)
+G[0,1](SMBGperDayPtMeterCombo >= 1.644 & BGTestAvgNumPtRep >= 0.146)

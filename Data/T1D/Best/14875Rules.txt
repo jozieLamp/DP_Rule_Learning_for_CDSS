@@ -1,0 +1,2 @@
+G[0,0](((WeightKg >= 65.247 | Pt_A1cGoalLev <= 0.000) & Pt_SHFlg <= 0.000) & AutonomicNeuroCl <= 0.000)
+F[0,0](((UnitsInsBasalOrLongAct >= 0.000 -> BldPrSys <= 117.966) & HeightCm >= 106.767) | WeightKg >= 110.013)

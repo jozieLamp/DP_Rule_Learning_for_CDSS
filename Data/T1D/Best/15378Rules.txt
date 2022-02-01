@@ -1,0 +1,5 @@
+G[0,0]((WeightKg >= 71.099 | bmi >= 25.788) -> UnitsInsBasalOrLongAct <= 5.953)
+G[0,0]((WeightKg >= 71.064 | bmi >= 25.691) -> UnitsInsBasalOrLongAct <= 8.298)
+G[0,0]((WeightKg >= 72.399 | bmi >= 26.287) -> UnitsInsBasalOrLongAct <= 7.979)
+F[0,0](BldPrDia <= 63.947 | NumPumpBolusOrShortAct >= 0.779)
+G[0,0]((WeightKg >= 72.192 | bmi >= 26.727) -> UnitsInsBasalOrLongAct <= 6.219)

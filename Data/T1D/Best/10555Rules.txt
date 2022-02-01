@@ -1,0 +1,6 @@
+G[0,0](NumPumpBolusOrShortAct <= 9.908 | UnitsInsBasalOrLongAct >= 6.808)
+F[0,0]((Pt_GrandchildT1D <= 0.000 & NumPumpBolusOrShortAct >= 0.489) | Pt_A1cGoalLevelDsYr5 >= 1.089)
+F[0,0](Pt_SHFlg >= 0.039 & Pt_GrandchildT1D <= 0.000)
+F[0,0]((BldPrDia >= 63.873 & Triglyc >= 2.198) | HbA1c >= 22.801)
+G[0,0](NumPumpBolusOrShortAct <= 9.565 & Pt_ChildT1D <= 0.000)
+G[0,0](diabDur >= 4.233 & UnitsInsBasalOrLongAct >= 8.126)

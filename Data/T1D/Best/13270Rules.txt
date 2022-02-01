@@ -1,0 +1,5 @@
+F[0,0]((Pt_SiblingT1D >= 0.000 & Pt_InsGov >= 0.191) & UnitsInsBasalOrLongAct <= 0.713)
+F[0,0](BGTestAvgNumMeter <= 3.721 | Pt_SHFlg >= 0.053)
+F[0,0](((BUN <= 16.753 | BGTestAvgNumPtRep >= 0.385) -> Pt_SHFlg >= 0.215) & LDL <= 1.322)
+F[0,0](DirectLDL <= 0.000 -> BldPrDia <= 62.908)
+F[0,0](bmiZscore >= 0.580 & HeightCm <= 164.555)

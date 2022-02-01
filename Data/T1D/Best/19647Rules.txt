@@ -1,0 +1,8 @@
+G[0,0](BldPrSys >= 8.074 & bmiPerc <= 0.948)
+G[1,1](BldPrDia <= 53.700 | Pt_A1cGoalLev >= 0.024)
+F[1,1](Pt_MotherT1D >= 0.000 -> BGTestAvgNumPtRep <= 4.863)
+F[0,0](((UnitsInsBasalOrLongAct >= 6.672 -> Triglyc >= 3.225) -> Pt_SiblingT1D >= 11.363) & bmiZscore <= 26.971)
+((bmi <= 24.483) U[1,1] (TotalDailyInsPerKg <= 1.268))
+G[1,1](SMBGperDayPtMeterCombo >= 3.032 & BGTestAvgNumPtRep >= 0.006)
+G[1,1](SMBGperDayPtMeterCombo >= 3.730 & BGTestAvgNumPtRep >= 0.557)
+G[1,1]((Pt_InsGov >= 0.283 & Pt_SHFlg <= 0.661) | Pt_A1cGoalLev >= 0.077)

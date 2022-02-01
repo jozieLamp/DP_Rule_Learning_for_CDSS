@@ -1,0 +1,7 @@
+G[0,0](((HDL >= 5.115 & TotalDailyInsPerKg >= 0.909) -> Pt_MotherT1D <= 0.964) -> SMBGperDayPtMeterCombo <= 1.295)
+F[0,0]((Pt_FatherT1D <= 0.000 & WeightKg <= 81.731) | age >= 70.403)
+((BGTestAvgNumPtRep <= 1.606) U[0,0] (HbA1cImputeDtMnC <= 53.584))
+F[0,0](bmiZscore <= 0.307 -> TotChol >= 52.992)
+((diabDur <= 9.527) U[0,0] (TotChol >= 45.516))
+((bmiPerc <= 0.602) U[0,0] (HDL >= 38.634))
+F[0,0](((bmiZscore <= 0.315 -> diabDur <= 9.251) -> DirectLDL >= 4.526) -> HDL >= 4.063)

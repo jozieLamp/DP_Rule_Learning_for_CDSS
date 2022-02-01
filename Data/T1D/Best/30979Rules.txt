@@ -1,0 +1,6 @@
+G[0,0](diabDur <= 6.914 -> WeightKg >= 92.142)
+((Pt_InsGov >= 0.000) U[0,0] (diabDur <= 6.543))
+F[0,0](DirectLDL <= 0.908 & Pt_ChildT1D >= 0.000)
+G[0,0](((BldPrSys >= 104.465 | BGTestAvgNumPtRep <= 0.000) -> BldPrDia <= 0.000) | Pt_SHFlg <= 0.000)
+((age >= 14.741) U[0,0] (TSH >= 0.305))
+G[0,0](AlbCreatRat_mggNew >= 0.000 -> SMBGperDayPtMeterCombo <= 5.105)

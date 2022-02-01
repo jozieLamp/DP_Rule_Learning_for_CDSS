@@ -1,0 +1,6 @@
+G[0,0]((HbA1c >= 7.506 -> Pt_GrandchildT1D <= 0.000) -> LDL <= 0.000)
+G[0,0](TotalDailyInsPerKg >= 0.225 & UnitsInsBasalOrLongAct >= 7.698)
+((AlbCreatRat_mggNew >= 0.000) U[0,0] (LDL >= 7.203))
+G[0,0]((age >= 11.819 | HeightCm >= 144.811) | HbA1cImputeDtMnC >= 146.954)
+G[0,0](HDL <= 68.468 & Pt_CGMUseNumDays <= 0.000)
+G[0,0]((bmiZscore >= 0.826 -> Pt_SHFlg <= 0.894) | TotChol >= 0.177)

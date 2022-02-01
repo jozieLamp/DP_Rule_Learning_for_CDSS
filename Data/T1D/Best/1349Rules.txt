@@ -1,0 +1,5 @@
+G[0,0](((BGTestAvgNumMeter <= 8.354 | BGTestAvgNumMeter >= 3.523) | GFR >= 3.167) -> BGTestAvgNumPtRep >= 3.023)
+G[0,1]((bmiPerc <= 0.446 -> bmiZscore >= -0.347) & HbA1cImputeDtMnC >= -0.384)
+((BGTestAvgNumMeter >= 3.493) U[0,0] (BGTestAvgNumPtRep <= 3.329))
+F[1,1]((bmiZscore <= -0.051 -> BGTestAvgNumMeter <= 5.765) -> Pt_FatherT1D >= 2.164)
+F[1,1](HbA1cImputeDtMnC >= 31.409 & HeightCm <= 167.178)

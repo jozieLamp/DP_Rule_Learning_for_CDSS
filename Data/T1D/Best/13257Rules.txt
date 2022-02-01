@@ -1,0 +1,2 @@
+G[0,0]((WeightKg >= 49.423 | bmi >= 21.822) -> UnitsInsBasalOrLongAct <= 40.427)
+F[0,0](HbA1c <= 7.821 & HeightCm >= 158.280)

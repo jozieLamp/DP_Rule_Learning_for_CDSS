@@ -1,0 +1,2 @@
+G[0,0]((WeightKg >= 9.601 | bmi >= 12.577) -> UnitsInsBasalOrLongAct <= 30.880)
+F[0,0]((Pt_InsGov <= 0.697 -> TotalDailyInsPerKg <= 0.344) & UnitsInsBasalOrLongAct >= 0.113)

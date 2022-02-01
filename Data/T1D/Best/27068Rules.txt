@@ -1,0 +1,8 @@
+G[0,0](BldPrSys > 102.604 -> Pt_SHFlg = 0.002)
+F[0,0](Pt_SiblingT1D <= 0.000 & bmi >= 17.214)
+F[0,0](((bmi <= 17.453 -> Pt_InsGov <= 0.955) -> AutonomicNeuroCl <= 0.700) -> BGTestAvgNumPtRep >= 0.105)
+G[0,0](bmi <= 17.334 | bmiPerc <= 0.826)
+F[0,0]((BUN <= 8.925 & GFR <= 0.000) -> TSH <= 0.000)
+G[0,0](BldPrDia >= 58.113 & BldPrSys <= 103.807)
+G[0,0](BGTestAvgNumMeter > 5.090 -> Pt_SHFlg = 0.499)
+G[0,0](bmiZscore >= 0.828 -> Pt_SHFlg = 0.973)

@@ -1,0 +1,2 @@
+G[0,0]((WeightKg >= 45.191 | bmi >= 16.745) -> UnitsInsBasalOrLongAct <= 27.054)
+F[0,0](((HbA1c >= 7.765 | UnitsInsBasalOrLongAct <= 21.843) -> Pt_InsGov >= 1.542) & age <= 20.528)

@@ -1,0 +1,3 @@
+G[0,0](((HbA1cImputeDtMnC <= 32.737 -> DirectLDL <= 0.591) & HeightCm >= 0.143) & Pt_A1cGoalLevelDsYr5 <= 0.481)
+G[0,0](((BUN <= 9.549 -> diabDur <= 4.995) -> SMBGperDayPtMeterCombo >= 2.151) | UnitsInsBasalOrLongAct <= 4.782)
+G[0,0](HbA1cImputeDtMnC <= 29.530 -> HeightCm <= 183.389)

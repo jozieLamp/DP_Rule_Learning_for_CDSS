@@ -1,0 +1,5 @@
+G[0,0](GFR <= 0.000 -> BUN >= 2.085)
+G[0,0](((bmiPerc <= 0.978 & UnitsInsBasalOrLongAct <= 51.467) | BUN <= 69.457) & Triglyc >= 24.308)
+F[0,0](HbA1c >= 0.437 & UnitsInsBasalOrLongAct >= 22.877)
+G[0,0](GFR <= 0.000 -> BUN >= 1.936)
+G[0,0]((BldPrDia <= 69.224 -> LDL >= 30.528) | Pt_SiblingT1D >= 17.488)

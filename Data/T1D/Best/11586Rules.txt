@@ -1,0 +1,1 @@
+G[0,0]((WeightKg >= 84.172 | bmi >= 32.928) -> UnitsInsBasalOrLongAct <= 37.190)

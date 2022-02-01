@@ -1,0 +1,3 @@
+G[0,0]((NumPumpBolusOrShortAct >= 0.920 & bmiZscore >= 2.017) -> NumPumpBolusOrShortAct <= 2.126)
+F[0,0]((age <= 15.058 & Pt_InsGov >= 0.044) | Pt_SHFlg >= 0.054)
+G[0,0]((BUN >= 9.496 & Pt_SHFlg >= 0.007) -> Pt_SHFlg <= 0.835)

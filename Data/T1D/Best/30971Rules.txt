@@ -1,0 +1,4 @@
+G[0,0](SMBGperDayPtMeterCombo >= 6.255 & BGTestAvgNumPtRep >= 6.480)
+F[0,0](((BldPrSys >= 102.944 -> NumPumpBolusOrShortAct <= 3.000) & NumPumpBolusOrShortAct <= 3.000) & Triglyc >= 3.000)
+G[0,0](((bmiZscore >= 0.290 -> HDL >= 8.600) & LDL >= 7.031) -> TSH >= 3.005)
+F[0,0]((AlbCreatRat_mggNew <= 96.563 | BUN <= 11.454) -> LDL >= 1.390)

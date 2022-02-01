@@ -1,0 +1,7 @@
+G[0,1](bmi < 20.568 -> Pt_SHFlg = 0.920)
+F[1,1]((HbA1cImputeDtMnC >= 0.104 -> TotChol <= 153.599) & Pt_DKAFlg <= 93.462)
+F[1,1]((AlbCreatRat_mggNew >= 2.620 & BUN <= 49.220) & TotChol <= 35.118)
+F[1,1]((BldPrDia >= 46.174 & TotalDailyInsPerKg <= 1.306) & bmi >= 0.316)
+((diabDur <= 61.612) U[1,2] (TSH <= 0.000))
+F[0,0](BUN >= 7.287 & HbA1c >= 6.077)
+F[0,0]((BGTestAvgNumPtRep <= 3.799 & TotChol <= 115.330) -> Pt_InsGov >= 13.404)

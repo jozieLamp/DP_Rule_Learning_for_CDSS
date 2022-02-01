@@ -1,0 +1,2 @@
+G[0,1]((AlbCreatRat_mggNew >= 6.031 | bmiZscore >= -0.518) -> bmiZscore <= -0.441)
+F[1,1](HDL >= 51.214 & TotalDailyInsPerKg >= 0.429)

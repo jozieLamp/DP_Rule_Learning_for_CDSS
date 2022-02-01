@@ -1,0 +1,8 @@
+G[0,0]((LDL <= 93.206 | UnitsInsBasalOrLongAct <= 17.828) -> Pt_GrandparentT1D >= 1.204)
+((diabDur <= 17.129) U[0,0] (Pt_SHFlg >= 0.017))
+F[0,0](TSH >= 0.000 & HDL <= 27.976)
+((BldPrDia >= 29.472) U[0,0] (HbA1cImputeDtMnC <= 24.027))
+G[0,0](GFR <= 0.000 -> BUN >= 2.632)
+F[0,0](NumPumpBolusOrShortAct >= 0.000 -> TotalDailyInsPerKg >= 0.074)
+G[0,0]((BldPrDia <= 52.406 -> Pt_InsGov <= 0.480) & HbA1cImputeDtMnC >= 0.201)
+G[0,0](GFR <= 0.000 -> BUN >= 8.786)

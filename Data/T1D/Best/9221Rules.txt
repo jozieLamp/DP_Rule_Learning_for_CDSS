@@ -1,0 +1,4 @@
+G[0,1](((bmiPerc <= 0.899 & WeightKg >= 63.959) & BGTestAvgNumMeter >= 64.393) | BldPrDia >= 65.623)
+G[0,1](AlbCreatRat_mggNew >= 1.822 | bmiPerc <= 0.874)
+G[0,1]((WeightKg >= 66.795 | bmi >= 24.491) -> UnitsInsBasalOrLongAct <= 34.227)
+G[0,1]((WeightKg >= 65.734 | bmi >= 25.610) -> UnitsInsBasalOrLongAct <= 38.519)

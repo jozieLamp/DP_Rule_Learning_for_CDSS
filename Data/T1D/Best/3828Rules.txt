@@ -1,0 +1,6 @@
+G[0,1](Pt_ChildT1D >= 0.000 -> DirectLDL <= 0.360)
+F[1,1]((LDL <= 69.923 | TotChol >= 12.847) -> DirectLDL >= 10.231)
+F[1,1]((BldPrDia >= 86.134 -> HeightCm >= 13.773) -> SMBGperDayPtMeterCombo >= 29.172)
+F[1,1](((HbA1cImputeDtMnC >= 17.433 | TSH >= 1.617) & Triglyc <= 10.364) & GFR <= 6.142)
+F[0,0]((HbA1cImputeDtMnC <= 44.312 & GFR >= 0.000) & WeightKg <= 0.000)
+((BldPrDia >= 85.325) U[1,2] (Pt_MotherT1D <= 0.000))

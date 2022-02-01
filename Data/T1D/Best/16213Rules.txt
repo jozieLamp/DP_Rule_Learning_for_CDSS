@@ -1,0 +1,2 @@
+G[0,0]((TotChol <= 103.357 | BldPrDia <= 75.792) & BGTestAvgNumMeter <= 77.642)
+((Triglyc <= 75.414) U[0,0] (BldPrDia >= 73.254))

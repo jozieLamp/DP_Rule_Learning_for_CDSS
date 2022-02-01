@@ -1,0 +1,3 @@
+G[0,0](AlbCreatRat_mggNew <= 0.000 -> Pt_DKAFlg <= 0.855)
+F[0,0](Pt_CGMUseNumDays >= 0.000 & BGTestAvgNumPtRep >= 2.237)
+((BUN >= 7.646) U[0,0] (bmiPerc >= 0.192))

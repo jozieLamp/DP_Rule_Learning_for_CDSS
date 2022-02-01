@@ -1,0 +1,8 @@
+G[0,0](GFR <= 39.973 -> BUN >= 16.043)
+G[1,1](age <= 56.359 -> Pt_A1cGoalLev >= 0.590)
+F[0,1](NumPumpBolusOrShortAct >= 1.769 & TotChol <= 173.139)
+F[0,0]((AlbCreatRat_mggNew >= 2.965 -> HDL <= 58.618) | Pt_InsGov >= 49.813)
+F[1,1](((Pt_SiblingT1D <= 0.000 & TotalDailyInsPerKg <= 1.052) & Pt_ChildT1D <= 0.909) -> BldPrSys <= 1.007)
+F[0,0](((BGTestAvgNumPtRep >= 3.236 & NumPumpBolusOrShortAct >= 0.685) & Pt_GrandparentT1D <= 3.924) & TSH >= 2.397)
+G[0,0](GFR <= 46.572 -> BUN >= 13.091)
+G[0,1](GFR <= 47.364 -> BUN >= 14.165)

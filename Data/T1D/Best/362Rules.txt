@@ -1,0 +1,8 @@
+F[0,0](TSH <= 0.000 & Pt_SHFlg >= 0.210)
+F[0,0](((bmiZscore <= -0.025 -> TotChol <= 181.955) -> Pt_MotherT1D >= 31.520) & Pt_ChildT1D <= 203.986)
+F[0,0]((BUN >= 7.234 & HbA1cImputeDtMnC <= 32.974) | UnitsInsBasalOrLongAct <= 24.097)
+((AutonomicNeuroCl >= 1.000) U[0,0] (HDL <= 55.833))
+F[0,0]((BGTestAvgNumPtRep >= 0.071 & Pt_A1cGoalLev >= 0.000) & bmiPerc >= 0.000)
+F[0,0]((Pt_ChildT1D >= 0.000 -> HbA1c <= 8.099) -> TotChol <= 8.427)
+F[0,0](((TSH <= 0.000 -> LDL <= 147.627) -> HbA1cImputeDtMnC >= 127.730) -> GFR >= 115.202)
+((BGTestAvgNumMeter >= 5.488) U[0,0] (BGTestAvgNumPtRep >= 2.938))

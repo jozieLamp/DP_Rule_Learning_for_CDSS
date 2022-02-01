@@ -1,0 +1,5 @@
+G[0,0](GFR <= 14.157 -> BUN >= 13.555)
+F[0,0](HeightCm <= 181.371 -> TotalDailyInsPerKg <= 0.509)
+G[0,1](GFR <= 56.120 -> BUN >= 12.738)
+F[0,0](HbA1cImputeDtMnC >= 16.101 & TotalDailyInsPerKg <= 0.527)
+G[0,0](GFR <= 43.412 -> BUN >= 13.050)

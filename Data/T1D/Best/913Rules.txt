@@ -1,0 +1,7 @@
+G[0,0]((HbA1cImputeDtMnC <= 34.673 & WeightKg >= 40.622) -> BGTestAvgNumPtRep >= 37.261)
+((BGTestAvgNumPtRep <= 3.565) U[0,0] (TSH >= 0.093))
+F[1,1]((bmi >= 18.004 -> BldPrDia >= 52.638) -> age >= 54.160)
+((BGTestAvgNumPtRep >= 0.294) U[0,0] (DirectLDL >= 0.126))
+G[0,1](((bmiPerc <= 0.667 & diabDur >= 0.498) -> diabDur <= 2.513) | HbA1cImputeDtMnC <= 2.394)
+F[0,0]((DirectLDL <= 0.872 & HDL <= 0.000) -> age <= 0.000)
+G[0,0](((GFR <= 0.000 -> Pt_SHFlg <= 0.331) & LDL <= 0.886) | WeightKg <= 0.346)

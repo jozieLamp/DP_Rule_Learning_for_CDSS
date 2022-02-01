@@ -1,0 +1,2 @@
+G[0,0](Triglyc <= 43.489 -> HbA1cImputeDtMnC <= 35.139)
+G[0,0](BGTestAvgNumPtRep >= 1.280 | TotalDailyInsPerKg >= 0.187)

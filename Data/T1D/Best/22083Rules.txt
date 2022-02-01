@@ -1,0 +1,8 @@
+G[0,1](GFR <= 76.865 -> BUN >= 5.519)
+F[0,0](((HbA1cImputeDtMnC >= 10.332 & HDL >= 32.461) | BldPrDia >= 30.433) -> LDL <= 56.593)
+G[0,1](((HeightCm >= 159.082 & Pt_SHFlg >= 0.033) -> WeightKg <= 0.822) -> Triglyc >= 0.078)
+G[0,0](GFR <= 46.142 -> BUN >= 5.277)
+G[1,1](BldPrSys <= 127.776 & HbA1c <= 7.805)
+F[0,1]((BGTestAvgNumMeter <= 5.857 & Pt_InsGov >= 0.165) | BUN <= 0.246)
+F[0,1](((BUN >= 10.701 -> WeightKg <= 73.510) -> LDL >= 67.434) -> AutonomicNeuroCl >= 72.545)
+((GFR <= 73.312) U[1,1] (Pt_SHFlg <= 0.195))

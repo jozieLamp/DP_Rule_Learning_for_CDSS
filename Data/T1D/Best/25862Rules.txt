@@ -1,0 +1,2 @@
+F[0,0](((Pt_MotherT1D <= 0.000 & Pt_GrandparentT1D <= 0.940) & BUN >= 0.232) & LDL >= 0.117)
+F[0,0]((bmiZscore <= 0.643 & LDL >= 56.831) -> HbA1cImputeDtMnC >= 51.349)

@@ -1,0 +1,6 @@
+G[0,0](((AlbCreatRat_mggNew >= 1.643 | HbA1cImputeDtMnC <= 61.874) & Pt_SHFlg <= 31.446) & HDL <= 22.226)
+((bmiPerc >= 0.055) U[0,0] (Triglyc >= 12.537))
+F[0,0]((Pt_GrandparentT1D >= 0.000 & TotChol <= 135.683) -> Pt_CGMUseNumDays >= 49.390)
+F[0,0](BldPrSys >= 50.311 -> Triglyc >= 20.429)
+((BldPrSys <= 129.149) U[0,0] (TSH >= 0.595))
+((diabDur <= 4.932) U[0,0] (TSH >= 0.596))

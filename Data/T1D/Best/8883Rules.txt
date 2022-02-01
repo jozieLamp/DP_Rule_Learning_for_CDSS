@@ -1,0 +1,8 @@
+G[0,1](BUN >= 0.000 -> BldPrSys <= 132.922)
+((HbA1cImputeDtMnC >= 14.370) U[1,1] (SMBGperDayPtMeterCombo <= 3.450))
+F[0,1](bmiZscore < 0.502 -> Pt_SHFlg = 0.312)
+F[0,1](AlbCreatRat_mggNew >= 1.204 & BGTestAvgNumMeter <= 2.959)
+G[0,0](BldPrDia <= 87.423 & NumPumpBolusOrShortAct <= 5.320)
+G[0,1](((bmi <= 32.547 & AutonomicNeuroCl <= 1.000) | diagAgeCombo <= 1.000) & TSH <= 1.000)
+G[1,1]((WeightKg >= 93.665 | bmi >= 32.338) -> UnitsInsBasalOrLongAct <= 67.375)
+G[0,1](HDL >= 29.786 | WeightKg <= 94.318)

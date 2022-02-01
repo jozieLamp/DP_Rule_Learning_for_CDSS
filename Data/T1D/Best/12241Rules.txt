@@ -1,0 +1,8 @@
+G[0,0]((diabDur >= 11.161 -> SMBGperDayPtMeterCombo >= 3.154) -> bmi <= 6.414)
+G[0,0](((BldPrDia <= 86.577 -> HbA1cImputeDtMnC >= 26.692) -> NumPumpBolusOrShortAct <= 55.975) & HeightCm <= 47.229)
+F[0,0](AlbCreatRat_mggNew >= 59.365 & BGTestAvgNumMeter <= 2.510)
+((BUN <= 29.359) U[0,0] (bmi >= 10.911))
+((BldPrDia <= 80.797) U[0,0] (HeightCm >= 99.102))
+F[0,0](((HDL >= 19.183 | Pt_InsGov <= 0.967) -> Pt_CGMUseNumDays >= 0.087) & Pt_DKAFlg <= 0.543)
+F[0,0](((AutonomicNeuroCl >= 1.000 | Pt_ChildT1D <= 0.000) | Pt_DKAFlg <= 0.000) -> UnitsInsBasalOrLongAct <= 0.000)
+((BGTestAvgNumMeter <= 2.819) U[0,0] (WeightKg >= 2.929))

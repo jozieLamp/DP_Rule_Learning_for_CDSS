@@ -1,0 +1,3 @@
+G[0,0]((BGTestAvgNumPtRep >= 1.958 -> TotalDailyInsPerKg <= 0.506) | NumPumpBolusOrShortAct <= 0.482)
+F[0,0]((Pt_A1cGoalLev >= 0.000 & age >= 41.514) -> BUN >= 42.708)
+F[0,0]((Pt_SiblingT1D <= 0.000 & TSH >= 0.014) -> BldPrDia <= 1.559)

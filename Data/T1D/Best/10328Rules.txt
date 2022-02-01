@@ -1,0 +1,1 @@
+G[0,0]((bmi <= 35.874 -> DirectLDL <= 0.400) | Pt_GrandchildT1D >= 0.153)

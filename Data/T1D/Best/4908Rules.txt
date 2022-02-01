@@ -1,0 +1,8 @@
+G[0,1](TotChol <= 196.060 & TSH <= 2.322)
+((Triglyc <= 79.002) U[1,1] (WeightKg <= 92.122))
+F[0,0](HeightCm <= 173.609 & diagAgeCombo >= 18.000)
+F[0,0](HDL <= 73.677 -> Pt_SHFlg = 0.336)
+((HbA1c >= 7.548) U[1,2] (HbA1cImputeDtMnC >= 4.034))
+F[0,0](bmiZscore >= 0.073 & Pt_ChildT1D >= 0.000)
+((age <= 59.307) U[0,1] (HbA1c >= 6.849))
+((NumPumpBolusOrShortAct <= 17.694) U[1,2] (AutonomicNeuroCl <= 1.000))

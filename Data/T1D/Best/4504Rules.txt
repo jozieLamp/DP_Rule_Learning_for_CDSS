@@ -1,0 +1,2 @@
+F[0,0](diabDur >= 10.214 & GFR <= 41.181)
+((BGTestAvgNumMeter >= 2.759) U[0,0] (BGTestAvgNumPtRep <= 4.224))

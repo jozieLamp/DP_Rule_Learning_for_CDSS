@@ -1,0 +1,5 @@
+G[0,1](HbA1c >= 8.570 | Pt_SHFlg >= 0.010)
+G[0,1]((BGTestAvgNumMeter >= 1.753 | HbA1c >= 8.776) | TotalDailyInsPerKg >= 9.264)
+F[1,1]((AlbCreatRat_mggNew >= 0.329 -> DirectLDL >= 0.174) -> Pt_ChildT1D >= 0.102)
+G[0,1](AlbCreatRat_mggNew >= 2.268 -> LDL >= 13.547)
+G[0,1](AlbCreatRat_mggNew <= 10.001 -> HbA1c <= 9.905)

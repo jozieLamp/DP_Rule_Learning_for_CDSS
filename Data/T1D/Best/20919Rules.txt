@@ -1,0 +1,1 @@
+F[1,1](((bmiPerc >= 0.435 -> DirectLDL <= 0.810) -> TotChol >= 0.304) | diabDur <= 0.941)

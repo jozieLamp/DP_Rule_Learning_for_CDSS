@@ -1,0 +1,6 @@
+((BldPrDia <= 69.153) U[0,0] (bmi <= 38.629))
+F[0,0]((Pt_A1cGoalLev <= 4.879 & Pt_CGMUseNumDays >= 0.000) -> SMBGperDayPtMeterCombo <= 0.000)
+F[0,0](((TotalDailyInsPerKg <= 0.792 & HDL >= 11.479) | HbA1cImputeDtMnC >= 2.640) -> NumPumpBolusOrShortAct >= 13.736)
+((Pt_CGMUseNumDays <= 0.000) U[0,0] (HeightCm <= 170.973))
+((diagAgeCombo >= 1.726) U[0,0] (TotChol >= 33.272))
+((BldPrSys <= 129.556) U[0,0] (WeightKg <= 114.869))

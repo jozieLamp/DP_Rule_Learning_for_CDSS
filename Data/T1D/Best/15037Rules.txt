@@ -1,0 +1,5 @@
+G[0,0]((WeightKg >= 33.753 | bmi >= 17.823) -> UnitsInsBasalOrLongAct <= 18.902)
+F[0,0]((BUN >= 7.849 | TotalDailyInsPerKg >= 0.055) & HbA1cImputeDtMnC >= 0.116)
+F[1,1](TotalDailyInsPerKg <= 0.865 & age <= 11.243)
+F[0,0](DirectLDL >= 0.000 & BldPrDia >= 64.823)
+((diabDur <= 7.407) U[1,1] (Pt_SHFlg <= 0.593))

@@ -1,0 +1,4 @@
+G[0,1]((Pt_SHFlg <= 0.158 -> SMBGperDayPtMeterCombo >= 0.054) | Pt_A1cGoalLev >= 0.401)
+((bmiZscore >= 1.001) U[0,1] (BUN >= 0.616))
+F[0,1]((BUN >= 0.220 & AlbCreatRat_mggNew >= 0.012) | bmi <= 7.777)
+((NumPumpBolusOrShortAct >= 1.023) U[0,1] (TSH >= 0.577))

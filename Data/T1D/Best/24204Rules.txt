@@ -1,0 +1,4 @@
+G[0,0](LDL <= 80.739 -> Pt_SHFlg = 0.775)
+F[0,0](((BldPrDia <= 77.836 & UnitsInsBasalOrLongAct <= 16.238) & UnitsInsBasalOrLongAct <= 9.559) & Pt_A1cGoalLev <= 11.216)
+F[0,0](((NumPumpBolusOrShortAct <= 2.178 -> UnitsInsBasalOrLongAct >= 4.242) -> Pt_InsGov <= 17.583) -> HbA1cImputeDtMnC <= 16.755)
+G[0,0]((BldPrSys >= 107.849 -> TotChol >= 0.000) & HbA1cImputeDtMnC >= 0.000)

@@ -1,0 +1,8 @@
+G[0,1](((BGTestAvgNumPtRep >= 0.306 & UnitsInsBasalOrLongAct >= 8.953) & BGTestAvgNumMeter <= 23.048) | AlbCreatRat_mggNew >= 2.347)
+F[1,1]((bmiZscore <= -0.078 | Pt_DKAFlg >= 0.042) -> DirectLDL >= 0.142)
+F[0,1](AlbCreatRat_mggNew <= 15.173 & bmiPerc >= 0.420)
+F[1,1](HbA1c <= 12.121 -> Pt_SHFlg = 0.211)
+G[0,1]((bmiPerc <= 0.487 & Pt_InsGov >= 0.099) | BGTestAvgNumPtRep >= 0.332)
+F[0,1](((BGTestAvgNumPtRep <= 4.533 & NumPumpBolusOrShortAct <= 3.674) | SMBGperDayPtMeterCombo <= 5.329) & DirectLDL >= 0.034)
+F[0,1](BGTestAvgNumPtRep >= 2.299 & DirectLDL >= 0.159)
+G[0,0]((AlbCreatRat_mggNew >= 0.802 -> DirectLDL <= 0.904) & AlbCreatRat_mggNew >= 0.122)

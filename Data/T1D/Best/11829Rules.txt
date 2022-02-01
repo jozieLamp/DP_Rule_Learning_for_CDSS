@@ -1,0 +1,5 @@
+G[0,0](diabDur >= 38.813 & NumPumpBolusOrShortAct <= 1.425)
+((Pt_A1cGoalLev >= 0.000) U[0,0] (SMBGperDayPtMeterCombo >= 1.592))
+F[0,0](GFR >= 10.288 -> SMBGperDayPtMeterCombo >= 1.494)
+F[0,0]((BldPrDia >= 12.363 | SMBGperDayPtMeterCombo <= 6.833) -> Pt_InsGov >= 0.224)
+G[0,0](((BGTestAvgNumPtRep >= 0.145 & AutonomicNeuroCl >= 1.000) | Pt_FatherT1D >= 1.000) -> diabDur <= 1.000)

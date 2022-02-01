@@ -1,0 +1,2 @@
+G[0,0](BldPrSys >= 99.929 | SMBGperDayPtMeterCombo >= 5.498)
+((AlbCreatRat_mggNew >= 7.996) U[1,1] (TotChol <= 29.619))

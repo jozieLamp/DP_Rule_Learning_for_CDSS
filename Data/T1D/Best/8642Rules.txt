@@ -1,0 +1,4 @@
+G[0,1](BUN >= 6.304 | Pt_A1cGoalLev <= 3.714)
+F[1,1](Pt_A1cGoalLev >= 0.525 & WeightKg <= 77.383)
+((bmiZscore <= 0.323) U[1,1] (Pt_A1cGoalLev >= 0.728))
+((bmiZscore >= -0.048) U[0,1] (Pt_A1cGoalLev >= 0.612))

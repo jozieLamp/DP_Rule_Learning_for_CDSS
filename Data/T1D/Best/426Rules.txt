@@ -1,0 +1,8 @@
+G[0,0](diabDur >= 39.966 | SMBGperDayPtMeterCombo <= 5.544)
+((diabDur <= 42.374) U[0,0] (TotChol <= 171.676))
+F[0,0]((BUN <= 29.855 | TSH >= 0.052) -> TotChol <= 0.480)
+F[0,0]((bmiZscore <= 0.686 -> HbA1cImputeDtMnC >= 19.332) -> Pt_DKAFlg >= 8.109)
+F[0,0](Pt_CGMUseNumDays >= 0.179 & Pt_FatherT1D >= 0.000)
+F[0,0]((diabDur <= 40.578 -> TSH <= 0.422) -> UnitsInsBasalOrLongAct <= 0.323)
+G[0,0](((LDL <= 142.586 & HbA1c <= 5.996) | diabDur >= 3.379) & TotChol >= 4.921)
+G[0,0]((bmi <= 29.714 -> NumPumpBolusOrShortAct <= 2.200) & Pt_CGMUseNumDays <= 2.479)

@@ -1,0 +1,4 @@
+G[0,0]((diabDur <= 13.380 | Triglyc >= 19.195) -> BldPrSys <= 58.500)
+F[0,0](TotChol <= 113.318 -> Pt_SHFlg = 0.820)
+((BldPrSys <= 134.332) U[0,0] (age <= 22.742))
+F[0,0]((BldPrSys <= 140.715 | TotalDailyInsPerKg >= 0.109) | DirectLDL >= 0.143)

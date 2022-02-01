@@ -1,0 +1,3 @@
+G[0,0](BGTestAvgNumPtRep >= 1.609 & GFR <= 0.000)
+G[0,0](BldPrSys <= 114.690 -> Pt_GrandparentT1D >= 0.131)
+F[0,0](((BldPrSys <= 120.916 -> Pt_InsGov <= 0.816) -> BldPrSys >= 0.367) -> Pt_InsGov <= 0.895)
