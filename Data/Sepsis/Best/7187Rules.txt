@@ -1,0 +1,7 @@
+G[0,1](((TroponinI >= 0.000 | O2Sat <= 98.973) | Potassium <= 98.320) & O2Sat >= 97.657)
+((Phosphate <= 2.096) U[0,0] (Temp >= 36.428))
+F[0,1](DBP < 56.072 -> SepsisLabel = 0.900)
+((BUN <= 17.999) U[0,1] (O2Sat <= 97.898))
+G[0,0]((WBC >= 0.138 | Glucose >= 46.942) | AST >= 35.639)
+F[0,0](Creatinine <= 0.587 & Temp >= 36.465)
+G[0,0](Temp >= 35.970 -> Glucose >= 36.637)

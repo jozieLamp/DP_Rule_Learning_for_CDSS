@@ -1,0 +1,3 @@
+((BaseExcess <= 7.530) U[0,0] (SepsisLabel >= 0.440))
+((Resp >= 17.552) U[0,0] (SepsisLabel >= 0.238))
+F[0,0](((Hgb >= 0.129 | SepsisLabel <= 0.909) -> Bilirubin_total >= 0.132) & Phosphate <= 0.816)

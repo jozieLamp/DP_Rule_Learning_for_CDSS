@@ -1,0 +1,3 @@
+G[1,1](((HR >= 43.710 & AST >= 3.451) | Resp >= 1.341) & Bilirubin_total <= 25.871)
+((MAP >= 39.568) U[0,1] (SBP <= 92.394))
+F[0,0](((SepsisLabel >= 0.795 | Temp >= 5.417) | pH >= 2.762) & Magnesium <= 23.110)

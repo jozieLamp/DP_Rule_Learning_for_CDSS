@@ -1,0 +1,8 @@
+G[0,0](O2Sat >= 33.636 -> SepsisLabel = 0.082)
+((MAP >= 41.227) U[1,2] (SBP <= 117.869))
+((Glucose >= 0.000) U[1,1] (Platelets <= 217.760))
+((Resp >= 2.480) U[1,1] (Alkalinephos <= 0.000))
+F[1,1](MAP <= 86.150 & Magnesium >= 0.000)
+G[1,1](((Hgb <= 0.000 | Hct <= 11.006) -> WBC >= 0.000) & Platelets >= 24.998)
+F[1,1]((Calcium <= 0.000 & Potassium <= 2.378) & Magnesium >= 0.000)
+G[1,1]((SBP >= 64.927 | Temp >= 0.875) -> Potassium >= 4.636)

@@ -1,0 +1,4 @@
+G[0,0](((TroponinI >= 0.000 & HR >= 53.376) -> Fibrinogen >= 50.316) & PaCO2 <= 88.577)
+((HR >= 50.260) U[1,2] (Chloride >= 0.000))
+F[0,0](Creatinine >= 0.021 | MAP >= 4.597)
+((Potassium >= 0.000) U[0,0] (Resp >= 14.644))

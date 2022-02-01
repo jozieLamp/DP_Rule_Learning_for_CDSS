@@ -1,0 +1,2 @@
+F[0,1]((TroponinI >= 0.000 & PTT <= 9.198) & SepsisLabel >= 0.027)
+F[1,1](((Fibrinogen <= 151.532 & HR <= 97.088) | Calcium >= 80.787) & WBC <= 94.026)

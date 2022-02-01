@@ -1,0 +1,2 @@
+G[0,0](((Hct <= 30.535 & SBP <= 148.041) -> Magnesium >= 84.959) -> Calcium >= 34.064)
+F[0,1]((Glucose >= 44.869 & Lactate <= 12.479) & Magnesium <= 9.258)

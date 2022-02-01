@@ -1,0 +1,2 @@
+G[0,0](EtCO2 >= 0.000 -> Fibrinogen <= 216.798)
+G[0,0](((Calcium >= 0.072 -> Temp >= 14.454) & Potassium <= 19.040) & BUN <= 16.646)

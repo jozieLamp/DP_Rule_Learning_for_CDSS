@@ -1,0 +1,8 @@
+G[0,0](Glucose >= 13.560 | SepsisLabel <= 0.886)
+G[0,0](Glucose <= 116.771 -> pH >= 0.758)
+G[0,0](((HCO3 >= 1.724 -> Lactate <= 0.996) -> Alkalinephos <= 0.296) -> Glucose >= 0.011)
+G[0,0](SaO2 >= 14.594 & BUN <= 11.124)
+F[0,0]((Temp <= 23.399 & Lactate >= 0.011) | pH <= 0.694)
+F[0,1](FiO2 > 0.111 -> SepsisLabel = 0.058)
+G[0,0](Phosphate >= 0.000 -> SaO2 >= 21.979)
+G[0,1](FiO2 >= 0.249 | HCO3 >= 1.125)

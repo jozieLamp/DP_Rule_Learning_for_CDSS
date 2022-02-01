@@ -1,0 +1,6 @@
+G[0,0](SepsisLabel <= 0.981 & HCO3 >= 0.000)
+((Fibrinogen >= 0.000) U[0,0] (O2Sat >= 38.919))
+F[0,0](((BUN <= 0.000 -> O2Sat >= 87.133) & WBC <= 97.521) | Glucose >= 75.585)
+((Temp >= 6.241) U[0,0] (SepsisLabel >= 0.206))
+G[0,0]((Calcium <= 0.000 -> Bilirubin_total >= 0.000) & SBP <= 0.000)
+((MAP >= 21.975) U[0,0] (O2Sat >= 5.150))

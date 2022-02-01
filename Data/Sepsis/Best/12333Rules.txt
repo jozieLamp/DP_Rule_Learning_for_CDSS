@@ -1,0 +1,8 @@
+((Temp >= 5.196) U[1,2] (Phosphate >= 0.000))
+F[0,0]((SBP >= 17.189 & Temp >= 9.109) & Bilirubin_total <= 28.235)
+F[0,0]((TroponinI <= 0.000 -> MAP <= 106.129) | Alkalinephos >= 26.569)
+((SBP <= 131.926) U[0,0] (SepsisLabel >= 0.012))
+((MAP <= 109.829) U[1,1] (Platelets >= 0.000))
+G[1,1]((Resp <= 20.746 & SBP >= 6.743) -> Chloride >= 34.210)
+G[0,0](((SaO2 >= 0.000 | HCO3 >= 0.000) -> Creatinine >= 0.000) & SepsisLabel <= 0.000)
+G[0,1](((Hgb <= 0.000 & Temp <= 17.619) | Temp <= 36.454) | HR <= 33.586)

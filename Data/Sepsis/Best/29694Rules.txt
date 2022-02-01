@@ -1,0 +1,2 @@
+G[0,0](SaO2 <= 74.558 -> SepsisLabel <= 0.868)
+F[0,0](((O2Sat >= 47.576 & pH >= 0.971) | Bilirubin_total <= 4.027) -> EtCO2 >= 1.366)

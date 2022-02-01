@@ -1,0 +1,6 @@
+G[0,1](SBP <= 122.683 -> Alkalinephos >= 8.134)
+F[0,1](SepsisLabel >= 0.820 & EtCO2 <= 0.000)
+((SBP <= 123.225) U[1,1] (SBP >= 56.246))
+F[0,1]((DBP >= 0.000 & SepsisLabel >= 0.068) & PTT <= 0.910)
+G[0,0](BaseExcess >= 0.000 & SepsisLabel <= 0.847)
+((SepsisLabel <= 0.919) U[0,0] (SepsisLabel >= 0.153))

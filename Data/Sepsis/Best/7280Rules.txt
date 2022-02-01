@@ -1,0 +1,6 @@
+G[0,0](((Hct <= 16.565 -> Temp <= 20.760) | TroponinI >= 5.250) & Platelets <= 28.980)
+((FiO2 >= 0.037) U[1,1] (Hgb <= 6.189))
+F[0,0](((Glucose >= 32.570 -> Phosphate <= 1.226) -> FiO2 >= 0.115) | Creatinine >= 0.413)
+F[0,1](((Creatinine <= 0.936 -> O2Sat <= 97.325) & Phosphate <= 99.505) | Chloride >= 70.560)
+((Potassium <= 1.156) U[0,0] (SepsisLabel >= 0.405))
+((MAP >= 66.948) U[0,1] (SBP <= 146.994))

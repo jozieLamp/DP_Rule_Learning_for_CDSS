@@ -1,0 +1,5 @@
+G[1,1](pH <= 6.805 -> SepsisLabel <= 0.837)
+((SepsisLabel <= 0.806) U[0,0] (Temp >= 14.971))
+G[0,0]((SepsisLabel <= 0.767 | FiO2 <= 0.453) & BaseExcess <= 0.257)
+F[1,1]((Alkalinephos <= 0.000 & Temp >= 13.490) -> Alkalinephos >= 1.411)
+G[1,1](((Bilirubin_direct >= 0.000 -> Temp >= 8.204) & WBC <= 25.004) | AST >= 7.127)

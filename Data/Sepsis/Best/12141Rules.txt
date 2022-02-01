@@ -1,0 +1,5 @@
+G[0,1](((Phosphate >= 0.000 -> Alkalinephos >= 0.000) -> Potassium >= 0.000) -> MAP <= 0.000)
+F[0,0](((FiO2 <= 0.000 & Temp <= 22.507) -> pH <= 34.532) & O2Sat >= 3.021)
+G[0,0](((FiO2 <= 0.000 & Bilirubin_direct >= 0.000) | Creatinine <= 0.000) -> MAP <= 0.000)
+F[0,0](Resp >= 13.067 & EtCO2 <= 0.000)
+G[0,0]((Calcium >= 0.000 -> Magnesium >= 0.000) & SepsisLabel <= 0.000)

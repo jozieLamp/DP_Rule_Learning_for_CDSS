@@ -1,0 +1,3 @@
+G[0,0]((Chloride <= 95.163 -> FiO2 >= 0.154) | Bilirubin_direct >= 0.026)
+G[0,0](((Chloride >= 24.331 | Fibrinogen >= 11.519) & HCO3 <= 393.531) & HCO3 <= 367.795)
+G[0,1]((Calcium <= 3.943 | O2Sat >= 96.013) & WBC <= 99.310)

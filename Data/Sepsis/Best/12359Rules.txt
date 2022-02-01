@@ -1,0 +1,1 @@
+G[0,0](((Lactate >= 0.000 & HR <= 91.112) & Potassium <= 88.869) | Calcium >= 41.942)

@@ -1,0 +1,3 @@
+G[0,0](((PaCO2 <= 17.867 -> Phosphate >= 0.184) | Fibrinogen <= 1.387) & DBP <= 2.221)
+((EtCO2 >= 0.000) U[1,1] (SepsisLabel >= 0.017))
+F[0,0](DBP <= 71.232 | Calcium >= 0.240)

@@ -1,0 +1,4 @@
+G[0,0](Magnesium <= 1.319 & SepsisLabel <= 0.813)
+F[0,1]((Potassium <= 4.093 -> Temp <= 20.702) | PaCO2 >= 3.382)
+G[0,1](HR >= 26.124 & Temp >= 12.221)
+F[0,0]((PaCO2 <= 0.000 & SepsisLabel >= 0.096) | FiO2 >= 0.438)

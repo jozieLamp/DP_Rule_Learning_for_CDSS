@@ -1,0 +1,5 @@
+G[0,1](((SepsisLabel >= 0.038 & EtCO2 <= 18.785) & Calcium >= 2.350) | Glucose <= 20.535)
+F[1,1](((EtCO2 <= 8.758 | EtCO2 >= 6.255) -> AST <= 21.207) & Glucose >= 6.481)
+F[1,1](Glucose >= 41.566 & MAP <= 110.043)
+F[1,1]((DBP >= 55.614 -> Potassium >= 0.835) & Chloride <= 1.945)
+F[1,1](((Hct >= 0.822 | Lactate <= 0.259) & BUN <= 0.304) -> SBP <= 1.530)

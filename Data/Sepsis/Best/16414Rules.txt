@@ -1,0 +1,6 @@
+G[0,1](((Resp <= 15.350 -> Fibrinogen >= 0.000) -> Chloride >= 0.000) -> DBP <= 0.000)
+F[0,0](((DBP >= 34.810 & WBC >= 0.000) & Fibrinogen >= 0.000) & Hgb <= 0.000)
+G[0,0]((MAP >= 40.890 -> PaCO2 <= 21.079) & O2Sat <= 19.964)
+F[0,0](HCO3 >= 0.587 | HR >= 4.523)
+G[0,0](((Platelets <= 0.000 & Phosphate >= 0.222) -> BaseExcess <= 4.215) -> MAP <= 2.607)
+G[0,0]((MAP >= 4.996 -> O2Sat <= 90.078) | Potassium >= 4.563)

@@ -1,0 +1,6 @@
+G[0,1]((Calcium >= 1.139 | Phosphate >= 0.252) -> O2Sat >= 0.095)
+F[1,1](O2Sat <= 85.921 & Potassium <= 3.343)
+G[0,0]((FiO2 <= 0.948 -> Magnesium >= 0.027) | Creatinine <= 1.457)
+((MAP >= 25.097) U[1,1] (SBP <= 87.930))
+G[0,1]((Platelets >= 1.931 -> Potassium <= 3.561) -> BUN <= 3.360)
+G[0,1]((TroponinI <= 0.000 -> Creatinine >= 0.233) -> SBP >= 0.181)

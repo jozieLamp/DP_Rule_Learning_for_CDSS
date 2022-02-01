@@ -1,0 +1,3 @@
+G[0,0](Lactate <= 0.595 -> SepsisLabel <= 0.874)
+F[0,1](Glucose >= 4.612 | SepsisLabel >= 0.578)
+G[0,0]((SepsisLabel >= 0.651 | SepsisLabel >= 0.810) -> Platelets >= 0.028)

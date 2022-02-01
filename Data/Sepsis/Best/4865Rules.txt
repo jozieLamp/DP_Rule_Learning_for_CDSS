@@ -1,0 +1,8 @@
+G[1,1](((BaseExcess <= 0.757 | FiO2 >= 0.040) -> PaCO2 <= 0.542) & Fibrinogen <= 0.348)
+F[0,0](Glucose >= 0.707 | WBC >= 2.702)
+F[1,1]((Chloride <= 109.440 | FiO2 <= 0.331) -> Platelets >= 0.002)
+F[0,1](HR >= 31.791 & Potassium >= 0.679)
+F[0,1](Hgb >= 0.112 & WBC >= 1.600)
+((Temp >= 6.129) U[0,1] (WBC >= 2.886))
+G[0,1]((BaseExcess >= -1.009 | O2Sat >= 2.638) & Platelets <= 78.487)
+G[0,0](O2Sat <= 68.704 | Temp <= 35.583)

@@ -1,0 +1,1 @@
+G[0,0](((BaseExcess <= 4.636 -> SBP <= 68.436) | Bilirubin_total >= 32.074) | Hgb >= 5.168)

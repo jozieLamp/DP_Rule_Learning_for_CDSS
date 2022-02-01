@@ -1,0 +1,7 @@
+G[0,0](((O2Sat >= 29.344 -> Calcium >= 0.000) -> Fibrinogen <= 0.000) & Lactate <= 0.000)
+G[0,1]((Alkalinephos <= 23.182 -> Fibrinogen >= 5.010) -> Hgb >= 18.238)
+G[0,1](AST <= 27.682 & SBP <= 116.150)
+F[1,1](((Creatinine <= 0.165 | Phosphate >= 0.109) | AST >= 0.044) & Creatinine <= 2.525)
+F[0,1]((Lactate >= 0.237 | Magnesium >= 0.060) & Glucose <= 2.220)
+G[1,1]((Alkalinephos <= 46.412 | HCO3 >= 8.319) & PaCO2 <= 11.259)
+G[0,0](((Hgb >= 3.057 & Resp <= 16.933) -> HR >= 10.386) & PaCO2 >= 12.158)

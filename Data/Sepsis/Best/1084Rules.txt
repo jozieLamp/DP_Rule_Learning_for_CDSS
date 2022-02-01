@@ -1,0 +1,8 @@
+G[0,1](((Glucose <= 64.075 | PTT <= 24.726) & BaseExcess <= 107.216) | TroponinI >= 0.293)
+G[0,1]((Chloride <= 65.953 -> SepsisLabel <= 0.965) | SaO2 >= 0.045)
+G[1,1](Creatinine <= 0.458 | HCO3 <= 10.026)
+((FiO2 <= 0.000) U[1,1] (WBC >= 7.804))
+F[1,1](((WBC <= 17.597 & Creatinine >= 0.146) & Glucose >= 0.055) & Hgb >= 0.158)
+F[1,1](((PaCO2 <= 25.202 | Platelets <= 176.530) & Hgb >= 30.108) | PTT >= 58.914)
+((HR >= 48.631) U[1,1] (WBC >= 7.864))
+G[0,1](((BUN <= 15.776 & Resp <= 16.600) & BUN <= 15.638) | PTT <= 17.311)

@@ -1,0 +1,8 @@
+G[1,1](Chloride >= 2.640 & HCO3 >= 1.674)
+F[1,1]((pH <= 1.419 -> Magnesium <= 0.223) | SBP <= 0.503)
+F[0,1]((SaO2 >= 0.834 | SepsisLabel >= 0.168) & Glucose <= 0.962)
+F[0,0](((Chloride >= 7.651 | FiO2 <= 0.332) | SaO2 <= 0.337) & SepsisLabel >= 0.139)
+F[1,1](((Calcium < 2.627 & Potassium < 2.067) & Magnesium < 0.834) & Phosphate < 1.696)
+G[1,1](Chloride >= 9.324 & HCO3 >= 1.304)
+F[1,1](Potassium >= 0.290 -> O2Sat <= 97.643)
+G[1,1](Chloride >= 8.793 & HCO3 >= 0.059)

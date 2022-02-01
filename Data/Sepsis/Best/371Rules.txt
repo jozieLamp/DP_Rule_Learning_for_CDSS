@@ -1,0 +1,7 @@
+G[0,0](((HR >= 28.670 | DBP >= 19.487) -> Hct >= 20.551) | FiO2 >= 15.118)
+F[0,0](((EtCO2 >= 0.000 -> SepsisLabel <= 0.998) & EtCO2 >= 0.743) | DBP >= 0.475)
+((HR >= 59.625) U[0,1] (SepsisLabel >= 0.026))
+((BaseExcess <= 1.993) U[0,0] (O2Sat >= 57.793))
+G[0,1](((Hct <= 0.000 & SBP <= 143.100) & Glucose <= 148.390) | DBP >= 75.077)
+F[0,0](Phosphate <= 0.000 -> O2Sat >= 61.937)
+G[0,0](((Lactate <= 0.000 -> Lactate >= 0.000) -> Creatinine >= 0.000) -> MAP <= 0.000)

@@ -1,0 +1,7 @@
+G[0,1](Magnesium <= 0.955 & FiO2 <= 0.554)
+F[0,1](HR >= 83.920 & DBP <= 63.036)
+F[0,1](((DBP >= 52.096 & Phosphate >= 0.203) | PTT >= 0.444) | FiO2 >= 0.256)
+F[0,1](((FiO2 >= 0.104 & SBP >= 82.689) | WBC >= 83.679) | Hct >= 79.564)
+((Bilirubin_direct >= 0.000) U[0,0] (Lactate <= 1.125))
+G[0,0](BaseExcess >= -0.571 -> Lactate >= 0.157)
+((Creatinine >= 0.004) U[0,1] (FiO2 >= 0.246))

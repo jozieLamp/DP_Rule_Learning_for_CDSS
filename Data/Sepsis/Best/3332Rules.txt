@@ -1,0 +1,4 @@
+G[0,1]((HR <= 69.587 | WBC >= 3.068) | Calcium >= 3.870)
+F[0,1]((Creatinine >= 0.077 -> Hct <= 20.199) & Resp >= 6.564)
+G[0,0]((HR <= 78.093 | Magnesium >= 0.514) -> Platelets >= 0.240)
+((BaseExcess <= 0.000) U[0,0] (Resp <= 20.409))

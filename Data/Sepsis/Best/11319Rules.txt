@@ -1,0 +1,1 @@
+F[0,1](((Hct >= 5.897 | HR <= 58.507) & Bilirubin_total <= 60.837) -> Phosphate >= 42.110)

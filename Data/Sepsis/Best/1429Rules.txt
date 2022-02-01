@@ -1,0 +1,8 @@
+G[1,1](((Magnesium <= 0.784 & AST >= 0.000) & SBP >= 0.000) & SaO2 >= 0.000)
+G[1,1]((SaO2 <= 55.354 | Temp <= 37.616) | HR <= 37.392)
+((MAP >= 49.916) U[1,1] (Platelets >= 5.573))
+F[0,1]((Calcium <= 0.000 & Potassium <= 4.301) & Magnesium >= 0.073)
+F[0,1](((Magnesium <= 0.534 | Temp <= 37.474) -> Fibrinogen >= 35.720) | Creatinine >= 35.959)
+F[1,1]((Creatinine >= 0.024 & Alkalinephos >= 0.000) | O2Sat <= 0.000)
+F[0,1]((Calcium <= 0.000 & Potassium <= 4.156) & Magnesium >= 0.060)
+G[1,1](((MAP <= 60.746 | Alkalinephos >= 0.000) -> PaCO2 <= 0.000) | PTT <= 0.000)

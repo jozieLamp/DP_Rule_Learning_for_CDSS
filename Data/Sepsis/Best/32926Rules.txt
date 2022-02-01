@@ -1,0 +1,4 @@
+G[0,0](((Bilirubin_total <= 0.108 -> Hgb <= 13.006) & HCO3 <= 4.384) -> MAP <= 8.266)
+F[0,1](((Fibrinogen <= 0.000 & Bilirubin_total >= 0.020) -> EtCO2 >= 0.017) & SepsisLabel >= 0.007)
+G[0,0]((AST <= 21.226 & Resp <= 11.356) & HR <= 15.131)
+F[1,1](Hgb >= 0.425 | SepsisLabel >= 0.394)

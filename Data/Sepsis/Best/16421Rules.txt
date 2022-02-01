@@ -1,0 +1,5 @@
+F[0,1](((FiO2 <= 0.482 -> HR <= 71.749) & Creatinine <= 75.845) -> Hct >= 32.777)
+G[0,0](((Hgb <= 8.719 | SepsisLabel <= 0.786) | PaCO2 <= 0.960) & SepsisLabel <= 0.904)
+G[0,0]((Phosphate <= 2.581 & Resp <= 26.924) & PTT <= 25.078)
+G[0,0]((pH <= 7.271 -> SepsisLabel >= 0.394) -> Alkalinephos >= 0.589)
+G[0,1]((HCO3 >= 0.029 | SaO2 <= 47.663) & pH <= 58.624)

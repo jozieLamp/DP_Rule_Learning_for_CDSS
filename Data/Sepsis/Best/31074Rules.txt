@@ -1,0 +1,1 @@
+F[0,0]((Resp >= 2.626 & SepsisLabel >= 0.019) & Lactate <= 0.839)

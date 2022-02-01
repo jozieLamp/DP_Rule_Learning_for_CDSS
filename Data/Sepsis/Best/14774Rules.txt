@@ -1,0 +1,8 @@
+G[0,1](((FiO2 <= 0.194 -> O2Sat <= 99.747) | AST >= 39.227) | Hct >= 1.678)
+G[1,1]((Platelets >= 1.946 | Potassium <= 2.413) -> FiO2 >= 0.381)
+G[0,1](FiO2 >= 0.165 & PaCO2 <= 19.172)
+((Lactate <= 0.000) U[0,0] (SepsisLabel >= 0.177))
+F[1,1]((PaCO2 <= 9.718 & Lactate <= 0.000) | pH <= 0.000)
+G[0,0](Alkalinephos >= 0.000 -> HR <= 57.085)
+G[0,1]((EtCO2 <= 0.000 & SaO2 <= 0.000) -> SepsisLabel <= 0.000)
+G[1,1](O2Sat >= 82.861 -> PaCO2 >= 5.802)

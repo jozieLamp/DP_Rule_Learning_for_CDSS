@@ -1,0 +1,6 @@
+G[0,0](((Chloride >= 3.976 -> Fibrinogen <= 0.000) | Temp <= 0.000) -> MAP <= 0.000)
+F[0,0](Fibrinogen <= 0.000 & SBP >= 15.678)
+G[0,0]((O2Sat >= 5.054 | Glucose <= 147.020) -> O2Sat <= 38.206)
+((MAP >= 9.131) U[0,0] (Resp >= 3.672))
+G[0,0](O2Sat >= 4.676 -> SepsisLabel = 0.074)
+G[0,0]((PTT <= 0.000 & Resp <= 13.901) | Platelets >= 0.479)

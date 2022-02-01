@@ -1,0 +1,6 @@
+G[0,0]((Creatinine >= 0.105 | SepsisLabel >= 0.674) -> HR <= 0.921)
+F[0,1](SBP >= 25.217 & Temp <= 25.365)
+F[0,1](((PTT <= 31.724 -> Phosphate >= 0.217) -> Resp <= 1.110) -> SBP >= 0.434)
+F[0,0](Platelets >= 9.343 | SBP >= 24.189)
+F[0,1](((AST <= 0.000 | BaseExcess >= 0.134) & DBP >= 0.055) | Glucose >= 0.084)
+F[0,1]((Temp <= 35.026 | Hct >= 1.464) & DBP >= 3.798)

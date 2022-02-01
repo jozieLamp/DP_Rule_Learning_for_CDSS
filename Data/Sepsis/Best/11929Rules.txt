@@ -1,0 +1,4 @@
+G[0,0](((MAP >= 28.301 & PaCO2 <= 15.844) & SBP >= 5.956) -> BUN >= 3.892)
+G[0,0]((Chloride >= 14.658 -> Alkalinephos <= 0.000) & Temp <= 0.000)
+G[0,0](((BaseExcess >= -0.013 | Alkalinephos >= 0.000) -> WBC <= 0.000) -> SBP <= 0.000)
+G[0,0](Temp <= 32.645 & Fibrinogen <= 0.000)

@@ -1,0 +1,7 @@
+G[0,0](((Hct >= 0.724 -> EtCO2 >= 0.000) & SepsisLabel <= 0.000) | DBP <= 0.000)
+F[0,1](SBP <= 112.079 -> SepsisLabel = 0.754)
+F[0,0](SBP <= 107.617 -> Temp <= 33.247)
+F[0,1](BaseExcess >= -0.897 -> SBP >= 94.636)
+G[0,1]((Magnesium <= 0.000 -> Resp >= 16.303) & SepsisLabel <= 19.485)
+F[0,0]((Hgb >= 0.104 | MAP >= 27.705) & FiO2 <= 78.635)
+G[0,1](Resp <= 17.265 -> SBP <= 105.702)

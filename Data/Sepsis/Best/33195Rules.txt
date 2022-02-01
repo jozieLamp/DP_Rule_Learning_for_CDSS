@@ -1,0 +1,3 @@
+F[0,0](((Platelets <= 0.000 | TroponinI >= 0.001) | Fibrinogen >= 7.703675510800048e-06) -> Resp >= 0.001)
+F[0,1]((MAP >= 61.873 & SBP <= 120.927) & Creatinine <= 128.521)
+((Creatinine >= 0.047) U[0,0] (SepsisLabel >= 0.504))

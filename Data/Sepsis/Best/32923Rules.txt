@@ -1,0 +1,4 @@
+((O2Sat >= 35.755) U[1,1] (SepsisLabel >= 0.109))
+((SBP >= 69.058) U[1,2] (Potassium <= 0.000))
+F[0,0](((Bilirubin_total >= 0.000 & SBP >= 47.414) | PaCO2 >= 80.117) | Resp >= 6.365)
+((HR >= 4.702) U[1,2] (Creatinine <= 0.000))

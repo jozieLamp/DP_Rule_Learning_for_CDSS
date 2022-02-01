@@ -1,0 +1,8 @@
+G[0,1]((HR <= 73.081 & Potassium <= 2.627) | SaO2 <= 1.601)
+F[0,0](Chloride <= 40.975 & FiO2 >= 0.029)
+((Alkalinephos <= 0.000) U[0,0] (Hgb >= 0.575))
+F[0,1]((BUN <= 7.037 & PTT >= 0.753) | BaseExcess >= 0.270)
+G[0,1]((Bilirubin_total >= 0.000 | Bilirubin_total >= 0.000) -> BaseExcess <= 0.000)
+F[0,0]((Alkalinephos <= 0.000 -> SaO2 <= 97.646) -> TroponinI >= 0.510)
+G[0,0](((SBP >= 48.765 -> Phosphate >= 0.000) | Potassium <= 0.000) -> Hgb <= 0.000)
+G[0,0]((Lactate >= 0.014 -> PTT >= 0.873) & Potassium <= 15.045)

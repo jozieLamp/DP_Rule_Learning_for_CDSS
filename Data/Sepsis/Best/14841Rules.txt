@@ -1,0 +1,5 @@
+G[0,1](Potassium <= 5.263 & SBP <= 108.956)
+F[0,1](((Phosphate >= 0.137 -> Potassium >= 0.886) & SepsisLabel >= 0.216) | BUN >= 0.708)
+((MAP >= 15.491) U[0,0] (SBP <= 118.473))
+G[0,0](((WBC >= 0.001 & Phosphate <= 1.659) | Resp >= 0.213) -> Creatinine >= 0.093)
+F[0,0](BaseExcess >= 0.000 & SepsisLabel >= 0.254)

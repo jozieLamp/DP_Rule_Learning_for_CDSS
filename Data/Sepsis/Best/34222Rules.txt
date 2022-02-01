@@ -1,0 +1,2 @@
+G[0,0](Fibrinogen >= 0.000 -> Resp <= 22.139)
+F[0,1](((Chloride >= 0.000 & O2Sat <= 95.708) & HR >= 68.802) | Bilirubin_direct >= 44.291)

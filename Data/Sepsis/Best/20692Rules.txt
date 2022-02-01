@@ -1,0 +1,6 @@
+G[0,1]((Bilirubin_total >= 0.058 -> HR <= 96.975) -> MAP >= 55.323)
+((BUN <= 1.393) U[1,1] (O2Sat <= 89.227))
+F[1,1](((EtCO2 >= 0.000 | pH <= 0.000) -> Phosphate <= 0.000) & SBP <= 0.000)
+G[1,1]((O2Sat <= 86.296 -> BUN >= 0.195) | BUN >= 0.369)
+F[0,1](((Platelets >= 20.317 | Alkalinephos >= 2.247) | MAP >= 4.506) -> MAP <= 34.533)
+G[1,1]((Glucose <= 10.432 -> Potassium >= 0.182) | DBP >= 0.199)

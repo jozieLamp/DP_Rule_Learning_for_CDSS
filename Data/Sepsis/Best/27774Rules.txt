@@ -1,0 +1,3 @@
+G[0,1](Glucose >= 14.954 | TroponinI <= 0.017)
+F[0,0]((Creatinine <= 0.276 & Temp >= 4.850) & Glucose <= 20.580)
+G[1,1]((BUN <= 16.130 -> HR <= 99.154) & Lactate <= 82.356)

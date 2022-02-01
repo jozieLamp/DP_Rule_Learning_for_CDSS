@@ -1,0 +1,5 @@
+G[0,1](((WBC <= 0.000 -> Platelets <= 0.000) -> Fibrinogen >= 0.000) & SepsisLabel <= 0.000)
+((Lactate <= 0.000) U[0,1] (SepsisLabel >= 0.451))
+F[0,0]((Glucose >= 6.030 | HR <= 88.305) -> AST >= 57.684)
+((Bilirubin_direct >= 0.000) U[0,0] (MAP >= 11.645))
+((Hct <= 0.000) U[0,0] (HR >= 9.102))

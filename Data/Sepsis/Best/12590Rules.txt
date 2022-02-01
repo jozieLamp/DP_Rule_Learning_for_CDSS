@@ -1,0 +1,7 @@
+G[0,1](HR < 89.206 -> SepsisLabel = 0.360)
+F[0,1](Alkalinephos <= 0.000 & SepsisLabel >= 0.758)
+((Temp >= 2.134) U[0,1] (SepsisLabel >= 0.229))
+G[0,1]((SepsisLabel >= 0.048 -> Temp >= 0.587) | pH >= 5.684)
+F[0,0]((HCO3 >= 0.000 & O2Sat >= 14.716) | Bilirubin_total >= 33.268)
+G[0,1](PTT >= 3.782 | SepsisLabel <= 0.981)
+G[0,0]((Hgb <= 0.000 -> Lactate >= 0.000) -> O2Sat <= 0.000)

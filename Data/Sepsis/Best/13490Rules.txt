@@ -1,0 +1,5 @@
+G[0,0]((Platelets <= 95.970 | pH <= 0.000) -> MAP <= 0.000)
+((O2Sat >= 23.299) U[1,2] (Phosphate >= 0.000))
+F[0,1](SepsisLabel >= 0.373 & FiO2 <= 0.555)
+F[0,0]((Hgb >= 0.019 | Bilirubin_total <= 0.382) -> MAP >= 0.035)
+F[0,0]((WBC >= 0.529 | SBP <= 125.886) -> SepsisLabel >= 77.705)

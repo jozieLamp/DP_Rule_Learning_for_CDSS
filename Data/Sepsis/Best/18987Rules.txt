@@ -1,0 +1,7 @@
+F[0,1]((HR <= 90.634 -> Potassium >= 0.139) & Chloride <= 2.317)
+G[1,1](DBP <= 61.295 | HCO3 >= 0.470)
+G[1,1](((Bilirubin_total >= 0.000 & Phosphate >= 0.178) -> BaseExcess >= 0.126) & Lactate <= 0.328)
+((Phosphate <= 2.655) U[1,1] (Potassium >= 0.193))
+F[0,0]((EtCO2 <= 0.000 & HR >= 76.262) | WBC >= 73.110)
+((BaseExcess >= -0.215) U[1,1] (Potassium >= 0.331))
+F[0,1](Resp <= 15.324 & Fibrinogen >= 0.000)

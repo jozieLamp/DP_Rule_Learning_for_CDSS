@@ -1,0 +1,2 @@
+G[0,1](Bilirubin_direct <= 0.000 & MAP >= 67.597)
+F[0,0]((Fibrinogen <= 0.000 -> MAP <= 74.734) & pH <= 74.458)

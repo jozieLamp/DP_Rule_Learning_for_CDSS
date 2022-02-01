@@ -1,0 +1,4 @@
+G[0,1]((Calcium <= 6.844 & HR <= 96.722) | Temp >= 54.595)
+F[0,1](((HCO3 >= 0.602 -> Creatinine <= 0.472) & Platelets >= 0.034) & Phosphate <= 0.739)
+((Glucose <= 86.778) U[0,0] (Temp >= 2.930))
+G[0,0]((Calcium >= 0.413 & Lactate <= 0.000) | Temp <= 0.000)

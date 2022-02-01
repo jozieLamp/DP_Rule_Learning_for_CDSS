@@ -1,0 +1,7 @@
+G[0,0](HR >= 73.495 -> SepsisLabel = 0.043)
+F[0,0]((FiO2 <= 0.262 -> Resp >= 6.107) & WBC <= 21.427)
+F[0,0]((Bilirubin_direct >= 0.000 -> Phosphate >= 0.130) | SBP >= 0.240)
+F[0,1](((Alkalinephos <= 11.343 & FiO2 <= 0.152) & SepsisLabel >= 0.037) & Alkalinephos <= 0.248)
+((Magnesium <= 0.814) U[0,1] (SepsisLabel >= 0.519))
+G[0,0]((BaseExcess <= 0.000 -> HR >= 4.501) -> BUN >= 62.171)
+((O2Sat <= 86.871) U[0,0] (Resp >= 5.094))

@@ -1,0 +1,4 @@
+G[1,1](((Glucose <= 38.772 | HR <= 74.523) -> MAP >= 39.708) | Bilirubin_direct >= 58.652)
+G[0,1](((Platelets <= 0.000 | PaCO2 <= 35.464) | Lactate >= 1.412) -> MAP >= 2.112)
+F[0,1]((Lactate >= 0.012 | MAP >= 36.759) -> Potassium >= 13.109)
+G[0,1](((SepsisLabel >= 0.469 | Platelets <= 0.000) & MAP <= 0.000) -> Temp <= 0.000)

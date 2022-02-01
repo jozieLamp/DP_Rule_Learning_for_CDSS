@@ -1,0 +1,7 @@
+G[0,1](((AST <= 3.213 | Hct >= 0.326) & Glucose >= 0.667) -> Alkalinephos >= 0.358)
+G[1,1]((Chloride >= 4.260 & Hgb >= 0.739) -> Glucose <= 4.779)
+F[1,1](((Resp <= 18.796 -> Magnesium >= 0.039) | PTT >= 0.111) -> Temp >= 0.019)
+F[0,1](FiO2 >= 0.000 & BaseExcess >= 0.003)
+((Temp >= 4.461) U[1,1] (Hgb >= 0.219))
+F[1,1]((Resp <= 20.255 | Creatinine <= 0.143) & BaseExcess >= 0.046)
+G[0,1]((EtCO2 >= 0.000 | EtCO2 >= 0.000) & pH <= 0.000)

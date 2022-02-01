@@ -1,0 +1,6 @@
+((EtCO2 >= 6.778) U[1,1] (MAP <= 68.878))
+G[1,1](DBP <= 52.496 -> SepsisLabel = 0.799)
+G[1,1]((Calcium <= 6.617 -> EtCO2 >= 10.314) -> MAP <= 21.961)
+F[0,1](EtCO2 >= 5.836 & SBP <= 97.859)
+G[0,1](EtCO2 >= 7.160 -> Fibrinogen >= 48.494)
+G[0,0](Lactate <= 2.203 -> SepsisLabel <= 0.719)

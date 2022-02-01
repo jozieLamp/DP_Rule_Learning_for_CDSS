@@ -1,0 +1,2 @@
+G[1,1](SepsisLabel <= 0.976 & SaO2 <= 0.000)
+((SepsisLabel >= 0.146) U[1,1] (Alkalinephos >= 0.000))

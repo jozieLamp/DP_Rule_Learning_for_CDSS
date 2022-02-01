@@ -1,0 +1,7 @@
+G[0,0]((Potassium <= 2.641 & MAP <= 76.175) & Calcium <= 80.023)
+F[1,1](((Magnesium <= 0.862 -> Potassium <= 1.012) | Glucose >= 0.403) -> SepsisLabel >= 0.344)
+F[0,0](((WBC >= 0.074 -> Potassium >= 0.001) | Fibrinogen <= 3.746) -> SBP >= 0.412)
+G[0,0](SBP > 53.319 -> SepsisLabel = 0.910)
+F[1,1](MAP <= 75.142 -> SepsisLabel = 0.647)
+G[0,1](((Phosphate >= 0.020 -> Resp >= 2.521) | HCO3 >= 14.502) -> Hct <= 23.831)
+G[0,1]((HCO3 <= 8.551 | HCO3 <= 6.888) & Temp <= 8.826)

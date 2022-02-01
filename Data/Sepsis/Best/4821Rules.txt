@@ -1,0 +1,3 @@
+G[0,1](Bilirubin_total <= 0.269 | SaO2 <= 89.337)
+F[0,0](Creatinine >= 0.050 | Glucose <= 78.712)
+F[0,0]((Glucose >= 34.360 -> PTT >= 3.991) | Chloride >= 5.293)

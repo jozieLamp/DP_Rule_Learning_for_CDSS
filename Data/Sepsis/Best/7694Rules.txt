@@ -1,0 +1,1 @@
+((SepsisLabel >= 0.323) U[1,2] (Fibrinogen <= 0.000))

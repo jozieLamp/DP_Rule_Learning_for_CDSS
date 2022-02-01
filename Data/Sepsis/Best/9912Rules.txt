@@ -1,0 +1,2 @@
+F[0,1](BUN <= 2.776 & Fibrinogen >= 27.850)
+F[0,1](Alkalinephos <= 111.679 -> SepsisLabel = 0.774)

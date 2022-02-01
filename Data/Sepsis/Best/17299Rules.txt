@@ -1,0 +1,8 @@
+G[0,1](SepsisLabel <= 0.926 & Potassium <= 0.000)
+F[0,0]((SBP <= 98.746 & Temp <= 34.915) -> DBP >= 0.562)
+((SaO2 >= 0.000) U[0,0] (SBP <= 110.946))
+((Lactate <= 1.311) U[0,0] (SBP <= 116.353))
+F[0,0](SepsisLabel >= 0.148 & Calcium >= 0.000)
+F[1,1](((Creatinine <= 0.000 -> Lactate <= 3.299) | BUN <= 0.547) & SepsisLabel >= 0.088)
+G[0,0]((Calcium <= 0.000 -> Lactate <= 0.640) & MAP <= 3.421)
+((MAP >= 15.276) U[0,0] (SBP <= 108.676))
