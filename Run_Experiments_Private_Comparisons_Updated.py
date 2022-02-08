@@ -8,6 +8,7 @@ import pandas as pd
 import math
 import numpy as np
 import warnings
+import os
 warnings.filterwarnings('ignore')
 
 def main():
@@ -15,9 +16,9 @@ def main():
     dataset = 'ICU'
     mctsType = 'Baseline'
     computeRQ = False
-    params.popSize = 100
+    params.popSize = 1000
     params.maxQueries = 1000
-    numTimes = 5
+    numTimes = 10
 
     #Load client rules
     clientTrees, clientRules, clientDF = cov.loadClientRules(params.popSize, params.dataFilename)
@@ -36,7 +37,6 @@ def main():
     budgets = [1000, 100, 10, 1, 0.1, 0.01, 0.001]
     cps = ['basic', 'beta', 'eps', '1', '2']
     prunes = ['10', '1', '0-1', '0-001']
-
 
 
     for cpMethod in cps:
@@ -67,13 +67,19 @@ def main():
 
                 params.epsilon = eps
                 params.name = "Cp" + cpMethod + "_Lambda" + pruneMethod + "_Eps" + str(eps)
-                params.resultsFilename = "Results/Private/"+ dataset + "/" + mctsType + "/Cp" + cpMethod + "_Lambda" + pruneMethod + "_Eps" + str(eps)
+                # params.resultsFilename = "Results/Private/"+ dataset + "/" + mctsType + "/Cp" + cpMethod + "_Lambda" + pruneMethod + "_Eps" + str(eps)
 
                 print("\n\n**************** CP: " + cpMethod + "; Lambda:", pruneMethod, "; EPSILON: ", params.epsilon, "****************")
 
                 aveCov = []
                 aveQual = []
                 for n in range(numTimes):
+                    filepath = "Results/Private/" + dataset + "/" + mctsType + "/" + str(params.popSize) + " Clients/Run " + str(n) + "/"
+                    params.resultsFilename = filepath + "/Cp" + cpMethod + "_Lambda" + pruneMethod + "_Eps" + str(eps)
+
+                    if not os.path.exists(filepath): #make path if it doesn't exist
+                        os.makedirs(filepath)
+
                     #Run protocol
                     runProt(params)
 
@@ -129,44 +135,53 @@ def main():
     #Coverage DF
     df = pd.DataFrame(coverageLst, columns=["Cp", "Lambda", "Epsilon", "Total Client Rules", "Percentage Found Rules", "Found Rules", "Non Rules", "Rule Precision",
                     "Total Client Structures","Percentage Found Structures", "Found Structures", "Non Structures", "Structure Precision"])
-    df.to_csv("Results/Private/"+ dataset + "/" + mctsType + "/Coverage/CoverageSummaryDF.csv")
+
+    filepath = "Results/Private/" + dataset + "/" + mctsType + "/" + str(params.popSize) + " Clients/Coverage/"
+    if not os.path.exists(filepath):  # make path if it doesn't exist
+        os.makedirs(filepath)
+
+    df.to_csv(filepath + "CoverageSummaryDF.csv")
     print("COVERAGE DF:")
     print(df)
 
     # Make graphs of query analysis for coverage
-    cov.plotQueryAnalysisPrivate(df, save="Results/Private/" + dataset + "/" + mctsType +"/Coverage/", value='Percentage Found Rules')
-    cov.plotQueryAnalysisPrivate(df, save="Results/Private/" + dataset + "/" + mctsType + "/Coverage/",value='Percentage Found Structures')
-    cov.plotQueryAnalysisPrivate(df, save="Results/Private/" + dataset + "/" + mctsType + "/Coverage/",value='Rule Precision')
-    cov.plotQueryAnalysisPrivate(df, save="Results/Private/" + dataset + "/" + mctsType + "/Coverage/",value='Structure Precision')
-    cov.plotQueryAnalysisPrivate(df, save="Results/Private/" + dataset + "/" + mctsType + "/Coverage/",value='Found Rules')
-    cov.plotQueryAnalysisPrivate(df, save="Results/Private/" + dataset + "/" + mctsType + "/Coverage/",value='Non Rules')
+    cov.plotQueryAnalysisPrivate(df, save=filepath, value='Percentage Found Rules')
+    cov.plotQueryAnalysisPrivate(df, save=filepath,value='Percentage Found Structures')
+    cov.plotQueryAnalysisPrivate(df, save=filepath,value='Rule Precision')
+    cov.plotQueryAnalysisPrivate(df, save=filepath,value='Structure Precision')
+    cov.plotQueryAnalysisPrivate(df, save=filepath,value='Found Rules')
+    cov.plotQueryAnalysisPrivate(df, save=filepath,value='Non Rules')
 
     aveCovDf = pd.DataFrame(averagedCov,columns=["Cp", "Lambda", "Epsilon", "Total Client Rules", "Percentage Found Rules", "Found Rules","Non Rules", "Rule Precision",
                                "Total Client Structures", "Percentage Found Structures", "Found Structures","Non Structures", "Structure Precision",
                                 "Total Client Rules Std", "Percentage Found Rules Std", "Found Rules Std","Non Rules Std", "Rule Precision Std","Total Client Structures Std",
                                 "Percentage Found Structures Std","Found Structures Std","Non Structures Std", "Structure Precision Std" ])
-    aveCovDf.to_csv("Results/Private/" + dataset + "/" + mctsType + "/Coverage/AveragedCoverageSummaryDF.csv")
-    cov.summaryPrivRules(aveCovDf, save="Results/Private/" + dataset + "/" + mctsType + "/Coverage/")
+    aveCovDf.to_csv(filepath + "AveragedCoverageSummaryDF.csv")
+    cov.summaryPrivRules(aveCovDf, save=filepath)
 
 
 
     # Quality DF
     if computeRQ:
         qualDF = pd.DataFrame(qualLst, columns=["Cp", 'Lambda', "Epsilon", 'Precision', 'Accuracy', 'Patient Precision', 'Patient Accuracy'])
-        qualDF.to_csv("Results/Private/"+ dataset + "/" + mctsType + "/Rule Quality/RuleQualitySummaryDF.csv")
+
+        filepath = "Results/Private/" + dataset + "/" + mctsType + "/" + str(params.popSize) + " Clients/Rule Quality/"
+        if not os.path.exists(filepath):  # make path if it doesn't exist
+            os.makedirs(filepath)
+        qualDF.to_csv(filepath + "RuleQualitySummaryDF.csv")
         print("RULE QUALITY DF")
         print(qualDF)
 
         # Make graphs of query analysis for rule quality
-        RQ.plotPrivateCM(qualDF, clientCM, metric='Accuracy', save="Results/Private/"+ dataset + "/" + mctsType + "/Rule Quality/")
-        RQ.plotPrivateCM(qualDF, clientCM, metric='Precision', save="Results/Private/"+ dataset + "/" + mctsType + "/Rule Quality/")
+        RQ.plotPrivateCM(qualDF, clientCM, metric='Accuracy', save=filepath)
+        RQ.plotPrivateCM(qualDF, clientCM, metric='Precision', save=filepath)
         #Do for patient
-        RQ.plotPrivateCM(qualDF, clientPtCM, metric='Patient Accuracy', save="Results/Private/"+ dataset + "/" + mctsType + "/Rule Quality/")
-        RQ.plotPrivateCM(qualDF, clientPtCM, metric='Patient Precision', save="Results/Private/"+ dataset + "/" + mctsType + "/Rule Quality/")
+        RQ.plotPrivateCM(qualDF, clientPtCM, metric='Patient Accuracy', save=filepath)
+        RQ.plotPrivateCM(qualDF, clientPtCM, metric='Patient Precision', save=filepath)
 
         aveQualDF = pd.DataFrame(averagedQual, columns=["Cp", 'Lambda', "Epsilon", 'Precision', 'Accuracy', 'Patient Precision', 'Patient Accuracy',
                                                         'Precision Std', 'Accuracy Std', 'Patient Precision Std', 'Patient Accuracy Std'])
-        aveQualDF.to_csv("Results/Private/"+ dataset + "/" + mctsType + "/Rule Quality/AveragedRuleQualitySummaryDF.csv")
+        aveQualDF.to_csv(filepath + "AveragedRuleQualitySummaryDF.csv")
 
 
 
