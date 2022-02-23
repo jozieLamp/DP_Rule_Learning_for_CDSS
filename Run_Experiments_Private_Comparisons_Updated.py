@@ -16,9 +16,9 @@ def main():
     dataset = 'ICU'
     mctsType = 'Baseline'
     computeRQ = False
-    params.popSize = 1000
+    params.popSize = 10
     params.maxQueries = 1000
-    numTimes = 10
+    numTimes = 5
 
     #Load client rules
     clientTrees, clientRules, clientDF = cov.loadClientRules(params.popSize, params.dataFilename)
@@ -34,7 +34,11 @@ def main():
     averagedCov = []
     averagedQual = []
 
-    budgets = [1000, 100, 10, 1, 0.1, 0.01, 0.001]
+    # budgets = [1000, 100, 10, 1, 0.1, 0.01, 0.001]
+    # cps = ['basic', 'beta', 'eps', '1', '2']
+    # prunes = ['10', '1', '0-1', '0-001']
+
+    budgets = [1000, 100, 10, 1, 0.1, 0.01]
     cps = ['basic', 'beta', 'eps', '1', '2']
     prunes = ['10', '1', '0-1', '0-001']
 
@@ -80,32 +84,36 @@ def main():
                     if not os.path.exists(filepath): #make path if it doesn't exist
                         os.makedirs(filepath)
 
-                    #Run protocol
-                    runProt(params)
+                    try:
+                        #Run protocol
+                        runProt(params)
 
-                    ## COVERAGE EXPs
-                    ldpRules, covDF, structDF = calcIndivCoverage(clientDF)
+                        ## COVERAGE EXPs
+                        ldpRules, covDF, structDF = calcIndivCoverage(clientDF)
 
-                    aveCov.append([covDF['Total Client Rules'].item(), covDF['Found Rules'].item()/covDF['Total Client Rules'].item() ,covDF['Found Rules'].item(), covDF['Non Rules'].item(),
-                       covDF['Precision'].item(),structDF['Total Client Structures'].item(), structDF['Found Structures'].item()/structDF['Total Client Structures'].item(),
-                       structDF['Found Structures'].item(), structDF['Non Structures'].item(),
-                       structDF['Precision'].item()])
+                        aveCov.append([covDF['Total Client Rules'].item(), covDF['Found Rules'].item()/covDF['Total Client Rules'].item() ,covDF['Found Rules'].item(), covDF['Non Rules'].item(),
+                           covDF['Precision'].item(),structDF['Total Client Structures'].item(), structDF['Found Structures'].item()/structDF['Total Client Structures'].item(),
+                           structDF['Found Structures'].item(), structDF['Non Structures'].item(),
+                           structDF['Precision'].item()])
 
-                    coverageLst.append([cpMethod, pruneMethod, eps, covDF['Total Client Rules'].item(), covDF['Found Rules'].item()/covDF['Total Client Rules'].item() ,covDF['Found Rules'].item(), covDF['Non Rules'].item(),
-                       covDF['Precision'].item(),structDF['Total Client Structures'].item(), structDF['Found Structures'].item()/structDF['Total Client Structures'].item(),
-                       structDF['Found Structures'].item(), structDF['Non Structures'].item(),
-                       structDF['Precision'].item()])
+                        coverageLst.append([cpMethod, pruneMethod, eps, covDF['Total Client Rules'].item(), covDF['Found Rules'].item()/covDF['Total Client Rules'].item() ,covDF['Found Rules'].item(), covDF['Non Rules'].item(),
+                           covDF['Precision'].item(),structDF['Total Client Structures'].item(), structDF['Found Structures'].item()/structDF['Total Client Structures'].item(),
+                           structDF['Found Structures'].item(), structDF['Non Structures'].item(),
+                           structDF['Precision'].item()])
 
-                    ## RULE QUALITY EXPS
-                    if computeRQ:
-                        ldpCM, ldpPtCM = calcIndivRuleQuality(ldpRules, clientData, clientLabels)
+                        ## RULE QUALITY EXPS
+                        if computeRQ:
+                            ldpCM, ldpPtCM = calcIndivRuleQuality(ldpRules, clientData, clientLabels)
 
-                        # Add results to list
-                        aveQual.append([ldpCM['Precision'].item(), ldpCM['Accuracy'].item(),
-                             ldpPtCM['Precision'].item(), ldpPtCM['Accuracy'].item()])
+                            # Add results to list
+                            aveQual.append([ldpCM['Precision'].item(), ldpCM['Accuracy'].item(),
+                                 ldpPtCM['Precision'].item(), ldpPtCM['Accuracy'].item()])
 
-                        qualLst.append([cpMethod, pruneMethod, eps, ldpCM['Precision'].item(), ldpCM['Accuracy'].item(),
-                             ldpPtCM['Precision'].item(), ldpPtCM['Accuracy'].item()])
+                            qualLst.append([cpMethod, pruneMethod, eps, ldpCM['Precision'].item(), ldpCM['Accuracy'].item(),
+                                 ldpPtCM['Precision'].item(), ldpPtCM['Accuracy'].item()])
+
+                    except:
+                        print("\nHAD an error, skipping this round")
 
 
                 #Ave results

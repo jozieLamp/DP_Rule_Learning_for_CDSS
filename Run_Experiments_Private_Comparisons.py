@@ -15,7 +15,7 @@ def main():
     dataset = 'ICU'
     mctsType = 'Baseline'
     computeRQ = False
-    params.popSize = 100
+    params.popSize = 10
     params.maxQueries = 1000
     numTimes = 5
 
