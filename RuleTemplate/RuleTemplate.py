@@ -22,7 +22,7 @@ stlGrammarDict = {
     "stlTerm": [["BooleanAtomic", "U", "timeBound",  "BooleanAtomic"], ["F", "timeBound", "BooleanAtomic"], ["G", "timeBound", "BooleanAtomic"], ["BooleanAtomic"]],
     # "timeBound": [["[","atomic",",","atomic","]"]],
     # "BooleanAtomic": [["GT"], ["GE"], ["LT"], ["LE"], ["EQ"], ["NEQ"], ["(","boolExpr",")"], ["NOT", "BooleanAtomic"]],
-    "BooleanAtomic": [["GT"], ["LT"], ["EQ"], ["NEQ"], ["(", "boolExpr", ")"],["NOT", "BooleanAtomic"]],
+    "BooleanAtomic": [["GE"], ["LE"], ["EQ"], ["NEQ"], ["(", "boolExpr", ")"],["NOT", "BooleanAtomic"]],
     "GT": [["Variable", "Parameter"]],
     "GE": [["Variable", "Parameter"]],
     "LT": [["Variable", "Parameter"]],

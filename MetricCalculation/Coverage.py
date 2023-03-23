@@ -25,6 +25,8 @@ def getClientTreesFromCountDF(df):
     return clTrees
 
 #Get count of coverage
+# TODO - check this here ...
+# Why getting more rules --> 44 structures and not the 15 ...
 def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
     stlFac = STLFactory()
 
