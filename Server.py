@@ -9,6 +9,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from scipy.stats import norm
+from gekko import GEKKO
 from RuleTemplate.RuleTemplate import RuleTemplate, Node, stlGrammarDict, terminalNodes
 from SignalTemporalLogic.STLFactory import STLFactory
 from MCTS.MCTS import MCTS
@@ -97,7 +99,9 @@ class Server :
         mcts = MCTS(method=self.mctsType, server=self, verbose=self.verbose)
 
         totalIters = 1 #to track the number of iterations that are completed
-        while not self.globalBudgetUsed() and self.numQueries < self.maxQueries and not self.templateTree._branches[branchName].completelyExplored:
+        # while not self.globalBudgetUsed() and self.numQueries < self.maxQueries and not self.templateTree._branches[branchName].completelyExplored:
+        while not self.globalBudgetUsed() and not self.templateTree._branches[branchName].completelyExplored:
+
             if (self.verbose):
                 self.logger.info("BEGIN SEARCH ROUND, ITERATION: " + str(totalIters) + "\n")
 
@@ -296,9 +300,11 @@ class Server :
                 resp = self.clientList[c].queryStructuralRuleMatch(tempNodes, template.varList)
                 yesCount += resp
 
-                #Remove client if has no match
-                if resp == 1:
-                    updatedActiveClients.append(c)
+                # ***ADDED - Removing active client computation
+                # #Remove client if has no match
+                # if resp == 1:
+                #     updatedActiveClients.append(c)
+                updatedActiveClients.append(c)
 
             return yesCount, updatedActiveClients
 
@@ -328,9 +334,11 @@ class Server :
                     else:
                         priorProb = 0.5 #50% chance return true
 
-                    # print("\nClient", c, "resp", resp)
-                    if self.checkClientActive(response=resp, p=p, priorProbTrue=priorProb): #if true, still active, add to updated active clients
-                        updatedActiveClients.append(c)
+                    # ***ADDED - Removing active client computation
+                    # # print("\nClient", c, "resp", resp)
+                    # if self.checkClientActive(response=resp, p=p, priorProbTrue=priorProb): #if true, still active, add to updated active clients
+                    #     updatedActiveClients.append(c)
+                    updatedActiveClients.append(c)
 
             # print("Updated active clients", updatedActiveClients)
 
@@ -354,11 +362,99 @@ class Server :
             # else:
             return "BUDGET USED", updatedActiveClients
 
+
     #Allocate budget for this query
     def allocateQueryBudget(self, strategy):
 
         if strategy == 'fixed':  #Fixed budget
             pLossBudg = self.epsilon / self.maxQueries
+        elif strategy == 'adaptive':
+            print("In adaptive tree search")
+
+            #true count -->
+            c = 7 #true count from parent node
+
+            errorBound = 0.05
+            # beta = 1/(errorBound * math.sqrt(n))
+            n = len(self.clientList) # num clients
+
+            prob = GEKKO()
+
+
+            # first, compute the expected number of yesses
+            # p = decimal.Decimal(math.e) ** decimal.Decimal(beta) / (
+            #         1 + decimal.Decimal(math.e) ** decimal.Decimal(beta))
+
+            # p = math.e ** beta / (1 + math.e ** beta)
+            # q = 1-p
+            # c_hat = p * n
+            #
+            # stdDev = (n * q * (1-q)) / (p-q)**2
+            # z = (c - c_hat) / stdDev
+            #
+            # cdf = (1.0 + math.erf(z / math.sqrt(2.0))) / 2.0
+            # cdf >= 0.95
+
+            # beta = 1
+            # p = math.e ** beta / (1 + math.e ** beta)
+            # print("p", p)
+            # q = 1 - p
+            # c_hat = p * n
+            # print("c_hat", c_hat)
+            # stdDev = 2.5#(n * q * (1 - q)) / (p - q) ** 2
+            # print("std dev", stdDev)
+            # # want to ensure distance between estimated count and true is within 5%
+            # z = (c_hat - c) / stdDev # how many std devs away from the mean
+            # print("z is", z)
+            # # cdf = norm.cdf(z)
+            # # this gives the probability that my est count is <= given value
+            # cdf = norm.cdf(c_hat, loc=c, scale=stdDev)
+            # print("cdf", cdf)
+            # print("cdf both", cdf + 1 - cdf)
+
+            beta = 1
+            p = math.e ** beta / (1 + math.e ** beta)
+            print("p", p)
+            q = 1 - p
+            c_hat = p * n
+            print("c_hat", c_hat)
+            # Compute Standard Deviation of parent node
+            q_paren = 0.5
+            p_paren = 0.5
+            bottom = (p_paren - q_paren) ** 2
+            stdDev = (n * q_paren * (1 - q_paren)) / bottom if bottom else (n * q_paren * (1 - q_paren))
+            print("std dev", stdDev)
+
+            d = 2 * stdDev #Distance of within 2 standard deviations
+            z_upper = (c_hat - c + d)/stdDev
+            z_lower = (c_hat - c - d)/stdDev
+            # Probability true count falls within +- d of the estimated count
+            cdf = norm.cdf(z_upper) - norm.cdf(z_lower)
+            print("cdf", cdf)
+
+
+
+            # # variables
+            # beta = prob.Var(ub=self.epsilon)
+            #
+            # # Intermediates
+            # p = prob.Intermediate(math.e ** beta / (1 + math.e ** beta))
+            # print("p", p.value)
+            # q = prob.Intermediate(1-p)
+            # c_hat = prob.Intermediate(p * n)
+            # stdDev = prob.Intermediate((n * q * (1 - q)) / (p - q) ** 2 ) # this might need to be true std dev of true value ... so prob from parent
+            # z = prob.Intermediate((c_hat - c) / stdDev)
+            # print("z is", z.value)
+            # cdf = prob.Intermediate(norm.cdf(z.value))
+            # print("Cdf is", cdf.value)
+            #
+            # # Functions:
+            # prob.Equations([2 * cdf - 0.5 >= 0.95])
+            # prob.Minimize(beta)
+            #
+            # prob.solve()
+            # print("beta", beta.value)
+            #
 
         return pLossBudg
 

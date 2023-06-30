@@ -48,6 +48,7 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
     nonRuleLst = []
     clientRulesFound = []
 
+    # TODO - make this for matches of client trees, not ldp trees
     for l in ldpTrees:
         # print("\nTemplate", l.toString(), "Per Count", ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item())
 
@@ -57,8 +58,8 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
             if cRule not in clientRulesFound:
                 clientRulesFound.append(cRule)
                 foundRules += 1
-                # print(l.toString())
-                # print(ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'])
+                print(l.toString())
+                print(ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'])
                 try:
                     lCount = ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item()
                 except:
@@ -66,7 +67,7 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
                 # cCount = clientDF[clientDF["Rule"] == cRule]['Percent of Population'].item()
                 matchLst.append([l.toString(), cRule, lCount, cCount])
         else:
-            # print("LDP RULE NOT FOUND", l.toString())
+            print("LDP RULE NOT FOUND", l.toString())
             nonRuleLst.append(l.toString())
             nonRules += 1
 

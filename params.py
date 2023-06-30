@@ -70,8 +70,8 @@ variables = {'LOS': [0.0, 122.0], 'ICU_Pt_Days': [0.0, 120.0], 'Mort': [0.0, 1.0
 
 
 # PRIVACY BUDGET PARAMS
-epsilon = 'inf' #set epsilon to 'inf' to run nonprivate model
-budgetAllocMethod = 'fixed' #Options are 'fixed': epsilon/total queries,
+epsilon = 10 #set epsilon to 'inf' to run nonprivate model
+budgetAllocMethod = 'adaptive' #Options are 'fixed': epsilon/total queries, 'adaptive'
 
 
 # cp = epsilon / maxQueries #UCT param to increase or decrease the amount of exploration performed

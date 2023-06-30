@@ -63,6 +63,9 @@ def runProtocol(params):
     covDF, countDF, nrDF, missedCR, clientTrees = cov.getCoverageTable(params.cutoffThresh, ldpDF, ldpTrees, clientDF)
     print(covDF)
 
+    structDF = cov.countUniqueStructuresNoVars(clientTrees, ldpTrees)
+    print(structDF)
+
 
 if __name__ == "__main__":
     runProtocol(params)
