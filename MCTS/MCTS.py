@@ -300,7 +300,8 @@ class MCTS:
                     self.server.clientList[c].numQueries += 2  # add count to queries
 
                     if self.server.epsilon != 'inf':
-                        xtraBudg = self.server.allocateQueryBudget(strategy=self.server.budgetAllocStrategy)
+                        parentCount = selectedBranch.parent.branch.getMatchCount()
+                        xtraBudg = self.server.allocateQueryBudget(strategy=self.server.budgetAllocStrategy, c=parentCount)
                         self.server.clientList[c].budgetUsed += xtraBudg #Preserve budget for final query of rule
                         # self.server.clientList[c].budgetUsed += (self.server.clientList[c].paramNoise * numParams)
                         self.server.clientList[c].budgetUsed += (xtraBudg * numParams) #Preserve budget for noising of params

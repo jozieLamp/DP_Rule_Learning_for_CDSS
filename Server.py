@@ -77,6 +77,9 @@ class Server :
             self.budgetAllocStrategy = params.budgetAllocMethod
             self.clientsWithUsedBudgets = []  # list of clients who have used budget
             self.numQueries = 0
+            # Previous node p and q values
+            self.q_paren = 0.5 #initially set to even 50%
+            self.p_paren = 0.5
 
             self.logger.info("Setting privacy budget to: " + str(self.epsilon))
 
@@ -114,8 +117,8 @@ class Server :
             if self.globalBudgetUsed():
                 self.logger.info("GLOBAL BUDGET USED")
 
-            if self.numQueries >= self.maxQueries:
-                self.logger.info("TOTAL QUERIES USED UP")
+            # if self.numQueries >= self.maxQueries:
+            #     self.logger.info("TOTAL QUERIES USED UP")
 
             if self.templateTree._branches[branchName].completelyExplored:
                 self.logger.info("TREE COMPLETELY EXPLORED")
@@ -315,7 +318,12 @@ class Server :
             trueYesses = 0
 
             #Get PLoss budget for this query
-            pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy)
+            if branch.parent:
+                parentCount = branch.parent.branch.getMatchCount()
+            else:
+                parentCount = len(self.clientList) / 2 #if no parent node assume 50% prob of match
+            # print("FOUND MATCH COUNT", parentCount)
+            pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy, c=parentCount)
             p = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
 
             # print("\nActive clients at CURRENT BRANCH", branch.name, ":", branch.activeClients)
@@ -364,31 +372,30 @@ class Server :
 
 
     #Allocate budget for this query
-    def allocateQueryBudget(self, strategy):
+    def allocateQueryBudget(self, strategy, c):
 
         if strategy == 'fixed':  #Fixed budget
             pLossBudg = self.epsilon / self.maxQueries
         elif strategy == 'adaptive':
-            print("In adaptive tree search")
+            # print("In adaptive tree search")
 
             #Constants
             n = len(self.clientList)  # num clients
-            c = 7 #true count (mean) from parent node
+            # c is param passed in, true count (mean) from parent node
 
             # Compute Standard Deviation of parent node
-            q_paren = 0.5
-            p_paren = 0.5
-            bottom = (p_paren - q_paren) ** 2
-            stdDev = (n * q_paren * (1 - q_paren)) / bottom if bottom else (n * q_paren * (1 - q_paren))
+            bottom = (self.p_paren - self.q_paren) ** 2
+            stdDev = (n * self.q_paren * (1 - self.q_paren)) / bottom if bottom else (n * self.q_paren * (1 - self.q_paren))
             # print("std dev", stdDev)
 
             d = 2 * stdDev  # Distance of within 2 standard deviations
 
-
+            #Formulate optimization problem to find minimum budget (beta) to use
             prob = GEKKO()
 
             # variables
-            beta = prob.Var()
+            # beta = prob.Var(lb=1e-10, ub=self.epsilon)
+            beta = prob.Var(lb=0.001, ub=self.epsilon)
 
             # Intermediates
             p = prob.Intermediate(math.e ** beta / (1 + math.e ** beta))
@@ -405,40 +412,21 @@ class Server :
             cdf_upper = prob.Intermediate((1.0 + prob.erf(z_upper / math.sqrt(2.0))) / 2.0)
             cdf_lower= prob.Intermediate((1.0 + prob.erf(z_lower / math.sqrt(2.0))) / 2.0)
 
-
             # Functions:
             # Probability estimated count falls within +- d of the true count is >= 90%
-            prob.Equation(cdf_upper - cdf_lower >= 0.90)
+            prob.Equation(cdf_upper - cdf_lower >= 0.95)
             # prob.Equations([(norm.cdf(z_upper.value) - norm.cdf(z_lower.value)) >= 0.95])
             prob.Minimize(beta)
-            prob.solve()
-            print("beta", beta.value)
+            prob.solve(disp=False)
+            if self.verbose:
+                print("Allocated Beta Budget of:", beta.value)
+            print("Allocated Beta Budget of:", beta.value)
 
+            pLossBudg = beta.value[0]
 
-            # prob = GEKKO()
-            #
-            # # variables
-            # beta = prob.Var()
-            #
-            # # Intermediates
-            # p = prob.Intermediate(math.e ** beta / (1 + math.e ** beta))
-            # print("p", p.value)
-            # c_hat = prob.Intermediate(p * n)
-            #
-            # z_upper = prob.Intermediate((c_hat - c + d)/stdDev )
-            # z_lower = prob.Intermediate((c_hat - c - d)/stdDev )
-            # cdf_upper = prob.Intermediate(norm.cdf(z_upper.value))
-            # cdf_lower = prob.Intermediate(norm.cdf(z_lower.value))
-            #
-            # # Functions:
-            # # Probability estimated count falls within +- d of the true count
-            # prob.Equation(cdf_upper - cdf_lower >= 0.50)
-            # # prob.Equations([(norm.cdf(z_upper.value) - norm.cdf(z_lower.value)) >= 0.95])
-            # prob.Minimize(beta)
-            #
-            # prob.solve()
-            # print("beta", beta.value)
-
+            # Update global p and q params of parent node
+            self.p_paren = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
+            self.q_paren = 1 - self.p_paren
 
         return pLossBudg
 

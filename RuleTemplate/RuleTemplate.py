@@ -63,6 +63,11 @@ class Branch: #Set of nodes in tree
         # print("per count", perCount)
         return perCount
 
+    def getMatchCount(self): #return sum of percent match score
+        counts = [item[0] for item in self.matchScores]
+        # print("counts:", counts)
+        return round(sum(counts) / len(counts))
+
     def allChildrenCompletelyExplored(self):
         if self.hasChildren():
             for n in self.nodes:
