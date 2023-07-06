@@ -32,9 +32,10 @@ class Client:
             for line in file:
                 if line[0] == "(" and line[-2] == ")":
                     line = line[1:-2] + "\n"
-
+                line = re.sub('e-', '', line) #fix issue where scientific notation confuses matching
                 rule = stlFac.constructFormulaTree(line)
-                self.ruleSet.append(rule)
+                if " = " not in rule.toString():
+                    self.ruleSet.append(rule)
 
             file.close()
             return True
@@ -252,6 +253,9 @@ class Client:
 
                 if 'LT' in tempList[i]:
                     test = [x if x != "LT" else "LE" for x in tempList[i]]
+
+                # if 'EQ' in tempList[i]:
+                #     test = [x if x != "EQ" else "LE" for x in tempList[i]]
 
                 if test in cList:
                     cList.remove(test)

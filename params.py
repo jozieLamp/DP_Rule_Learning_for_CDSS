@@ -4,7 +4,7 @@ import math
 # GENERAL INPUT PARAMS
 popSize = 10  # 8000 #Size of ICU population
 #popSize = 40337 #Sepsis size
-
+#popSize = 34013 #T1d size
 
 # PROTOCOL PARAMS
 verbose = True
@@ -16,7 +16,7 @@ mctsType = 'baseline' #baseline' #'baseline' #options are 'baseline', 'coverage'
 maxQueries = 0 #Maximum number of server queries allowed (to define for nonprivate model)
 cp = 1/math.sqrt(2) #UCT param to increase or decrease the amount of exploration performed
 maxTreeDepth = 25 #Maximum depth of tree
-cutoffThresh = 0.01 #Match score cutoff threshold to prune branches
+cutoffThresh = 0.0000001 #Match score cutoff threshold to prune branches- was 0.01
 
 
 # DATA PARAMETERS
@@ -68,9 +68,21 @@ variables = {'LOS': [0.0, 122.0], 'ICU_Pt_Days': [0.0, 120.0], 'Mort': [0.0, 1.0
 #  'Potassium': [0.0, 27.5], 'Bilirubin_total': [0.0, 49.6], 'TroponinI': [0.0, 440.0], 'Hct': [0.0, 71.7], 'Hgb': [0.0, 32.0],
 #  'PTT': [0.0, 250.0], 'WBC': [0.0, 440.0], 'Fibrinogen': [0.0, 1760.0], 'Platelets': [0.0, 2322.0], 'SepsisLabel': [0, 1]}
 
+# # T1D Dataset
+# variables = {'Pt_CGMUseNumDays': [0.0, 30.0], 'Pt_FatherT1D': [0.0, 1.0], 'Pt_MotherT1D': [0.0, 1.0], 'Pt_SiblingT1D': [0.0, 1.0], 'Pt_ChildT1D': [0.0, 1.0],
+#  'Pt_GrandchildT1D': [0.0, 1.0],'Pt_GrandparentT1D': [0.0, 1.0],'BldPrSys': [0.0, 300.0],'BldPrDia': [0.0, 160.0],'SMBGperDayPtMeterCombo': [0.0, 30.0],
+#  'WeightKg': [0.0, 242.0],'HeightCm': [0.0, 210.0],'DirectLDL': [0.0, 1.0],'age': [0, 90],'diabDur': [0.0, 83.0],'TotalDailyInsPerKg': [0.0, 12.0],
+#  'LDL': [0.0, 400.0],'HDL': [0.0, 200.0],'TotChol': [0.0, 632.0],'Triglyc': [0.0, 3000.0],'BUN': [0.0, 230.0],'AlbCreatRat_mggNew': [-0.1, 9679.0],
+#  'UnitsInsBasalOrLongAct': [0.0, 200.0],'BGTestAvgNumMeter': [0.0, 30.0],'BGTestAvgNumPtRep': [0.0, 30.0],'TSH': [0.0, 493.0],'HbA1c': [0.0, 20.0],
+#  'AutonomicNeuroCl': [0.0, 1.0],'Pt_InsGov': [0.0, 1.0],'NumPumpBolusOrShortAct': [0.0, 50.0],'HbA1cImputeDtMnC': [-83.0, 92.0],
+#  'Pt_SHFlg': [0.0, 1.0],'Pt_DKAFlg': [0.0, 1.0],'bmi': [0.0, 112.0],'bmiPerc': [0.0, 1.0],'bmiZscore': [-32.0, 30],
+#  'GFR': [0.0, 424.0],'diagAgeCombo': [0.0, 89.0],'Pt_A1cGoalLev': [0.0, 12.0],'Pt_A1cGoalLevelDsYr5': [0.0, 12.0]}
+
+
+
 
 # PRIVACY BUDGET PARAMS
-epsilon = 1 #set epsilon to 'inf' to run nonprivate model
+epsilon = 10 #1 #set epsilon to 'inf' to run nonprivate model
 budgetAllocMethod = 'adaptive' #Options are 'fixed': epsilon/total queries, 'adaptive'
 
 

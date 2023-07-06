@@ -80,6 +80,7 @@ class Server :
             # Previous node p and q values
             self.q_paren = 0.5 #initially set to even 50%
             self.p_paren = 0.5
+            self.final_saved_budget = []
 
             self.logger.info("Setting privacy budget to: " + str(self.epsilon))
 
@@ -110,8 +111,6 @@ class Server :
 
             mcts.runMCTSRound(branchName=branchName)
 
-            #TODO here - add something to check and print or save # queries and total rules generated ...
-
             totalIters += 1
 
             if self.globalBudgetUsed():
@@ -135,12 +134,12 @@ class Server :
 
         #Save initial rule trees
         irtDF = pd.DataFrame([x.toString() for x in initialRuleTrees], columns=['Initial Rule Trees'])
-        # irtDF.to_csv(self.params.resultsFilename + "InitialRules.csv")
+        irtDF.to_csv(self.params.resultsFilename + "InitialRules.csv")
         #TODO - del this
-        if self.verbose:
-            self.logger.info("Initial Rules")
-            for x in initialRuleTrees:
-                self.logger.info(x.toString())
+        # if self.verbose:
+        #     self.logger.info("Initial Rules")
+        #     for x in initialRuleTrees:
+        #         self.logger.info(x.toString())
 
         if self.verbose:
             self.logger.info("Generated " + str(len(initialRuleTrees)) + " initial rules\n")
@@ -148,12 +147,18 @@ class Server :
 
         # do one final query for each rule to make sure full rule has a match
         ruleTrees = []
-        for r in initialRuleTrees:
+        for ri in range(len(initialRuleTrees)):
+            r = initialRuleTrees[ri]
             # print(r.toString())
             # r.show()
 
             origAC = r.activeClients
-            matchCount, activeClients = self.queryFullRuleMatch(r)
+
+            if self.epsilon != 'inf':
+                finalBudg = self.final_saved_budget[ri]
+            else:
+                finalBudg=None
+            matchCount, activeClients = self.queryFullRuleMatch(r, finalBudg)
 
             # Fix negative estimates
             if matchCount < 0:
@@ -178,10 +183,10 @@ class Server :
             self.logger.info("Generated " + str(len(ruleTrees)) + " full rules\n")
 
         #TODO del this
-        if self.verbose:
-            self.logger.info("Generated Full Rules:")
-            for x in ruleTrees:
-                self.logger.info(x.toString())
+        # if self.verbose:
+        #     self.logger.info("Generated Full Rules:")
+        #     for x in ruleTrees:
+        #         self.logger.info(x.toString())
 
         # ESTIMATE PARAMETERS FOR EACH RULE IN THE RULESET
         if self.verbose:
@@ -191,16 +196,23 @@ class Server :
         rules = []
         finalTrees = []
         #query params and make final STL Rule Structures (STL Trees)
-        for t in ruleTrees:
+        for ti in range(len(ruleTrees)):
+            t = ruleTrees[ti]
+
+            # get budget
+            if self.epsilon != 'inf':
+                finalBudg = self.final_saved_budget[ti]
+            else:
+                finalBudg = None
+
             #Query missing params for tree
-            tempParams = self.queryParameters(t)
+            tempParams = self.queryParameters(t, finalBudg)
 
             #Only get correctly formatted rules
             ft = stlFac.constructFormulaTree(t.toStringWithParams() + "\n") # Check if structure correct
 
             if ft != None:  # Formula is not improper
 
-                #TODO - OPTION might have to do something where if rule is improper, remove it from the RuleTree list so the other functions are not messed up
                 if tempParams != None:
                     ft.updateParams(tempParams)# Update params in structure
                 rules.append(ft)
@@ -228,10 +240,10 @@ class Server :
 
 
     #Final query once have completed final rules generated from rule template
-    def queryFullRuleMatch(self, template):
+    def queryFullRuleMatch(self, template, pLossBudg):
         # get template node list
         tempNodes = self.getTemplateNodes(template)
-        updatedActiveClients = []
+        updatedActiveClients = template.activeClients
 
         # Non private model
         if self.epsilon == 'inf':
@@ -240,9 +252,9 @@ class Server :
                 resp = self.clientList[c].queryStructuralRuleMatch(tempNodes, template.varList)
                 yesCount += resp
 
-                # Remove client if has no match
-                if resp == 1:
-                    updatedActiveClients.append(c)
+                # # Remove client if has no match
+                # if resp == 1:
+                #     updatedActiveClients.append(c)
 
             return yesCount, updatedActiveClients
 
@@ -253,21 +265,22 @@ class Server :
             trueYesses = 0
 
             # Get PLoss budget for this query
-            pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy)
+            # parentCount = len(self.clientList) / 2 #if no parent node assume 50% prob of match #TODO - might need to set this as something standard...
+            # pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy, c=parentCount)
             p = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
 
-            for c in template.activeClients: #TODO - OPTION potentially query all clients, not just the active ones in the final step (?)
+            for c in template.activeClients:
                 resp, truResp = self.clientList[c].finalRandResponseQuery(tempNodes, template.varList, pLossBudg)
 
                 yesCount += resp
                 trueYesses += truResp
 
-                if resp == 1:
-                    updatedActiveClients.append(c) #make active clients only the ones who said yes
+                # if resp == 1:
+                #     updatedActiveClients.append(c) #make active clients only the ones who said yes
 
             #Calculate final match count for this rule
             q = 1 - p
-            estTrueCount = float((yesCount - (len(template.activeClients) * q)) / (p - q))
+            estTrueCount = yesCount #float((yesCount - (len(template.activeClients) * q)) / (p - q))
             percentCount = float(estTrueCount / len(template.activeClients))
             truePerCount = float(trueYesses / len(template.activeClients))  # Real percent
 
@@ -353,12 +366,12 @@ class Server :
             if not self.globalBudgetUsed():
                 q = 1-p
                 # estTrueCount = float((yesCount - (len(self.clientList) * q)) / (p-q))
-                estTrueCount = float((yesCount - (len(branch.activeClients) * q)) / (p-q))
+                estTrueCount = yesCount #(yesCount - (len(self.clientList) * float(q))) / (float(p)-float(q)) # equation to unbias results
                 percentCount = float(estTrueCount / len(branch.activeClients)) if len(branch.activeClients) else 0
                 truePerCount = float(trueYesses / len(branch.activeClients)) if len(branch.activeClients) else 0#Real percent
 
                 if self.verbose:
-                    # print("yes cnt", yesCount, "p", p, "q", q, "est true count", estTrueCount)
+                    # self.logger.info("p "+ str(p) + " q " + str(q) + " len client list " + str(len(self.clientList)))
                     self.logger.info("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) +", Estimated True yesses " + str(estTrueCount))
                     self.logger.info("True Percent " + str(truePerCount) + ", Est Percent " + str(percentCount) + "\n")
                     # self.logger.info("True Count " + str(trueYesses) +  ", Est Count " + str(estTrueCount))
@@ -535,7 +548,7 @@ class Server :
         return nodes
 
     #receives a rule tree template
-    def queryParameters(self, template):
+    def queryParameters(self, template, pLossBudg):
 
         # get template node list
         tempNodes = self.getTemplateNodes(template)
@@ -544,10 +557,10 @@ class Server :
         # print("template params", tempParams)
         # print("template var list", template.varList)
 
-        if self.epsilon != 'inf':
-            pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy)
-        else:
-            pLossBudg = None
+        # if self.epsilon != 'inf':
+        #     pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy)
+        # else:
+        #     pLossBudg = None
 
         #Get param values from clients
         # print("active clients", template.activeClients)

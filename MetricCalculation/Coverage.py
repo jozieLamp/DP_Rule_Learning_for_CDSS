@@ -48,7 +48,6 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
     nonRuleLst = []
     clientRulesFound = []
 
-    # TODO - make this for matches of client trees, not ldp trees
     for l in ldpTrees:
         # print("\nTemplate", l.toString(), "Per Count", ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item())
 
@@ -58,8 +57,8 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
             if cRule not in clientRulesFound:
                 clientRulesFound.append(cRule)
                 foundRules += 1
-                print(l.toString())
-                print(ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'])
+                # print(l.toString())
+                # print(ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'])
                 try:
                     lCount = ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item()
                 except:
@@ -71,7 +70,28 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
             nonRuleLst.append(l.toString())
             nonRules += 1
 
-    #Adjust overestimates of found rules
+    print("Total found LDP rules", foundRules)
+
+    #Double check missed client rules actually missed and not semantic match in ldp rule set
+    missedRules = list(np.setdiff1d(clientRules, clientRulesFound))
+    for mr in missedRules:
+
+        # From client rule, first make client tree
+        m = stlFac.constructFormulaTree(mr + "\n")
+
+        # print("m", m.toString())
+        cRule, cCount = findClientRuleMatch(m, ldpTrees, clientDF)
+
+        # print(cRule)
+        if cRule != None:
+            foundRules += 1
+            missedRules.remove(mr)
+
+    if missedRules != []:
+        print("Missed Client Rules:")
+        print(missedRules)
+
+    #Adjust overestimates of found rules from double rules (same rule twice)
     if foundRules > len(clientRules):
         foundRules = len(clientRules)
 
@@ -79,11 +99,6 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
     prec = foundRules / bot if bot else 0
     lst = [len(clientRules), foundRules, nonRules, prec]
     covDF = pd.DataFrame([lst], columns=["Total Client Rules", "Found Rules", "Non Rules", "Precision"])
-
-    #Print missed client rules
-    missedRules = np.setdiff1d(clientRules, clientRulesFound)
-    # print("Missed Client Rules:")
-    # print(missedRules)
 
     #Make DF
     nrDF = pd.DataFrame(nonRuleLst, columns=['Non Rules'])
@@ -139,7 +154,7 @@ def getUniqueStructures(trees):
 
     return structs
 
-# def findRuleMatch(template, clientTrees, ldpDF, clientDF):
+
 def findRuleMatch(template, clientTrees, clientDF):
     cCount = None
 
@@ -154,6 +169,22 @@ def findRuleMatch(template, clientTrees, clientDF):
             pass
 
     return rule, cCount
+
+def findClientRuleMatch(template, ldpTrees, clientDF):
+    cCount = None
+
+    rule = queryStructuralFullMatch(template, ldpTrees)
+
+    if rule != None:
+        # print("Full Match Found")
+        rule = rule.toString()
+        try:
+            cCount = clientDF[clientDF["Rule"] == rule]['Percent of Population'].item()
+        except:
+            pass
+
+    return rule, cCount
+
 
 # TODO - delete this?
 def queryPartialStructuralMatch(template, clientTrees, clientDF):
@@ -181,6 +212,16 @@ def queryPartialStructuralMatch(template, clientTrees, clientDF):
             return partials
 
     return None
+
+def getClientRuleMatch(clientRule, ldpTrees):
+    client = Client(clientNum=1, epsilon='inf', ruleSet=ldpTrees)
+    server = Server(clientList=[], varDict={}, params=None)
+
+    clientNodes = server.getTemplateNodes(clientRule)
+    clientVars = clientRule.getAllVars()
+
+    r = client.queryStructuralRuleMatchReturn(ldpNodes, ldpVars)
+
 
 def queryStructuralFullMatch(template, clientTrees):
 
@@ -357,12 +398,14 @@ def loadClientRules(popSize, dataFilename):
 
         num += 1
 
-        # get nonduplicate list of trees
+    print("clients added", clientsAdded)
+
+    # get nonduplicate list of trees
     currRls = []
     ct = []
     for t in clientTrees:
         strRl = t.toString()
-        # strRl = re.sub('>=', '>', strRl)
+        # strRl = re.sub(' = ', '>=', strRl)
         # strRl = re.sub('<=', '<', strRl)
 
         if strRl not in currRls:
@@ -388,6 +431,8 @@ def loadRuleSet(num, textfile):
         for line in file:
             if line[0] == "(" and line[-2] == ")":
                 line = line[1:-2] + "\n"
+            # line = re.sub(' = ', '>=', line)
+            line = re.sub('e-', '', line)  # fix issue where scientific notation confuses matching
 
             rule = stlFac.constructFormulaTree(line+"\n")
             rule.getFormulaNoParams()
@@ -398,7 +443,9 @@ def loadRuleSet(num, textfile):
             strRl = rule.toString()
             # strRl = re.sub('>=', '>', strRl)
             # strRl = re.sub('<=', '<', strRl)
-            ruleSet.append(strRl)
+
+            if " = " not in strRl:
+                ruleSet.append(strRl)
 
         file.close()
         return True, ruleTrees, ruleSet
