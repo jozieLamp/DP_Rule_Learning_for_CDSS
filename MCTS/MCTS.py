@@ -272,8 +272,10 @@ class MCTS:
             selectedBranch.ruleTree.show()
             print("Variables for rule tree:", selectedBranch.ruleTree.varList)
 
-        # Note - this part could be where the p budgets are tested / evaluated ...
-        matchCount, activeClients = self.server.queryClientRuleMatch(selectedBranch)
+        matchCount, activeClients, pLossBudg = self.server.queryClientRuleMatch(selectedBranch)
+
+        #Update loss budget used for this query
+        selectedBranch.pLossBudg = pLossBudg
 
         if matchCount != "BUDGET USED":
             # Fix negative estimates
@@ -301,7 +303,7 @@ class MCTS:
 
                     if self.server.epsilon != 'inf':
                         parentCount = selectedBranch.parent.branch.getMatchCount()
-                        xtraBudg = self.server.allocateQueryBudget(strategy=self.server.budgetAllocStrategy, c=parentCount)
+                        xtraBudg = pLossBudg #selectedBranch.parent.branch.pLossBudg #self.server.allocateQueryBudget(strategy=self.server.budgetAllocStrategy, c=parentCount)
                         self.server.final_saved_budget.append(xtraBudg)
                         self.server.clientList[c].budgetUsed += xtraBudg #Preserve budget for final query of rule
                         # self.server.clientList[c].budgetUsed += (self.server.clientList[c].paramNoise * numParams)

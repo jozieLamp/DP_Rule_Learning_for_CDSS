@@ -48,6 +48,8 @@ class Branch: #Set of nodes in tree
         self.matchScores = [] #list of match count scores + number of clients queried in format [percentage, num clients]
         self.uct = 0.0 #UCT score of branch
 
+        self.pLossBudg = None #track p loss budget
+
         self.ruleTree = RuleTree()
 
     def getCurrentScore(self): #return sum of percent match score

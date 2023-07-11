@@ -7,7 +7,7 @@ popSize = 10  # 8000 #Size of ICU population
 #popSize = 34013 #T1d size
 
 # PROTOCOL PARAMS
-verbose = True
+verbose = False
 paramPercentile = 85 #Percentile wanted for params - score at or below which (inclusive) x% of the scores in the distribution may be found
 
 
@@ -82,7 +82,7 @@ variables = {'LOS': [0.0, 122.0], 'ICU_Pt_Days': [0.0, 120.0], 'Mort': [0.0, 1.0
 
 
 # PRIVACY BUDGET PARAMS
-epsilon = 10 #1 #set epsilon to 'inf' to run nonprivate model
+epsilon = 1 #1 #set epsilon to 'inf' to run nonprivate model
 budgetAllocMethod = 'adaptive' #Options are 'fixed': epsilon/total queries, 'adaptive'
 
 

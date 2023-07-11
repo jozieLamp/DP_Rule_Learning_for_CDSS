@@ -87,10 +87,13 @@ class Server :
 
     def globalBudgetUsed(self):
         # print("Clients with used budgets:", self.clientsWithUsedBudgets)
+        self.budgetZero = False
 
         if list(self.clientList.keys()) == set(self.clientsWithUsedBudgets):
             return True
         elif len(set(self.clientsWithUsedBudgets)) > len(self.clientList)-3: #only a few clients without used budgets so end
+            return True
+        elif self.budgetZero == True:
             return True
         else:
             return False
@@ -322,7 +325,7 @@ class Server :
                 #     updatedActiveClients.append(c)
                 updatedActiveClients.append(c)
 
-            return yesCount, updatedActiveClients
+            return yesCount, updatedActiveClients, None
 
         #Private model
         else:
@@ -338,6 +341,9 @@ class Server :
             # print("FOUND MATCH COUNT", parentCount)
             pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy, c=parentCount)
             p = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
+
+            if pLossBudg == None: #set budget as used
+                self.budgetZero = True
 
             # print("\nActive clients at CURRENT BRANCH", branch.name, ":", branch.activeClients)
             for c in branch.activeClients:
@@ -365,8 +371,8 @@ class Server :
 
             if not self.globalBudgetUsed():
                 q = 1-p
-                # estTrueCount = float((yesCount - (len(self.clientList) * q)) / (p-q))
-                estTrueCount = yesCount #(yesCount - (len(self.clientList) * float(q))) / (float(p)-float(q)) # equation to unbias results
+                c_hat = float((yesCount - (len(self.clientList) * q)) / (p-q)) # equation to unbias results
+                estTrueCount = 0 if c_hat < 0 else yesCount
                 percentCount = float(estTrueCount / len(branch.activeClients)) if len(branch.activeClients) else 0
                 truePerCount = float(trueYesses / len(branch.activeClients)) if len(branch.activeClients) else 0#Real percent
 
@@ -377,11 +383,13 @@ class Server :
                     # self.logger.info("True Count " + str(trueYesses) +  ", Est Count " + str(estTrueCount))
                     # self.logger.info("True Percent " + str(truePerCount) +  ", Est Percent " + str(percentCount))
 
+                print("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) +", Estimated True yesses " + str(estTrueCount))
+                print("Unbiased estimate yesses", float((yesCount - (len(self.clientList) * q)) / (p-q)) )
 
-                return estTrueCount, updatedActiveClients
+                return estTrueCount, updatedActiveClients, pLossBudg
 
             # else:
-            return "BUDGET USED", updatedActiveClients
+            return "BUDGET USED", updatedActiveClients, pLossBudg
 
 
     #Allocate budget for this query
@@ -408,7 +416,8 @@ class Server :
 
             # variables
             # beta = prob.Var(lb=1e-10, ub=self.epsilon)
-            beta = prob.Var(lb=0.001, ub=self.epsilon)
+            budgetLeft = self.epsilon - self.clientList[1].budgetUsed
+            beta = prob.Var(lb=0.001, ub=budgetLeft)
 
             # Intermediates
             p = prob.Intermediate(math.e ** beta / (1 + math.e ** beta))
@@ -430,16 +439,26 @@ class Server :
             prob.Equation(cdf_upper - cdf_lower >= 0.95)
             # prob.Equations([(norm.cdf(z_upper.value) - norm.cdf(z_lower.value)) >= 0.95])
             prob.Minimize(beta)
-            prob.solve(disp=False)
-            if self.verbose:
+            try:
+                prob.solve(disp=False)
+                if self.verbose:
+                    print("Allocated Beta Budget of:", beta.value)
+
+                pLossBudg = beta.value[0]
+
+                # Update global p and q params of parent node
+                self.p_paren = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (
+                            1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
+                self.q_paren = 1 - self.p_paren
+
+                print("\nEstimated prob of:", cdf_upper.value[0] - cdf_lower.value[0])
                 print("Allocated Beta Budget of:", beta.value)
-            print("Allocated Beta Budget of:", beta.value)
+            except:
+                print("IN EXCEPT!!!!")
+                pLossBudg = None
 
-            pLossBudg = beta.value[0]
+            print("Budget Left", budgetLeft)
 
-            # Update global p and q params of parent node
-            self.p_paren = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
-            self.q_paren = 1 - self.p_paren
 
         return pLossBudg
 
