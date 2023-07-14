@@ -10,6 +10,7 @@ import numpy as np
 from collections import Counter
 import operator
 import warnings
+warnings.filterwarnings("ignore")
 import treelib
 import re
 from Client import Client
@@ -87,9 +88,9 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
             foundRules += 1
             missedRules.remove(mr)
 
-    if missedRules != []:
-        print("Missed Client Rules:")
-        print(missedRules)
+    # if missedRules != []:
+    #     print("Missed Client Rules:")
+    #     print(missedRules)
 
     #Adjust overestimates of found rules from double rules (same rule twice)
     if foundRules > len(clientRules):

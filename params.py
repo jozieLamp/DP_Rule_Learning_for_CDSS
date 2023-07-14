@@ -2,7 +2,7 @@
 import math
 
 # GENERAL INPUT PARAMS
-popSize = 10  # 8000 #Size of ICU population
+popSize = 10 # 8000 #Size of ICU population
 #popSize = 40337 #Sepsis size
 #popSize = 34013 #T1d size
 
@@ -12,11 +12,16 @@ paramPercentile = 85 #Percentile wanted for params - score at or below which (in
 
 
 # MCTS PARAMS
-mctsType = 'baseline' #baseline' #'baseline' #options are 'baseline', 'coverage'
-maxQueries = 0 #Maximum number of server queries allowed (to define for nonprivate model)
+mctsType = 'baseline' #options are 'baseline', 'coverage'
 cp = 1/math.sqrt(2) #UCT param to increase or decrease the amount of exploration performed
 maxTreeDepth = 25 #Maximum depth of tree
-cutoffThresh = 0.0000001 #Match score cutoff threshold to prune branches- was 0.01
+cutoffThresh = 0.0001 #Match score cutoff threshold to prune branches- was 0.01
+
+# PRIVACY BUDGET PARAMS
+epsilon = 1 #1 #set epsilon to 'inf' to run nonprivate model
+budgetAllocMethod = 'adaptive' #Options are 'fixed': epsilon/total queries, 'adaptive'
+maxQueries = 0 #1000 #Maximum number of server queries allowed (to define for nonprivate + baseline model)
+# cp = epsilon / maxQueries #UCT param to increase or decrease the amount of exploration performed
 
 
 # DATA PARAMETERS
@@ -81,9 +86,4 @@ variables = {'LOS': [0.0, 122.0], 'ICU_Pt_Days': [0.0, 120.0], 'Mort': [0.0, 1.0
 
 
 
-# PRIVACY BUDGET PARAMS
-epsilon = 1 #1 #set epsilon to 'inf' to run nonprivate model
-budgetAllocMethod = 'adaptive' #Options are 'fixed': epsilon/total queries, 'adaptive'
 
-
-# cp = epsilon / maxQueries #UCT param to increase or decrease the amount of exploration performed

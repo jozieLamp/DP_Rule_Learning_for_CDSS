@@ -148,6 +148,8 @@ class Server :
             self.logger.info("Generated " + str(len(initialRuleTrees)) + " initial rules\n")
             self.logger.info("----PERFORM FINAL QUERY FOR EACH FULL RULE----")
 
+        self.logger.info("Generated " + str(len(initialRuleTrees)) + " initial rules\n")
+
         # do one final query for each rule to make sure full rule has a match
         ruleTrees = []
         for ri in range(len(initialRuleTrees)):
@@ -158,9 +160,10 @@ class Server :
             origAC = r.activeClients
 
             if self.epsilon != 'inf':
-                finalBudg = self.final_saved_budget[ri]
+                finalBudg = self.final_saved_budget[ri] #sum(self.final_saved_budget) / len(self.final_saved_budget) #
             else:
                 finalBudg=None
+
             matchCount, activeClients = self.queryFullRuleMatch(r, finalBudg)
 
             # Fix negative estimates
@@ -251,7 +254,7 @@ class Server :
         # Non private model
         if self.epsilon == 'inf':
             yesCount = 0
-            for c in template.activeClients: #TODO - OPTION potentially query all clients, not just the active ones in the final step (?)
+            for c in template.activeClients:
                 resp = self.clientList[c].queryStructuralRuleMatch(tempNodes, template.varList)
                 yesCount += resp
 
@@ -283,7 +286,16 @@ class Server :
 
             #Calculate final match count for this rule
             q = 1 - p
-            estTrueCount = yesCount #float((yesCount - (len(template.activeClients) * q)) / (p - q))
+
+            c_hat = float((yesCount - (len(template.activeClients) * q)) / (p - q)) #unbiased estimate of count
+            #Fix/clip over/under estimates
+            if c_hat > len(template.activeClients):
+                estTrueCount = len(template.activeClients)
+            elif c_hat < 0:
+                estTrueCount = 0
+            else:
+                estTrueCount = c_hat
+
             percentCount = float(estTrueCount / len(template.activeClients))
             truePerCount = float(trueYesses / len(template.activeClients))  # Real percent
 
@@ -371,20 +383,29 @@ class Server :
 
             if not self.globalBudgetUsed():
                 q = 1-p
-                c_hat = float((yesCount - (len(self.clientList) * q)) / (p-q)) # equation to unbias results
-                estTrueCount = 0 if c_hat < 0 else yesCount
+
+                c_hat = float((yesCount - (len(self.clientList) * q)) / (p - q))  # unbiased estimate of count
+                # Fix/clip over/under- estimates
+                if c_hat > len(self.clientList):
+                    estTrueCount = len(self.clientList)
+                elif c_hat < 0:
+                    estTrueCount = 0
+                else:
+                    estTrueCount = c_hat
+
                 percentCount = float(estTrueCount / len(branch.activeClients)) if len(branch.activeClients) else 0
-                truePerCount = float(trueYesses / len(branch.activeClients)) if len(branch.activeClients) else 0#Real percent
+                truePerCount = float(trueYesses / len(branch.activeClients)) if len(branch.activeClients) else 0  # Real percent
 
                 if self.verbose:
-                    # self.logger.info("p "+ str(p) + " q " + str(q) + " len client list " + str(len(self.clientList)))
+                    self.logger.info("p "+ str(p) + " q " + str(q) + " len client list " + str(len(branch.activeClients)))
                     self.logger.info("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) +", Estimated True yesses " + str(estTrueCount))
                     self.logger.info("True Percent " + str(truePerCount) + ", Est Percent " + str(percentCount) + "\n")
                     # self.logger.info("True Count " + str(trueYesses) +  ", Est Count " + str(estTrueCount))
                     # self.logger.info("True Percent " + str(truePerCount) +  ", Est Percent " + str(percentCount))
 
-                print("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) +", Estimated True yesses " + str(estTrueCount))
-                print("Unbiased estimate yesses", float((yesCount - (len(self.clientList) * q)) / (p-q)) )
+                print("p "+ str(p) + " q " + str(q) + " len client list " + str(len(branch.activeClients)))
+                print("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) + ", c_hat " + str(c_hat) +", Estimated True yesses " + str(estTrueCount))
+
 
                 return estTrueCount, updatedActiveClients, pLossBudg
 
@@ -407,7 +428,10 @@ class Server :
             # Compute Standard Deviation of parent node
             bottom = (self.p_paren - self.q_paren) ** 2
             stdDev = (n * self.q_paren * (1 - self.q_paren)) / bottom if bottom else (n * self.q_paren * (1 - self.q_paren))
-            # print("std dev", stdDev)
+            # print("q paren", self.q_paren)
+            # print("p paren", self.p_paren)
+            print("std dev", stdDev)
+            # print("bottom", bottom)
 
             d = 2 * stdDev  # Distance of within 2 standard deviations
 
@@ -417,16 +441,17 @@ class Server :
             # variables
             # beta = prob.Var(lb=1e-10, ub=self.epsilon)
             budgetLeft = self.epsilon - self.clientList[1].budgetUsed
-            beta = prob.Var(lb=0.001, ub=budgetLeft)
+            beta = prob.Var(lb=0.001, ub=budgetLeft) #was 0.01
 
             # Intermediates
             p = prob.Intermediate(math.e ** beta / (1 + math.e ** beta))
             # print("p", p.value)
             c_hat = prob.Intermediate(p * n)
 
+
             z_upper = prob.Intermediate((c_hat - c + d) / stdDev)
             z_lower = prob.Intermediate((c_hat - c - d) / stdDev)
-            # print("z upper", z_upper)
+
 
             #Compute CDF
             # cdf_upper = prob.Intermediate(norm.cdf(z_upper.value))
@@ -435,15 +460,22 @@ class Server :
             cdf_lower= prob.Intermediate((1.0 + prob.erf(z_lower / math.sqrt(2.0))) / 2.0)
 
             # Functions:
-            # Probability estimated count falls within +- d of the true count is >= 90%
+            # Probability estimated count falls within +- d of the true count is >= 95%
             prob.Equation(cdf_upper - cdf_lower >= 0.95)
             # prob.Equations([(norm.cdf(z_upper.value) - norm.cdf(z_lower.value)) >= 0.95])
             prob.Minimize(beta)
+
             try:
+
+                # Solvers- 1: APOPT, 2: BPOPT, 3: IPOPT
+                # prob.options.SOLVER = 0
                 prob.solve(disp=False)
                 if self.verbose:
                     print("Allocated Beta Budget of:", beta.value)
 
+                # print("c_hat", c_hat.value, "c", c)
+                # print("z upper", z_upper.value)
+                # print("z lower", z_lower.value)
                 pLossBudg = beta.value[0]
 
                 # Update global p and q params of parent node

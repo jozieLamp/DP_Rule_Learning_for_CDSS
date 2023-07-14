@@ -5,6 +5,9 @@ from Server import Server
 from MetricCalculation import Coverage as cov
 from MetricCalculation import RuleQuality as RQ
 
+import math
+import decimal
+
 
 def runProtocol(params):
     logging.basicConfig(level=logging.INFO)
@@ -75,8 +78,6 @@ if __name__ == "__main__":
     clientTrees, clientRules, clientDF = cov.loadClientRules(params.popSize, params.dataFilename)
 
     runProtocol(params)
-
-
 
     ## COVERAGE EXPs
     ldpRules, covDF, structDF = calcIndivCoverage(clientDF)
