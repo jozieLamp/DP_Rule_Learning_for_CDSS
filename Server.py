@@ -430,7 +430,7 @@ class Server :
             stdDev = (n * self.q_paren * (1 - self.q_paren)) / bottom if bottom else (n * self.q_paren * (1 - self.q_paren))
             # print("q paren", self.q_paren)
             # print("p paren", self.p_paren)
-            print("std dev", stdDev)
+            # print("std dev", stdDev)
             # print("bottom", bottom)
 
             d = 2 * stdDev  # Distance of within 2 standard deviations
@@ -441,17 +441,15 @@ class Server :
             # variables
             # beta = prob.Var(lb=1e-10, ub=self.epsilon)
             budgetLeft = self.epsilon - self.clientList[1].budgetUsed
-            beta = prob.Var(lb=0.001, ub=budgetLeft) #was 0.01
+            beta = prob.Var(lb=0.01, ub=budgetLeft)
 
             # Intermediates
             p = prob.Intermediate(math.e ** beta / (1 + math.e ** beta))
-            # print("p", p.value)
+            print("p", p.value, "start beta", beta.value)
             c_hat = prob.Intermediate(p * n)
-
 
             z_upper = prob.Intermediate((c_hat - c + d) / stdDev)
             z_lower = prob.Intermediate((c_hat - c - d) / stdDev)
-
 
             #Compute CDF
             # cdf_upper = prob.Intermediate(norm.cdf(z_upper.value))
@@ -487,6 +485,11 @@ class Server :
                 print("Allocated Beta Budget of:", beta.value)
             except:
                 print("IN EXCEPT!!!!")
+
+                print("c_hat", c_hat.value, "c", c)
+                print("z upper", z_upper.value)
+                print("z lower", z_lower.value)
+                print("\nEstimated prob of:", cdf_upper.value - cdf_lower.value)
                 pLossBudg = None
 
             print("Budget Left", budgetLeft)

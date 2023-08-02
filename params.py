@@ -18,7 +18,7 @@ maxTreeDepth = 25 #Maximum depth of tree
 cutoffThresh = 0.0001 #Match score cutoff threshold to prune branches- was 0.01
 
 # PRIVACY BUDGET PARAMS
-epsilon = 1 #1 #set epsilon to 'inf' to run nonprivate model
+epsilon = 100 #1 #set epsilon to 'inf' to run nonprivate model
 budgetAllocMethod = 'adaptive' #Options are 'fixed': epsilon/total queries, 'adaptive'
 maxQueries = 0 #1000 #Maximum number of server queries allowed (to define for nonprivate + baseline model)
 # cp = epsilon / maxQueries #UCT param to increase or decrease the amount of exploration performed

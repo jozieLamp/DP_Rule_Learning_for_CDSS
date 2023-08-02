@@ -81,3 +81,7 @@ if __name__ == "__main__":
 
     ## COVERAGE EXPs
     ldpRules, covDF, structDF = calcIndivCoverage(clientDF)
+
+    # beta =1
+    # p = math.e ** beta / (1 + math.e ** beta)
+    # print("p", p)
