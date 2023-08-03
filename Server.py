@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import norm
+from scipy.optimize import minimize_scalar, minimize, Bounds
 from gekko import GEKKO
 from RuleTemplate.RuleTemplate import RuleTemplate, Node, stlGrammarDict, terminalNodes
 from SignalTemporalLogic.STLFactory import STLFactory
@@ -273,7 +274,8 @@ class Server :
             # Get PLoss budget for this query
             # parentCount = len(self.clientList) / 2 #if no parent node assume 50% prob of match #TODO - might need to set this as something standard...
             # pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy, c=parentCount)
-            p = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
+            p = math.e ** pLossBudg / (1 + math.e ** pLossBudg)
+            #decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
 
             for c in template.activeClients:
                 resp, truResp = self.clientList[c].finalRandResponseQuery(tempNodes, template.varList, pLossBudg)
@@ -287,7 +289,7 @@ class Server :
             #Calculate final match count for this rule
             q = 1 - p
 
-            c_hat = float((yesCount - (len(template.activeClients) * q)) / (p - q)) #unbiased estimate of count
+            c_hat = float((yesCount - (len(template.activeClients) * q)) / (p - q) if (p-q) else (yesCount - (len(template.activeClients) * q)) ) #unbiased estimate of count
             #Fix/clip over/under estimates
             if c_hat > len(template.activeClients):
                 estTrueCount = len(template.activeClients)
@@ -352,7 +354,8 @@ class Server :
                 parentCount = len(self.clientList) / 2 #if no parent node assume 50% prob of match
             # print("FOUND MATCH COUNT", parentCount)
             pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy, c=parentCount)
-            p = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
+            # p = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
+            p = math.e ** pLossBudg / (1 + math.e ** pLossBudg)
 
             if pLossBudg == None: #set budget as used
                 self.budgetZero = True
@@ -384,7 +387,7 @@ class Server :
             if not self.globalBudgetUsed():
                 q = 1-p
 
-                c_hat = float((yesCount - (len(self.clientList) * q)) / (p - q))  # unbiased estimate of count
+                c_hat = float((yesCount - (len(self.clientList) * q)) / (p - q) if (p-q) else (yesCount - (len(self.clientList) * q)))  # unbiased estimate of count
                 # Fix/clip over/under- estimates
                 if c_hat > len(self.clientList):
                     estTrueCount = len(self.clientList)
@@ -405,97 +408,179 @@ class Server :
 
                 print("p "+ str(p) + " q " + str(q) + " len client list " + str(len(branch.activeClients)))
                 print("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) + ", c_hat " + str(c_hat) +", Estimated True yesses " + str(estTrueCount))
-
+                print("\n")
 
                 return estTrueCount, updatedActiveClients, pLossBudg
 
             # else:
             return "BUDGET USED", updatedActiveClients, pLossBudg
 
-
-    #Allocate budget for this query
+    # Allocate budget for this query --> method using mystic
     def allocateQueryBudget(self, strategy, c):
 
-        if strategy == 'fixed':  #Fixed budget
+        if strategy == 'fixed':  # Fixed budget
             pLossBudg = self.epsilon / self.maxQueries
         elif strategy == 'adaptive':
             # print("In adaptive tree search")
 
-            #Constants
+            # Constants
             n = len(self.clientList)  # num clients
             # c is param passed in, true count (mean) from parent node
 
             # Compute Standard Deviation of parent node
-            bottom = (self.p_paren - self.q_paren) ** 2
-            stdDev = (n * self.q_paren * (1 - self.q_paren)) / bottom if bottom else (n * self.q_paren * (1 - self.q_paren))
-            # print("q paren", self.q_paren)
-            # print("p paren", self.p_paren)
-            # print("std dev", stdDev)
-            # print("bottom", bottom)
+            # bottom = (self.p_paren - self.q_paren) ** 2
+            # stdDev = (n * self.q_paren * (1 - self.q_paren)) / bottom if bottom else (
+            #             n * self.q_paren * (1 - self.q_paren))
+            # # print("q paren", self.q_paren)
+            # # print("p paren", self.p_paren)
+            # # print("std dev", stdDev)
+            # # print("bottom", bottom)
+            stdDev = n / 4
 
             d = 2 * stdDev  # Distance of within 2 standard deviations
+            print("Std Dev", stdDev, "distance", d)
 
-            #Formulate optimization problem to find minimum budget (beta) to use
-            prob = GEKKO()
+            # Formulate optimization problem to find minimum budget (beta) to use
+            def obj_func(beta):
+                p = math.e ** beta / (1 + math.e ** beta)
+                c_hat = p * n
 
-            # variables
-            # beta = prob.Var(lb=1e-10, ub=self.epsilon)
-            budgetLeft = self.epsilon - self.clientList[1].budgetUsed
-            beta = prob.Var(lb=0.01, ub=budgetLeft)
+                #Compute z scores for distances
+                z_upper = (c_hat - c + d) / stdDev
+                z_lower = (c_hat - c - d) / stdDev
 
-            # Intermediates
-            p = prob.Intermediate(math.e ** beta / (1 + math.e ** beta))
-            print("p", p.value, "start beta", beta.value)
-            c_hat = prob.Intermediate(p * n)
+                # Compute CDF
+                cdf_upper = norm.cdf(z_upper)
+                cdf_lower = norm.cdf(z_lower)
 
-            z_upper = prob.Intermediate((c_hat - c + d) / stdDev)
-            z_lower = prob.Intermediate((c_hat - c - d) / stdDev)
+                print("beta", beta, "Sub CDFs", (cdf_upper - cdf_lower))
 
-            #Compute CDF
-            # cdf_upper = prob.Intermediate(norm.cdf(z_upper.value))
-            # cdf_lower = prob.Intermediate(norm.cdf(z_lower.value))
-            cdf_upper = prob.Intermediate((1.0 + prob.erf(z_upper / math.sqrt(2.0))) / 2.0)
-            cdf_lower= prob.Intermediate((1.0 + prob.erf(z_lower / math.sqrt(2.0))) / 2.0)
+                return (cdf_upper - cdf_lower)  # >= 0.95
 
-            # Functions:
-            # Probability estimated count falls within +- d of the true count is >= 95%
-            prob.Equation(cdf_upper - cdf_lower >= 0.95)
-            # prob.Equations([(norm.cdf(z_upper.value) - norm.cdf(z_lower.value)) >= 0.95])
-            prob.Minimize(beta)
+            ineq_constraint = {'type': 'ineq', 'fun': lambda x: obj_func(x) - 0.95}
+            lw_bnd = 1e-5
+            up_bnd = self.epsilon - self.clientList[1].budgetUsed
+            bnds = Bounds(lb=lw_bnd, ub=up_bnd)
+            print("bounds", bnds)
 
-            try:
+            # SLSQP method
+            options = {'maxiter': 500, 'ftol': 0.1}
+            result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='SLSQP',options=options)
 
-                # Solvers- 1: APOPT, 2: BPOPT, 3: IPOPT
-                # prob.options.SOLVER = 0
-                prob.solve(disp=False)
-                if self.verbose:
-                    print("Allocated Beta Budget of:", beta.value)
+            # trust-constr method
+            # options = {'maxiter': 1000}  # Increase the maximum number of function evaluations
+            # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
 
-                # print("c_hat", c_hat.value, "c", c)
-                # print("z upper", z_upper.value)
-                # print("z lower", z_lower.value)
-                pLossBudg = beta.value[0]
+
+
+            if result.success:
+                print("\nSuccess, beta = ", result.x)
+                print("Estimated Prob of", result.fun)
+
+                pLossBudg = result.x[0]
+
+                #TODO - fix this
+                if pLossBudg < 0:
+                    pLossBudg = lw_bnd
 
                 # Update global p and q params of parent node
-                self.p_paren = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (
-                            1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
+                self.p_paren = math.e ** pLossBudg / (1 + math.e ** pLossBudg)
+                    #decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
                 self.q_paren = 1 - self.p_paren
 
-                print("\nEstimated prob of:", cdf_upper.value[0] - cdf_lower.value[0])
-                print("Allocated Beta Budget of:", beta.value)
-            except:
-                print("IN EXCEPT!!!!")
 
-                print("c_hat", c_hat.value, "c", c)
-                print("z upper", z_upper.value)
-                print("z lower", z_lower.value)
-                print("\nEstimated prob of:", cdf_upper.value - cdf_lower.value)
+            else:
+                print("FAIL")
+                print(result)
+                print(result.message)
                 pLossBudg = None
-
-            print("Budget Left", budgetLeft)
 
 
         return pLossBudg
+
+    # #Allocate budget for this query --> Method using Gekko Optimization
+    # def allocateQueryBudget(self, strategy, c):
+    #
+    #     if strategy == 'fixed':  #Fixed budget
+    #         pLossBudg = self.epsilon / self.maxQueries
+    #     elif strategy == 'adaptive':
+    #         # print("In adaptive tree search")
+    #
+    #         #Constants
+    #         n = len(self.clientList)  # num clients
+    #         # c is param passed in, true count (mean) from parent node
+    #
+    #         # Compute Standard Deviation of parent node
+    #         bottom = (self.p_paren - self.q_paren) ** 2
+    #         stdDev = (n * self.q_paren * (1 - self.q_paren)) / bottom if bottom else (n * self.q_paren * (1 - self.q_paren))
+    #         # print("q paren", self.q_paren)
+    #         # print("p paren", self.p_paren)
+    #         # print("std dev", stdDev)
+    #         # print("bottom", bottom)
+    #
+    #         d = 2 * stdDev  # Distance of within 2 standard deviations
+    #
+    #         #Formulate optimization problem to find minimum budget (beta) to use
+    #         prob = GEKKO()
+    #
+    #         # variables
+    #         # beta = prob.Var(lb=1e-10, ub=self.epsilon)
+    #         budgetLeft = self.epsilon - self.clientList[1].budgetUsed
+    #         beta = prob.Var(lb=0.01, ub=budgetLeft)
+    #
+    #         # Intermediates
+    #         p = prob.Intermediate(math.e ** beta / (1 + math.e ** beta))
+    #         print("p", p.value, "start beta", beta.value)
+    #         c_hat = prob.Intermediate(p * n)
+    #
+    #         z_upper = prob.Intermediate((c_hat - c + d) / stdDev)
+    #         z_lower = prob.Intermediate((c_hat - c - d) / stdDev)
+    #
+    #         #Compute CDF
+    #         # cdf_upper = prob.Intermediate(norm.cdf(z_upper.value))
+    #         # cdf_lower = prob.Intermediate(norm.cdf(z_lower.value))
+    #         cdf_upper = prob.Intermediate((1.0 + prob.erf(z_upper / math.sqrt(2.0))) / 2.0)
+    #         cdf_lower= prob.Intermediate((1.0 + prob.erf(z_lower / math.sqrt(2.0))) / 2.0)
+    #
+    #         # Functions:
+    #         # Probability estimated count falls within +- d of the true count is >= 95%
+    #         prob.Equation(cdf_upper - cdf_lower >= 0.95)
+    #         # prob.Equations([(norm.cdf(z_upper.value) - norm.cdf(z_lower.value)) >= 0.95])
+    #         prob.Minimize(beta)
+    #
+    #         try:
+    #
+    #             # Solvers- 1: APOPT, 2: BPOPT, 3: IPOPT
+    #             # prob.options.SOLVER = 0
+    #             prob.solve(disp=False)
+    #             if self.verbose:
+    #                 print("Allocated Beta Budget of:", beta.value)
+    #
+    #             # print("c_hat", c_hat.value, "c", c)
+    #             # print("z upper", z_upper.value)
+    #             # print("z lower", z_lower.value)
+    #             pLossBudg = beta.value[0]
+    #
+    #             # Update global p and q params of parent node
+    #             self.p_paren = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (
+    #                         1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
+    #             self.q_paren = 1 - self.p_paren
+    #
+    #             print("\nEstimated prob of:", cdf_upper.value[0] - cdf_lower.value[0])
+    #             print("Allocated Beta Budget of:", beta.value)
+    #         except:
+    #             print("IN EXCEPT!!!!")
+    #
+    #             print("c_hat", c_hat.value, "c", c)
+    #             print("z upper", z_upper.value)
+    #             print("z lower", z_lower.value)
+    #             print("\nEstimated prob of:", cdf_upper.value - cdf_lower.value)
+    #             pLossBudg = None
+    #
+    #         print("Budget Left", budgetLeft)
+    #
+    #
+    #     return pLossBudg
 
     # Check if the client is still active - client can still have true queries
     def checkClientActive(self, response, p, priorProbTrue):
