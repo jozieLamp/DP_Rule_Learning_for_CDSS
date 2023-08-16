@@ -290,7 +290,7 @@ class RuleTemplate():
         delNames = []
         for key, br in self._branches.items():
             # if has been visited and score < cutoff or no more active clients (either at branch or after query completed in updated active clients), prune branch
-            if (br.visits > 0 and br.getCurrentScore() < cutoff) or len(br.activeClients) == 0 or (br.visits > 0 and len(br.updatedActiveClients) == 0):
+            if self.pruneCondition(br, cutoff):
 
                 if self.verbose:
                     self.logger.info("PRUNING BRANCH " +  key)
@@ -308,6 +308,21 @@ class RuleTemplate():
         else:
             if self.verbose:
                 self.logger.info("Nothing to prune\n")
+
+    def pruneCondition(self, branch, cutoff):
+
+        # # Baseline prune condition:
+        # #  if has been visited and score < cutoff or no more active clients (either at branch or after query completed in updated active clients), prune branch
+        # if (br.visits > 0 and br.getCurrentScore() < cutoff) or len(br.activeClients) == 0 or (br.visits > 0 and len(br.updatedActiveClients) == 0):
+        #     return True
+
+        # Adaptive Budget Pruning Condition --> if this and parent node < cutoff only then cutoff this branch
+        if (branch.visits > 0 and branch.getCurrentScore() < cutoff) and (
+                branch.parent.branch.visits > 0 and branch.parent.branch.getCurrentScore() < cutoff):
+                # and (branch.parent.branch.parent.branch.visits > 0 and branch.parent.branch.parent.branch.getCurrentScore() < cutoff):
+            return True
+
+        return False
 
 
     # generate unique node ids for tree
@@ -428,7 +443,8 @@ class RuleTemplate():
 
                 if branch.ruleTree.activeClients == []:
                     branch.ruleTree.activeClients = copy.deepcopy(branch.activeClients) #add active clients to rule tree
-                    branch.ruleTree.percentCount = branch.getCurrentScore()  # add percent count to rule tree
+                    branch.ruleTree.percentCount.append(branch.getCurrentScore())  # add percent count to rule tree
+                    #TODO HERE --> possibly make this have all scores in the tree ... ?
 
                 trees.append(branch.ruleTree)
                 # print("trees after appending", [t.toString() for t in trees])
@@ -508,8 +524,11 @@ class RuleTemplate():
         parentTree.activeClients = list(set(ac))
         parentTree.varList.extend(childTree.varList) #add var list
 
-        if childTree.percentCount != None and (parentTree.percentCount == None or childTree.percentCount > parentTree.percentCount):
-            parentTree.percentCount = childTree.percentCount
+        # if childTree.percentCount != None and (parentTree.percentCount == None or childTree.percentCount > parentTree.percentCount):
+        #     parentTree.percentCount = childTree.percentCount
+
+        if childTree.percentCount != None:
+            parentTree.percentCount.extend(childTree.percentCount)
 
         return parentTree
 

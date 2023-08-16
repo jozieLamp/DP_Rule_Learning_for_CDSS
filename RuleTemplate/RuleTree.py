@@ -10,7 +10,7 @@ class RuleTree(treelib.Tree):
     def __init__(self,  *args, **kw):
         super().__init__(*args, **kw)
         self.varList = []
-        self.percentCount = None
+        self.percentCount = []
         self.activeClients = []
         self.params = {}
 

@@ -98,8 +98,9 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
 
     bot = foundRules + nonRules
     prec = foundRules / bot if bot else 0
-    lst = [len(clientRules), foundRules, nonRules, prec]
-    covDF = pd.DataFrame([lst], columns=["Total Client Rules", "Found Rules", "Non Rules", "Precision"])
+    cov = foundRules / len(clientRules)
+    lst = [len(clientRules), foundRules, nonRules, prec, cov]
+    covDF = pd.DataFrame([lst], columns=["Total Client Rules", "Found Rules", "Non Rules", "Precision", "Coverage"])
 
     #Make DF
     nrDF = pd.DataFrame(nonRuleLst, columns=['Non Rules'])
@@ -138,8 +139,9 @@ def countUniqueStructuresNoVars(clientTrees, ldpTrees):
 
     bot = foundStructs + nonStructs
     prec = foundStructs / bot if bot else 0
-    lst = [len(clientStructs), foundStructs, nonStructs, prec]
-    structDF = pd.DataFrame([lst], columns=["Total Client Structures", "Found Structures", "Non Structures", "Precision"])
+    cov = foundStructs / len(clientStructs)
+    lst = [len(clientStructs), foundStructs, nonStructs, prec, cov]
+    structDF = pd.DataFrame([lst], columns=["Total Client Structures", "Found Structures", "Non Structures", "Precision", "Coverage"])
 
     return structDF
 

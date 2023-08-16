@@ -151,6 +151,7 @@ class Server :
 
         self.logger.info("Generated " + str(len(initialRuleTrees)) + " initial rules\n")
 
+
         # do one final query for each rule to make sure full rule has a match
         ruleTrees = []
         for ri in range(len(initialRuleTrees)):
@@ -159,11 +160,22 @@ class Server :
             # r.show()
 
             origAC = r.activeClients
+            percentCount = r.percentCount
 
             if self.epsilon != 'inf':
-                finalBudg = self.final_saved_budget[ri] #sum(self.final_saved_budget) / len(self.final_saved_budget) #
+                # finalBudg = self.final_saved_budget[ri] #sum(self.final_saved_budget) / len(self.final_saved_budget) #
+                # finalBudg = 5 / len(self.final_saved_budget)
+                finalBudg = sum(self.final_saved_budget) / len(initialRuleTrees) #this is the good one ...
+                # finalBudg = 0.1 #now checking to see if higher budg at end is better
+                print(r.toString(), "count:", r.percentCount)
+                print("FINAL BUDG", finalBudg)
             else:
                 finalBudg=None
+
+            # TODO here - how to save ploss budget used for query so can do final last query ...
+            # finalBudg = r.pLossBudg
+            # print(r.toString())
+            # print("FINAL BUDG Query from rule Tree", finalBudg)
 
             matchCount, activeClients = self.queryFullRuleMatch(r, finalBudg)
 
@@ -176,13 +188,24 @@ class Server :
 
             percentCount = matchCount / len(origAC) if len(origAC) > 0 else 0
 
-            # if self.verbose:
-            #     self.logger.info(r.toString())
-            #     self.logger.info("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount))
+            if self.verbose:
+                self.logger.info(r.toString())
+                self.logger.info("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount))
 
-            if percentCount >= self.cutoffThresh:
+            # if percentCount >= self.cutoffThresh:
+            #     #update active clients to be only clients who said yes
+            #     # r.activeClients = activeClients  # add active clients to rule tree
+            #     r.percentCount = percentCount  # add percent count to rule tree
+            #     ruleTrees.append(r)
+
+            # TODO - now trying averages of node percent counts + last query
+            # Get aves of percent count at each node
+            # print(r.percentCount)
+            avePer = (sum(r.percentCount) + percentCount) / (len(r.percentCount) + 1)
+
+            if avePer >= self.cutoffThresh: #TODO - change cutoff thresh here ...? #if avePer > 0.33:
                 #update active clients to be only clients who said yes
-                r.activeClients = activeClients  # add active clients to rule tree
+                # r.activeClients = activeClients  # add active clients to rule tree
                 r.percentCount = percentCount  # add percent count to rule tree
                 ruleTrees.append(r)
 
@@ -232,6 +255,7 @@ class Server :
         if self.verbose:
             self.finalRuleSet.logRuleSet()
 
+        self.logger.info("Generated " + str(len(initialRuleTrees)) + " initial rules")
         self.logger.info("Produced " + str(len(self.finalRuleSet.ruleTrees)) + " Rule Tree Structures")
         self.logger.info("Generated " + str(len(self.finalRuleSet.rules)) + " Formatted Rules")
         self.logger.info("Completed " + str(self.numQueries) + " server queries")
@@ -308,6 +332,11 @@ class Server :
             #     self.logger.info("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) + ", Estimated True yesses " + str(estTrueCount))
             #     self.logger.info("True Percent " + str(truePerCount) + ", Est Percent " + str(percentCount) + "\n")
 
+            print("p " + str(p) + " q " + str(q))
+            print("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) + ", c_hat " + str(
+                c_hat) + ", Estimated True yesses " + str(estTrueCount))
+            print("\n")
+
             return estTrueCount, updatedActiveClients
 
 
@@ -357,7 +386,7 @@ class Server :
             # p = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
             p = math.e ** pLossBudg / (1 + math.e ** pLossBudg)
 
-            if pLossBudg == None: #set budget as used
+            if pLossBudg == None or self.clientList[1].privacyBudgetUsed(): #set budget as used
                 self.budgetZero = True
 
             # print("\nActive clients at CURRENT BRANCH", branch.name, ":", branch.activeClients)
@@ -423,6 +452,10 @@ class Server :
         elif strategy == 'adaptive':
             # print("In adaptive tree search")
 
+            #check if budget used
+            if self.clientList[1].privacyBudgetUsed():
+                return 0
+
             # Constants
             n = len(self.clientList)  # num clients
             # c is param passed in, true count (mean) from parent node
@@ -453,28 +486,38 @@ class Server :
                 cdf_upper = norm.cdf(z_upper)
                 cdf_lower = norm.cdf(z_lower)
 
-                print("beta", beta, "Sub CDFs", (cdf_upper - cdf_lower))
+                # print("beta", beta, "Sub CDFs", (cdf_upper - cdf_lower))
 
                 return (cdf_upper - cdf_lower)  # >= 0.95
 
-            ineq_constraint = {'type': 'ineq', 'fun': lambda x: obj_func(x) - 0.95}
-            lw_bnd = 1e-5
+            ineq_constraint = {'type': 'ineq', 'fun': lambda x: obj_func(x) - 0.50} # was 0.95
+
+            lw_bnd = 1e-10 #1e-20
+            print("BUDGET USED", self.clientList[1].budgetUsed)
+            print("global budget used?", self.globalBudgetUsed())
             up_bnd = self.epsilon - self.clientList[1].budgetUsed
+            if lw_bnd > up_bnd:
+                up_bnd = lw_bnd
             bnds = Bounds(lb=lw_bnd, ub=up_bnd)
             print("bounds", bnds)
 
             # SLSQP method
-            options = {'maxiter': 500, 'ftol': 0.1}
+            options = {'maxiter': 1000, 'ftol': 0.1}
             result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='SLSQP',options=options)
 
             # trust-constr method
             # options = {'maxiter': 1000}  # Increase the maximum number of function evaluations
             # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
 
+            # if failed try trust constr method
+            if not result.success:
+                print("TRYING TRUST CONSTR METHOD*************************************************************************")
+                options = {'maxiter': 500}  # Increase the maximum number of function evaluations
+                result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
 
 
             if result.success:
-                print("\nSuccess, beta = ", result.x)
+                print("Success, beta = ", result.x)
                 print("Estimated Prob of", result.fun)
 
                 pLossBudg = result.x[0]
@@ -488,14 +531,13 @@ class Server :
                     #decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
                 self.q_paren = 1 - self.p_paren
 
-
             else:
                 print("FAIL")
                 print(result)
                 print(result.message)
                 pLossBudg = None
 
-
+        print("Returning budget of:", pLossBudg)
         return pLossBudg
 
     # #Allocate budget for this query --> Method using Gekko Optimization
