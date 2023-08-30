@@ -311,16 +311,16 @@ class RuleTemplate():
 
     def pruneCondition(self, branch, cutoff):
 
-        # # Baseline prune condition:
-        # #  if has been visited and score < cutoff or no more active clients (either at branch or after query completed in updated active clients), prune branch
-        # if (br.visits > 0 and br.getCurrentScore() < cutoff) or len(br.activeClients) == 0 or (br.visits > 0 and len(br.updatedActiveClients) == 0):
-        #     return True
-
-        # Adaptive Budget Pruning Condition --> if this and parent node < cutoff only then cutoff this branch
-        if (branch.visits > 0 and branch.getCurrentScore() < cutoff) and (
-                branch.parent.branch.visits > 0 and branch.parent.branch.getCurrentScore() < cutoff):
-                # and (branch.parent.branch.parent.branch.visits > 0 and branch.parent.branch.parent.branch.getCurrentScore() < cutoff):
+        # Baseline prune condition:
+        #  if has been visited and score < cutoff or no more active clients (either at branch or after query completed in updated active clients), prune branch
+        if (branch.visits > 0 and branch.getCurrentScore() < cutoff) or len(branch.activeClients) == 0 or (branch.visits > 0 and len(branch.updatedActiveClients) == 0):
             return True
+
+        # # Adaptive Budget Pruning Condition --> if this and parent node < cutoff only then cutoff this branch
+        # if (branch.visits > 0 and branch.getCurrentScore() < cutoff) and branch.parent != None and (
+        #         branch.parent.branch.visits > 0 and branch.parent.branch.getCurrentScore() < cutoff):
+        #         # and (branch.parent.branch.parent.branch.visits > 0 and branch.parent.branch.parent.branch.getCurrentScore() < cutoff):
+        #     return True
 
         return False
 

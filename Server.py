@@ -163,11 +163,14 @@ class Server :
             percentCount = r.percentCount
 
             if self.epsilon != 'inf':
-                # finalBudg = self.final_saved_budget[ri] #sum(self.final_saved_budget) / len(self.final_saved_budget) #
-                # finalBudg = 5 / len(self.final_saved_budget)
-                finalBudg = sum(self.final_saved_budget) / len(initialRuleTrees) #this is the good one ...
-                # finalBudg = 0.1 #now checking to see if higher budg at end is better
-                print(r.toString(), "count:", r.percentCount)
+                if self.budgetAllocStrategy == 'fixed':
+                    finalBudg = self.allocateQueryBudget(self.budgetAllocStrategy, None)
+                else:
+                    # finalBudg = self.final_saved_budget[ri] #sum(self.final_saved_budget) / len(self.final_saved_budget) #
+                    # finalBudg = 5 / len(self.final_saved_budget)
+                    finalBudg = sum(self.final_saved_budget) / len(initialRuleTrees) #this is the good one ...
+                    # finalBudg = 0.1 #now checking to see if higher budg at end is better
+                    print(r.toString(), "count:", r.percentCount)
                 print("FINAL BUDG", finalBudg)
             else:
                 finalBudg=None
@@ -490,7 +493,7 @@ class Server :
 
                 return (cdf_upper - cdf_lower)  # >= 0.95
 
-            ineq_constraint = {'type': 'ineq', 'fun': lambda x: obj_func(x) - 0.50} # was 0.95
+            ineq_constraint = {'type': 'ineq', 'fun': lambda x: obj_func(x) - 0.95} # was 0.95
 
             lw_bnd = 1e-10 #1e-20
             print("BUDGET USED", self.clientList[1].budgetUsed)
