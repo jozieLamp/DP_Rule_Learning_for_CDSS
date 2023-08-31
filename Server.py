@@ -461,41 +461,74 @@ class Server :
 
             # Constants
             n = len(self.clientList)  # num clients
-            # c is param passed in, true count (mean) from parent node
+            theta = 0.05 * 2 # acceptable error probability, e.g., 5%
 
-            # Compute Standard Deviation of parent node
-            # bottom = (self.p_paren - self.q_paren) ** 2
-            # stdDev = (n * self.q_paren * (1 - self.q_paren)) / bottom if bottom else (
-            #             n * self.q_paren * (1 - self.q_paren))
-            # # print("q paren", self.q_paren)
-            # # print("p paren", self.p_paren)
-            # # print("std dev", stdDev)
-            # # print("bottom", bottom)
-            stdDev = n / 4
-
-            d = 2 * stdDev  # Distance of within 2 standard deviations
-            print("Std Dev", stdDev, "distance", d)
+            # TODO - try scaling everything to be between 0 and 1 ...
 
             # Formulate optimization problem to find minimum budget (beta) to use
+            #P[ˆc > λ | c ≤ λ] + P[ˆc ≤ λ | c > λ] ≤ θ
             def obj_func(beta):
                 p = math.e ** beta / (1 + math.e ** beta)
+                q = 1-p
+
                 c_hat = p * n
+                print("\nP", p)
+                print("c hat", c_hat)
+                print("c", c)
 
-                #Compute z scores for distances
-                z_upper = (c_hat - c + d) / stdDev
-                z_lower = (c_hat - c - d) / stdDev
+                # TODO HERE - figure out proper formula for standard deviation
+                sigma_c_hat = self.sigma(n, beta, p, q)
+                print("sigma c hat", sigma_c_hat)
+                sigma_c = self.sigma(n, self.epsilon, self.p_paren, self.q_paren)
+                print("sigma c", sigma_c)
 
-                # Compute CDF
-                cdf_upper = norm.cdf(z_upper)
-                cdf_lower = norm.cdf(z_lower)
+                # # Compute CDFs
+                # #P[ˆc > λ | c ≤ λ]
+                # falseContinue = (1 - norm.cdf(self.Z(n, c_hat, sigma_c_hat))) / norm.cdf(self.Z(n, c, sigma_c))
+                # #P[ˆc ≤ λ | c > λ]
+                # falseCutoff = norm.cdf(self.Z(n, c_hat, sigma_c_hat)) / (1 - norm.cdf(self.Z(n, c, sigma_c)))
 
-                # print("beta", beta, "Sub CDFs", (cdf_upper - cdf_lower))
+                # Compute CDFs
+                #TODO - issues is here --> need to figure out why these are not giving probability values <1
+                # Think conditional probability calculation is wrong here
+                # P[ˆc > λ | c ≤ λ]
+                lmda = self.cutoffThresh * n
+                # falseContinue = norm.cdf(lmda, loc=c, scale=sigma_c) * (1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat)) / norm.cdf(lmda, loc=c, scale=sigma_c)
+                # # P[ˆc ≤ λ | c > λ]
+                # falseCutoff = (1 - norm.cdf(lmda, loc=c, scale=sigma_c)) * norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) / (1 - norm.cdf(lmda, loc=c, scale=sigma_c))
 
-                return (cdf_upper - cdf_lower)  # >= 0.95
+                # P[ˆc > λ | c ≤ λ]
+                falseContinue = (1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat)) * norm.pdf(lmda, loc=c, scale=sigma_c) / norm.cdf(lmda, loc=c, scale=sigma_c)
+                # P[ˆc ≤ λ | c > λ]
+                falseCutoff = norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.cdf(lmda, loc=c, scale=sigma_c)) / norm.pdf(lmda, loc=c_hat, scale=sigma_c_hat)
+                # falseCutoff = norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.pdf(lmda, loc=c, scale=sigma_c)) / (1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat))
 
-            ineq_constraint = {'type': 'ineq', 'fun': lambda x: obj_func(x) - 0.95} # was 0.95
+                # # P[ˆc > λ | c ≤ λ]
+                # falseContinue = (1 - norm.cdf(self.Z(n, c_hat, sigma_c_hat))) * norm.pdf(self.Z(n, c,sigma_c)) / norm.cdf(self.Z(n, c, sigma_c))
+                # # P[ˆc ≤ λ | c > λ]
+                # falseCutoff = norm.cdf(self.Z(n, c_hat, sigma_c_hat)) * (1 - norm.cdf(self.Z(n, c, sigma_c))) / norm.pdf(self.Z(n, c_hat, sigma_c_hat))
+                # falseCutoff = norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.pdf(lmda, loc=c, scale=sigma_c)) / (1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat))
 
-            lw_bnd = 1e-10 #1e-20
+
+                probErrorChoice = falseContinue + falseCutoff
+                print("beta", beta)
+                print("c_hat cdf", norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat))
+                print("c cdf", norm.cdf(lmda, loc=c, scale=1))
+                print("c pdf", norm.pdf(lmda, loc=c, scale=1))
+                # print("z of c hat", self.Z(n, c_hat, sigma_c_hat))
+                # print("cdf of c hat", norm.cdf(self.Z(n, c_hat, sigma_c_hat)))
+                # print("z of c", self.Z(n, c, sigma_c))
+                # print("cdf of c", norm.cdf(self.Z(n, c, sigma_c)))
+                print("false cont", falseContinue)
+                print("fasle cutoff", falseCutoff)
+                print("prob error", probErrorChoice)
+                print("error", -1.0 * (probErrorChoice - theta))
+                return -1.0 * (probErrorChoice - theta)
+
+            # TODO - change all cutoff thresh vars to be lambda and make this prob a hyperparam fed in --> theta
+            ineq_constraint = {'type': 'ineq', 'fun': lambda x: obj_func(x)}
+
+            lw_bnd = 1e-5#1e-10 #1e-20
             print("BUDGET USED", self.clientList[1].budgetUsed)
             print("global budget used?", self.globalBudgetUsed())
             up_bnd = self.epsilon - self.clientList[1].budgetUsed
@@ -512,11 +545,11 @@ class Server :
             # options = {'maxiter': 1000}  # Increase the maximum number of function evaluations
             # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
 
-            # if failed try trust constr method
-            if not result.success:
-                print("TRYING TRUST CONSTR METHOD*************************************************************************")
-                options = {'maxiter': 500}  # Increase the maximum number of function evaluations
-                result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
+            # # if failed try trust constr method
+            # if not result.success:
+            #     print("TRYING TRUST CONSTR METHOD*************************************************************************")
+            #     options = {'maxiter': 500}  # Increase the maximum number of function evaluations
+            #     result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
 
 
             if result.success:
@@ -543,89 +576,128 @@ class Server :
         print("Returning budget of:", pLossBudg)
         return pLossBudg
 
-    # #Allocate budget for this query --> Method using Gekko Optimization
+    def sigma(self, n, beta, p ,q):
+        bottom =n* ((p - q) ** 2)
+        stdDev = q * (1 - q) / bottom if bottom else (q * (1 - q))
+        print("top", q * (1 - q))
+        # stdDev = stdDev / n
+        # print("p, q, p-q", p, q, (p - q))
+        # print("p-q std dev", math.pow((p - q), 2))
+        # print("p-q std dev", ((p - q)**2))
+        # stdDev = (q * (1 - q)) / ((p - q)**2)
+        # print("sigma, bottom", bottom)
+        # print("sigma, top", (n * q * (1 - q)))
+        # print("top sigma", (n * (1 - p - q)))
+        # bottom = p-q
+        # stdDev = (n * (1 - p - q)) / bottom if bottom else 0
+        # stdDev = n * ((-1 + beta) / (beta - 1)**2 )
+        # if stdDev == 0:
+        #     stdDev = 1
+
+        return stdDev
+
+    def Z(self, n, v, sigma_v):
+        cutoffCount = self.cutoffThresh * n
+        return (cutoffCount - v) / sigma_v
+
+
+    # # Allocate budget for this query --> method using mystic
     # def allocateQueryBudget(self, strategy, c):
     #
-    #     if strategy == 'fixed':  #Fixed budget
+    #     if strategy == 'fixed':  # Fixed budget
     #         pLossBudg = self.epsilon / self.maxQueries
     #     elif strategy == 'adaptive':
     #         # print("In adaptive tree search")
     #
-    #         #Constants
+    #         #check if budget used
+    #         if self.clientList[1].privacyBudgetUsed():
+    #             return 0
+    #
+    #         # Constants
     #         n = len(self.clientList)  # num clients
     #         # c is param passed in, true count (mean) from parent node
     #
     #         # Compute Standard Deviation of parent node
-    #         bottom = (self.p_paren - self.q_paren) ** 2
-    #         stdDev = (n * self.q_paren * (1 - self.q_paren)) / bottom if bottom else (n * self.q_paren * (1 - self.q_paren))
-    #         # print("q paren", self.q_paren)
-    #         # print("p paren", self.p_paren)
-    #         # print("std dev", stdDev)
-    #         # print("bottom", bottom)
+    #         # bottom = (self.p_paren - self.q_paren) ** 2
+    #         # stdDev = (n * self.q_paren * (1 - self.q_paren)) / bottom if bottom else (
+    #         #             n * self.q_paren * (1 - self.q_paren))
+    #         # # print("q paren", self.q_paren)
+    #         # # print("p paren", self.p_paren)
+    #         # # print("std dev", stdDev)
+    #         # # print("bottom", bottom)
+    #         stdDev = n / 4
     #
     #         d = 2 * stdDev  # Distance of within 2 standard deviations
+    #         print("Std Dev", stdDev, "distance", d)
     #
-    #         #Formulate optimization problem to find minimum budget (beta) to use
-    #         prob = GEKKO()
+    #         # Formulate optimization problem to find minimum budget (beta) to use
+    #         def obj_func(beta):
+    #             p = math.e ** beta / (1 + math.e ** beta)
+    #             c_hat = p * n
     #
-    #         # variables
-    #         # beta = prob.Var(lb=1e-10, ub=self.epsilon)
-    #         budgetLeft = self.epsilon - self.clientList[1].budgetUsed
-    #         beta = prob.Var(lb=0.01, ub=budgetLeft)
+    #             #Compute z scores for distances
+    #             z_upper = (c_hat - c + d) / stdDev
+    #             z_lower = (c_hat - c - d) / stdDev
     #
-    #         # Intermediates
-    #         p = prob.Intermediate(math.e ** beta / (1 + math.e ** beta))
-    #         print("p", p.value, "start beta", beta.value)
-    #         c_hat = prob.Intermediate(p * n)
+    #             # Compute CDF
+    #             cdf_upper = norm.cdf(z_upper)
+    #             cdf_lower = norm.cdf(z_lower)
     #
-    #         z_upper = prob.Intermediate((c_hat - c + d) / stdDev)
-    #         z_lower = prob.Intermediate((c_hat - c - d) / stdDev)
+    #             # print("beta", beta, "Sub CDFs", (cdf_upper - cdf_lower))
     #
-    #         #Compute CDF
-    #         # cdf_upper = prob.Intermediate(norm.cdf(z_upper.value))
-    #         # cdf_lower = prob.Intermediate(norm.cdf(z_lower.value))
-    #         cdf_upper = prob.Intermediate((1.0 + prob.erf(z_upper / math.sqrt(2.0))) / 2.0)
-    #         cdf_lower= prob.Intermediate((1.0 + prob.erf(z_lower / math.sqrt(2.0))) / 2.0)
+    #             return (cdf_upper - cdf_lower)  # >= 0.95
     #
-    #         # Functions:
-    #         # Probability estimated count falls within +- d of the true count is >= 95%
-    #         prob.Equation(cdf_upper - cdf_lower >= 0.95)
-    #         # prob.Equations([(norm.cdf(z_upper.value) - norm.cdf(z_lower.value)) >= 0.95])
-    #         prob.Minimize(beta)
+    #         ineq_constraint = {'type': 'ineq', 'fun': lambda x: obj_func(x) - 0.95} # was 0.95
     #
-    #         try:
+    #         lw_bnd = 1e-10 #1e-20
+    #         print("BUDGET USED", self.clientList[1].budgetUsed)
+    #         print("global budget used?", self.globalBudgetUsed())
+    #         up_bnd = self.epsilon - self.clientList[1].budgetUsed
+    #         if lw_bnd > up_bnd:
+    #             up_bnd = lw_bnd
+    #         bnds = Bounds(lb=lw_bnd, ub=up_bnd)
+    #         print("bounds", bnds)
     #
-    #             # Solvers- 1: APOPT, 2: BPOPT, 3: IPOPT
-    #             # prob.options.SOLVER = 0
-    #             prob.solve(disp=False)
-    #             if self.verbose:
-    #                 print("Allocated Beta Budget of:", beta.value)
+    #         # SLSQP method
+    #         options = {'maxiter': 1000, 'ftol': 0.1}
+    #         result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='SLSQP',options=options)
     #
-    #             # print("c_hat", c_hat.value, "c", c)
-    #             # print("z upper", z_upper.value)
-    #             # print("z lower", z_lower.value)
-    #             pLossBudg = beta.value[0]
+    #         # trust-constr method
+    #         # options = {'maxiter': 1000}  # Increase the maximum number of function evaluations
+    #         # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
+    #
+    #         # if failed try trust constr method
+    #         if not result.success:
+    #             print("TRYING TRUST CONSTR METHOD*************************************************************************")
+    #             options = {'maxiter': 500}  # Increase the maximum number of function evaluations
+    #             result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
+    #
+    #
+    #         if result.success:
+    #             print("Success, beta = ", result.x)
+    #             print("Estimated Prob of", result.fun)
+    #
+    #             pLossBudg = result.x[0]
+    #
+    #             #TODO - fix this
+    #             if pLossBudg < 0:
+    #                 pLossBudg = lw_bnd
     #
     #             # Update global p and q params of parent node
-    #             self.p_paren = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (
-    #                         1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
+    #             self.p_paren = math.e ** pLossBudg / (1 + math.e ** pLossBudg)
+    #                 #decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
     #             self.q_paren = 1 - self.p_paren
     #
-    #             print("\nEstimated prob of:", cdf_upper.value[0] - cdf_lower.value[0])
-    #             print("Allocated Beta Budget of:", beta.value)
-    #         except:
-    #             print("IN EXCEPT!!!!")
-    #
-    #             print("c_hat", c_hat.value, "c", c)
-    #             print("z upper", z_upper.value)
-    #             print("z lower", z_lower.value)
-    #             print("\nEstimated prob of:", cdf_upper.value - cdf_lower.value)
+    #         else:
+    #             print("FAIL")
+    #             print(result)
+    #             print(result.message)
     #             pLossBudg = None
     #
-    #         print("Budget Left", budgetLeft)
-    #
-    #
+    #     print("Returning budget of:", pLossBudg)
     #     return pLossBudg
+
+
 
     # Check if the client is still active - client can still have true queries
     def checkClientActive(self, response, p, priorProbTrue):
