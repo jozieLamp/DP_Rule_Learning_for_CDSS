@@ -461,10 +461,9 @@ class Server :
 
             # Constants
             n = len(self.clientList)  # num clients
-            theta = 0.05 * 2 # acceptable error probability, e.g., 5%
+            theta = 0.05 # acceptable error probability, e.g., 5%
             c = c / n
 
-            # TODO - try scaling everything to be between 0 and 1 ...?
 
             # Formulate optimization problem to find minimum budget (beta) to use
             #P[ˆc > λ | c ≤ λ] + P[ˆc ≤ λ | c > λ] ≤ θ
@@ -479,11 +478,13 @@ class Server :
                 print("c hat", c_hat)
                 print("c", c)
 
-                # TODO HERE - figure out proper formula for standard deviation
                 sigma_c_hat = self.sigma(n, beta, p, q)
                 print("sigma c hat", sigma_c_hat)
                 sigma_c = self.sigma(n, self.epsilon, self.p_paren, self.q_paren)
                 print("sigma c", sigma_c)
+
+                lmda = self.cutoffThresh #* n
+                print("lmda", lmda)
 
                 # # Compute CDFs
                 # #P[ˆc > λ | c ≤ λ]
@@ -491,19 +492,39 @@ class Server :
                 # #P[ˆc ≤ λ | c > λ]
                 # falseCutoff = norm.cdf(self.Z(n, c_hat, sigma_c_hat)) / (1 - norm.cdf(self.Z(n, c, sigma_c)))
 
+                # # Compute CDFs
+                # # P[ˆc > λ | c ≤ λ]
+                # falseContinue = ((1 - norm.cdf(self.Z(n, c_hat, sigma_c_hat))) - norm.cdf(self.Z(n, c, sigma_c))) / (1 - norm.cdf(self.Z(n, c, sigma_c)))
+                # # P[ˆc ≤ λ | c > λ]
+                # falseCutoff = (norm.cdf(self.Z(n, c_hat, sigma_c_hat)) - (1 - norm.cdf(self.Z(n, c, sigma_c)))) / norm.cdf(self.Z(n, c, sigma_c))
+                # print("P[c_hat > lambda", 1 - norm.cdf(self.Z(n, c_hat, sigma_c_hat)))
+                # print("P[c <= lambda", norm.cdf(self.Z(n, c, sigma_c)))
+                # print("Prob false continue", falseContinue)
+                # print("P[c_hat <= lambda", norm.cdf(self.Z(n, c_hat, sigma_c_hat)))
+                # print("P[c > lambda", 1 - norm.cdf(self.Z(n, c, sigma_c)))
+                # print("Prob false cutoff", falseCutoff)
+
+                # TODO - working here ... not sure if probs make sense
                 # Compute CDFs
+                # # P[ˆc > λ | c ≤ λ]
+                # falseContinue = ((1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat)) * norm.cdf(lmda, loc=c, scale=sigma_c)) / (1 - norm.cdf(lmda, loc=c, scale=sigma_c))
+                # # P[ˆc ≤ λ | c > λ]
+                # falseCutoff = (norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.cdf(lmda, loc=c, scale=sigma_c))) / norm.cdf(lmda, loc=c, scale=sigma_c)
                 # P[ˆc > λ | c ≤ λ]
-                falseContinue = ((1 - norm.cdf(self.Z(n, c_hat, sigma_c_hat))) * norm.cdf(self.Z(n, c, sigma_c))) / norm.cdf(self.Z(n, c, sigma_c))
+                falseContinue = (1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat)) * norm.cdf(lmda, loc=c,scale=sigma_c)
                 # P[ˆc ≤ λ | c > λ]
-                falseCutoff = (norm.cdf(self.Z(n, c_hat, sigma_c_hat)) * (1 - norm.cdf(self.Z(n, c, sigma_c)))) / (1 - norm.cdf(self.Z(n, c, sigma_c)))
+                falseCutoff = norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.cdf(lmda, loc=c, scale=sigma_c))
+
+                print("P[c_hat > lambda", 1 - norm.cdf(self.Z(n, c_hat, sigma_c_hat) ))
+                print("P[c <= lambda", norm.cdf(self.Z(n, c, sigma_c)))
+                print("Prob false continue", falseContinue)
+                print("P[c_hat <= lambda",norm.cdf(self.Z(n, c_hat, sigma_c_hat)))
+                print("P[c > lambda", 1 - norm.cdf(self.Z(n, c, sigma_c)))
+                print("Prob false cutoff", falseCutoff)
 
 
                 # Compute CDFs
-                #TODO - issues is here --> need to figure out why these are not giving probability values <1
-                # Think conditional probability calculation is wrong here
                 # P[ˆc > λ | c ≤ λ]
-                lmda = self.cutoffThresh #* n
-                print("lmda", lmda)
                 # falseContinue = norm.cdf(lmda, loc=c, scale=sigma_c) * (1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat)) / norm.cdf(lmda, loc=c, scale=sigma_c)
                 # # P[ˆc ≤ λ | c > λ]
                 # falseCutoff = (1 - norm.cdf(lmda, loc=c, scale=sigma_c)) * norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) / (1 - norm.cdf(lmda, loc=c, scale=sigma_c))
@@ -526,18 +547,18 @@ class Server :
                 # print("c_hat cdf", norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat))
                 # print("c cdf", norm.cdf(lmda, loc=c, scale=1))
                 # print("c pdf", norm.pdf(lmda, loc=c, scale=1))
-                print("z of c hat", self.Z(n, c_hat, sigma_c_hat))
-                print("cdf of c hat", norm.cdf(self.Z(n, c_hat, sigma_c_hat)))
-                print("z of c", self.Z(n, c, sigma_c))
-                print("cdf of c", norm.cdf(self.Z(n, c, sigma_c)))
-                print("false cont", falseContinue)
-                print("fasle cutoff", falseCutoff)
-                print("prob error", probErrorChoice)
-                print("error", -1.0 * (probErrorChoice - theta))
-                return -1.0 * (probErrorChoice - theta)
+                # print("z of c hat", self.Z(n, c_hat, sigma_c_hat))
+                # print("cdf of c hat", norm.cdf(self.Z(n, c_hat, sigma_c_hat)))
+                # print("z of c", self.Z(n, c, sigma_c))
+                # print("cdf of c", norm.cdf(self.Z(n, c, sigma_c)))
+                # print("false cont", falseContinue)
+                # print("fasle cutoff", falseCutoff)
+                print("Prob make incorrect choice", probErrorChoice)
+                print("Prob make correct choice, and function return", 1 - probErrorChoice)
+                return 1 - probErrorChoice
 
             # TODO - change all cutoff thresh vars to be lambda and make this prob a hyperparam fed in --> theta
-            ineq_constraint = {'type': 'ineq', 'fun': lambda x: obj_func(x)}
+            ineq_constraint = {'type': 'ineq', 'fun': lambda x: obj_func(x) - (1 - theta)}
 
             lw_bnd = 0.1#1e-5#1e-10 #1e-20
             print("BUDGET USED", self.clientList[1].budgetUsed)
@@ -588,8 +609,8 @@ class Server :
         return pLossBudg
 
     def sigma(self, n, beta, p ,q):
-        # bottom =n* ((p - q) ** 2)
-        bottom = (p - q) ** 2
+        bottom =n* ((p - q) ** 2)
+        # bottom = (p - q) ** 2
         stdDev = q * (1 - q) / bottom if bottom else (q * (1 - q))
         # print("top", q * (1 - q))
         # stdDev = stdDev / n
