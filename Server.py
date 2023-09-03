@@ -474,17 +474,17 @@ class Server :
                 # c_hat = p * n
                 c_hat = p
 
-                print("\nP", p)
-                print("c hat", c_hat)
-                print("c", c)
+                # print("\nP", p)
+                # print("c hat", c_hat)
+                # print("c", c)
 
                 sigma_c_hat = self.sigma(n, beta, p, q)
-                print("sigma c hat", sigma_c_hat)
+                # print("sigma c hat", sigma_c_hat)
                 sigma_c = self.sigma(n, self.epsilon, self.p_paren, self.q_paren)
-                print("sigma c", sigma_c)
+                # print("sigma c", sigma_c)
 
                 lmda = self.cutoffThresh #* n
-                print("lmda", lmda)
+                # print("lmda", lmda)
 
                 # # Compute CDFs
                 # #P[ˆc > λ | c ≤ λ]
@@ -504,12 +504,12 @@ class Server :
                 # print("P[c > lambda", 1 - norm.cdf(self.Z(n, c, sigma_c)))
                 # print("Prob false cutoff", falseCutoff)
 
-                # TODO - working here ... not sure if probs make sense
                 # Compute CDFs
                 # # P[ˆc > λ | c ≤ λ]
                 # falseContinue = ((1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat)) * norm.cdf(lmda, loc=c, scale=sigma_c)) / (1 - norm.cdf(lmda, loc=c, scale=sigma_c))
                 # # P[ˆc ≤ λ | c > λ]
                 # falseCutoff = (norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.cdf(lmda, loc=c, scale=sigma_c))) / norm.cdf(lmda, loc=c, scale=sigma_c)
+
                 # P[ˆc > λ | c ≤ λ]
                 falseContinue = (1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat)) * norm.cdf(lmda, loc=c,scale=sigma_c)
                 # P[ˆc ≤ λ | c > λ]
@@ -541,8 +541,6 @@ class Server :
                 # falseCutoff = norm.cdf(self.Z(n, c_hat, sigma_c_hat)) * (1 - norm.cdf(self.Z(n, c, sigma_c))) / norm.pdf(self.Z(n, c_hat, sigma_c_hat))
                 # falseCutoff = norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.pdf(lmda, loc=c, scale=sigma_c)) / (1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat))
 
-
-                probErrorChoice = falseContinue + falseCutoff
                 print("beta", beta)
                 # print("c_hat cdf", norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat))
                 # print("c cdf", norm.cdf(lmda, loc=c, scale=1))
@@ -553,8 +551,20 @@ class Server :
                 # print("cdf of c", norm.cdf(self.Z(n, c, sigma_c)))
                 # print("false cont", falseContinue)
                 # print("fasle cutoff", falseCutoff)
+
+                # TODO - make this only one sided (prob of false cutoff or false prune and only return prob of that each time ...)
+
+                if (c_hat > lmda and c <= lmda) or (c_hat > lmda and c > lmda):
+                    print("ret false cont")
+                    probErrorChoice =  falseContinue
+                else: # c_hat <= lmda and c > lmda
+                    print("ret false cutoff")
+                    probErrorChoice = falseCutoff
+
                 print("Prob make incorrect choice", probErrorChoice)
                 print("Prob make correct choice, and function return", 1 - probErrorChoice)
+                # probErrorChoice = falseContinue + falseCutoff
+                # return 1 - probErrorChoice
                 return 1 - probErrorChoice
 
             # TODO - change all cutoff thresh vars to be lambda and make this prob a hyperparam fed in --> theta
