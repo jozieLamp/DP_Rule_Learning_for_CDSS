@@ -473,10 +473,7 @@ class Server :
 
                 # c_hat = p * n
                 c_hat = p
-
-                # print("\nP", p)
-                # print("c hat", c_hat)
-                # print("c", c)
+                print("c", c, "c_hat", c_hat)
 
                 sigma_c_hat = self.sigma(n, beta, p, q)
                 # print("sigma c hat", sigma_c_hat)
@@ -486,73 +483,25 @@ class Server :
                 lmda = self.cutoffThresh #* n
                 # print("lmda", lmda)
 
-                # # Compute CDFs
-                # #P[ˆc > λ | c ≤ λ]
-                # falseContinue = (1 - norm.cdf(self.Z(n, c_hat, sigma_c_hat))) / norm.cdf(self.Z(n, c, sigma_c))
-                # #P[ˆc ≤ λ | c > λ]
-                # falseCutoff = norm.cdf(self.Z(n, c_hat, sigma_c_hat)) / (1 - norm.cdf(self.Z(n, c, sigma_c)))
-
-                # # Compute CDFs
-                # # P[ˆc > λ | c ≤ λ]
-                # falseContinue = ((1 - norm.cdf(self.Z(n, c_hat, sigma_c_hat))) - norm.cdf(self.Z(n, c, sigma_c))) / (1 - norm.cdf(self.Z(n, c, sigma_c)))
-                # # P[ˆc ≤ λ | c > λ]
-                # falseCutoff = (norm.cdf(self.Z(n, c_hat, sigma_c_hat)) - (1 - norm.cdf(self.Z(n, c, sigma_c)))) / norm.cdf(self.Z(n, c, sigma_c))
-                # print("P[c_hat > lambda", 1 - norm.cdf(self.Z(n, c_hat, sigma_c_hat)))
-                # print("P[c <= lambda", norm.cdf(self.Z(n, c, sigma_c)))
-                # print("Prob false continue", falseContinue)
-                # print("P[c_hat <= lambda", norm.cdf(self.Z(n, c_hat, sigma_c_hat)))
-                # print("P[c > lambda", 1 - norm.cdf(self.Z(n, c, sigma_c)))
-                # print("Prob false cutoff", falseCutoff)
-
                 # Compute CDFs
                 # # P[ˆc > λ | c ≤ λ]
                 # falseContinue = ((1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat)) * norm.cdf(lmda, loc=c, scale=sigma_c)) / (1 - norm.cdf(lmda, loc=c, scale=sigma_c))
                 # # P[ˆc ≤ λ | c > λ]
                 # falseCutoff = (norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.cdf(lmda, loc=c, scale=sigma_c))) / norm.cdf(lmda, loc=c, scale=sigma_c)
 
+                # TODO - figure out why increasing beta does not increase prob correct choice --> think probability calculations are off
                 # P[ˆc > λ | c ≤ λ]
                 falseContinue = (1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat)) * norm.cdf(lmda, loc=c,scale=sigma_c)
                 # P[ˆc ≤ λ | c > λ]
                 falseCutoff = norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.cdf(lmda, loc=c, scale=sigma_c))
-
-                print("P[c_hat > lambda", 1 - norm.cdf(self.Z(n, c_hat, sigma_c_hat) ))
-                print("P[c <= lambda", norm.cdf(self.Z(n, c, sigma_c)))
-                print("Prob false continue", falseContinue)
-                print("P[c_hat <= lambda",norm.cdf(self.Z(n, c_hat, sigma_c_hat)))
-                print("P[c > lambda", 1 - norm.cdf(self.Z(n, c, sigma_c)))
-                print("Prob false cutoff", falseCutoff)
-
-
-                # Compute CDFs
-                # P[ˆc > λ | c ≤ λ]
-                # falseContinue = norm.cdf(lmda, loc=c, scale=sigma_c) * (1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat)) / norm.cdf(lmda, loc=c, scale=sigma_c)
-                # # P[ˆc ≤ λ | c > λ]
-                # falseCutoff = (1 - norm.cdf(lmda, loc=c, scale=sigma_c)) * norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) / (1 - norm.cdf(lmda, loc=c, scale=sigma_c))
-
-                # # P[ˆc > λ | c ≤ λ]
-                # falseContinue = (1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat)) * norm.pdf(lmda, loc=c, scale=sigma_c) / norm.cdf(lmda, loc=c, scale=sigma_c)
-                # # P[ˆc ≤ λ | c > λ]
-                # falseCutoff = norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.cdf(lmda, loc=c, scale=sigma_c)) / norm.pdf(lmda, loc=c_hat, scale=sigma_c_hat)
-                # # falseCutoff = norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.pdf(lmda, loc=c, scale=sigma_c)) / (1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat))
-
-                # # P[ˆc > λ | c ≤ λ]
-                # falseContinue = (1 - norm.cdf(self.Z(n, c_hat, sigma_c_hat))) * norm.pdf(self.Z(n, c,sigma_c)) / norm.cdf(self.Z(n, c, sigma_c))
-                # # P[ˆc ≤ λ | c > λ]
-                # falseCutoff = norm.cdf(self.Z(n, c_hat, sigma_c_hat)) * (1 - norm.cdf(self.Z(n, c, sigma_c))) / norm.pdf(self.Z(n, c_hat, sigma_c_hat))
-                # falseCutoff = norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.pdf(lmda, loc=c, scale=sigma_c)) / (1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat))
+                # print("P[c_hat > lambda", 1 - norm.cdf(self.Z(n, c_hat, sigma_c_hat) ))
+                # print("P[c <= lambda", norm.cdf(self.Z(n, c, sigma_c)))
+                # print("Prob false continue", falseContinue)
+                # print("P[c_hat <= lambda",norm.cdf(self.Z(n, c_hat, sigma_c_hat)))
+                # print("P[c > lambda", 1 - norm.cdf(self.Z(n, c, sigma_c)))
+                # print("Prob false cutoff", falseCutoff)
 
                 print("beta", beta)
-                # print("c_hat cdf", norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat))
-                # print("c cdf", norm.cdf(lmda, loc=c, scale=1))
-                # print("c pdf", norm.pdf(lmda, loc=c, scale=1))
-                # print("z of c hat", self.Z(n, c_hat, sigma_c_hat))
-                # print("cdf of c hat", norm.cdf(self.Z(n, c_hat, sigma_c_hat)))
-                # print("z of c", self.Z(n, c, sigma_c))
-                # print("cdf of c", norm.cdf(self.Z(n, c, sigma_c)))
-                # print("false cont", falseContinue)
-                # print("fasle cutoff", falseCutoff)
-
-                # TODO - make this only one sided (prob of false cutoff or false prune and only return prob of that each time ...)
 
                 if (c_hat > lmda and c <= lmda) or (c_hat > lmda and c > lmda):
                     print("ret false cont")
@@ -577,7 +526,7 @@ class Server :
             if lw_bnd > up_bnd:
                 up_bnd = lw_bnd
             bnds = Bounds(lb=lw_bnd, ub=up_bnd)
-            print("bounds", bnds)
+            print("\nbounds", bnds)
 
             # SLSQP method
             options = {'maxiter': 1000, 'ftol': 0.1}
@@ -587,11 +536,11 @@ class Server :
             # options = {'maxiter': 1000}  # Increase the maximum number of function evaluations
             # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
 
-            # # if failed try trust constr method
-            # if not result.success:
-            #     print("TRYING TRUST CONSTR METHOD*************************************************************************")
-            #     options = {'maxiter': 500}  # Increase the maximum number of function evaluations
-            #     result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
+            # if failed try trust constr method
+            if not result.success:
+                print("TRYING TRUST CONSTR METHOD*************************************************************************")
+                options = {'maxiter': 500}  # Increase the maximum number of function evaluations
+                result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
 
 
             if result.success:
