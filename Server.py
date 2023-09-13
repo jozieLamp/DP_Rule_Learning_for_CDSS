@@ -9,8 +9,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from scipy.stats import norm
+from scipy.stats import norm, multivariate_normal
 from scipy.optimize import minimize_scalar, minimize, Bounds
+from scipy.integrate import quad
 from gekko import GEKKO
 from RuleTemplate.RuleTemplate import RuleTemplate, Node, stlGrammarDict, terminalNodes
 from SignalTemporalLogic.STLFactory import STLFactory
@@ -473,6 +474,9 @@ class Server :
 
                 # c_hat = p * n
                 c_hat = p
+
+                # c = 1
+                print("\nbeta", beta)
                 print("c", c, "c_hat", c_hat)
 
                 sigma_c_hat = self.sigma(n, beta, p, q)
@@ -489,37 +493,41 @@ class Server :
                 # # P[ˆc ≤ λ | c > λ]
                 # falseCutoff = (norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.cdf(lmda, loc=c, scale=sigma_c))) / norm.cdf(lmda, loc=c, scale=sigma_c)
 
-                # TODO - figure out why increasing beta does not increase prob correct choice --> think probability calculations are off
+                # TODO - figure out why increasing beta does not increase prob correct choice --> think probability calculations are off??
                 # P[ˆc > λ | c ≤ λ]
+
+                # test = multivariate_normal.cdf([lmda, lmda], mean=[mean_x, mean_y], cov=[[var_x, cov_xy], [cov_xy, var_y]])
                 falseContinue = (1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat)) * norm.cdf(lmda, loc=c,scale=sigma_c)
+                # falseContinue = ((1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat)) * norm.cdf(lmda, loc=c,scale=sigma_c)) / norm.cdf(lmda, loc=c, scale=sigma_c)
                 # P[ˆc ≤ λ | c > λ]
                 falseCutoff = norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.cdf(lmda, loc=c, scale=sigma_c))
+                # falseCutoff = (norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.cdf(lmda, loc=c, scale=sigma_c))) / (1 - norm.cdf(lmda, loc=c, scale=sigma_c))
                 # print("P[c_hat > lambda", 1 - norm.cdf(self.Z(n, c_hat, sigma_c_hat) ))
                 # print("P[c <= lambda", norm.cdf(self.Z(n, c, sigma_c)))
-                # print("Prob false continue", falseContinue)
+                print("Prob false continue", falseContinue)
                 # print("P[c_hat <= lambda",norm.cdf(self.Z(n, c_hat, sigma_c_hat)))
                 # print("P[c > lambda", 1 - norm.cdf(self.Z(n, c, sigma_c)))
-                # print("Prob false cutoff", falseCutoff)
+                print("Prob false cutoff", falseCutoff)
 
-                print("beta", beta)
 
-                if (c_hat > lmda and c <= lmda) or (c_hat > lmda and c > lmda):
-                    print("ret false cont")
-                    probErrorChoice =  falseContinue
-                else: # c_hat <= lmda and c > lmda
-                    print("ret false cutoff")
-                    probErrorChoice = falseCutoff
+                # if (c_hat > lmda and c <= lmda) or (c_hat > lmda and c > lmda):
+                #     print("ret false cont")
+                #     probErrorChoice =  falseContinue
+                # else: # c_hat <= lmda and c > lmda
+                #     print("ret false cutoff")
+                #     probErrorChoice = falseCutoff
 
+                # probErrorChoice = falseContinue * falseCutoff
+                probErrorChoice = falseCutoff
                 print("Prob make incorrect choice", probErrorChoice)
                 print("Prob make correct choice, and function return", 1 - probErrorChoice)
-                # probErrorChoice = falseContinue + falseCutoff
-                # return 1 - probErrorChoice
+
                 return 1 - probErrorChoice
 
             # TODO - change all cutoff thresh vars to be lambda and make this prob a hyperparam fed in --> theta
             ineq_constraint = {'type': 'ineq', 'fun': lambda x: obj_func(x) - (1 - theta)}
 
-            lw_bnd = 0.1#1e-5#1e-10 #1e-20
+            lw_bnd = 1e-5#1e-10 #1e-20
             print("BUDGET USED", self.clientList[1].budgetUsed)
             print("global budget used?", self.globalBudgetUsed())
             up_bnd = self.epsilon - self.clientList[1].budgetUsed
