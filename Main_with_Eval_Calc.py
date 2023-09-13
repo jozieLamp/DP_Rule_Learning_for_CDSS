@@ -73,89 +73,18 @@ def calcIndivCoverage(clientDF):
 
 
 
-def sigma( n, p ,q):
-    bottom =n * ((p - q) ** 2)
-    # bottom = (p - q) ** 2
-    stdDev = q * (1 - q) / bottom if bottom else (q * (1 - q))
-    # print("top", q * (1 - q))
-    # stdDev = stdDev / n
-    # print("p, q, p-q", p, q, (p - q))
-    # print("p-q std dev", math.pow((p - q), 2))
-    # print("p-q std dev", ((p - q)**2))
-    # stdDev = (q * (1 - q)) / ((p - q)**2)
-    # print("sigma, bottom", bottom)
-    # print("sigma, top", (n * q * (1 - q)))
-    # print("top sigma", (n * (1 - p - q)))
-    # bottom = p-q
-    # stdDev = (n * (1 - p - q)) / bottom if bottom else 0
-    # stdDev = n * ((-1 + beta) / (beta - 1)**2 )
-    # if stdDev == 0:
-    #     stdDev = 1
-
-    return stdDev
-
-from scipy.stats import norm
-from scipy.integrate import quad
-import numpy as np
 if __name__ == "__main__":
 
-    # # Load client rules
-    # clientTrees, clientRules, clientDF = cov.loadClientRules(params.popSize, params.dataFilename)
-    #
-    # runProtocol(params)
-    #
-    # ## COVERAGE EXPs
-    # ldpRules, covDF, structDF = calcIndivCoverage(clientDF)
+    # Load client rules
+    clientTrees, clientRules, clientDF = cov.loadClientRules(params.popSize, params.dataFilename)
 
-    # TODO working here - figuring out why probs themselves are so low ...
-    # Issue is that probs start low and then when multiplied together get high error rates when they actually should not be that high ...
-    n = 100
-    lmda = 0.1
-    # c = 0.05
-    c_hat = 0.0
-    # print("c", c, "c_hat", c_hat)
+    runProtocol(params)
 
-    p = 0.9
-    q = 1-p
-
-    # I think issue here is the sigma calculation .... !!!!!!????
-    # Problem that sigma is >
-    sigma_c_hat = sigma(n, p, q) #if sigma big then prob c_hat > lmda gets really low b/c lots of variation in the distribution ...
-    print("sigma c hat", sigma_c_hat)
-    # sigma_c = 0.25#sigma(n, 0.49, 0.51)
-
-    #integral of x from 0 to lmda P[true(c) = x | c_hat] --> Get a confidence interval that true count c < lambda
-    # if conf interval within theshold, e.g., 95% that should or should not cut, use this budget, otherwise increase budget used
-
-    def probTrue(x):
-        # p[c = x | c_hat]
-        prob_c_eqs_x = norm.pdf(x, loc=c_hat, scale=sigma_c_hat)
-        print("x=", x, "P[c=x]", prob_c_eqs_x)
-
-        return prob_c_eqs_x
+    ## COVERAGE EXPs
+    ldpRules, covDF, structDF = calcIndivCoverage(clientDF)
 
 
-    #Integral, could also just do a summation of the counts over up to lambda since they are discrete and may not need continuous distribution
-    conf_intrvl_low = quad(probTrue, 0, lmda)
-    conf_intrvl_high = quad(probTrue, lmda, 1)
 
-    print("Conf that true count c < lambda", conf_intrvl_low)
-    print("Conf that true count c > lambda", conf_intrvl_high)
-
-    # #P[ˆc > λ | c ≤ λ]
-    # falseContinue = (1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat)) * norm.cdf(lmda, loc=c, scale=sigma_c)
-    # print("P[c_hat > lmda]", 1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat))
-    # print("P[c <= lmda]", norm.cdf(lmda, loc=c, scale=sigma_c))
-    # # falseContinue = ((1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat)) * norm.cdf(lmda, loc=c,scale=sigma_c)) / norm.cdf(lmda, loc=c, scale=sigma_c)
-    # # P[ˆc ≤ λ | c > λ]
-    # falseCutoff = norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.cdf(lmda, loc=c, scale=sigma_c))
-    # # falseCutoff = (norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.cdf(lmda, loc=c, scale=sigma_c))) / (1 - norm.cdf(lmda, loc=c, scale=sigma_c))
-    # # print("P[c_hat > lambda", 1 - norm.cdf(self.Z(n, c_hat, sigma_c_hat) ))
-    # # print("P[c <= lambda", norm.cdf(self.Z(n, c, sigma_c)))
-    # print("Prob false continue", falseContinue)
-    # print("P[c_hat <= lambda",norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat))
-    # # print("P[c > lambda", 1 - norm.cdf(self.Z(n, c, sigma_c)))
-    # print("Prob false cutoff", falseCutoff)
 
 
 

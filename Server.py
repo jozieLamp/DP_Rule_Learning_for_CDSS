@@ -462,70 +462,53 @@ class Server :
 
             # Constants
             n = len(self.clientList)  # num clients
-            theta = 0.05 # acceptable error probability, e.g., 5%
-            c = c / n
+            theta = 0.90 # acceptable conf probability, e.g., 95%
 
 
             # Formulate optimization problem to find minimum budget (beta) to use
-            #P[ˆc > λ | c ≤ λ] + P[ˆc ≤ λ | c > λ] ≤ θ
+            #integral of x from 0 to lmda P[true(c) = x | c_hat] --> Get a confidence interval that true count c < lambda
+            # if conf interval within theshold, e.g., 95% that should or should not cut, use this budget, otherwise increase budget used
             def obj_func(beta):
                 p = math.e ** beta / (1 + math.e ** beta)
                 q = 1-p
 
                 # c_hat = p * n
                 c_hat = p
-
+                # TODO - del c
                 # c = 1
                 print("\nbeta", beta)
                 print("c", c, "c_hat", c_hat)
 
                 sigma_c_hat = self.sigma(n, beta, p, q)
                 # print("sigma c hat", sigma_c_hat)
-                sigma_c = self.sigma(n, self.epsilon, self.p_paren, self.q_paren)
-                # print("sigma c", sigma_c)
 
                 lmda = self.cutoffThresh #* n
                 # print("lmda", lmda)
 
-                # Compute CDFs
-                # # P[ˆc > λ | c ≤ λ]
-                # falseContinue = ((1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat)) * norm.cdf(lmda, loc=c, scale=sigma_c)) / (1 - norm.cdf(lmda, loc=c, scale=sigma_c))
-                # # P[ˆc ≤ λ | c > λ]
-                # falseCutoff = (norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.cdf(lmda, loc=c, scale=sigma_c))) / norm.cdf(lmda, loc=c, scale=sigma_c)
+                def probTrue(x):
+                    # p[c = x | c_hat]
+                    prob_c_eqs_x = norm.pdf(x, loc=c_hat, scale=sigma_c_hat)
+                    # print("x=", x, "P[c=x]", prob_c_eqs_x)
+                    return prob_c_eqs_x
 
-                # TODO - figure out why increasing beta does not increase prob correct choice --> think probability calculations are off??
-                # P[ˆc > λ | c ≤ λ]
+                # Integral, could also just do a summation of the counts over up to lambda since they are discrete and may not need continuous distribution
+                # conf_intrvl_low = quad(probTrue, 0, lmda)
+                # conf_intrvl_high = quad(probTrue, lmda, 1)
+                conf_intrvl_low = quad(probTrue, -np.inf, lmda)
+                conf_intrvl_high = quad(probTrue, lmda, np.inf)
 
-                # test = multivariate_normal.cdf([lmda, lmda], mean=[mean_x, mean_y], cov=[[var_x, cov_xy], [cov_xy, var_y]])
-                falseContinue = (1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat)) * norm.cdf(lmda, loc=c,scale=sigma_c)
-                # falseContinue = ((1 - norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat)) * norm.cdf(lmda, loc=c,scale=sigma_c)) / norm.cdf(lmda, loc=c, scale=sigma_c)
-                # P[ˆc ≤ λ | c > λ]
-                falseCutoff = norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.cdf(lmda, loc=c, scale=sigma_c))
-                # falseCutoff = (norm.cdf(lmda, loc=c_hat, scale=sigma_c_hat) * (1 - norm.cdf(lmda, loc=c, scale=sigma_c))) / (1 - norm.cdf(lmda, loc=c, scale=sigma_c))
-                # print("P[c_hat > lambda", 1 - norm.cdf(self.Z(n, c_hat, sigma_c_hat) ))
-                # print("P[c <= lambda", norm.cdf(self.Z(n, c, sigma_c)))
-                print("Prob false continue", falseContinue)
-                # print("P[c_hat <= lambda",norm.cdf(self.Z(n, c_hat, sigma_c_hat)))
-                # print("P[c > lambda", 1 - norm.cdf(self.Z(n, c, sigma_c)))
-                print("Prob false cutoff", falseCutoff)
+                print("sigma c hat", sigma_c_hat)
+                print("Conf that true count c < lambda", conf_intrvl_low)
+                print("Conf that true count c > lambda", conf_intrvl_high)
 
+                # if either conf interval >= theta then good
+                finalProb = max(conf_intrvl_low[0], conf_intrvl_high[0])
+                print("Returning final prob:", finalProb)
 
-                # if (c_hat > lmda and c <= lmda) or (c_hat > lmda and c > lmda):
-                #     print("ret false cont")
-                #     probErrorChoice =  falseContinue
-                # else: # c_hat <= lmda and c > lmda
-                #     print("ret false cutoff")
-                #     probErrorChoice = falseCutoff
-
-                # probErrorChoice = falseContinue * falseCutoff
-                probErrorChoice = falseCutoff
-                print("Prob make incorrect choice", probErrorChoice)
-                print("Prob make correct choice, and function return", 1 - probErrorChoice)
-
-                return 1 - probErrorChoice
+                return finalProb
 
             # TODO - change all cutoff thresh vars to be lambda and make this prob a hyperparam fed in --> theta
-            ineq_constraint = {'type': 'ineq', 'fun': lambda x: obj_func(x) - (1 - theta)}
+            ineq_constraint = {'type': 'ineq', 'fun': lambda x: obj_func(x) - theta} #obj_func >= theta # obj_func(x) - (1 - theta)
 
             lw_bnd = 1e-5#1e-10 #1e-20
             print("BUDGET USED", self.clientList[1].budgetUsed)
@@ -537,7 +520,7 @@ class Server :
             print("\nbounds", bnds)
 
             # SLSQP method
-            options = {'maxiter': 1000, 'ftol': 0.1}
+            options = {'maxiter': 1000, 'ftol': 1e-10}
             result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='SLSQP',options=options)
 
             # trust-constr method
