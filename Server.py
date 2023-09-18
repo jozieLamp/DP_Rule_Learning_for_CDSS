@@ -210,6 +210,7 @@ class Server :
             if avePer >= self.cutoffThresh: #TODO - change cutoff thresh here ...? #if avePer > 0.33:
                 #update active clients to be only clients who said yes
                 # r.activeClients = activeClients  # add active clients to rule tree
+                print("aveper", avePer, "RULE ADDED")
                 r.percentCount = percentCount  # add percent count to rule tree
                 ruleTrees.append(r)
 
@@ -462,7 +463,7 @@ class Server :
 
             # Constants
             n = len(self.clientList)  # num clients
-            theta = 0.90 # acceptable conf probability, e.g., 95%
+            theta = 0.95 # acceptable conf probability, e.g., 95%
 
 
             # Formulate optimization problem to find minimum budget (beta) to use
@@ -492,25 +493,29 @@ class Server :
                     return prob_c_eqs_x
 
                 # Integral, could also just do a summation of the counts over up to lambda since they are discrete and may not need continuous distribution
-                # conf_intrvl_low = quad(probTrue, 0, lmda)
-                # conf_intrvl_high = quad(probTrue, lmda, 1)
-                conf_intrvl_low = quad(probTrue, -np.inf, lmda)
-                conf_intrvl_high = quad(probTrue, lmda, np.inf)
+                conf_intrvl_low = quad(probTrue, 0, lmda)
+                conf_intrvl_high = quad(probTrue, lmda, 1)
+                # conf_intrvl_low = quad(probTrue, -np.inf, lmda)
+                # conf_intrvl_high = quad(probTrue, lmda, np.inf)
 
                 print("sigma c hat", sigma_c_hat)
                 print("Conf that true count c < lambda", conf_intrvl_low)
                 print("Conf that true count c > lambda", conf_intrvl_high)
 
+                conf_intrvl_low = conf_intrvl_low[0]
+                conf_intrvl_high = 1 - conf_intrvl_low
+                print("Conf that true count c > lambda, using subtrct", conf_intrvl_high)
+
                 # if either conf interval >= theta then good
-                finalProb = max(conf_intrvl_low[0], conf_intrvl_high[0])
+                finalProb = max(conf_intrvl_low, conf_intrvl_high)
                 print("Returning final prob:", finalProb)
 
                 return finalProb
 
             # TODO - change all cutoff thresh vars to be lambda and make this prob a hyperparam fed in --> theta
-            ineq_constraint = {'type': 'ineq', 'fun': lambda x: obj_func(x) - theta} #obj_func >= theta # obj_func(x) - (1 - theta)
+            ineq_constraint = {'type': 'ineq', 'fun': lambda x: (obj_func(x) - theta)} #obj_func >= theta # obj_func(x) - (1 - theta)
 
-            lw_bnd = 1e-5#1e-10 #1e-20
+            lw_bnd = 1e-10 #1e-20
             print("BUDGET USED", self.clientList[1].budgetUsed)
             print("global budget used?", self.globalBudgetUsed())
             up_bnd = self.epsilon - self.clientList[1].budgetUsed
@@ -519,19 +524,22 @@ class Server :
             bnds = Bounds(lb=lw_bnd, ub=up_bnd)
             print("\nbounds", bnds)
 
-            # SLSQP method
-            options = {'maxiter': 1000, 'ftol': 1e-10}
-            result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='SLSQP',options=options)
+            # TODO figure out why not terminating when it should be ...
+            # # SLSQP method
+            # # options = {'maxiter': 1000, 'ftol': 1e-10, 'xtol': 1e-10}
+            # options = {'maxiter': 1000, 'xtol': 1e-5}
+            # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='SLSQP',options=options)
+            # # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='SLSQP')
 
             # trust-constr method
-            # options = {'maxiter': 1000}  # Increase the maximum number of function evaluations
-            # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
+            options = {'maxiter': 500, 'gtol': 1e-4,'xtol': 1e-5}  # Increase the maximum number of function evaluations
+            result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds,method='trust-constr', options=options)
 
-            # if failed try trust constr method
-            if not result.success:
-                print("TRYING TRUST CONSTR METHOD*************************************************************************")
-                options = {'maxiter': 500}  # Increase the maximum number of function evaluations
-                result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
+            # # if failed try trust constr method
+            # if not result.success:
+            #     print("TRYING TRUST CONSTR METHOD*************************************************************************")
+            #     options = {'maxiter': 500,'gtol': 1e-4, 'xtol': 1e-5}  # Increase the maximum number of function evaluations
+            #     result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
 
 
             if result.success:
@@ -559,7 +567,7 @@ class Server :
         return pLossBudg
 
     def sigma(self, n, beta, p ,q):
-        bottom =n* ((p - q) ** 2)
+        bottom = n * ((p - q) ** 2)
         # bottom = (p - q) ** 2
         stdDev = q * (1 - q) / bottom if bottom else (q * (1 - q))
         # print("top", q * (1 - q))

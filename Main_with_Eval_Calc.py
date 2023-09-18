@@ -52,9 +52,7 @@ def runProtocol(params):
     clientQs.to_csv(params.resultsFilename + "_ClientQueries.csv")
 
 
-def calcIndivCoverage(clientDF):
-    # Calculate experimental results
-    ldpDF, ldpTrees, ldpRules = cov.loadLDPRuleset(params.resultsFilename + "_Rules.csv")
+def calcCompleteCoverage(clientDF, ldpDF, ldpTrees):
 
     print("\nCalculating Coverage")
     covDF, countDF, nrDF, missedCR, clientTrees = cov.getCoverageTable(params.cutoffThresh, ldpDF, ldpTrees, clientDF)
@@ -69,20 +67,34 @@ def calcIndivCoverage(clientDF):
     # Plot comparison of match counts
     cov.plotLDPClientCounts(clientDF, countDF, save=params.resultsFilename, title="Cov")#params.name)
 
-    return ldpRules, covDF, structDF
+    return covDF, structDF
 
 
 
 if __name__ == "__main__":
 
     # Load client rules
-    clientTrees, clientRules, clientDF = cov.loadClientRules(params.popSize, params.dataFilename)
+    clientDF = cov.loadClientRules(params.popSize, params.dataFilename, cutoff=0.0)
+    print("CLIENT DF", clientDF)
 
-    runProtocol(params)
+    # Load client rules w/ cutoff
+    clientDF_cutoff = cov.loadClientRules(params.popSize, params.dataFilename, cutoff=0.01)
+    print("CLIENT DF Cutoff", clientDF_cutoff)
+
+    # runProtocol(params)
+
+    # Load learned LDP rules
+    ldpDF, ldpTrees, ldpRules = cov.loadLDPRuleset(params.resultsFilename + "_Rules.csv")
 
     ## COVERAGE EXPs
-    ldpRules, covDF, structDF = calcIndivCoverage(clientDF)
 
+    # Calculate complete coverage
+    print("Complete Coverage")
+    covDF, structDF = calcCompleteCoverage(clientDF, ldpDF, ldpTrees)
+
+    # Calculate coverage for %client rules > cutoff threshold
+    print("Coverage at Cutoff Thresh")
+    covDF_cutoff, structDF_cutoff = calcCompleteCoverage(clientDF_cutoff, ldpDF, ldpTrees)
 
 
 

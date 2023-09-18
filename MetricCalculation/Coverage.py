@@ -141,7 +141,7 @@ def countUniqueStructuresNoVars(clientTrees, ldpTrees):
     prec = foundStructs / bot if bot else 0
     cov = foundStructs / len(clientStructs)
     lst = [len(clientStructs), foundStructs, nonStructs, prec, cov]
-    structDF = pd.DataFrame([lst], columns=["Total Client Structures", "Found Structures", "Non Structures", "Precision", "Coverage"])
+    structDF = pd.DataFrame([lst], columns=["Total Strcts", "Found", "Non Strts", "Precision", "Coverage"])
 
     return structDF
 
@@ -385,7 +385,7 @@ def loadLDPRuleset(resultsFilename):
 
 
 
-def loadClientRules(popSize, dataFilename):
+def loadClientRules(popSize, dataFilename, cutoff=0.0):
     clientRules = []
     clientTrees = []
     num = 1
@@ -423,7 +423,10 @@ def loadClientRules(popSize, dataFilename):
     #Fix counts > 100%
     clientDF['Percent of Population'][clientDF['Percent of Population'] > 1.0] = 1.0
 
-    return ct, clientRules, clientDF
+    # Drop rules below cutoff thresh
+    clientDF = clientDF[clientDF['Percent of Population'] > cutoff]
+
+    return clientDF
 
 def loadRuleSet(num, textfile):
     ruleSet = []
