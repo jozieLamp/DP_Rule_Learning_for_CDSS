@@ -52,11 +52,12 @@ def runProtocol(params):
     clientQs.to_csv(params.resultsFilename + "_ClientQueries.csv")
 
 
-def calcCompleteCoverage(clientDF, ldpDF, ldpTrees):
+def calcCompleteCoverage(clientDF, ldpDF, ldpTrees, cutoff=0.0):
 
     print("\nCalculating Coverage")
-    covDF, countDF, nrDF, missedCR, clientTrees = cov.getCoverageTable(params.cutoffThresh, ldpDF, ldpTrees, clientDF)
+    covDF, countDF, nrDF, missedCR, clientTrees = cov.getCoverageTable(clientDF, ldpDF, ldpTrees, cutoff)
     print(covDF)
+    # TODO - update or del this
     structDF = cov.countUniqueStructuresNoVars(clientTrees, ldpTrees)
     print(structDF)
 
@@ -64,8 +65,9 @@ def calcCompleteCoverage(clientDF, ldpDF, ldpTrees):
     nrDF.to_csv(params.resultsFilename + "_NonRules.csv")
     missedCR.to_csv(params.resultsFilename + "_MissedClientRules.csv")
 
-    # Plot comparison of match counts
-    cov.plotLDPClientCounts(clientDF, countDF, save=params.resultsFilename, title="Cov")#params.name)
+    # TODO - fix or update this
+    # # Plot comparison of match counts
+    # cov.plotLDPClientCounts(clientDF, countDF, save=params.resultsFilename, title="Cov")#params.name)
 
     return covDF, structDF
 
@@ -77,11 +79,11 @@ if __name__ == "__main__":
     clientDF = cov.loadClientRules(params.popSize, params.dataFilename, cutoff=0.0)
     print("CLIENT DF", clientDF)
 
-    # Load client rules w/ cutoff
-    clientDF_cutoff = cov.loadClientRules(params.popSize, params.dataFilename, cutoff=0.01)
-    print("CLIENT DF Cutoff", clientDF_cutoff)
+    # # Load client rules w/ cutoff
+    # clientDF_cutoff = cov.loadClientRules(params.popSize, params.dataFilename, cutoff=0.01)
+    # print("CLIENT DF Cutoff", clientDF_cutoff)
 
-    # runProtocol(params)
+    runProtocol(params)
 
     # Load learned LDP rules
     ldpDF, ldpTrees, ldpRules = cov.loadLDPRuleset(params.resultsFilename + "_Rules.csv")
@@ -90,13 +92,13 @@ if __name__ == "__main__":
 
     # Calculate complete coverage
     print("Complete Coverage")
-    covDF, structDF = calcCompleteCoverage(clientDF, ldpDF, ldpTrees)
+    covDF, structDF = calcCompleteCoverage(clientDF, ldpDF, ldpTrees, cutoff=0.0)
 
     # Calculate coverage for %client rules > cutoff threshold
-    print("Coverage at Cutoff Thresh")
-    covDF_cutoff, structDF_cutoff = calcCompleteCoverage(clientDF_cutoff, ldpDF, ldpTrees)
+    print("\nCoverage at Cutoff Thresh")
+    covDF_cutoff, structDF_cutoff = calcCompleteCoverage(clientDF, ldpDF, ldpTrees, cutoff=0.01)
 
-
+    # Try testing coverage on dif dataset ...
 
 
 

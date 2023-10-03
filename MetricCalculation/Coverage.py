@@ -26,20 +26,25 @@ def getClientTreesFromCountDF(df):
     return clTrees
 
 #Get count of coverage
-# TODO - check this here ...
-# Why getting more rules --> 44 structures and not the 15 ...
-def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
+def getCoverageTable(clientDF, ldpDF, ldpTrees, cutoff=0.0):
     stlFac = STLFactory()
 
     # Get client rules above the threshold
-    # df = clientDF[clientDF['Percent of Population'] >= thresh]
-    clientRules = clientDF['Rule'].tolist()
+    cdf = clientDF[clientDF['Percent of Population'] > cutoff]
+    clientRules = cdf['Rule'].tolist()
+    print("Total Client Rules", len(clientDF))
+    print("Total Client Rules at Cutoff Thresh", len(cdf))
 
     # From client rules, first make client trees
     clientTrees = []
     for c in clientRules:
         c = stlFac.constructFormulaTree(c + "\n")
         clientTrees.append(c)
+
+    clientTrees_full = []
+    for c in clientDF['Rule'].tolist():
+        c = stlFac.constructFormulaTree(c + "\n")
+        clientTrees_full.append(c)
 
     ## MAKE MAIN COVERAGE TABLE
     # Calculate num true rules, num false rules and precision (true rules / total rules found)
@@ -52,7 +57,7 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
     for l in ldpTrees:
         # print("\nTemplate", l.toString(), "Per Count", ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item())
 
-        cRule, cCount = findRuleMatch(l, clientTrees, clientDF)
+        cRule, cCount = findRuleMatch(l, clientTrees, cdf)
 
         if cRule != None:  # check structural match
             if cRule not in clientRulesFound:
@@ -67,11 +72,17 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
                 # cCount = clientDF[clientDF["Rule"] == cRule]['Percent of Population'].item()
                 matchLst.append([l.toString(), cRule, lCount, cCount])
         else:
-            print("LDP RULE NOT FOUND", l.toString())
-            nonRuleLst.append(l.toString())
-            nonRules += 1
+            # Check to make sure rule just not < thresh
+            cRule, cCount = findRuleMatch(l, clientTrees_full, clientDF)
 
-    print("Total found LDP rules", foundRules)
+            if cRule != None:
+                pass
+            else:
+                # print("LDP RULE NOT FOUND", l.toString())
+                nonRuleLst.append(l.toString())
+                nonRules += 1
+
+    # print("Total found LDP rules", foundRules)
 
     #Double check missed client rules actually missed and not semantic match in ldp rule set
     missedRules = list(np.setdiff1d(clientRules, clientRulesFound))
@@ -81,10 +92,11 @@ def getCoverageTable(thresh, ldpDF, ldpTrees, clientDF):
         m = stlFac.constructFormulaTree(mr + "\n")
 
         # print("m", m.toString())
+        cRule_thresh, cCount_thresh = findClientRuleMatch(m, ldpTrees, cdf)
         cRule, cCount = findClientRuleMatch(m, ldpTrees, clientDF)
 
         # print(cRule)
-        if cRule != None:
+        if cRule != None or cRule_thresh != None:
             foundRules += 1
             missedRules.remove(mr)
 

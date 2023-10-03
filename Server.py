@@ -127,7 +127,7 @@ class Server :
             if self.templateTree._branches[branchName].completelyExplored:
                 self.logger.info("TREE COMPLETELY EXPLORED")
 
-
+        print("Out of run protocol loop...")
         if self.verbose:
             self.logger.info("----MCTS SEARCH COMPLETED----\n")
 
@@ -156,6 +156,8 @@ class Server :
         # do one final query for each rule to make sure full rule has a match
         ruleTrees = []
         for ri in range(len(initialRuleTrees)):
+            print("initial rule",ri, "out of", len(initialRuleTrees))
+
             r = initialRuleTrees[ri]
             # print(r.toString())
             # r.show()
@@ -165,7 +167,7 @@ class Server :
 
             if self.epsilon != 'inf':
                 if self.budgetAllocStrategy == 'fixed':
-                    finalBudg = self.allocateQueryBudget(self.budgetAllocStrategy, None)
+                    finalBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy, A=origAC, c=None)
                 else:
                     # finalBudg = self.final_saved_budget[ri] #sum(self.final_saved_budget) / len(self.final_saved_budget) #
                     # finalBudg = 5 / len(self.final_saved_budget)
@@ -181,6 +183,7 @@ class Server :
             # print(r.toString())
             # print("FINAL BUDG Query from rule Tree", finalBudg)
 
+            # print("Doing query full match")
             matchCount, activeClients = self.queryFullRuleMatch(r, finalBudg)
 
             # Fix negative estimates
@@ -196,23 +199,23 @@ class Server :
                 self.logger.info(r.toString())
                 self.logger.info("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount))
 
-            # if percentCount >= self.cutoffThresh:
-            #     #update active clients to be only clients who said yes
-            #     # r.activeClients = activeClients  # add active clients to rule tree
-            #     r.percentCount = percentCount  # add percent count to rule tree
-            #     ruleTrees.append(r)
-
-            # TODO - now trying averages of node percent counts + last query
-            # Get aves of percent count at each node
-            # print(r.percentCount)
-            avePer = (sum(r.percentCount) + percentCount) / (len(r.percentCount) + 1)
-
-            if avePer >= self.cutoffThresh: #TODO - change cutoff thresh here ...? #if avePer > 0.33:
+            if percentCount >= self.cutoffThresh:
                 #update active clients to be only clients who said yes
-                # r.activeClients = activeClients  # add active clients to rule tree
-                print("aveper", avePer, "RULE ADDED")
+                r.activeClients = activeClients  # add active clients to rule tree
                 r.percentCount = percentCount  # add percent count to rule tree
                 ruleTrees.append(r)
+
+            # # TODO - now trying averages of node percent counts + last query
+            # # Get aves of percent count at each node
+            # # print(r.percentCount)
+            # avePer = (sum(r.percentCount) + percentCount) / (len(r.percentCount) + 1)
+            #
+            # if avePer >= self.cutoffThresh: #TODO - change cutoff thresh here ...? #if avePer > 0.33:
+            #     #update active clients to be only clients who said yes
+            #     r.activeClients = activeClients  # add active clients to rule tree
+            #     print("aveper", avePer, "RULE ADDED")
+            #     r.percentCount = percentCount  # add percent count to rule tree
+            #     ruleTrees.append(r)
 
         if self.verbose:
             self.logger.info("Generated " + str(len(ruleTrees)) + " full rules\n")
@@ -253,6 +256,8 @@ class Server :
                 rules.append(ft)
                 finalTrees.append(t)
 
+        print("Outside of initial rule trees")
+
         #Make Rule Set Object to store output rule set
         self.finalRuleSet = RuleSet(finalTrees, rules)
 
@@ -279,18 +284,19 @@ class Server :
     def queryFullRuleMatch(self, template, pLossBudg):
         # get template node list
         tempNodes = self.getTemplateNodes(template)
-        updatedActiveClients = template.activeClients
+        updatedActiveClients = []
 
         # Non private model
         if self.epsilon == 'inf':
             yesCount = 0
-            for c in template.activeClients:
+            for c in template.activeClients: #TODO - OPTION potentially query all clients, not just the active ones in the final step (?)
+                # print("query struct match in query rule match")
                 resp = self.clientList[c].queryStructuralRuleMatch(tempNodes, template.varList)
                 yesCount += resp
 
-                # # Remove client if has no match
-                # if resp == 1:
-                #     updatedActiveClients.append(c)
+                # Remove client if has no match
+                if resp == 1:
+                    updatedActiveClients.append(c)
 
             return yesCount, updatedActiveClients
 
@@ -306,19 +312,19 @@ class Server :
             p = math.e ** pLossBudg / (1 + math.e ** pLossBudg)
             #decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
 
-            for c in template.activeClients:
+            for c in template.activeClients: #TODO - OPTION potentially query all clients, not just the active ones in the final step (?)
                 resp, truResp = self.clientList[c].finalRandResponseQuery(tempNodes, template.varList, pLossBudg)
 
                 yesCount += resp
                 trueYesses += truResp
 
-                # if resp == 1:
-                #     updatedActiveClients.append(c) #make active clients only the ones who said yes
+                if resp == 1:
+                    updatedActiveClients.append(c) #make active clients only the ones who said yes
 
             #Calculate final match count for this rule
             q = 1 - p
 
-            c_hat = float((yesCount - (len(template.activeClients) * q)) / (p - q) if (p-q) else (yesCount - (len(template.activeClients) * q)) ) #unbiased estimate of count
+            c_hat = float((yesCount - (len(template.activeClients) * q)) )#/ (p - q) if (p-q) else (yesCount - (len(template.activeClients) * q)) ) #unbiased estimate of count
             #Fix/clip over/under estimates
             if c_hat > len(template.activeClients):
                 estTrueCount = len(template.activeClients)
@@ -326,6 +332,7 @@ class Server :
                 estTrueCount = 0
             else:
                 estTrueCount = c_hat
+
 
             percentCount = float(estTrueCount / len(template.activeClients))
             truePerCount = float(trueYesses / len(template.activeClients))  # Real percent
@@ -338,8 +345,7 @@ class Server :
             #     self.logger.info("True Percent " + str(truePerCount) + ", Est Percent " + str(percentCount) + "\n")
 
             print("p " + str(p) + " q " + str(q))
-            print("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) + ", c_hat " + str(
-                c_hat) + ", Estimated True yesses " + str(estTrueCount))
+            print("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) + ", c_hat " + str(c_hat) + ", Estimated True yesses " + str(estTrueCount))
             print("\n")
 
             return estTrueCount, updatedActiveClients
@@ -367,11 +373,9 @@ class Server :
                 resp = self.clientList[c].queryStructuralRuleMatch(tempNodes, template.varList)
                 yesCount += resp
 
-                # ***ADDED - Removing active client computation
-                # #Remove client if has no match
-                # if resp == 1:
-                #     updatedActiveClients.append(c)
-                updatedActiveClients.append(c)
+                #Remove client if has no match
+                if resp == 1:
+                    updatedActiveClients.append(c)
 
             return yesCount, updatedActiveClients, None
 
@@ -387,7 +391,8 @@ class Server :
             else:
                 parentCount = len(self.clientList) / 2 #if no parent node assume 50% prob of match
             # print("FOUND MATCH COUNT", parentCount)
-            pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy, c=parentCount)
+
+            pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy, A=branch.activeClients, c=parentCount)
             # p = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
             p = math.e ** pLossBudg / (1 + math.e ** pLossBudg)
 
@@ -411,17 +416,16 @@ class Server :
                         priorProb = 0.5 #50% chance return true
 
                     # ***ADDED - Removing active client computation
-                    # # print("\nClient", c, "resp", resp)
-                    # if self.checkClientActive(response=resp, p=p, priorProbTrue=priorProb): #if true, still active, add to updated active clients
-                    #     updatedActiveClients.append(c)
-                    updatedActiveClients.append(c)
+                    # print("\nClient", c, "resp", resp)
+                    if self.checkClientActive(response=resp, p=p, priorProbTrue=priorProb): #if true, still active, add to updated active clients
+                        updatedActiveClients.append(c)
 
             # print("Updated active clients", updatedActiveClients)
 
             if not self.globalBudgetUsed():
                 q = 1-p
 
-                c_hat = float((yesCount - (len(self.clientList) * q)) / (p - q) if (p-q) else (yesCount - (len(self.clientList) * q)))  # unbiased estimate of count
+                c_hat = float((yesCount - (len(self.clientList) * q)) )#/ (p - q) if (p-q) else (yesCount - (len(self.clientList) * q)))  # unbiased estimate of count
                 # Fix/clip over/under- estimates
                 if c_hat > len(self.clientList):
                     estTrueCount = len(self.clientList)
@@ -429,6 +433,7 @@ class Server :
                     estTrueCount = 0
                 else:
                     estTrueCount = c_hat
+
 
                 percentCount = float(estTrueCount / len(branch.activeClients)) if len(branch.activeClients) else 0
                 truePerCount = float(trueYesses / len(branch.activeClients)) if len(branch.activeClients) else 0  # Real percent
@@ -450,7 +455,7 @@ class Server :
             return "BUDGET USED", updatedActiveClients, pLossBudg
 
     # Allocate budget for this query --> method using mystic
-    def allocateQueryBudget(self, strategy, c):
+    def allocateQueryBudget(self, strategy, A, c):
 
         if strategy == 'fixed':  # Fixed budget
             pLossBudg = self.epsilon / self.maxQueries
@@ -462,7 +467,8 @@ class Server :
                 return 0
 
             # Constants
-            n = len(self.clientList)  # num clients
+            #TODO update this to be all A, not n
+            n = len(A)  # num active clients at this branch
             theta = 0.95 # acceptable conf probability, e.g., 95%
 
 
@@ -474,11 +480,22 @@ class Server :
                 q = 1-p
 
                 # c_hat = p * n
-                c_hat = p
-                # TODO - del c
+                # c_hat = p
+                #TODO - how to get the estimated num yesses at this node ??
+                # Currently assuming use the max - count from previous parent node but ...
+                numEstYesses = c # currently use parent count (max possible yesses)
+                # c_hat = (numEstYesses - (n * q)) / (p-q)
+                c_hat = (numEstYesses - (n * q))
                 # c = 1
                 print("\nbeta", beta)
-                print("c", c, "c_hat", c_hat)
+                print("p", p, "c", c, "c_hat", c_hat)
+
+                #### Num est yesses
+                # P(true answer=yes) = numYesResponses * p + numNoResponses * q
+                # P(true answer=no) = numNoResponses * p + numYesResponses * q
+
+                c_hat = (numEstYesses - (n * q)) / n # div by n to get decimal
+                print("c_hat as decimal", c_hat)
 
                 sigma_c_hat = self.sigma(n, beta, p, q)
                 # print("sigma c hat", sigma_c_hat)
@@ -515,7 +532,7 @@ class Server :
             # TODO - change all cutoff thresh vars to be lambda and make this prob a hyperparam fed in --> theta
             ineq_constraint = {'type': 'ineq', 'fun': lambda x: (obj_func(x) - theta)} #obj_func >= theta # obj_func(x) - (1 - theta)
 
-            lw_bnd = 1e-10 #1e-20
+            lw_bnd = 1e-5#1e-10 #1e-20
             print("BUDGET USED", self.clientList[1].budgetUsed)
             print("global budget used?", self.globalBudgetUsed())
             up_bnd = self.epsilon - self.clientList[1].budgetUsed
