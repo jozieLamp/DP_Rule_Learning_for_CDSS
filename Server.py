@@ -77,28 +77,36 @@ class Server :
             #Privacy budget params
             self.epsilon = params.epsilon
             self.budgetAllocStrategy = params.budgetAllocMethod
+            self.useActiveClients = params.useActiveClients
             self.clientsWithUsedBudgets = []  # list of clients who have used budget
             self.numQueries = 0
             # Previous node p and q values
             self.q_paren = 0.5 #initially set to even 50%
             self.p_paren = 0.5
             self.final_saved_budget = []
+            self.budgetZero = False
 
             self.logger.info("Setting privacy budget to: " + str(self.epsilon))
 
 
     def globalBudgetUsed(self):
-        # print("Clients with used budgets:", self.clientsWithUsedBudgets)
-        self.budgetZero = False
+        print("Clients with used budgets:", self.clientsWithUsedBudgets)
 
         if list(self.clientList.keys()) == set(self.clientsWithUsedBudgets):
             return True
         elif len(set(self.clientsWithUsedBudgets)) > len(self.clientList)-3: #only a few clients without used budgets so end
             return True
-        elif self.budgetZero == True:
+        elif self.budgetZero == True: #when not using active clients, check if budget used for all clients
             return True
         else:
             return False
+
+        # if list(self.clientList.keys()) == set(self.clientsWithUsedBudgets):
+        #     return True
+        # elif len(set(self.clientsWithUsedBudgets)) > len(self.clientList) - 3:  # only a few clients without used budgets so end
+        #     return True
+        # else:
+        #     return False
 
 
     # RUN Monte Carlo Tree Search
@@ -294,8 +302,11 @@ class Server :
                 resp = self.clientList[c].queryStructuralRuleMatch(tempNodes, template.varList)
                 yesCount += resp
 
-                # Remove client if has no match
-                if resp == 1:
+                if self.useActiveClients:
+                    # Remove client if has no match
+                    if resp == 1:
+                        updatedActiveClients.append(c)
+                else:
                     updatedActiveClients.append(c)
 
             return yesCount, updatedActiveClients
@@ -318,8 +329,11 @@ class Server :
                 yesCount += resp
                 trueYesses += truResp
 
-                if resp == 1:
-                    updatedActiveClients.append(c) #make active clients only the ones who said yes
+                if self.useActiveClients:
+                    if resp == 1:
+                        updatedActiveClients.append(c) #make active clients only the ones who said yes
+                else:
+                    updatedActiveClients.append(c)
 
             #Calculate final match count for this rule
             q = 1 - p
@@ -373,8 +387,11 @@ class Server :
                 resp = self.clientList[c].queryStructuralRuleMatch(tempNodes, template.varList)
                 yesCount += resp
 
-                #Remove client if has no match
-                if resp == 1:
+                if self.useActiveClients:
+                    #Remove client if has no match
+                    if resp == 1:
+                        updatedActiveClients.append(c)
+                else:
                     updatedActiveClients.append(c)
 
             return yesCount, updatedActiveClients, None
@@ -393,11 +410,14 @@ class Server :
             # print("FOUND MATCH COUNT", parentCount)
 
             pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy, A=branch.activeClients, c=parentCount)
+
+            # TODO fix this to work with active clients
+            if pLossBudg == None or pLossBudg == 0: #or self.clientList[1].privacyBudgetUsed(): #set budget as used
+                self.budgetZero = True
+                # return "BUDGET USED", branch.activeClients, pLossBudg
+
             # p = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
             p = math.e ** pLossBudg / (1 + math.e ** pLossBudg)
-
-            if pLossBudg == None or self.clientList[1].privacyBudgetUsed(): #set budget as used
-                self.budgetZero = True
 
             # print("\nActive clients at CURRENT BRANCH", branch.name, ":", branch.activeClients)
             for c in branch.activeClients:
@@ -415,9 +435,10 @@ class Server :
                     else:
                         priorProb = 0.5 #50% chance return true
 
-                    # ***ADDED - Removing active client computation
-                    # print("\nClient", c, "resp", resp)
-                    if self.checkClientActive(response=resp, p=p, priorProbTrue=priorProb): #if true, still active, add to updated active clients
+                    if self.useActiveClients:
+                        if self.checkClientActive(response=resp, p=p, priorProbTrue=priorProb): #if true, still active, add to updated active clients
+                            updatedActiveClients.append(c)
+                    else:
                         updatedActiveClients.append(c)
 
             # print("Updated active clients", updatedActiveClients)
@@ -462,84 +483,73 @@ class Server :
         elif strategy == 'adaptive':
             # print("In adaptive tree search")
 
+            lw_bnd = 1e-5  # 1e-10 #1e-20
+            print("BUDGET USED", self.clientList[A[0]].budgetUsed)
+            print("global budget used?", self.globalBudgetUsed())
+            # TODO - make this the lowest remaining budget val from the clients
+            up_bnd = self.epsilon - self.clientList[A[0]].budgetUsed
+            if lw_bnd > up_bnd:
+                up_bnd = lw_bnd
+            bnds = Bounds(lb=lw_bnd, ub=up_bnd)
+            print("\nbounds", bnds)
+
+            # TODO - fix this to be more exact, if getting real close to end of budget then stop
             #check if budget used
-            if self.clientList[1].privacyBudgetUsed():
+            # if self.clientList[1].privacyBudgetUsed():
+            if self.globalBudgetUsed() or self.clientList[1].budgetUsed + lw_bnd >= self.epsilon: #todo make this global check and to work with active clients
                 return 0
 
             # Constants
             #TODO update this to be all A, not n
             n = len(A)  # num active clients at this branch
-            theta = 0.95 # acceptable conf probability, e.g., 95%
-
+            conf = 0.9 # acceptable conf probability, e.g., 95%
+            theta = 1 - conf  # acceptable error prob, e.g., 5%
 
             # Formulate optimization problem to find minimum budget (beta) to use
             #integral of x from 0 to lmda P[true(c) = x | c_hat] --> Get a confidence interval that true count c < lambda
             # if conf interval within theshold, e.g., 95% that should or should not cut, use this budget, otherwise increase budget used
             def obj_func(beta):
+                # c = true (unknown count); c_hat = estimated count
+                # Important assumptions:
+                # - since our responses are the sum of many independent random responses, its distribution is very close to a normal dist
+                # - we know that E[c_hat] = c
+                # - we assume the worst case where true count is at the valid rule threshold, c = V, for all calculations
+
                 p = math.e ** beta / (1 + math.e ** beta)
                 q = 1-p
-
-                # c_hat = p * n
-                # c_hat = p
-                #TODO - how to get the estimated num yesses at this node ??
-                # Currently assuming use the max - count from previous parent node but ...
-                numEstYesses = c # currently use parent count (max possible yesses)
-                # c_hat = (numEstYesses - (n * q)) / (p-q)
-                c_hat = (numEstYesses - (n * q))
-                # c = 1
                 print("\nbeta", beta)
-                print("p", p, "c", c, "c_hat", c_hat)
 
-                #### Num est yesses
-                # P(true answer=yes) = numYesResponses * p + numNoResponses * q
-                # P(true answer=no) = numNoResponses * p + numYesResponses * q
+                sigma_c = self.sigma(n, beta, p, q)
 
-                c_hat = (numEstYesses - (n * q)) / n # div by n to get decimal
-                print("c_hat as decimal", c_hat)
+                def probTrue(y):
+                    # y = queried yes count
+                    c_hat = ( (y * p) + (n - y) * q ) / n
+                    #TODO switch this to V, not cutoff thresh
+                    c = self.cutoffThresh #* n # assuming worst case where true count at valid rule threshold
+                    # TODO this might need to become all percentages ...
+                    print("p", p, "c", c, "c_hat", c_hat, "c", c, "n / active clients", n, "sigma c", sigma_c)
 
-                sigma_c_hat = self.sigma(n, beta, p, q)
-                # print("sigma c hat", sigma_c_hat)
+                    # p[c_hat < V | c = V]; prob we make an error
+                    prob_chat_lt_v = norm.cdf(c_hat, loc=c, scale=sigma_c)
+                    print("y=", y, "P[c_hat < V | c = V]", prob_chat_lt_v)
+                    return prob_chat_lt_v
 
-                lmda = self.cutoffThresh #* n
-                # print("lmda", lmda)
+                # Integral, could also just do a summation of the counts over up to n since they are discrete and may not need continuous distribution
+                conf_intrvl = quad(probTrue, 0, n) # integrate over all possible values of y
+                print("Conf that c_hat < V", conf_intrvl)
 
-                def probTrue(x):
-                    # p[c = x | c_hat]
-                    prob_c_eqs_x = norm.pdf(x, loc=c_hat, scale=sigma_c_hat)
-                    # print("x=", x, "P[c=x]", prob_c_eqs_x)
-                    return prob_c_eqs_x
+                # conf_intrvl_low = conf_intrvl_low[0]
+                # conf_intrvl_high = 1 - conf_intrvl_low
+                # print("Conf that true count c > lambda, using subtrct", conf_intrvl_high)
 
-                # Integral, could also just do a summation of the counts over up to lambda since they are discrete and may not need continuous distribution
-                conf_intrvl_low = quad(probTrue, 0, lmda)
-                conf_intrvl_high = quad(probTrue, lmda, 1)
-                # conf_intrvl_low = quad(probTrue, -np.inf, lmda)
-                # conf_intrvl_high = quad(probTrue, lmda, np.inf)
-
-                print("sigma c hat", sigma_c_hat)
-                print("Conf that true count c < lambda", conf_intrvl_low)
-                print("Conf that true count c > lambda", conf_intrvl_high)
-
-                conf_intrvl_low = conf_intrvl_low[0]
-                conf_intrvl_high = 1 - conf_intrvl_low
-                print("Conf that true count c > lambda, using subtrct", conf_intrvl_high)
-
-                # if either conf interval >= theta then good
-                finalProb = max(conf_intrvl_low, conf_intrvl_high)
+                # if conf interval >= theta then good
+                # finalProb = max(conf_intrvl_low, conf_intrvl_high)
+                finalProb = conf_intrvl[0] / 100 # make decimal value, not percent
                 print("Returning final prob:", finalProb)
-
                 return finalProb
 
             # TODO - change all cutoff thresh vars to be lambda and make this prob a hyperparam fed in --> theta
-            ineq_constraint = {'type': 'ineq', 'fun': lambda x: (obj_func(x) - theta)} #obj_func >= theta # obj_func(x) - (1 - theta)
-
-            lw_bnd = 1e-5#1e-10 #1e-20
-            print("BUDGET USED", self.clientList[1].budgetUsed)
-            print("global budget used?", self.globalBudgetUsed())
-            up_bnd = self.epsilon - self.clientList[1].budgetUsed
-            if lw_bnd > up_bnd:
-                up_bnd = lw_bnd
-            bnds = Bounds(lb=lw_bnd, ub=up_bnd)
-            print("\nbounds", bnds)
+            ineq_constraint = {'type': 'ineq', 'fun': lambda x: (theta - obj_func(x))} # theta - obj_func >= 0
 
             # TODO figure out why not terminating when it should be ...
             # # SLSQP method
@@ -547,16 +557,22 @@ class Server :
             # options = {'maxiter': 1000, 'xtol': 1e-5}
             # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='SLSQP',options=options)
             # # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='SLSQP')
+            # options = {'maxiter': 1000}  # Increase the maximum number of function evaluations
+            # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds,method='SLSQP', options=options)
 
-            # trust-constr method
-            options = {'maxiter': 500, 'gtol': 1e-4,'xtol': 1e-5}  # Increase the maximum number of function evaluations
-            result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds,method='trust-constr', options=options)
+            options = {'maxiter': 1000, 'gtol': 1e-4,'xtol': 1e-5}  # Increase the maximum number of function evaluations
+            result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
 
             # # if failed try trust constr method
             # if not result.success:
             #     print("TRYING TRUST CONSTR METHOD*************************************************************************")
             #     options = {'maxiter': 500,'gtol': 1e-4, 'xtol': 1e-5}  # Increase the maximum number of function evaluations
             #     result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
+            #
+            #     # TODO fine tune this ...
+            #     if not result.success: #not big enough budget to meet constraints, say budget used
+            #         print("FAIL, can't find budget that meets constraints")
+            #         return 0
 
 
             if result.success:
@@ -578,7 +594,8 @@ class Server :
                 print("FAIL")
                 print(result)
                 print(result.message)
-                pLossBudg = None
+                print("BUDGET USED", self.clientList[1].budgetUsed)
+                pLossBudg = 0
 
         print("Returning budget of:", pLossBudg)
         return pLossBudg
@@ -601,6 +618,9 @@ class Server :
         # stdDev = n * ((-1 + beta) / (beta - 1)**2 )
         # if stdDev == 0:
         #     stdDev = 1
+
+        # #TODO fix
+        # stdDev = 1
 
         return stdDev
 
