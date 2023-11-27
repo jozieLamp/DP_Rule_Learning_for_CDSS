@@ -73,32 +73,82 @@ def calcCompleteCoverage(clientDF, ldpDF, ldpTrees, cutoff=0.0):
 
 
 
+from scipy.stats import norm, multivariate_normal
+from scipy.optimize import minimize_scalar, minimize, Bounds
+from scipy.integrate import quad
+
 if __name__ == "__main__":
 
-    # Load client rules
-    clientDF = cov.loadClientRules(params.popSize, params.dataFilename, cutoff=0.0)
-    print("CLIENT DF", clientDF)
+    # # Load client rules
+    # clientDF = cov.loadClientRules(params.popSize, params.dataFilename, cutoff=0.0)
+    # print("CLIENT DF", clientDF)
+    #
+    # # # Load client rules w/ cutoff
+    # # clientDF_cutoff = cov.loadClientRules(params.popSize, params.dataFilename, cutoff=0.01)
+    # # print("CLIENT DF Cutoff", clientDF_cutoff)
 
-    # # Load client rules w/ cutoff
-    # clientDF_cutoff = cov.loadClientRules(params.popSize, params.dataFilename, cutoff=0.01)
-    # print("CLIENT DF Cutoff", clientDF_cutoff)
+    #
+    # runProtocol(params)
+    #
+    # # Load learned LDP rules
+    # ldpDF, ldpTrees, ldpRules = cov.loadLDPRuleset(params.resultsFilename + "_Rules.csv")
+    #
+    # ## COVERAGE EXPs
+    #
+    # # Calculate complete coverage
+    # print("Complete Coverage")
+    # covDF, structDF = calcCompleteCoverage(clientDF, ldpDF, ldpTrees, cutoff=params.cutoffThresh)
+    #
+    # # Calculate coverage for %client rules > cutoff threshold
+    # print("\nCoverage at Cutoff Thresh")
+    # covDF_cutoff, structDF_cutoff = calcCompleteCoverage(clientDF, ldpDF, ldpTrees, cutoff=params.cutoffThresh)
+    #
+    # # Try testing coverage on dif dataset ...
 
-    runProtocol(params)
+    beta = 0.01
+    cutoffThresh = 0.05
 
-    # Load learned LDP rules
-    ldpDF, ldpTrees, ldpRules = cov.loadLDPRuleset(params.resultsFilename + "_Rules.csv")
+    p = math.e ** beta / (1 + math.e ** beta)
+    q = 1 - p
 
-    ## COVERAGE EXPs
+    n = 100
+    c = cutoffThresh  # * n # assuming worst case where true count at valid rule threshold
 
-    # Calculate complete coverage
-    print("Complete Coverage")
-    covDF, structDF = calcCompleteCoverage(clientDF, ldpDF, ldpTrees, cutoff=0.0)
+    bottom = n * ((p - q) ** 2)
+    # bottom = (p - q) ** 2
+    sigma_c = q * (1 - q) / bottom if bottom else (q * (1 - q))
 
-    # Calculate coverage for %client rules > cutoff threshold
-    print("\nCoverage at Cutoff Thresh")
-    covDF_cutoff, structDF_cutoff = calcCompleteCoverage(clientDF, ldpDF, ldpTrees, cutoff=0.01)
+    def probTrue(y):
+        c_hat = ((y * p) + (n - y) * q) / n
+        # prob_prune_correct = norm.cdf(cutoffThresh, loc=c_hat, scale=sigma_c) / norm.cdf(cutoffThresh, loc=0.5,scale=sigma_c)
+        # print("p", p, "c", c, "c_hat", c_hat, "c", c, "n / active clients", n, "sigma c", sigma_c)
+        # print("y=", y, "Prob correct: P[c_hat >= V | c >= V]", prob_prune_correct)
 
-    # Try testing coverage on dif dataset ...
+        # p[c_hat < V | c = V]; prob we make an error
+        prob_chat_lt_v = norm.cdf(c_hat, loc=c, scale=sigma_c)
+        print("p", p, "c", c, "c_hat", c_hat, "c", c, "n / active clients", n, "sigma c", sigma_c)
+        print("y=", y, "p[c_hat < V | c = V]; prob we make an error", prob_chat_lt_v)
+
+
+        # return prob_prune_correct
+        return prob_chat_lt_v
+
+
+    conf_intrvl = quad(probTrue, 0, n)  # integrate over all possible values of y
+    print("\nCONF INTRVL", conf_intrvl)
+    print("CONF INTRVL", conf_intrvl[0] / (cutoffThresh * n))
+
+    # # p[c_hat < V | c = V]; prob we make an error
+    # prob_chat_lt_v = norm.cdf(c_hat, loc=c, scale=sigma_c)
+    # print("y=", y, "P[c_hat < V | c = V]", prob_chat_lt_v)
+    # return prob_chat_lt_v
+
+    # print(norm.cdf(cutoffThresh, loc=0.5, scale=sigma_c))
+    #
+    # # p[c_hat < V | c >= V]; prob we make an error, assuming hardest case where c = V
+    # prob_prune_incorrect = norm.cdf(cutoffThresh, loc=c_hat, scale=sigma_c) / (1 - norm.cdf(cutoffThresh, loc=0.5, scale=sigma_c))
+    # print("y=", y, "Prob error: P[c_hat < V | c >= V]", prob_prune_incorrect)
+
 
 
 

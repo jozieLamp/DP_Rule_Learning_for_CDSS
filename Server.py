@@ -78,6 +78,7 @@ class Server :
             self.epsilon = params.epsilon
             self.budgetAllocStrategy = params.budgetAllocMethod
             self.useActiveClients = params.useActiveClients
+            self.theta = params.theta
             self.clientsWithUsedBudgets = []  # list of clients who have used budget
             self.numQueries = 0
             # Previous node p and q values
@@ -164,7 +165,7 @@ class Server :
         # do one final query for each rule to make sure full rule has a match
         ruleTrees = []
         for ri in range(len(initialRuleTrees)):
-            print("initial rule",ri, "out of", len(initialRuleTrees))
+            print("initial rule", ri+1, "out of", len(initialRuleTrees))
 
             r = initialRuleTrees[ri]
             # print(r.toString())
@@ -394,7 +395,7 @@ class Server :
                 else:
                     updatedActiveClients.append(c)
 
-            return yesCount, updatedActiveClients, None
+            return yesCount, updatedActiveClients, None, 0
 
         #Private model
         else:
@@ -448,8 +449,8 @@ class Server :
 
                 c_hat = float((yesCount - (len(self.clientList) * q)) )#/ (p - q) if (p-q) else (yesCount - (len(self.clientList) * q)))  # unbiased estimate of count
                 # Fix/clip over/under- estimates
-                if c_hat > len(self.clientList):
-                    estTrueCount = len(self.clientList)
+                if c_hat > len(branch.activeClients):
+                    estTrueCount = len(branch.activeClients)
                 elif c_hat < 0:
                     estTrueCount = 0
                 else:
@@ -470,10 +471,14 @@ class Server :
                 print("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) + ", c_hat " + str(c_hat) +", Estimated True yesses " + str(estTrueCount))
                 print("\n")
 
-                return estTrueCount, updatedActiveClients, pLossBudg
+                # Find lmda for pruning condition
+                sigma_c = self.sigma(len(branch.activeClients), pLossBudg, p, q)
+                lmda = self.findPruneCondition(c_hat=percentCount, n=branch.activeClients, sigma_c=sigma_c)
+
+                return estTrueCount, updatedActiveClients, pLossBudg, lmda
 
             # else:
-            return "BUDGET USED", updatedActiveClients, pLossBudg
+            return "BUDGET USED", updatedActiveClients, pLossBudg, self.cutoffThresh * len(branch.activeClients)
 
     # Allocate budget for this query --> method using mystic
     def allocateQueryBudget(self, strategy, A, c):
@@ -483,7 +488,7 @@ class Server :
         elif strategy == 'adaptive':
             # print("In adaptive tree search")
 
-            lw_bnd = 1e-5  # 1e-10 #1e-20
+            lw_bnd = 0.01#1e-5  # 1e-10 #1e-20
             print("BUDGET USED", self.clientList[A[0]].budgetUsed)
             print("global budget used?", self.globalBudgetUsed())
             # TODO - make this the lowest remaining budget val from the clients
@@ -502,8 +507,6 @@ class Server :
             # Constants
             #TODO update this to be all A, not n
             n = len(A)  # num active clients at this branch
-            conf = 0.9 # acceptable conf probability, e.g., 95%
-            theta = 1 - conf  # acceptable error prob, e.g., 5%
 
             # Formulate optimization problem to find minimum budget (beta) to use
             #integral of x from 0 to lmda P[true(c) = x | c_hat] --> Get a confidence interval that true count c < lambda
@@ -524,19 +527,23 @@ class Server :
                 def probTrue(y):
                     # y = queried yes count
                     c_hat = ( (y * p) + (n - y) * q ) / n
-                    #TODO switch this to V, not cutoff thresh
                     c = self.cutoffThresh #* n # assuming worst case where true count at valid rule threshold
-                    # TODO this might need to become all percentages ...
                     print("p", p, "c", c, "c_hat", c_hat, "c", c, "n / active clients", n, "sigma c", sigma_c)
 
-                    # p[c_hat < V | c = V]; prob we make an error
-                    prob_chat_lt_v = norm.cdf(c_hat, loc=c, scale=sigma_c)
-                    print("y=", y, "P[c_hat < V | c = V]", prob_chat_lt_v)
-                    return prob_chat_lt_v
+                    # # p[c_hat < V | c = V]; prob we make an error
+                    # prob_chat_lt_v = norm.cdf(c_hat, loc=c, scale=sigma_c)
+                    # print("y=", y, "P[c_hat < V | c = V]", prob_chat_lt_v)
+                    # return prob_chat_lt_v
+
+                    # p[c_hat < V | c >= V]; prob we make an error, assuming hardest case where c = V
+                    prob_prune_incorrect = norm.cdf(self.cutoffThresh, loc=c_hat, scale=sigma_c) / (1 - norm.cdf(self.cutoffThresh, loc=c, scale=sigma_c))
+                    print("y=", y, "P[c_hat < V | c >= V]", prob_prune_incorrect)
+                    return prob_prune_incorrect
+
 
                 # Integral, could also just do a summation of the counts over up to n since they are discrete and may not need continuous distribution
                 conf_intrvl = quad(probTrue, 0, n) # integrate over all possible values of y
-                print("Conf that c_hat < V", conf_intrvl)
+                # print("Conf that c_hat < V", conf_intrvl)
 
                 # conf_intrvl_low = conf_intrvl_low[0]
                 # conf_intrvl_high = 1 - conf_intrvl_low
@@ -549,7 +556,8 @@ class Server :
                 return finalProb
 
             # TODO - change all cutoff thresh vars to be lambda and make this prob a hyperparam fed in --> theta
-            ineq_constraint = {'type': 'ineq', 'fun': lambda x: (theta - obj_func(x))} # theta - obj_func >= 0
+            ineq_constraint = {'type': 'ineq', 'fun': lambda x: (self.theta - obj_func(x))} # theta - obj_func >= 0 # !! This correct one
+            # ineq_constraint = {'type': 'ineq', 'fun': lambda x: (obj_func(x) - theta)}  # theta - obj_func >= 0
 
             # TODO figure out why not terminating when it should be ...
             # # SLSQP method
@@ -557,11 +565,11 @@ class Server :
             # options = {'maxiter': 1000, 'xtol': 1e-5}
             # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='SLSQP',options=options)
             # # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='SLSQP')
-            # options = {'maxiter': 1000}  # Increase the maximum number of function evaluations
-            # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds,method='SLSQP', options=options)
+            options = {'maxiter': 1000, 'ftol': 1e-10, 'xtol': 1e-5}  # Increase the maximum number of function evaluations
+            result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds,method='SLSQP', options=options)
 
-            options = {'maxiter': 1000, 'gtol': 1e-4,'xtol': 1e-5}  # Increase the maximum number of function evaluations
-            result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
+            # options = {'maxiter': 1000, 'gtol': 1e-4,'xtol': 1e-5}  # Increase the maximum number of function evaluations
+            # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
 
             # # if failed try trust constr method
             # if not result.success:
@@ -628,6 +636,44 @@ class Server :
         cutoffCount = self.cutoffThresh #* n
         return (cutoffCount - v) / sigma_v
 
+
+    def findPruneCondition(self, c_hat, n, sigma_c):
+        print("\n\n FINDING PRUNE CONDITION")
+        # Find lambda s.t. P(c_hat < V + lambda | c = V) > theta
+        conf = 1 - self.theta
+        bnds = Bounds(lb=0, ub=1)
+        print("\nbounds", bnds)
+        c = ((self.cutoffThresh * n) - 1) / n # assuming worst case where true count at valid rule threshold
+        print("Original cutoff thresh", self.cutoffThresh, "V-1", c)
+
+        def obj_func(lmda):
+            # P(c_hat < V + lambda | c = V-1); prob we correctly prune
+            prob_prune_correct = norm.cdf(self.cutoffThresh + lmda - c_hat, loc=c, scale=sigma_c)
+            return prob_prune_correct
+
+        # Start optimization to find lmda
+        ineq_constraint = {'type': 'ineq','fun': lambda x: (obj_func(x) - conf)}  # obj_func - conf >= 0
+
+        # # SLSQP method
+        # # options = {'maxiter': 1000, 'ftol': 1e-10, 'xtol': 1e-10}
+        options = {'maxiter': 1000}  # Increase the maximum number of function evaluations
+        result = minimize(obj_func, x0=np.array(0), constraints=ineq_constraint, bounds=bnds, method='SLSQP',options=options)
+
+        # options = {'maxiter': 1000, 'gtol': 1e-4, 'xtol': 1e-5}  # Increase the maximum number of function evaluations
+        # result = minimize(obj_func, x0=np.array(0), constraints=ineq_constraint, bounds=bnds,method='trust-constr', options=options)
+
+        if result.success:
+            print("Success, lmda = ", result.x)
+            print("Estimated Prob of", result.fun)
+
+            lmda = result.x[0]
+
+        else:
+            print("FAIL in pruning condition")
+            print(result)
+            print(result.message)
+
+        return lmda
 
     # # Allocate budget for this query --> method using mystic
     # def allocateQueryBudget(self, strategy, c):

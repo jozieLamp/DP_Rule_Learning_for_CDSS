@@ -27,7 +27,7 @@ class MCTS:
 
         # QUERYING, BACKPROPAGATION
         if expandedBranch != None:
-            matchCount, activeClients = self.getQuery(expandedBranch)
+            matchCount, activeClients, lmda = self.getQuery(expandedBranch)
 
             if matchCount == "BUDGET USED":
                 self.mcLogger.info("BUDGET USED\n")
@@ -36,7 +36,7 @@ class MCTS:
                 self.backpropagation(expandedBranch, matchCount, activeClients)
 
         else:
-            matchCount, activeClients = self.getQuery(selectedBranch)
+            matchCount, activeClients, lmda = self.getQuery(selectedBranch)
             if matchCount == "BUDGET USED":
                 self.mcLogger.info("BUDGET USED\n")
                 return
@@ -48,7 +48,7 @@ class MCTS:
         if self.verbose:
             self.mcLogger.info("----PRUNING PHASE----")
 
-        self.server.templateTree.pruneTree(self.server.cutoffThresh)
+        self.server.templateTree.pruneTree(self.server.cutoffThresh, lmda)
 
 
     #### SELECTION
@@ -272,7 +272,7 @@ class MCTS:
             selectedBranch.ruleTree.show()
             print("Variables for rule tree:", selectedBranch.ruleTree.varList)
 
-        matchCount, activeClients, pLossBudg = self.server.queryClientRuleMatch(selectedBranch)
+        matchCount, activeClients, pLossBudg, lmda = self.server.queryClientRuleMatch(selectedBranch)
 
         #Update loss budget used for this query
         selectedBranch.pLossBudg = pLossBudg
@@ -310,7 +310,7 @@ class MCTS:
                         self.server.clientList[c].budgetUsed += (xtraBudg * numParams) #Preserve budget for noising of params
 
 
-        return matchCount, activeClients
+        return matchCount, activeClients, lmda
 
     #### BACKPROPAGATION
     def backpropagation(self, startingBranch, matchCount, activeClients):

@@ -8,7 +8,9 @@ import matplotlib.pyplot as plt
 import treelib
 import copy
 import itertools
-
+from scipy.stats import norm, multivariate_normal
+from scipy.optimize import minimize_scalar, minimize, Bounds
+from scipy.integrate import quad
 from RuleTemplate.RuleTree import RuleTree
 from SignalTemporalLogic.STLFactory import STLFactory
 
@@ -278,7 +280,7 @@ class RuleTemplate():
             del self._branches[branchName] #remove node from node list
 
     #Prune any branches who have a match score < cutoff
-    def pruneTree(self, cutoff):
+    def pruneTree(self, cutoff, lmda):
 
         #TODO potentially add check here, where if prune children of branch and this makes that branch completely explored, update it ...
         # # Added check to see if branch terminal or all child branches completely explored, set branch to be compl explored
@@ -290,11 +292,13 @@ class RuleTemplate():
         delNames = []
         for key, br in self._branches.items():
             # if has been visited and score < cutoff or no more active clients (either at branch or after query completed in updated active clients), prune branch
-            if self.pruneCondition(br, cutoff):
+            if self.pruneCondition(br, cutoff, lmda):
+                print("Pruning")
+                print("Got score " + str(br.getCurrentScore()) + " < cutoff thresh " + str(cutoff) + "+" + str(lmda) + "\n")
 
                 if self.verbose:
                     self.logger.info("PRUNING BRANCH " +  key)
-                    self.logger.info("Got score " + str(br.getCurrentScore()) + " < cutoff thresh " + str(cutoff) + "\n")
+                    self.logger.info("Got score " + str(br.getCurrentScore()) + " < cutoff thresh " + str(cutoff) + "+" + str(lmda) + "\n")
                 delNames.append(key)
 
         for n in delNames:
@@ -309,12 +313,15 @@ class RuleTemplate():
             if self.verbose:
                 self.logger.info("Nothing to prune\n")
 
-    def pruneCondition(self, branch, cutoff):
+    def pruneCondition(self, branch, cutoff, lmda):
 
-        # Baseline prune condition:
-        #  if has been visited and score < cutoff or no more active clients (either at branch or after query completed in updated active clients), prune branch
-        if (branch.visits > 0 and branch.getCurrentScore() < cutoff) or len(branch.activeClients) == 0 or (branch.visits > 0 and len(branch.updatedActiveClients) == 0):
+        if (branch.visits > 0 and branch.getCurrentScore() < cutoff + lmda) or len(branch.activeClients) == 0 or (branch.visits > 0 and len(branch.updatedActiveClients) == 0):
             return True
+
+        # # Baseline prune condition:
+        # #  if has been visited and score < cutoff or no more active clients (either at branch or after query completed in updated active clients), prune branch
+        # if (branch.visits > 0 and branch.getCurrentScore() < cutoff) or len(branch.activeClients) == 0 or (branch.visits > 0 and len(branch.updatedActiveClients) == 0):
+        #     return True
 
         # # Adaptive Budget Pruning Condition --> if this and parent node < cutoff only then cutoff this branch
         # if (branch.visits > 0 and branch.getCurrentScore() < cutoff) and branch.parent != None and (
