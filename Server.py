@@ -473,7 +473,7 @@ class Server :
 
                 # Find lmda for pruning condition
                 sigma_c = self.sigma(len(branch.activeClients), pLossBudg, p, q)
-                lmda = self.findPruneCondition(c_hat=percentCount, n=branch.activeClients, sigma_c=sigma_c)
+                lmda = self.findPruneCondition(c_hat=percentCount, n=len(branch.activeClients), sigma_c=sigma_c)
 
                 return estTrueCount, updatedActiveClients, pLossBudg, lmda
 
@@ -488,7 +488,7 @@ class Server :
         elif strategy == 'adaptive':
             # print("In adaptive tree search")
 
-            lw_bnd = 0.01#1e-5  # 1e-10 #1e-20
+            lw_bnd = 1e-5  # 1e-10 #1e-20
             print("BUDGET USED", self.clientList[A[0]].budgetUsed)
             print("global budget used?", self.globalBudgetUsed())
             # TODO - make this the lowest remaining budget val from the clients
@@ -528,36 +528,36 @@ class Server :
                     # y = queried yes count
                     c_hat = ( (y * p) + (n - y) * q ) / n
                     c = self.cutoffThresh #* n # assuming worst case where true count at valid rule threshold
+
+                    # # ALTERNATIVE FORMULATION FOR: p[c_hat < V | c >= V]; prob we make an error
+                    # p_chat_lt_V = norm.cdf(cutoffThresh, loc=c_hat, scale=sigma_c)
+                    # p_c_ge_V = 1 - norm.cdf(cutoffThresh, loc=c_hat, scale=sigma_c)
+                    # print(p_chat_lt_V, p_c_ge_V)
+                    # prob_chat_lt_v = p_chat_lt_V / p_c_ge_V #if p_c_ge_V else p_chat_lt_V
+                    # print("p", p, "c", c, "c_hat", c_hat, "c", c, "n / active clients", n, "sigma c", sigma_c)
+                    # print("y=", y, "p[c_hat < V | c >= V]; prob we make an error", prob_chat_lt_v)
+
+                    # p[c_hat < V | c = V]; prob we make an error
+                    prob_chat_lt_v = norm.cdf(self.cutoffThresh, loc=c_hat, scale=sigma_c)
                     print("p", p, "c", c, "c_hat", c_hat, "c", c, "n / active clients", n, "sigma c", sigma_c)
+                    print("y=", y, "p[c_hat < V | c = V]; prob we make an error", prob_chat_lt_v)
 
-                    # # p[c_hat < V | c = V]; prob we make an error
-                    # prob_chat_lt_v = norm.cdf(c_hat, loc=c, scale=sigma_c)
-                    # print("y=", y, "P[c_hat < V | c = V]", prob_chat_lt_v)
-                    # return prob_chat_lt_v
-
-                    # p[c_hat < V | c >= V]; prob we make an error, assuming hardest case where c = V
-                    prob_prune_incorrect = norm.cdf(self.cutoffThresh, loc=c_hat, scale=sigma_c) / (1 - norm.cdf(self.cutoffThresh, loc=c, scale=sigma_c))
-                    print("y=", y, "P[c_hat < V | c >= V]", prob_prune_incorrect)
-                    return prob_prune_incorrect
+                    if np.isinf(prob_chat_lt_v) or np.isnan(prob_chat_lt_v) or p >= 0.95:
+                        return 0
+                    else:
+                        return prob_chat_lt_v
 
 
                 # Integral, could also just do a summation of the counts over up to n since they are discrete and may not need continuous distribution
                 conf_intrvl = quad(probTrue, 0, n) # integrate over all possible values of y
-                # print("Conf that c_hat < V", conf_intrvl)
-
-                # conf_intrvl_low = conf_intrvl_low[0]
-                # conf_intrvl_high = 1 - conf_intrvl_low
-                # print("Conf that true count c > lambda, using subtrct", conf_intrvl_high)
-
-                # if conf interval >= theta then good
-                # finalProb = max(conf_intrvl_low, conf_intrvl_high)
-                finalProb = conf_intrvl[0] / 100 # make decimal value, not percent
+                # conf_intrvl = quad(probTrue, 0, self.cutoffThresh * n) #integrate over all values of y up until cutoff thresh
+                # print("\nCONF INTRVL", conf_intrvl)
+                finalProb = conf_intrvl[0] / n # make decimal value, not percent
                 print("Returning final prob:", finalProb)
                 return finalProb
 
-            # TODO - change all cutoff thresh vars to be lambda and make this prob a hyperparam fed in --> theta
+            # Set up optimization problem
             ineq_constraint = {'type': 'ineq', 'fun': lambda x: (self.theta - obj_func(x))} # theta - obj_func >= 0 # !! This correct one
-            # ineq_constraint = {'type': 'ineq', 'fun': lambda x: (obj_func(x) - theta)}  # theta - obj_func >= 0
 
             # TODO figure out why not terminating when it should be ...
             # # SLSQP method
