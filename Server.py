@@ -488,6 +488,7 @@ class Server :
         elif strategy == 'adaptive':
             # print("In adaptive tree search")
 
+            # Make bounds
             lw_bnd = 1e-5  # 1e-10 #1e-20
             print("BUDGET USED", self.clientList[A[0]].budgetUsed)
             print("global budget used?", self.globalBudgetUsed())
@@ -495,8 +496,13 @@ class Server :
             up_bnd = self.epsilon - self.clientList[A[0]].budgetUsed
             if lw_bnd > up_bnd:
                 up_bnd = lw_bnd
-            bnds = Bounds(lb=lw_bnd, ub=up_bnd)
-            print("\nbounds", bnds)
+            bnds_beta = (lw_bnd, up_bnd)
+            print("\nbounds beta", bnds_beta)
+
+            bnds_lmda = (0, self.cutoffThresh - 0.01)
+            print("bounds lmda", bnds_lmda)
+
+            bnds = (bnds_beta, bnds_lmda)
 
             # TODO - fix this to be more exact, if getting real close to end of budget then stop
             #check if budget used
@@ -511,16 +517,19 @@ class Server :
             # Formulate optimization problem to find minimum budget (beta) to use
             #integral of x from 0 to lmda P[true(c) = x | c_hat] --> Get a confidence interval that true count c < lambda
             # if conf interval within theshold, e.g., 95% that should or should not cut, use this budget, otherwise increase budget used
-            def obj_func(beta):
+            def obj_func(consts):
                 # c = true (unknown count); c_hat = estimated count
                 # Important assumptions:
                 # - since our responses are the sum of many independent random responses, its distribution is very close to a normal dist
                 # - we know that E[c_hat] = c
                 # - we assume the worst case where true count is at the valid rule threshold, c = V, for all calculations
 
+                beta = consts[0]
+                lmda = consts[1]
+
                 p = math.e ** beta / (1 + math.e ** beta)
                 q = 1-p
-                print("\nbeta", beta)
+                print("\nbeta", beta, "lmda", lmda)
 
                 sigma_c = self.sigma(n, beta, p, q)
 
@@ -538,7 +547,8 @@ class Server :
                     # print("y=", y, "p[c_hat < V | c >= V]; prob we make an error", prob_chat_lt_v)
 
                     # p[c_hat < V | c = V]; prob we make an error
-                    prob_chat_lt_v = norm.cdf(self.cutoffThresh, loc=c_hat, scale=sigma_c)
+                    prob_chat_lt_v = norm.cdf(self.cutoffThresh - lmda, loc=c_hat, scale=sigma_c)
+                    print("cutoff thresh", self.cutoffThresh - lmda)
                     print("p", p, "c", c, "c_hat", c_hat, "c", c, "n / active clients", n, "sigma c", sigma_c)
                     print("y=", y, "p[c_hat < V | c = V]; prob we make an error", prob_chat_lt_v)
 
@@ -566,7 +576,7 @@ class Server :
             # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='SLSQP',options=options)
             # # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='SLSQP')
             options = {'maxiter': 1000, 'ftol': 1e-10, 'xtol': 1e-5}  # Increase the maximum number of function evaluations
-            result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds,method='SLSQP', options=options)
+            result = minimize(obj_func, x0=np.array([lw_bnd, 0.0]), constraints=ineq_constraint, bounds=bnds,method='SLSQP', options=options)
 
             # options = {'maxiter': 1000, 'gtol': 1e-4,'xtol': 1e-5}  # Increase the maximum number of function evaluations
             # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
@@ -584,7 +594,7 @@ class Server :
 
 
             if result.success:
-                print("Success, beta = ", result.x)
+                print("Success", result.x)
                 print("Estimated Prob of", result.fun)
 
                 pLossBudg = result.x[0]
@@ -599,6 +609,7 @@ class Server :
                 self.q_paren = 1 - self.p_paren
 
             else:
+                # TODO - add message here to suggest bigger privacy budget eps if not finding suitable result here!!!!
                 print("FAIL")
                 print(result)
                 print(result.message)
@@ -648,7 +659,9 @@ class Server :
 
         def obj_func(lmda):
             # P(c_hat < V + lambda | c = V-1); prob we correctly prune
-            prob_prune_correct = norm.cdf(self.cutoffThresh + lmda - c_hat, loc=c, scale=sigma_c)
+            prob_prune_correct = norm.cdf(self.cutoffThresh + lmda, loc=c_hat, scale=sigma_c)
+            print("c_hat", c_hat, "cutoff thresh", self.cutoffThresh, "cutoff thresh + lambda", self.cutoffThresh + lmda)
+            print("Lambda", lmda, "; Prob prune correct,", prob_prune_correct)
             return prob_prune_correct
 
         # Start optimization to find lmda

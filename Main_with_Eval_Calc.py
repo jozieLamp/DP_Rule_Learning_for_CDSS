@@ -72,6 +72,10 @@ def calcCompleteCoverage(clientDF, ldpDF, ldpTrees, cutoff=0.0):
     return covDF, structDF
 
 
+from scipy.stats import norm, multivariate_normal
+from scipy.optimize import minimize_scalar, minimize, Bounds
+from scipy.integrate import quad
+
 
 if __name__ == "__main__":
 
@@ -82,7 +86,6 @@ if __name__ == "__main__":
     # # Load client rules w/ cutoff
     # clientDF_cutoff = cov.loadClientRules(params.popSize, params.dataFilename, cutoff=0.01)
     # print("CLIENT DF Cutoff", clientDF_cutoff)
-
 
     runProtocol(params)
 
@@ -100,5 +103,4 @@ if __name__ == "__main__":
     covDF_cutoff, structDF_cutoff = calcCompleteCoverage(clientDF, ldpDF, ldpTrees, cutoff=params.cutoffThresh)
 
     # Try testing coverage on dif dataset ...
-
 
