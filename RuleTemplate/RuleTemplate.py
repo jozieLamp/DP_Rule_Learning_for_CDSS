@@ -315,7 +315,7 @@ class RuleTemplate():
 
     def pruneCondition(self, branch, cutoff, lmda):
 
-        if (branch.visits > 0 and branch.getCurrentScore() < cutoff + lmda) or len(branch.activeClients) == 0 or (branch.visits > 0 and len(branch.updatedActiveClients) == 0):
+        if (branch.visits > 0 and branch.getCurrentScore() < cutoff - lmda) or len(branch.activeClients) == 0 or (branch.visits > 0 and len(branch.updatedActiveClients) == 0):
             return True
 
         # # Baseline prune condition:

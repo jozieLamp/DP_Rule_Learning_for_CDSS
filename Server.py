@@ -91,7 +91,7 @@ class Server :
 
 
     def globalBudgetUsed(self):
-        print("Clients with used budgets:", self.clientsWithUsedBudgets)
+        # print("Clients with used budgets:", self.clientsWithUsedBudgets)
 
         if list(self.clientList.keys()) == set(self.clientsWithUsedBudgets):
             return True
@@ -410,7 +410,7 @@ class Server :
                 parentCount = len(self.clientList) / 2 #if no parent node assume 50% prob of match
             # print("FOUND MATCH COUNT", parentCount)
 
-            pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy, A=branch.activeClients, c=parentCount)
+            pLossBudg, lmda = self.allocateQueryBudget(strategy=self.budgetAllocStrategy, A=branch.activeClients, c=parentCount)
 
             # TODO fix this to work with active clients
             if pLossBudg == None or pLossBudg == 0: #or self.clientList[1].privacyBudgetUsed(): #set budget as used
@@ -473,18 +473,18 @@ class Server :
 
                 # Find lmda for pruning condition
                 sigma_c = self.sigma(len(branch.activeClients), pLossBudg, p, q)
-                lmda = self.findPruneCondition(c_hat=percentCount, n=len(branch.activeClients), sigma_c=sigma_c)
 
                 return estTrueCount, updatedActiveClients, pLossBudg, lmda
 
             # else:
-            return "BUDGET USED", updatedActiveClients, pLossBudg, self.cutoffThresh * len(branch.activeClients)
+            return "BUDGET USED", updatedActiveClients, pLossBudg, lmda
 
     # Allocate budget for this query --> method using mystic
     def allocateQueryBudget(self, strategy, A, c):
 
         if strategy == 'fixed':  # Fixed budget
             pLossBudg = self.epsilon / self.maxQueries
+            lmda = 0
         elif strategy == 'adaptive':
             # print("In adaptive tree search")
 
@@ -499,20 +499,26 @@ class Server :
             bnds_beta = (lw_bnd, up_bnd)
             print("\nbounds beta", bnds_beta)
 
-            bnds_lmda = (0, self.cutoffThresh - 0.01)
+            # bnds_lmda = (0, self.cutoffThresh - 1e-10)
+            bnds_lmda = (0, 0)
             print("bounds lmda", bnds_lmda)
 
             bnds = (bnds_beta, bnds_lmda)
 
-            # TODO - fix this to be more exact, if getting real close to end of budget then stop
             #check if budget used
             # if self.clientList[1].privacyBudgetUsed():
             if self.globalBudgetUsed() or self.clientList[1].budgetUsed + lw_bnd >= self.epsilon: #todo make this global check and to work with active clients
-                return 0
+                return 0, 0
 
             # Constants
             #TODO update this to be all A, not n
             n = len(A)  # num active clients at this branch
+
+
+            # TODO - working here, getting optimization to work
+            # NOTE- currently lmda set to 0 rn
+            # Potentially try alternative optimization function?? maybe global opti?
+            # https://stackoverflow.com/questions/52306399/how-should-i-scipy-optimize-a-multivariate-and-non-differentiable-function-with/52318442#52318442
 
             # Formulate optimization problem to find minimum budget (beta) to use
             #integral of x from 0 to lmda P[true(c) = x | c_hat] --> Get a confidence interval that true count c < lambda
@@ -548,9 +554,9 @@ class Server :
 
                     # p[c_hat < V | c = V]; prob we make an error
                     prob_chat_lt_v = norm.cdf(self.cutoffThresh - lmda, loc=c_hat, scale=sigma_c)
-                    print("cutoff thresh", self.cutoffThresh - lmda)
-                    print("p", p, "c", c, "c_hat", c_hat, "c", c, "n / active clients", n, "sigma c", sigma_c)
-                    print("y=", y, "p[c_hat < V | c = V]; prob we make an error", prob_chat_lt_v)
+                    # print("cutoff thresh", self.cutoffThresh - lmda)
+                    # print("p", p, "c", c, "c_hat", c_hat, "c", c, "n / active clients", n, "sigma c", sigma_c)
+                    # print("y=", y, "p[c_hat < V | c = V]; prob we make an error", prob_chat_lt_v)
 
                     if np.isinf(prob_chat_lt_v) or np.isnan(prob_chat_lt_v) or p >= 0.95:
                         return 0
@@ -575,7 +581,10 @@ class Server :
             # options = {'maxiter': 1000, 'xtol': 1e-5}
             # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='SLSQP',options=options)
             # # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='SLSQP')
-            options = {'maxiter': 1000, 'ftol': 1e-10, 'xtol': 1e-5}  # Increase the maximum number of function evaluations
+
+            # options = {'maxiter': 1000, 'ftol': 1e-15, 'xtol': 1e-5}  # Increase the maximum number of function evaluations
+            # xtol = absolute value of diff btw x in prev and next iteration < xtol; ftol: absolute val of dif btw function output is < ftol
+            options = {'maxiter': 1000, 'ftol': 0.0001,'xtol': 1e-5}
             result = minimize(obj_func, x0=np.array([lw_bnd, 0.0]), constraints=ineq_constraint, bounds=bnds,method='SLSQP', options=options)
 
             # options = {'maxiter': 1000, 'gtol': 1e-4,'xtol': 1e-5}  # Increase the maximum number of function evaluations
@@ -598,6 +607,7 @@ class Server :
                 print("Estimated Prob of", result.fun)
 
                 pLossBudg = result.x[0]
+                lmda = result.x[1]
 
                 #TODO - fix this
                 if pLossBudg < 0:
@@ -617,7 +627,7 @@ class Server :
                 pLossBudg = 0
 
         print("Returning budget of:", pLossBudg)
-        return pLossBudg
+        return pLossBudg, lmda
 
     def sigma(self, n, beta, p ,q):
         bottom = n * ((p - q) ** 2)
@@ -647,46 +657,6 @@ class Server :
         cutoffCount = self.cutoffThresh #* n
         return (cutoffCount - v) / sigma_v
 
-
-    def findPruneCondition(self, c_hat, n, sigma_c):
-        print("\n\n FINDING PRUNE CONDITION")
-        # Find lambda s.t. P(c_hat < V + lambda | c = V) > theta
-        conf = 1 - self.theta
-        bnds = Bounds(lb=0, ub=1)
-        print("\nbounds", bnds)
-        c = ((self.cutoffThresh * n) - 1) / n # assuming worst case where true count at valid rule threshold
-        print("Original cutoff thresh", self.cutoffThresh, "V-1", c)
-
-        def obj_func(lmda):
-            # P(c_hat < V + lambda | c = V-1); prob we correctly prune
-            prob_prune_correct = norm.cdf(self.cutoffThresh + lmda, loc=c_hat, scale=sigma_c)
-            print("c_hat", c_hat, "cutoff thresh", self.cutoffThresh, "cutoff thresh + lambda", self.cutoffThresh + lmda)
-            print("Lambda", lmda, "; Prob prune correct,", prob_prune_correct)
-            return prob_prune_correct
-
-        # Start optimization to find lmda
-        ineq_constraint = {'type': 'ineq','fun': lambda x: (obj_func(x) - conf)}  # obj_func - conf >= 0
-
-        # # SLSQP method
-        # # options = {'maxiter': 1000, 'ftol': 1e-10, 'xtol': 1e-10}
-        options = {'maxiter': 1000}  # Increase the maximum number of function evaluations
-        result = minimize(obj_func, x0=np.array(0), constraints=ineq_constraint, bounds=bnds, method='SLSQP',options=options)
-
-        # options = {'maxiter': 1000, 'gtol': 1e-4, 'xtol': 1e-5}  # Increase the maximum number of function evaluations
-        # result = minimize(obj_func, x0=np.array(0), constraints=ineq_constraint, bounds=bnds,method='trust-constr', options=options)
-
-        if result.success:
-            print("Success, lmda = ", result.x)
-            print("Estimated Prob of", result.fun)
-
-            lmda = result.x[0]
-
-        else:
-            print("FAIL in pruning condition")
-            print(result)
-            print(result.message)
-
-        return lmda
 
     # # Allocate budget for this query --> method using mystic
     # def allocateQueryBudget(self, strategy, c):
