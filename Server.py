@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import norm, multivariate_normal
-from scipy.optimize import minimize_scalar, minimize, Bounds
+from scipy.optimize import minimize_scalar, minimize, Bounds, brute
 from scipy.integrate import quad
 from gekko import GEKKO
 from RuleTemplate.RuleTemplate import RuleTemplate, Node, stlGrammarDict, terminalNodes
@@ -504,6 +504,7 @@ class Server :
             print("bounds lmda", bnds_lmda)
 
             bnds = (bnds_beta, bnds_lmda)
+            print("complete bounds", bnds)
 
             #check if budget used
             # if self.clientList[1].privacyBudgetUsed():
@@ -514,6 +515,7 @@ class Server :
             #TODO update this to be all A, not n
             n = len(A)  # num active clients at this branch
 
+            grid = []
 
             # TODO - working here, getting optimization to work
             # currently always just picks the max budget value and returns that to only do one query*
@@ -521,12 +523,11 @@ class Server :
             # Potentially try alternative optimization function?? maybe global opti?
             # https://stackoverflow.com/questions/52306399/how-should-i-scipy-optimize-a-multivariate-and-non-differentiable-function-with/52318442#52318442
 
-            # Formulate optimization problem to find minimum budget (beta) to use
-            #integral of x from 0 to lmda P[true(c) = x | c_hat] --> Get a confidence interval that true count c < lambda
-            # if conf interval within theshold, e.g., 95% that should or should not cut, use this budget, otherwise increase budget used
+            # Formulate optimization problem to find minimum budget (beta) and adaptive pruning threshold (lambda) to use
+            # Find min beta, lmda s.t. P[c_hat < V * n - lmda | c = V] <= theta
             def obj_func(consts):
-                # c = true (unknown count); c_hat = estimated count
                 # Important assumptions:
+                # c_hat is estimated count, c is true (unknown) count
                 # - since our responses are the sum of many independent random responses, its distribution is very close to a normal dist
                 # - we know that E[c_hat] = c
                 # - we assume the worst case where true count is at the valid rule threshold, c = V, for all calculations
@@ -553,7 +554,7 @@ class Server :
                     # print("p", p, "c", c, "c_hat", c_hat, "c", c, "n / active clients", n, "sigma c", sigma_c)
                     # print("y=", y, "p[c_hat < V | c >= V]; prob we make an error", prob_chat_lt_v)
 
-                    # p[c_hat < V | c = V]; prob we make an error
+                    # P[c_hat < V - lmda | c = V]; prob we make an error
                     prob_chat_lt_v = norm.cdf(self.cutoffThresh - lmda, loc=c_hat, scale=sigma_c)
                     # print("cutoff thresh", self.cutoffThresh - lmda)
                     # print("p", p, "c", c, "c_hat", c_hat, "c", c, "n / active clients", n, "sigma c", sigma_c)
@@ -571,6 +572,9 @@ class Server :
                 # print("\nCONF INTRVL", conf_intrvl)
                 finalProb = conf_intrvl[0] / n # make decimal value, not percent
                 print("Returning final prob:", finalProb)
+
+                grid.append([beta, lmda, finalProb])
+
                 return finalProb
 
             # Set up optimization problem
@@ -585,8 +589,18 @@ class Server :
 
             # options = {'maxiter': 1000, 'ftol': 1e-15, 'xtol': 1e-5}  # Increase the maximum number of function evaluations
             # xtol = absolute value of diff btw x in prev and next iteration < xtol; ftol: absolute val of dif btw function output is < ftol
-            options = {'maxiter': 1000, 'ftol': 0.0001,'xtol': 1e-5}
-            result = minimize(obj_func, x0=np.array([lw_bnd, 0.0]), constraints=ineq_constraint, bounds=bnds,method='SLSQP', options=options)
+            # options = {'maxiter': 1000, 'ftol': 0.0001,'xtol': 1e-5}
+            # result = minimize(obj_func, x0=np.array([lw_bnd, 0.0]), constraints=ineq_constraint, bounds=bnds,method='SLSQP', options=options)
+
+            #Trying brute
+            # result = brute(obj_func, ranges=bnds, disp=True, finish=None)
+            result = brute(lambda x: (obj_func(x) if lw_bnd <= x[0] <= up_bnd and bnds_lmda[0] <= x[1] <= bnds_lmda[1] else np.inf), ranges=bnds, disp=True)
+            print("result", result)
+
+            #TODO - find point in grid where beta is the minimum but the constraints are met; e.g. fprob <= but closest to theta
+            # Can also plot the optimization path on a grid (tradeoff btw. beta and probability)
+            print("grid", grid)
+            #get all values where prob < theta, then select the one where beta is the min
 
             # options = {'maxiter': 1000, 'gtol': 1e-4,'xtol': 1e-5}  # Increase the maximum number of function evaluations
             # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
