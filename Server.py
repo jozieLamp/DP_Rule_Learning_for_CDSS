@@ -499,8 +499,8 @@ class Server :
             bnds_beta = (lw_bnd, up_bnd)
             print("\nbounds beta", bnds_beta)
 
-            # bnds_lmda = (0, self.cutoffThresh - 1e-10)
-            bnds_lmda = (0, 0)
+            bnds_lmda = (0, self.cutoffThresh - 1e-10)
+            # bnds_lmda = (0, 0)
             print("bounds lmda", bnds_lmda)
 
             bnds = (bnds_beta, bnds_lmda)
@@ -516,6 +516,7 @@ class Server :
 
 
             # TODO - working here, getting optimization to work
+            # currently always just picks the max budget value and returns that to only do one query*
             # NOTE- currently lmda set to 0 rn
             # Potentially try alternative optimization function?? maybe global opti?
             # https://stackoverflow.com/questions/52306399/how-should-i-scipy-optimize-a-multivariate-and-non-differentiable-function-with/52318442#52318442

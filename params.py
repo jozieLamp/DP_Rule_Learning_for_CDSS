@@ -23,7 +23,7 @@ budgetAllocMethod = 'adaptive' #Options are 'fixed': epsilon/total queries, 'ada
 useActiveClients = False # whether to use active clients or not
 maxQueries = 1000 #1000 #Maximum number of server queries allowed (to define for nonprivate + baseline model)
 # cp = epsilon / maxQueries #UCT param to increase or decrease the amount of exploration performed
-theta = 0.45 # acceptable error probability, e.g., 5%
+theta = 0.1 # acceptable error probability, e.g., 5%
 
 # DATA PARAMETERS
 dataFilename = "Data/ICU/Best/"
