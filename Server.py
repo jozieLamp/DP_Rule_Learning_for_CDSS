@@ -500,11 +500,10 @@ class Server :
             print("\nbounds beta", bnds_beta)
 
             bnds_lmda = (0, self.cutoffThresh - 1e-10)
-            # bnds_lmda = (0, 0)
-            print("bounds lmda", bnds_lmda)
+            # print("bounds lmda", bnds_lmda)
 
             bnds = (bnds_beta, bnds_lmda)
-            print("complete bounds", bnds)
+            # print("complete bounds", bnds)
 
             #check if budget used
             # if self.clientList[1].privacyBudgetUsed():
@@ -515,6 +514,7 @@ class Server :
             #TODO update this to be all A, not n
             n = len(A)  # num active clients at this branch
 
+            # grid to track beta, lmda and prob values
             grid = []
 
             # Formulate optimization problem to find minimum budget (beta) and adaptive pruning threshold (lambda) to use
@@ -531,7 +531,7 @@ class Server :
 
                 p = math.e ** beta / (1 + math.e ** beta)
                 q = 1-p
-                print("\nbeta", beta, "lmda", lmda)
+                # print("\nbeta", beta, "lmda", lmda)
 
                 sigma_c = self.sigma(n, beta, p, q)
 
@@ -560,7 +560,7 @@ class Server :
 
                 return finalProb
 
-
+            # TODO - issue here is that optimization scales to budget size so always does around 100 queries and uses a ton of budget, need it to use less budget, pick more small values
             # Global brute force optimization
             # result = brute(obj_func, ranges=bnds, disp=True, finish=None)
             result = brute(lambda x: (obj_func(x) if lw_bnd <= x[0] <= up_bnd and bnds_lmda[0] <= x[1] <= bnds_lmda[1] else np.inf), ranges=bnds, disp=True)
