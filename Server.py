@@ -517,12 +517,6 @@ class Server :
 
             grid = []
 
-            # TODO - working here, getting optimization to work
-            # currently always just picks the max budget value and returns that to only do one query*
-            # NOTE- currently lmda set to 0 rn
-            # Potentially try alternative optimization function?? maybe global opti?
-            # https://stackoverflow.com/questions/52306399/how-should-i-scipy-optimize-a-multivariate-and-non-differentiable-function-with/52318442#52318442
-
             # Formulate optimization problem to find minimum budget (beta) and adaptive pruning threshold (lambda) to use
             # Find min beta, lmda s.t. P[c_hat < V * n - lmda | c = V] <= theta
             def obj_func(consts):
@@ -546,14 +540,6 @@ class Server :
                     c_hat = ( (y * p) + (n - y) * q ) / n
                     c = self.cutoffThresh #* n # assuming worst case where true count at valid rule threshold
 
-                    # # ALTERNATIVE FORMULATION FOR: p[c_hat < V | c >= V]; prob we make an error
-                    # p_chat_lt_V = norm.cdf(cutoffThresh, loc=c_hat, scale=sigma_c)
-                    # p_c_ge_V = 1 - norm.cdf(cutoffThresh, loc=c_hat, scale=sigma_c)
-                    # print(p_chat_lt_V, p_c_ge_V)
-                    # prob_chat_lt_v = p_chat_lt_V / p_c_ge_V #if p_c_ge_V else p_chat_lt_V
-                    # print("p", p, "c", c, "c_hat", c_hat, "c", c, "n / active clients", n, "sigma c", sigma_c)
-                    # print("y=", y, "p[c_hat < V | c >= V]; prob we make an error", prob_chat_lt_v)
-
                     # P[c_hat < V - lmda | c = V]; prob we make an error
                     prob_chat_lt_v = norm.cdf(self.cutoffThresh - lmda, loc=c_hat, scale=sigma_c)
                     # print("cutoff thresh", self.cutoffThresh - lmda)
@@ -568,80 +554,35 @@ class Server :
 
                 # Integral, could also just do a summation of the counts over up to n since they are discrete and may not need continuous distribution
                 conf_intrvl = quad(probTrue, 0, n) # integrate over all possible values of y
-                # conf_intrvl = quad(probTrue, 0, self.cutoffThresh * n) #integrate over all values of y up until cutoff thresh
-                # print("\nCONF INTRVL", conf_intrvl)
                 finalProb = conf_intrvl[0] / n # make decimal value, not percent
-                print("Returning final prob:", finalProb)
-
+                # print("Returning final prob:", finalProb)
                 grid.append([beta, lmda, finalProb])
 
                 return finalProb
 
-            # Set up optimization problem
-            ineq_constraint = {'type': 'ineq', 'fun': lambda x: (self.theta - obj_func(x))} # theta - obj_func >= 0 # !! This correct one
 
-            # TODO figure out why not terminating when it should be ...
-            # # SLSQP method
-            # # options = {'maxiter': 1000, 'ftol': 1e-10, 'xtol': 1e-10}
-            # options = {'maxiter': 1000, 'xtol': 1e-5}
-            # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='SLSQP',options=options)
-            # # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='SLSQP')
-
-            # options = {'maxiter': 1000, 'ftol': 1e-15, 'xtol': 1e-5}  # Increase the maximum number of function evaluations
-            # xtol = absolute value of diff btw x in prev and next iteration < xtol; ftol: absolute val of dif btw function output is < ftol
-            # options = {'maxiter': 1000, 'ftol': 0.0001,'xtol': 1e-5}
-            # result = minimize(obj_func, x0=np.array([lw_bnd, 0.0]), constraints=ineq_constraint, bounds=bnds,method='SLSQP', options=options)
-
-            #Trying brute
+            # Global brute force optimization
             # result = brute(obj_func, ranges=bnds, disp=True, finish=None)
             result = brute(lambda x: (obj_func(x) if lw_bnd <= x[0] <= up_bnd and bnds_lmda[0] <= x[1] <= bnds_lmda[1] else np.inf), ranges=bnds, disp=True)
-            print("result", result)
+            # print("result", result)
 
-            #TODO - find point in grid where beta is the minimum but the constraints are met; e.g. fprob <= but closest to theta
-            # Can also plot the optimization path on a grid (tradeoff btw. beta and probability)
-            print("grid", grid)
+            # Search grid to find optimal values of beta and lambda
             #get all values where prob < theta, then select the one where beta is the min
+            gridDF = pd.DataFrame(grid, columns=["beta", "lambda", "prob"])
+            print(gridDF)
+            gridDF = gridDF.loc[gridDF['prob'] <= self.theta].reset_index(drop=True).sort_values(["beta", "lambda"], ascending=True)
+            print("Selected grid DF\n", gridDF)
 
-            # options = {'maxiter': 1000, 'gtol': 1e-4,'xtol': 1e-5}  # Increase the maximum number of function evaluations
-            # result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
-
-            # # if failed try trust constr method
-            # if not result.success:
-            #     print("TRYING TRUST CONSTR METHOD*************************************************************************")
-            #     options = {'maxiter': 500,'gtol': 1e-4, 'xtol': 1e-5}  # Increase the maximum number of function evaluations
-            #     result = minimize(obj_func, x0=np.array(lw_bnd), constraints=ineq_constraint, bounds=bnds, method='trust-constr', options=options)
-            #
-            #     # TODO fine tune this ...
-            #     if not result.success: #not big enough budget to meet constraints, say budget used
-            #         print("FAIL, can't find budget that meets constraints")
-            #         return 0
-
-
-            if result.success:
-                print("Success", result.x)
-                print("Estimated Prob of", result.fun)
-
-                pLossBudg = result.x[0]
-                lmda = result.x[1]
-
-                #TODO - fix this
-                if pLossBudg < 0:
-                    pLossBudg = lw_bnd
-
-                # Update global p and q params of parent node
-                self.p_paren = math.e ** pLossBudg / (1 + math.e ** pLossBudg)
-                    #decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
-                self.q_paren = 1 - self.p_paren
-
-            else:
-                # TODO - add message here to suggest bigger privacy budget eps if not finding suitable result here!!!!
-                print("FAIL")
-                print(result)
-                print(result.message)
+            if gridDF.empty: #no values meet the probability
+                print("NOT ENOUGH BUDGET TO MEET CONSTRAINTS")
                 print("BUDGET USED", self.clientList[1].budgetUsed)
                 pLossBudg = 0
+                lmda = 0
+            else:
+                pLossBudg = gridDF.loc[0]['beta']
+                lmda = gridDF.loc[0]['lambda']
 
-        print("Returning budget of:", pLossBudg)
+        print("Returning budget of", pLossBudg, "and lambda of", lmda)
         return pLossBudg, lmda
 
     def sigma(self, n, beta, p ,q):

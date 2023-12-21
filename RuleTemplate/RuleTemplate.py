@@ -294,7 +294,7 @@ class RuleTemplate():
             # if has been visited and score < cutoff or no more active clients (either at branch or after query completed in updated active clients), prune branch
             if self.pruneCondition(br, cutoff, lmda):
                 print("Pruning")
-                print("Got score " + str(br.getCurrentScore()) + " < cutoff thresh " + str(cutoff) + "+" + str(lmda) + "\n")
+                print("Got score " + str(br.getCurrentScore()) + " < cutoff thresh " + str(cutoff) + "-" + str(lmda) + "\n")
 
                 if self.verbose:
                     self.logger.info("PRUNING BRANCH " +  key)
