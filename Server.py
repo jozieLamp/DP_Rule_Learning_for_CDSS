@@ -208,8 +208,7 @@ class Server :
                 self.logger.info(r.toString())
                 self.logger.info("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount))
 
-            #TODO removed this for now
-            if 1==1: #percentCount >= self.cutoffThresh:
+            if percentCount >= self.cutoffThresh:
                 #update active clients to be only clients who said yes
                 r.activeClients = activeClients  # add active clients to rule tree
                 r.percentCount = percentCount  # add percent count to rule tree
@@ -498,10 +497,10 @@ class Server :
             if lw_bnd > up_bnd:
                 up_bnd = lw_bnd
             bnds_beta = (lw_bnd, up_bnd)
-            print("\nbounds beta", bnds_beta)
+            # print("\nbounds beta", bnds_beta)
 
             bnds_lmda = (0, self.cutoffThresh - 1e-10)
-            print("bounds lmda", bnds_lmda)
+            # print("bounds lmda", bnds_lmda)
 
             bnds = (bnds_beta, bnds_lmda)
             # print("complete bounds", bnds)
@@ -532,7 +531,7 @@ class Server :
 
                 p = math.e ** beta / (1 + math.e ** beta)
                 q = 1-p
-                print("\nbeta", beta, "lmda", lmda)
+                # print("\nbeta", beta, "lmda", lmda)
 
                 sigma_c = self.sigma(n, beta, p, q)
 
@@ -556,7 +555,7 @@ class Server :
                 # Integral, could also just do a summation of the counts over up to n since they are discrete and may not need continuous distribution
                 conf_intrvl = quad(probTrue, 0, n) # integrate over all possible values of y
                 finalProb = conf_intrvl[0] / n # make decimal value, not percent
-                print("Returning final prob:", finalProb)
+                # print("Returning final prob:", finalProb)
                 grid.append([beta, lmda, finalProb])
 
                 return finalProb
@@ -575,14 +574,14 @@ class Server :
 
             #this work but doesn't really adapt beta that much ...
             result = basinhopping(lambda x: (obj_func(x) if lw_bnd <= x[0] <= up_bnd and bnds_lmda[0] <= x[1] <= bnds_lmda[1] else np.inf), x0=[bnds_beta[0], bnds_lmda[0]], niter=500)
-            print("result", result)
+            # print("result", result)
 
             # Search grid to find optimal values of beta and lambda
             #get all values where prob < theta, then select the one where beta is the min
             gridDF = pd.DataFrame(grid, columns=["beta", "lambda", "prob"])
-            print(gridDF)
-            gridDF = gridDF.loc[gridDF['prob'] <= self.theta].reset_index(drop=True).sort_values(["beta", "lambda"], ascending=True)
-            print("Selected grid DF\n", gridDF)
+            # print(gridDF)
+            gridDF = gridDF.loc[gridDF['prob'] <= self.theta].sort_values(["beta", "lambda"], ascending=True).reset_index(drop=True)
+            # print("Selected grid DF\n", gridDF)
 
             if gridDF.empty: #no values meet the probability
                 print("NOT ENOUGH BUDGET TO MEET CONSTRAINTS")
@@ -593,7 +592,7 @@ class Server :
                 pLossBudg = gridDF.loc[0]['beta']
                 lmda = gridDF.loc[0]['lambda']
 
-        print("Returning budget of", pLossBudg, "and lambda of", lmda)
+        print("!!!Returning budget of", pLossBudg, "and lambda of", lmda)
         return pLossBudg, lmda
 
     def sigma(self, n, beta, p ,q):

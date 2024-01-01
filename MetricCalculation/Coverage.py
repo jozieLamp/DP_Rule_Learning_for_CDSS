@@ -78,11 +78,11 @@ def getCoverageTable(clientDF, ldpDF, ldpTrees, cutoff=0.0):
             if cRule != None:
                 pass
             else:
-                # print("LDP RULE NOT FOUND", l.toString())
+                print("LDP RULE NOT FOUND", l.toString())
                 nonRuleLst.append(l.toString())
                 nonRules += 1
 
-    # print("Total found LDP rules", foundRules)
+    print("Total found LDP rules", foundRules)
 
     #Double check missed client rules actually missed and not semantic match in ldp rule set
     missedRules = list(np.setdiff1d(clientRules, clientRulesFound))
@@ -100,9 +100,13 @@ def getCoverageTable(clientDF, ldpDF, ldpTrees, cutoff=0.0):
             foundRules += 1
             missedRules.remove(mr)
 
-    # if missedRules != []:
-    #     print("Missed Client Rules:")
-    #     print(missedRules)
+    print("Rules Found:")
+    for r in clientRulesFound:
+        print(r)
+
+    if missedRules != []:
+        print("Missed Client Rules:")
+        print(missedRules)
 
     #Adjust overestimates of found rules from double rules (same rule twice)
     if foundRules > len(clientRules):
