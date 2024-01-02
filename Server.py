@@ -321,8 +321,8 @@ class Server :
             # Get PLoss budget for this query
             # parentCount = len(self.clientList) / 2 #if no parent node assume 50% prob of match #TODO - might need to set this as something standard...
             # pLossBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy, c=parentCount)
-            p = math.e ** pLossBudg / (1 + math.e ** pLossBudg)
-            #decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
+            # p = math.e ** pLossBudg / (1 + math.e ** pLossBudg)
+            p = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
 
             for c in template.activeClients: #TODO - OPTION potentially query all clients, not just the active ones in the final step (?)
                 resp, truResp = self.clientList[c].finalRandResponseQuery(tempNodes, template.varList, pLossBudg)
@@ -417,8 +417,8 @@ class Server :
                 self.budgetZero = True
                 # return "BUDGET USED", branch.activeClients, pLossBudg
 
-            # p = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
-            p = math.e ** pLossBudg / (1 + math.e ** pLossBudg)
+            p = decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg) / (1 + decimal.Decimal(math.e) ** decimal.Decimal(pLossBudg))
+            # p = math.e ** pLossBudg / (1 + math.e ** pLossBudg)
 
             # print("\nActive clients at CURRENT BRANCH", branch.name, ":", branch.activeClients)
             for c in branch.activeClients:

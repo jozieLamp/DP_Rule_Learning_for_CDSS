@@ -29,6 +29,7 @@ def getClientTreesFromCountDF(df):
 def getCoverageTable(clientDF, ldpDF, ldpTrees, cutoff=0.0):
     stlFac = STLFactory()
 
+    print("In coverage, total LDP rule trees", len(ldpTrees))
     # Get client rules above the threshold
     cdf = clientDF[clientDF['Percent of Population'] > cutoff]
     clientRules = cdf['Rule'].tolist()
@@ -55,15 +56,15 @@ def getCoverageTable(clientDF, ldpDF, ldpTrees, cutoff=0.0):
     clientRulesFound = []
 
     for l in ldpTrees:
-        # print("\nTemplate", l.toString(), "Per Count", ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item())
+        print("\nTemplate", l.toString(), "Per Count", ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item())
 
         cRule, cCount = findRuleMatch(l, clientTrees, cdf)
 
         if cRule != None:  # check structural match
-            if cRule not in clientRulesFound:
-                clientRulesFound.append(cRule)
+            if l.toString() not in clientRulesFound:
+                clientRulesFound.append(l.toString())
                 foundRules += 1
-                # print(l.toString())
+                print("found rule", l.toString())
                 # print(ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'])
                 try:
                     lCount = ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item()
@@ -71,11 +72,14 @@ def getCoverageTable(clientDF, ldpDF, ldpTrees, cutoff=0.0):
                     lCount = 0
                 # cCount = clientDF[clientDF["Rule"] == cRule]['Percent of Population'].item()
                 matchLst.append([l.toString(), cRule, lCount, cCount])
+            else:
+                print("DUPLICATE RULE", l.toString())
         else:
             # Check to make sure rule just not < thresh
             cRule, cCount = findRuleMatch(l, clientTrees_full, clientDF)
 
             if cRule != None:
+                print("Found rule but rule below threshold:", l.toString())
                 pass
             else:
                 print("LDP RULE NOT FOUND", l.toString())
@@ -104,11 +108,11 @@ def getCoverageTable(clientDF, ldpDF, ldpTrees, cutoff=0.0):
     for r in clientRulesFound:
         print(r)
 
-    if missedRules != []:
-        print("Missed Client Rules:")
-        print(missedRules)
+    # if missedRules != []:
+    #     print("Missed Client Rules:")
+    #     print(missedRules)
 
-    #Adjust overestimates of found rules from double rules (same rule twice)
+    #Adjust overestimates of found rules from double semantic match rules
     if foundRules > len(clientRules):
         foundRules = len(clientRules)
 
@@ -127,6 +131,110 @@ def getCoverageTable(clientDF, ldpDF, ldpTrees, cutoff=0.0):
     countDF = pd.DataFrame(matchLst, columns=['LDP Rule', 'Client Rule', "LDP Count", "Client Count"])
 
     return covDF, countDF, nrDF, missedCR, clientTrees
+
+
+# #Get count of coverage - old version
+# def getCoverageTable(clientDF, ldpDF, ldpTrees, cutoff=0.0):
+#     stlFac = STLFactory()
+#
+#     # Get client rules above the threshold
+#     cdf = clientDF[clientDF['Percent of Population'] > cutoff]
+#     clientRules = cdf['Rule'].tolist()
+#     print("Total Client Rules", len(clientDF))
+#     print("Total Client Rules at Cutoff Thresh", len(cdf))
+#
+#     # From client rules, first make client trees
+#     clientTrees = []
+#     for c in clientRules:
+#         c = stlFac.constructFormulaTree(c + "\n")
+#         clientTrees.append(c)
+#
+#     clientTrees_full = []
+#     for c in clientDF['Rule'].tolist():
+#         c = stlFac.constructFormulaTree(c + "\n")
+#         clientTrees_full.append(c)
+#
+#     ## MAKE MAIN COVERAGE TABLE
+#     # Calculate num true rules, num false rules and precision (true rules / total rules found)
+#     foundRules = 0
+#     nonRules = 0
+#     matchLst = []
+#     nonRuleLst = []
+#     clientRulesFound = []
+#
+#     for l in ldpTrees:
+#         # print("\nTemplate", l.toString(), "Per Count", ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item())
+#
+#         cRule, cCount = findRuleMatch(l, clientTrees, cdf)
+#
+#         if cRule != None:  # check structural match
+#             if cRule not in clientRulesFound:
+#                 clientRulesFound.append(cRule)
+#                 foundRules += 1
+#                 # print(l.toString())
+#                 # print(ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'])
+#                 try:
+#                     lCount = ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item()
+#                 except:
+#                     lCount = 0
+#                 # cCount = clientDF[clientDF["Rule"] == cRule]['Percent of Population'].item()
+#                 matchLst.append([l.toString(), cRule, lCount, cCount])
+#         else:
+#             # Check to make sure rule just not < thresh
+#             cRule, cCount = findRuleMatch(l, clientTrees_full, clientDF)
+#
+#             if cRule != None:
+#                 pass
+#             else:
+#                 print("LDP RULE NOT FOUND", l.toString())
+#                 nonRuleLst.append(l.toString())
+#                 nonRules += 1
+#
+#     print("Total found LDP rules", foundRules)
+#
+#     #Double check missed client rules actually missed and not semantic match in ldp rule set
+#     missedRules = list(np.setdiff1d(clientRules, clientRulesFound))
+#     for mr in missedRules:
+#
+#         # From client rule, first make client tree
+#         m = stlFac.constructFormulaTree(mr + "\n")
+#
+#         # print("m", m.toString())
+#         cRule_thresh, cCount_thresh = findClientRuleMatch(m, ldpTrees, cdf)
+#         cRule, cCount = findClientRuleMatch(m, ldpTrees, clientDF)
+#
+#         # print(cRule)
+#         if cRule != None or cRule_thresh != None:
+#             foundRules += 1
+#             missedRules.remove(mr)
+#
+#     print("Rules Found:")
+#     for r in clientRulesFound:
+#         print(r)
+#
+#     if missedRules != []:
+#         print("Missed Client Rules:")
+#         print(missedRules)
+#
+#     #Adjust overestimates of found rules from double rules (same rule twice)
+#     if foundRules > len(clientRules):
+#         foundRules = len(clientRules)
+#
+#     bot = foundRules + nonRules
+#     prec = foundRules / bot if bot else 0
+#     cov = foundRules / len(clientRules)
+#     lst = [len(clientRules), foundRules, nonRules, prec, cov]
+#     covDF = pd.DataFrame([lst], columns=["Total Client Rules", "Found Rules", "Non Rules", "Precision", "Coverage"])
+#
+#     #Make DF
+#     nrDF = pd.DataFrame(nonRuleLst, columns=['Non Rules'])
+#     missedCR = pd.DataFrame(missedRules, columns=['Missed Client Rules'])
+#
+#     ## MAKE COUNT DF
+#     # Make DF that compares the count percentages of the ldp and client rules that were found
+#     countDF = pd.DataFrame(matchLst, columns=['LDP Rule', 'Client Rule', "LDP Count", "Client Count"])
+#
+#     return covDF, countDF, nrDF, missedCR, clientTrees
 
 def countUniqueStructuresNoVars(clientTrees, ldpTrees):
     ## MAKE STRUCTURE DF
