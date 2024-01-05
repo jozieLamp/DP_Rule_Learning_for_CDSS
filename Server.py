@@ -208,7 +208,8 @@ class Server :
                 self.logger.info(r.toString())
                 self.logger.info("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount))
 
-            if percentCount >= self.cutoffThresh:
+            #TODO - removing final rule query
+            if True: #percentCount >= self.cutoffThresh:
                 #update active clients to be only clients who said yes
                 r.activeClients = activeClients  # add active clients to rule tree
                 r.percentCount = percentCount  # add percent count to rule tree

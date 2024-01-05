@@ -2,7 +2,7 @@
 import math
 
 # GENERAL INPUT PARAMS
-popSize = 100 # 8000 #Size of ICU population
+popSize = 1000 # 8000 #Size of ICU population
 #popSize = 40337 #Sepsis size
 #popSize = 34013 #T1d size
 
@@ -15,15 +15,15 @@ paramPercentile = 85 #Percentile wanted for params - score at or below which (in
 mctsType = 'baseline' #options are 'baseline', 'coverage'
 cp = 1/math.sqrt(2) #UCT param to increase or decrease the amount of exploration performed
 maxTreeDepth = 25 #Maximum depth of tree
-cutoffThresh = 0.05 #V, Match score cutoff threshold to prune branches- was 0.001
+cutoffThresh = 0.01 #V, Match score cutoff threshold to prune branches- was 0.001
 
 # PRIVACY BUDGET PARAMS
-epsilon = 10 #set epsilon to 'inf' to run nonprivate model
+epsilon = 0.1 #set epsilon to 'inf' to run nonprivate model
 budgetAllocMethod = 'adaptive' #Options are 'fixed': epsilon/total queries, 'adaptive'
 useActiveClients = False # whether to use active clients or not
 maxQueries = 1000 #1000 #Maximum number of server queries allowed (to define for nonprivate + baseline model)
 # cp = epsilon / maxQueries #UCT param to increase or decrease the amount of exploration performed
-theta = 0.05 # acceptable error probability, e.g., 5%
+theta = 0.5 # acceptable error probability, e.g., 5%
 
 # DATA PARAMETERS
 dataFilename = "Data/ICU/Best/"
