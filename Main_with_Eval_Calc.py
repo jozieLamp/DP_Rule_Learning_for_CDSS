@@ -95,7 +95,7 @@ if __name__ == "__main__":
 
     # Calculate coverage for %client rules > cutoff threshold
     print("\nCoverage at Cutoff Thresh")
-    covDF_cutoff, structDF_cutoff = calcCompleteCoverage(clientDF, ldpDF, ldpTrees, 0.01)#params.cutoffThresh)
+    covDF_cutoff, structDF_cutoff = calcCompleteCoverage(clientDF, ldpDF, ldpTrees, params.cutoffThresh)
 
     # Try testing coverage on dif dataset ...
 
