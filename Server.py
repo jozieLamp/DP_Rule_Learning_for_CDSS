@@ -176,7 +176,7 @@ class Server :
 
             if self.epsilon != 'inf':
                 if self.budgetAllocStrategy == 'fixed':
-                    finalBudg = self.allocateQueryBudget(strategy=self.budgetAllocStrategy, A=origAC, c=None)
+                    finalBudg, lmda = self.allocateQueryBudget(strategy=self.budgetAllocStrategy, A=origAC, c=None)
                 else:
                     # finalBudg = self.final_saved_budget[ri] #sum(self.final_saved_budget) / len(self.final_saved_budget) #
                     # finalBudg = 5 / len(self.final_saved_budget)
@@ -496,21 +496,21 @@ class Server :
             # # Select bounds
             # if self.epsilon <= 0.01:
             #     lw_bnd = 1e-5
-            # elif self.epsilon == 0.1:
-            #     lw_bnd = ??
+            # elif self.epsilon <= 0.1:
+            #     lw_bnd = 1e-5
+            #     errorThresh = 0.5 # TODO - scale this based on incoming error --> if 0.05 --> 0.5 etc
             # elif self.epsilon == 1:
             #     lw_bnd = ??
             # elif self.epsilon == 10:
             #     lw_bnd = ??
             # elif self.epsilon == 100:
             #     lw_bnd = ??
-            # elif self.epsilon == 1000:
-            #     lw_bnd = 0.2
-            # elif self.epsilon >= 10000:
+            # elif self.epsilon >= 1000:
             #     lw_bnd = 2
+            #     errorThresh = self.theta
 
 
-            lw_bnd = 2 #maybe 0.25?
+            lw_bnd = 1e-4 #maybe 0.25?
             # 1e-5  # 1e-10 #1e-20
 
             errorThresh = self.theta
