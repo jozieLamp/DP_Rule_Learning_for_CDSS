@@ -208,8 +208,7 @@ class Server :
                 self.logger.info(r.toString())
                 self.logger.info("Rule Match Count: " + str(matchCount) + ", Rule Match Percentage: " + str(percentCount))
 
-            #TODO - removing final rule query
-            if True: #percentCount >= self.cutoffThresh:
+            if percentCount >= self.cutoffThresh:
                 #update active clients to be only clients who said yes
                 r.activeClients = activeClients  # add active clients to rule tree
                 r.percentCount = percentCount  # add percent count to rule tree
@@ -448,7 +447,9 @@ class Server :
             if not self.globalBudgetUsed():
                 q = 1-p
 
-                c_hat = float((yesCount - (len(self.clientList) * q)) )#/ (p - q) if (p-q) else (yesCount - (len(self.clientList) * q)))  # unbiased estimate of count
+                # c_hat = float((yesCount - (len(self.clientList) * q)) )#/ (p - q) if (p-q) else (yesCount - (len(self.clientList) * q)))  # unbiased estimate of count
+                c_hat = float((yesCount - (len(self.clientList) * q)) / (p - q) if (p-q) else (yesCount - (len(self.clientList) * q)))  # unbiased estimate of count
+
                 # Fix/clip over/under- estimates
                 if c_hat > len(branch.activeClients):
                     estTrueCount = len(branch.activeClients)
@@ -489,8 +490,28 @@ class Server :
         elif strategy == 'adaptive':
             # print("In adaptive tree search")
 
-            # Make bounds
-            lw_bnd = 1e-5  # 1e-10 #1e-20
+            #TODO - possibly change this based on eps budget
+            # something like: <= 0.1 1e-5; 1 1e-3; >= 10 0.01; 100 0.01; 1000 0.2
+
+            # # Select bounds
+            # if self.epsilon <= 0.01:
+            #     lw_bnd = 1e-5
+            # elif self.epsilon == 0.1:
+            #     lw_bnd = ??
+            # elif self.epsilon == 1:
+            #     lw_bnd = ??
+            # elif self.epsilon == 10:
+            #     lw_bnd = ??
+            # elif self.epsilon == 100:
+            #     lw_bnd = ??
+            # elif self.epsilon == 1000:
+            #     lw_bnd = 0.2
+            # elif self.epsilon >= 10000:
+            #     lw_bnd = 2
+
+
+            lw_bnd = 0.2 #maybe 0.25?
+            # 1e-5  # 1e-10 #1e-20
             print("BUDGET USED", self.clientList[A[0]].budgetUsed)
             print("global budget used?", self.globalBudgetUsed())
             # TODO - make this the lowest remaining budget val from the clients

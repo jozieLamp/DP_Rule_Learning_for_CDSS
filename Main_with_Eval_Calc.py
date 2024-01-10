@@ -51,6 +51,8 @@ def runProtocol(params):
     clientQs = s.getClientQueryCount()
     clientQs.to_csv(params.resultsFilename + "_ClientQueries.csv")
 
+    return s.numQueries
+
 
 def calcCompleteCoverage(clientDF, ldpDF, ldpTrees, cutoff=0.0):
 
@@ -82,7 +84,7 @@ if __name__ == "__main__":
     # clientDF_cutoff = cov.loadClientRules(params.popSize, params.dataFilename, cutoff=0.01)
     # print("CLIENT DF Cutoff", clientDF_cutoff)
 
-    runProtocol(params)
+    nq = runProtocol(params)
 
     # Load learned LDP rules
     ldpDF, ldpTrees, ldpRules = cov.loadLDPRuleset(params.resultsFilename + "_Rules.csv")
@@ -95,7 +97,8 @@ if __name__ == "__main__":
 
     # Calculate coverage for %client rules > cutoff threshold
     print("\nCoverage at Cutoff Thresh")
-    covDF_cutoff, structDF_cutoff = calcCompleteCoverage(clientDF, ldpDF, ldpTrees, params.cutoffThresh)
+    covDF_cutoff, structDF_cutoff = calcCompleteCoverage(clientDF, ldpDF, ldpTrees, 0.01)#params.cutoffThresh)
 
     # Try testing coverage on dif dataset ...
+    print("\nTotal Queries Completed:", nq)
 
