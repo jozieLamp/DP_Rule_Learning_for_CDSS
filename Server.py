@@ -510,8 +510,11 @@ class Server :
             #     lw_bnd = 2
 
 
-            lw_bnd = 0.2 #maybe 0.25?
+            lw_bnd = 2 #maybe 0.25?
             # 1e-5  # 1e-10 #1e-20
+
+            errorThresh = self.theta
+
             print("BUDGET USED", self.clientList[A[0]].budgetUsed)
             print("global budget used?", self.globalBudgetUsed())
             # TODO - make this the lowest remaining budget val from the clients
@@ -602,7 +605,7 @@ class Server :
             #get all values where prob < theta, then select the one where beta is the min
             gridDF = pd.DataFrame(grid, columns=["beta", "lambda", "prob"])
             # print(gridDF)
-            gridDF = gridDF.loc[gridDF['prob'] <= self.theta].sort_values(["beta", "lambda"], ascending=True).reset_index(drop=True)
+            gridDF = gridDF.loc[gridDF['prob'] <= errorThresh].sort_values(["beta", "lambda"], ascending=True).reset_index(drop=True)
             # print("Selected grid DF\n", gridDF)
 
             if gridDF.empty: #no values meet the probability

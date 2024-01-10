@@ -2,8 +2,8 @@
 import math
 
 # GENERAL INPUT PARAMS
-popSize = 100 # 8000 #Size of ICU population
-#popSize = 40337 #Sepsis size
+popSize = 1000 # 8000 #Size of ICU population
+#popSize = 40337 #Sepsis size --> should this be 40336?!
 #popSize = 34013 #T1d size
 
 # PROTOCOL PARAMS

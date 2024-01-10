@@ -80,7 +80,14 @@ def getCoverageTable(clientDF, ldpDF, ldpTrees, cutoff=0.0):
 
             if cRule != None:
                 print("Found rule but rule below threshold:", l.toString())
-                pass
+                foundRules += 1
+                try:
+                    lCount = ldpDF[ldpDF["Rule"] == l.toString()]['Percent Count'].item()
+                except:
+                    lCount = 0
+                # cCount = clientDF[clientDF["Rule"] == cRule]['Percent of Population'].item()
+                matchLst.append([l.toString(), cRule, lCount, cCount])
+
             else:
                 print("LDP RULE NOT FOUND", l.toString())
                 nonRuleLst.append(l.toString())
