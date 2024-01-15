@@ -1,3 +1,0 @@
-,Rule,Percent Count
-0,"F[1,1]((y = 1.000 & Glasgow_Coma_Scale_Total = 15.000))",1.0
-1,"F[1,1]((Mort = 1.000 & direct > 0.400))",1.0

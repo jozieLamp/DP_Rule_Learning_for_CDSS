@@ -1,5 +1,0 @@
-,Rule,Percent Count
-0,"((Mort = 1.000) U[1,1] (Sgy = 0.400))",0.5
-1,"((O2_Flow = 10.000) U[1,1] (n_evts = 5.000))",0.5
-2,"((Glasgow_Coma_Scale_Total > 6.000) U[1,1] (Sgy = 1.000))",0.5
-3,"((y = 1.000) U[1,1] (n_evts = 5.000))",0.5

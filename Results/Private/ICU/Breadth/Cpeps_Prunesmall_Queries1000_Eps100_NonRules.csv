@@ -1,9 +1,0 @@
-,Non Rules
-0,"((LOS > 0.000) U[0,0] (Glasgow_Coma_Scale_Total < 0.000))"
-1,"F[0,0]((ICU_Pt_Days = 0.000 & LOS < 0.000))"
-2,"((n_evts > 0.000) U[0,0] (death < 0.000))"
-3,"((n_evts > 0.000) U[0,0] (n_evts < 0.000))"
-4,"((LOS > 0.000) U[0,0] (AF < 0.000))"
-5,"((LOS > 0.000) U[0,0] (Pulse > 0.000))"
-6,"((n_evts > 0.000) U[0,0] (Pulse = 0.000))"
-7,"F[0,0]((ICU_Pt_Days = 0.000 & ICU_Pt_Days = 0.000))"

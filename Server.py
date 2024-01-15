@@ -148,7 +148,7 @@ class Server :
 
         #Save initial rule trees
         irtDF = pd.DataFrame([x.toString() for x in initialRuleTrees], columns=['Initial Rule Trees'])
-        irtDF.to_csv(self.params.resultsFilename + "InitialRules.csv")
+        irtDF.to_csv(self.params.resultsFilename + "/Coverage/InitialRules.csv")
         #TODO - del this
         # if self.verbose:
         #     self.logger.info("Initial Rules")
@@ -165,7 +165,8 @@ class Server :
         # do one final query for each rule to make sure full rule has a match
         ruleTrees = []
         for ri in range(len(initialRuleTrees)):
-            print("initial rule", ri+1, "out of", len(initialRuleTrees))
+            if self.verbose:
+                print("initial rule", ri+1, "out of", len(initialRuleTrees))
 
             r = initialRuleTrees[ri]
             # print(r.toString())
@@ -182,8 +183,9 @@ class Server :
                     # finalBudg = 5 / len(self.final_saved_budget)
                     finalBudg = sum(self.final_saved_budget) / len(initialRuleTrees) #this is the good one ...
                     # finalBudg = 0.1 #now checking to see if higher budg at end is better
-                    print(r.toString(), "count:", r.percentCount)
-                print("FINAL BUDG", finalBudg)
+                    # print(r.toString(), "count:", r.percentCount)
+                if self.verbose:
+                    print("FINAL BUDG", finalBudg)
             else:
                 finalBudg=None
 
@@ -359,9 +361,10 @@ class Server :
             #     self.logger.info("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) + ", Estimated True yesses " + str(estTrueCount))
             #     self.logger.info("True Percent " + str(truePerCount) + ", Est Percent " + str(percentCount) + "\n")
 
-            print("p " + str(p) + " q " + str(q))
-            print("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) + ", c_hat " + str(c_hat) + ", Estimated True yesses " + str(estTrueCount))
-            print("\n")
+            if self.verbose:
+                print("p " + str(p) + " q " + str(q))
+                print("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) + ", c_hat " + str(c_hat) + ", Estimated True yesses " + str(estTrueCount))
+                print("\n")
 
             return estTrueCount, updatedActiveClients
 
@@ -463,15 +466,14 @@ class Server :
                 truePerCount = float(trueYesses / len(branch.activeClients)) if len(branch.activeClients) else 0  # Real percent
 
                 if self.verbose:
-                    self.logger.info("p "+ str(p) + " q " + str(q) + " len client list " + str(len(branch.activeClients)))
-                    self.logger.info("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) +", Estimated True yesses " + str(estTrueCount))
-                    self.logger.info("True Percent " + str(truePerCount) + ", Est Percent " + str(percentCount) + "\n")
+                    # self.logger.info("p "+ str(p) + " q " + str(q) + " len client list " + str(len(branch.activeClients)))
+                    # self.logger.info("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) +", Estimated True yesses " + str(estTrueCount))
+                    # self.logger.info("True Percent " + str(truePerCount) + ", Est Percent " + str(percentCount) + "\n")
                     # self.logger.info("True Count " + str(trueYesses) +  ", Est Count " + str(estTrueCount))
                     # self.logger.info("True Percent " + str(truePerCount) +  ", Est Percent " + str(percentCount))
-
-                print("p "+ str(p) + " q " + str(q) + " len client list " + str(len(branch.activeClients)))
-                print("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) + ", c_hat " + str(c_hat) +", Estimated True yesses " + str(estTrueCount))
-                print("\n")
+                    print("p "+ str(p) + " q " + str(q) + " len client list " + str(len(branch.activeClients)))
+                    print("True Yesses " + str(trueYesses) + ", Yes Responses " + str(yesCount) + ", c_hat " + str(c_hat) +", Estimated True yesses " + str(estTrueCount))
+                    print("\n")
 
                 # Find lmda for pruning condition
                 sigma_c = self.sigma(len(branch.activeClients), pLossBudg, p, q)
@@ -617,7 +619,8 @@ class Server :
                 pLossBudg = gridDF.loc[0]['beta']
                 lmda = gridDF.loc[0]['lambda']
 
-        print("!!!Returning budget of", pLossBudg, "and lambda of", lmda)
+        if self.verbose:
+            print("!!!Returning budget of", pLossBudg, "and lambda of", lmda)
         return pLossBudg, lmda
 
     def sigma(self, n, beta, p ,q):
