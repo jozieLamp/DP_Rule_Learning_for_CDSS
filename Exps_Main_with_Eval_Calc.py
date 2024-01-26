@@ -127,8 +127,8 @@ if __name__ == "__main__":
 
     # Set params
     budgets = [0.01, 0.1, 1, 10, 100, 1000, 10000]
-    numTimes = 10
-    computeRQ = True
+    numTimes = 3
+    computeRQ = False
 
     # Load client rules
     clientDF = cov.loadClientRules(params.popSize, params.dataFilename, cutoff=0.0)

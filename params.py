@@ -2,7 +2,7 @@
 import math
 
 # GENERAL INPUT PARAMS
-popSize = 8000
+popSize = 100
 # 8000 #Size of ICU population
 #popSize = 40336 #Sepsis size
 #popSize = 34013 #T1d size
@@ -22,7 +22,7 @@ cutoffThresh = 0.01 #0.0001 #0.01 #V, Match score cutoff threshold to prune bran
 epsilon = 1 #set epsilon to 'inf' to run nonprivate model
 budgetAllocMethod = 'fixed' #Options are 'fixed': epsilon/total queries, 'adaptive'
 useActiveClients = False # whether to use active clients or not
-maxQueries = 1000 #1000 #Maximum number of server queries allowed (to define for nonprivate + baseline model)
+maxQueries = 5000 #1000 #Maximum number of server queries allowed (to define for nonprivate + baseline model)
 # cp = epsilon / maxQueries #UCT param to increase or decrease the amount of exploration performed
 theta = 0.5 # acceptable error probability, e.g., 5%
 
@@ -32,7 +32,8 @@ dataFilename = "Data/ICU/Best/"
 # dataFilename = "Data/Sepsis/Best/"
 
 # resultsFilename = "Results/ICU_Ruleset_MCTS_Baseline_1000pop_500iters"
-resultsFilename = "Results/ICU/Baseline_1000Q_V1/"
+# resultsFilename = "Results/ICU/Baseline_1000Q_V1/"
+resultsFilename = "Results/ICU/Baseline_5000Q_V1/"
 # resultsFilename = "Results/TEST/ICU_Base_PRIV"
 # resultsFilename = "Results/Sepsis_Base_TEST"
 # resultsFilename = "Results/Sepsis_Base_PRIV"
