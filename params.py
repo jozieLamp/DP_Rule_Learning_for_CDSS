@@ -2,7 +2,7 @@
 import math
 
 # GENERAL INPUT PARAMS
-popSize = 100
+popSize = 10
 # 8000 #Size of ICU population
 #popSize = 40336 #Sepsis size
 #popSize = 34013 #T1d size
@@ -19,7 +19,7 @@ maxTreeDepth = 25 #Maximum depth of tree
 cutoffThresh = 0.01 #0.0001 #0.01 #V, Match score cutoff threshold to prune branches- was 0.001
 
 # PRIVACY BUDGET PARAMS
-epsilon = 1 #set epsilon to 'inf' to run nonprivate model
+epsilon = 'inf' #set epsilon to 'inf' to run nonprivate model
 budgetAllocMethod = 'fixed' #Options are 'fixed': epsilon/total queries, 'adaptive'
 useActiveClients = False # whether to use active clients or not
 maxQueries = 1000 #1000 #Maximum number of server queries allowed (to define for nonprivate + baseline model)
