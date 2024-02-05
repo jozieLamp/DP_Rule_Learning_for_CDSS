@@ -86,6 +86,7 @@ class Server :
             self.p_paren = 0.5
             self.final_saved_budget = []
             self.budgetZero = False
+            self.adaptvBudgets = []
 
             self.logger.info("Setting privacy budget to: " + str(self.epsilon))
 
@@ -621,6 +622,8 @@ class Server :
 
         if self.verbose:
             print("!!!Returning budget of", pLossBudg, "and lambda of", lmda)
+
+        self.adaptvBudgets.append(pLossBudg)
         return pLossBudg, lmda
 
     def sigma(self, n, beta, p ,q):

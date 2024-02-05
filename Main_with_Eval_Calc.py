@@ -7,6 +7,7 @@ from MetricCalculation import RuleQuality as RQ
 
 import math
 import decimal
+import pandas as pd
 
 
 def runProtocol(params):
@@ -50,6 +51,8 @@ def runProtocol(params):
     # Get count of client queries
     clientQs = s.getClientQueryCount()
     clientQs.to_csv(params.resultsFilename + "_ClientQueries.csv")
+    df = pd.DataFrame(s.adaptvBudgets)
+    df.to_csv(params.resultsFilename + "_AdaptiveQueries_eps_" + str(params.epsilon) + ".csv")
 
     return s.numQueries
 
