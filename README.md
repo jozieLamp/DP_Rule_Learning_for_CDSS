@@ -1,4 +1,4 @@
-# Differentially-Private Rule Learning for Clinical Decision Support Systems
+# DP-RuL: Differentially-Private Rule Learning for Clinical Decision Support Systems
 
 Folder Breakdown:
 - Data: Raw data and the learned STL rules. 
